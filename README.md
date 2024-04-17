@@ -15,6 +15,7 @@ pip install -e ".[dev,test]"
 In a terminal, run the following commands to test the CLI:
 
 ```bash
-delt-core  # Welcome to DEL Technology!
 delt-core --help
+delt-core welcome # Welcome to DEL Technology!
+delt-core process # Processing...
 ```
