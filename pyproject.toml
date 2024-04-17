@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "delt-core"
+description = "DEL Technology core functionalities"
+authors = [
+    { name = "Adriano Martinelli", email = "adrianom@student.ethz.ch" },
+]
+readme = "README.md"
+# due to how PEP 440 defines version matching, prefer [incl, excl) definitions like below:
+requires-python = ">=3.10"
+dependencies = [
+    "click",
+    "pandas",
+    "openpyxl",
+    "seaborn",
+    "numpy",
+    "matplotlib",
+    "python-dotenv",
+    "pydantic",
+    "pydantic-settings",
+]
+version = "0.0.1"  # refactor to dynamic with setuptools_scm
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+delt-cli = "delt_core.cli.main:cli"
+
+[project.urls]
+repository = "https://github.com/DELTechnology/delt-core"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+dev = [
+    "mypy",
+    "black",
+    "isort",
+    "flake8",
+    "pre-commit",
+]
+
+[tool.black]
+line-length = 88
+skip-string-normalization = false
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+force_to_top = []
+
+[tool.mypy]
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "pytest.*"
+ignore_missing_imports = true
