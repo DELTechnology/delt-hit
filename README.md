@@ -1,4 +1,4 @@
-# delt-core
+# Package `delt-core`
 Core functionalities to work with DECL libraries
 
 # Installation
