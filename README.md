@@ -10,6 +10,13 @@ Navigate to the root folder of the package and run the following command:
 pip install -e ".[dev,test]"
 ```
 
+Create a `.env` file to store environment configurations, keys and secrets.
+```bash
+touch .env
+```
+These configurations can be accessed using the `python-dotenv` package.
+
+
 # CLI
 
 In a terminal, run the following commands to test the CLI:
