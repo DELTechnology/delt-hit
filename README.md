@@ -22,7 +22,7 @@ These configurations can be accessed using the `python-dotenv` package.
 In a terminal, run the following commands to test the CLI:
 
 ```bash
-delt-core --help
-delt-core welcome # Welcome to DEL Technology!
-delt-core process # Processing...
+delt-cli --help
+delt-cli welcome # Welcome to DEL Technology!
+delt-cli process # Processing...
 ```
