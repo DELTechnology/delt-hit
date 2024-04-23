@@ -1,5 +1,8 @@
 import click
 
+from ..processor import process
+
+
 @click.group()
 def cli():
     pass
@@ -8,8 +11,6 @@ def cli():
 def welcome():
     click.echo('Welcome to DEL Technology!')
 
-# import command from other module
-from ..processor import process
 cli.add_command(process)
 
 if __name__ == '__main__':
