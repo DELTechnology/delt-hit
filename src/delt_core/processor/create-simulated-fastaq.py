@@ -62,8 +62,9 @@ def create_all_barcode_regions_single_position_error(reads, elements, relative_p
     # NOTE: this only works as long as all sequences have the same length and there were no insertions or deletions
     reads_stacked = np.stack(reads)
     regions = elements[elements.region_type.isin(['B'])]
+    assert relative_position < (regions.end - regions.start)  # note: +1?
     positions = regions.start + relative_position
-    reads_stacked[:, positions.values] = 'X'
+    reads_stacked[:, positions.values] = 'X'  # TODO: fix type of inserted base
     return [i for i in reads_stacked]
 
 
