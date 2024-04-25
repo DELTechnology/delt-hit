@@ -1,17 +1,14 @@
 import click
 
-from ..processor import process
+from . import evaluate
 
 
 @click.group()
 def cli():
     pass
 
-@cli.command()
-def welcome():
-    click.echo('Welcome to DEL Technology!')
+cli.add_command(evaluate)
 
-cli.add_command(process)
 
 if __name__ == '__main__':
     cli()
