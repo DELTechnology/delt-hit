@@ -12,13 +12,11 @@ rng = np.random.default_rng()
 
 
 def read_struct_file(path_to_struct_file):
-    # path_to_struct_file = Path('/Users/adrianomartinelli/projects/DECLDecoder/simulation/structureNF2.txt')
     path_to_struct_file = Path(path_to_struct_file)
     with open(path_to_struct_file, 'r') as f:
         lines = f.readlines()
 
     file_name = lines[0].strip()
-    path_to_output = path_to_struct_file.parent / file_name
     elements = list(map(lambda x: x.strip().split('\t'), lines[2:]))
     elements = pd.DataFrame.from_records(elements, columns=['start', 'end', 'region_type', 'path_to_barcode_list'])
     elements['start'] = elements['start'].astype(int) - 1
@@ -34,7 +32,6 @@ def read_struct_file(path_to_struct_file):
 
     elements = elements.sort_values('start')
     return dict(file_name=file_name,
-                path_to_output=path_to_output,
                 elements=elements)
 
 
