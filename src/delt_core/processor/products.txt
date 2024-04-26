@@ -1,1 +1,0 @@
-Scaffold	BuildingBlock1	Product	Sequence

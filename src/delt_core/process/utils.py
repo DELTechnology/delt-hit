@@ -6,7 +6,7 @@ from rdkit.Chem import rdChemReactions
 
 
 def load_data(
-    path: str,
+        path: str,
 ) -> tp.Tuple[tp.List, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Returns the building blocks, the scaffolds, the reactions, and the constant regions.
@@ -18,14 +18,14 @@ def load_data(
     try:
         while True:
             step = len(bbs) + 1
-            bbs += [pd.read_excel(path, sheet_name=f'step{step}')]
+            bbs += [pd.read_excel(path, sheet_name=f'step{step}').fillna('')]
     except:
         return (bbs, scaffolds, reactions, consts)
 
 
 def get_smiles(
-    scaffold_id: str,
-    scaffolds: pd.DataFrame,
+        scaffold_id: str,
+        scaffolds: pd.DataFrame,
 ) -> str:
     """
     Returns the SMILES of the respective scaffold.
@@ -38,8 +38,8 @@ def get_smiles(
 
 
 def get_smarts(
-    reaction_type: str,
-    reactions: pd.DataFrame,
+        reaction_type: str,
+        reactions: pd.DataFrame,
 ) -> str:
     """
     Returns the SMARTS of the respective reaction.
@@ -52,13 +52,13 @@ def get_smarts(
 
 
 def get_reverse(
-    codon: str,
+        codon: str,
 ) -> str:
     return codon[::-1]
 
 
 def get_complement(
-    codon: str,
+        codon: str,
 ) -> str:
     complement = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
     codon = ''.join(complement.get(base, base) for base in codon)
@@ -66,8 +66,8 @@ def get_complement(
 
 
 def generate_code(
-    const: str,
-    codon: str,
+        const: str,
+        codon: str,
 ) -> str:
     if const['Reverse']:
         codon = get_reverse(codon)
@@ -77,9 +77,9 @@ def generate_code(
 
 
 def compute_product(
-    smarts: str,
-    smiles_1: str,
-    smiles_2: str = None,
+        smarts: str,
+        smiles_1: str,
+        smiles_2: str = None,
 ) -> str:
     """
     Computes the product of the respective reaction.
@@ -95,34 +95,39 @@ def compute_product(
 
 
 def perform_reaction(
-    reaction_type: str,
-    reactions: pd.DataFrame,
-    smiles_1: str,
-    smiles_2: str,
+        reaction_type: str,
+        reactions: pd.DataFrame,
+        smiles_1: str,
+        smiles_2: str,
 ) -> tp.Tuple:
     """
     Performs the respective reaction.
     """
-    if reaction_type == '-':
-        return (smiles_1,)
-    if reaction_type == 'H':
-        return (smiles_1, smiles_2)
+    if not reaction_type:
+        return smiles_1
     smarts = get_smarts(reaction_type, reactions)
     if reaction_type == 'SR':
-        return (compute_product(smarts, smiles_2),)
+        return compute_product(smarts, smiles_2)
     elif reaction_type == 'DH':
-        return (compute_product(smarts, smiles_1),)
+        return compute_product(smarts, smiles_1)
     else:
-        return (compute_product(smarts, smiles_1, smiles_2),)
+        return compute_product(smarts, smiles_1, smiles_2)
 
 
-def write_to_txt(
-    product: tp.List,
-    path: str = './',
-    mode: str = 'a',
+def write_txt(
+        rows: tp.List,
+        path: str = './',
+        mode: str = 'a',
 ) -> None:
     with open(path, mode) as file:
-        file.write('\t'.join(product))
-        # file.write('\t'.join(map(str, product)))
-        file.write('\n')
+        for row in rows:
+            file.write('\t'.join(row))
+            file.write('\n')
+
+
+def read_txt(
+        path: str,
+) -> None:
+    with open(path, 'r') as file:
+        return file.readlines()
 
