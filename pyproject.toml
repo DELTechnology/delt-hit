@@ -13,14 +13,15 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "click",
-    "pandas",
-    "openpyxl",
-    "seaborn",
-    "numpy",
     "matplotlib",
-    "python-dotenv",
+    "numpy",
+    "openpyxl",
+    "pandas",
     "pydantic",
     "pydantic-settings",
+    "python-dotenv",
+    "rdkit",
+    "seaborn",
 ]
 version = "0.0.1"  # refactor to dynamic with setuptools_scm
 classifiers = [
