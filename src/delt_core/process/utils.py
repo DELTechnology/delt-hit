@@ -140,19 +140,3 @@ def read_json(
     with open(path, 'r') as file:
         return json.load(file)
 
-
-def remove_reads(
-        file: str,
-        indices: tp.List,
-):
-    reads = read_txt(file)
-    remove = np.where(indices == -1)[0]
-    for i in range(len(reads) - 4, 0, -4):
-        read = reads[i].split()
-        read_idx = int(read[0].split('-')[-1])
-        print(read_idx, remove)
-        if read_idx in remove:
-            del reads[i:(i + 4)]
-    print(reads)
-    exit()
-
