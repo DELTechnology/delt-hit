@@ -61,7 +61,7 @@ def perform_reaction_steps(
     
     write_txt(rows, output_path)
     
-    # Perform reaction step 2, ..., n.
+    # Perform reaction steps 2, ..., n.
     for i, bbn in enumerate(bbs, 2):
         header.insert(i, f'BuildingBlock{i}_L{index}')
         write_txt([header], tmp, 'w')
