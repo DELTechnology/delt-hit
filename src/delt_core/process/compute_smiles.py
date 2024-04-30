@@ -14,14 +14,21 @@ def compute_smiles(
     
     parent = output_path.parent
 
+    # Compute SMILES.
     for i, library in enumerate(libraries, 1):
         perform_reaction_steps(i, library, parent)
     
-    num_steps = len(libraries) - 1
-    if num_steps:
-        hybridize(num_steps, parent)
-    
-    os.rename(parent / 'smiles1.txt', output_path)
+
+    # Hybridize libraries.
+    num_libs = len(libraries)
+
+    for lib1 in range(1, num_libs + 1):
+        for lib2 in range(1, num_libs + 1):
+            if lib1 < lib2:
+                hybridize(lib1, lib2, parent)
+        
+        if num_libs > 1:
+            os.remove(parent / f'smiles_{lib1}.txt')
 
 
 def perform_reaction_steps(
@@ -31,9 +38,9 @@ def perform_reaction_steps(
 ) -> None:
     
     tmp = output_path / 'tmp.txt'
-    output_path = output_path / f'smiles{index}.txt'
+    output_path = output_path / f'smiles_{index}.txt'
 
-    header = [f'Scaffold_L{index}', f'BuildingBlock1_L{index}', f'Product_L{index}', f'Sequence_L{index}']
+    header = [f'Scaffold_L{index}', f'BuildingBlock1_L{index}', f'Product_L{index}', 'Sequence']
     write_txt([header], output_path, 'w')
 
     bbs, scaffolds, reactions, consts = library
@@ -43,7 +50,7 @@ def perform_reaction_steps(
     const1 = consts.iloc[0]
     rows = []
 
-    for i, bb in bb1.iterrows():
+    for _, bb in bb1.iterrows():
 
         if bb['ReactionType']:  
             scaffold = get_smiles(bb['ScaffoldID'], scaffolds)
@@ -61,7 +68,7 @@ def perform_reaction_steps(
     
     write_txt(rows, output_path)
     
-    # Perform reaction step 2, ..., n.
+    # Perform reaction steps 2, ..., n.
     for i, bbn in enumerate(bbs, 2):
         header.insert(i, f'BuildingBlock{i}_L{index}')
         write_txt([header], tmp, 'w')
@@ -81,44 +88,42 @@ def perform_reaction_steps(
                     rows += [[*interm[:-2], bb['SMILES'], product, code]]
                 
                 write_txt(rows, tmp)
+                break
         
         os.rename(tmp, output_path)
 
 
 def hybridize(
-        num_steps: int,
+        lib1: int,
+        lib2: int,
         output_path: str,
 ) -> None:
     
-    tmp = output_path / 'tmp.txt'
-    output_file = output_path / 'smiles1.txt'
+    output_file = output_path / f'smiles_{lib1}-{lib2}.txt'
 
-    for step in range(2, num_steps+2):
-        os.rename(output_file, tmp)
+    lib1 = output_path / f'smiles_{lib1}.txt'
+    lib2 = output_path / f'smiles_{lib2}.txt'
+
+    interms1 = read_txt(lib1)
+    interms2 = read_txt(lib2)
+    
+    header1 = interms1.pop(0).split()[:-1]
+    header2 = interms2.pop(0).split()[:-1]
+
+    header = [*header1, *header2, "Sequence"]
+    write_txt([header], output_file, 'w')
+    
+    for interm1 in interms1:
+        interm1 = interm1.split()
+        code1 = interm1.pop()
+        
         rows = []
 
-        interms1 = read_txt(tmp)
-        header1 = interms1.pop(0).split()[:-1]
+        for interm2 in interms2:
+            interm2 = interm2.split()
+            code = code1 + interm2.pop()
 
-        for i, interm1 in enumerate(interms1):
-            interm1 = interm1.split()
-            code1 = interm1.pop()
-            
-            path = output_path / f'smiles{step}.txt'
-            interms2 = read_txt(path)
-            header2 = interms2.pop(0).split()[:-1]
-            
-            if not i:
-                header = [*header1, *header2, "Sequence"]
-                write_txt([header], output_file, 'w')
-
-            for interm2 in interms2:
-                interm2 = interm2.split()
-                code = code1 + interm2.pop()
-                rows += [[*interm1, *interm2, code]]
+            rows += [[*interm1, *interm2, code]]
         
         write_txt(rows, output_file)
-        
-        os.remove(path)
-    os.remove(tmp)
 
