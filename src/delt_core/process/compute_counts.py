@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import os
 from pathlib import Path
 import shutil
@@ -10,7 +11,7 @@ from utils import read_json, read_txt
 
 
 def compute_counts(
-        components: dict,
+        components: OrderedDict,
         config: dict,
 ) -> None:
     """
@@ -21,16 +22,35 @@ def compute_counts(
     CAAGTG  1
     """
     
-    struct_file = config['struct_file']
     fastq_file = config['fastq_file']
     output_file = config['output_file']
 
-    indices = map_sequences(components, fastq_file, output_file)
+    keys = list(components.keys())
+    num_reads = len(read_txt(fastq_file)) // 4
+    indices = np.full((len(components), num_reads), -1)
+    
+    map_sequences(components, keys, indices, Path(fastq_file))
     print(indices)
 
     counts = {}
 
     return counts
+
+
+def find_max_component(
+        components: dict,
+) -> str:
+    return max(components, key=lambda k: len(components[k][0]))
+
+
+def split_components(
+        components: OrderedDict,
+        key: str,
+) -> tp.Tuple[OrderedDict, OrderedDict]:
+    split = list(components.keys()).index(key)
+    comp1 = OrderedDict(list(components.items())[:split])
+    comp2 = OrderedDict(list(components.items())[(split + 1):])
+    return comp1, comp2
 
 
 def run_cutadapt(
@@ -58,99 +78,75 @@ def run_cutadapt(
 def update_indices(
         indices: np.ndarray,
         info_file: str,
+        output_file: str,
         comp_idx: int,
 ) -> None:
     
-    reads = read_txt(info_file)
+    info = read_txt(info_file)
+    output = read_txt(output_file)
     
-    for read in reads:
-        read = read.split('\t')
+    for i, j in enumerate(range(1, len(output), 4)):
+        read = info[i].split('\t')
         match = int(read[1]) >= 0
         
         if match:
+            output[j] = read[6] + '\n'
+            output[j+2] = read[10] + '\n'
             read_idx = int(read[0].split('-')[-1])
             seq_idx = int(read[7]) - 1
             indices[comp_idx, read_idx] = seq_idx
 
+    update_output(output_file, output)
 
-def update_output():
-    pass
+
+def update_output(
+        output_file: str,
+        output: str,
+) -> None:
+    copy = str(output_file).replace('a.fastq', 'b.fastq')
+    shutil.copyfile(output_file, copy)
+    with open(copy, 'w') as file:
+        file.writelines(output)
 
 
 def map_sequences(
         components: dict,
-        fastq_file: str,
-        output_file: str,
+        keys: tp.List,
+        indices: np.ndarray,
+        input_file: str,
         max_error_rate: float = 0.1,
         min_overlap: int = 0.8,
-) -> np.ndarray:
-    
-    parent = Path(output_file).parent
-    info_file = parent / 'info.tsv'
-    tmp = parent / 'tmp.fastq'
-    shutil.copyfile(fastq_file, tmp)
+):
 
-    num_reads = len(read_txt(fastq_file)) // 4
-    indices = np.full((len(components), num_reads), -1)
-    pre_comps = []
+    max_component = find_max_component(components)
 
-    for comp_idx, (component, seqs) in enumerate(components.items()):
+    parent = input_file.parent
+    info_file = parent / f'info_{max_component}.tsv'
+    output_file_a = parent / f'output_{max_component}a.fastq'
+    output_file_b = Path(str(output_file_a).replace('a.fastq', 'b.fastq'))
 
-        # Map the rightmost region.
-        if comp_idx == len(components) - 1:
-            run_cutadapt(
-                sequences=seqs,
-                mode='g',
-                input_file=tmp,
-                info_file=info_file,
-                max_error_rate=max_error_rate,
-                min_overlap=min_overlap,
-            )
-            update_indices(indices, info_file, comp_idx)
+    run_cutadapt(
+        sequences=components[max_component],
+        mode='a',
+        input_file=input_file,
+        info_file=info_file,
+        output_file=output_file_a,
+        max_error_rate=max_error_rate,
+        min_overlap=min_overlap,
+    )
 
-        # Map the leftmost constant region of the remaining sequence.
-        if component[0] != 'C':
-            pre_comps += [component]
-            continue
-        
-        run_cutadapt(
-            sequences=seqs,
-            mode='a',
-            input_file=tmp,
-            info_file=info_file,
-            output_file=output_file,
-            max_error_rate=max_error_rate,
-            min_overlap=min_overlap,
-        )
-        update_indices(indices, info_file, comp_idx)
-        
-        # Map the sequence preceding the constant region.
-        for i, pre_comp in enumerate(pre_comps):
-            run_cutadapt(
-                sequences=components[pre_comp],
-                mode='g',
-                input_file=output_file,
-                info_file=info_file,
-                max_error_rate=max_error_rate,
-                min_overlap=min_overlap,
-            )
-            update_indices(indices, info_file, comp_idx - (len(pre_comps) - i))
-        pre_comps = []
+    comp_idx = keys.index(max_component)
+    update_indices(indices, info_file, output_file_a, comp_idx)
 
-        # Keep the sequence following the constant region.
-        run_cutadapt(
-            sequences=seqs,
-            mode='g',
-            input_file=tmp,
-            info_file=info_file,
-            output_file=output_file,
-            max_error_rate=max_error_rate,
-            min_overlap=min_overlap,
-        )
-        shutil.copyfile(output_file, tmp)
+    comp1, comp2 = split_components(components, max_component)
+    if comp1:
+        map_sequences(comp1, keys, indices, output_file_a)
+    if comp2:
+        map_sequences(comp2, keys, indices, output_file_b)
 
-    os.remove(tmp)
-    return indices
+    os.remove(info_file)
+    os.remove(output_file_a)
+    os.remove(output_file_b)
 
 
 if __name__ == '__main__':
@@ -162,4 +158,5 @@ if __name__ == '__main__':
     counts = compute_counts(components, config)
 
     # print(sum(counts.values()))
+
 
