@@ -1,7 +1,7 @@
 from pathlib import Path
 import typing as tp
 
-from ... import process as p
+from ... import compute as c
 
 
 def compute_smiles_cli(
@@ -13,13 +13,13 @@ def compute_smiles_cli(
 
     libraries = []
     for library in input_path:
-        libraries += [p.load_data(library)]
+        libraries += [c.load_data(library)]
     
-    p.compute_smiles(libraries, Path(output_path))
+    c.compute_smiles(libraries, Path(output_path))
 
 
 def compute_counts_cli():
-    p.compute_counts()
+    c.compute_counts()
 
 
 def evaluate_cli():

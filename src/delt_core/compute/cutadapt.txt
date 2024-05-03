@@ -1,0 +1,30 @@
+Regular 5' adapter:
+cutadapt -g AACCGGTT -o output.fastq input.fastq
+
+Regular 3' adapter:
+cutadapt -a AACCGGTT -o output.fastq input.fastq
+
+Also works with zip files:
+cutadapt -g AACCGGTT -o output.fastq.gz input.fastq.gz
+
+No output file:
+cutadapt -g AACCGGTT -o /dev/null input.fastq
+
+Generate info file:
+cutadapt -g AACCGGTT -o output.fastq input.fastq --info-file=info.tsv
+
+Set maximum error rate:
+cutadapt -g AACCGGTT -o output.fastq input.fastq -e 0.1
+
+Set minimum overlap length:
+cutadapt -g AACCGGTT -o output.fastq input.fastq -O 5
+
+Discard reads without match:
+cutadapt -g AACCGGTT -o output.fastq input.fastq --trimmed-only
+
+Multiple adapters:
+cutadapt -g TGAGACACGCA -g AGGCACACAGGG -o output.fastq input.fastq
+
+
+Summary:
+https://cutadapt.readthedocs.io/en/stable/reference.html
