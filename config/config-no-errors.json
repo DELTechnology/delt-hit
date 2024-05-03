@@ -1,0 +1,6 @@
+{
+  "path_to_struct_file": "/Users/Gary/Downloads/zivi/git/delt-core/data/simulation/sequences/structure.txt",
+  "path_to_output": "/Users/Gary/Downloads/zivi/git/delt-core/data/simulation/simulation.fastq",
+  "number_of_reads": 1000,
+  "errors": []
+}

@@ -18,8 +18,19 @@ def compute_smiles_cli(
     c.compute_smiles(libraries, Path(output_path))
 
 
-def compute_counts_cli():
-    c.compute_counts()
+def compute_counts_cli(
+        input_file: str,
+        struct_file: str,
+        output_file: str = None,
+):
+    input_file = Path(input_file)
+    structure = c.read_json(struct_file)
+    if not output_file:
+        output_file = input_file.parent / 'counts.json'
+
+    counts = c.compute_counts(structure, input_file)
+    c.write_json(counts, output_file)
+    print(sum(counts.values()))
 
 
 def evaluate_cli():

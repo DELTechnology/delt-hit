@@ -7,13 +7,14 @@ import typing as tp
 
 import numpy as np
 
-from utils import read_json, read_txt
+from .utils import read_txt
 
 
 def compute_counts(
-        structure: OrderedDict,
-        config: tp.Dict,
-) -> None:
+        structure: tp.OrderedDict,
+        input_file: str,
+) -> tp.Dict:
+    
     """
     Code    Count
     -------------
@@ -21,17 +22,12 @@ def compute_counts(
     TCCGAC  3
     CAAGTG  1
     """
-    
-    fastq_file = config['fastq_file']
-    output_file = config['output_file']
 
     keys = list(structure.keys())
-    num_reads = len(read_txt(fastq_file)) // 4
+    num_reads = len(read_txt(input_file)) // 4
     indices = np.full((len(structure), num_reads), -1)
     
-    map_sequences(structure, keys, indices, Path(fastq_file))
-    print(indices)
-
+    map_sequences(structure, keys, indices, input_file)
     counts = create_table(structure, indices)
 
     return counts
@@ -44,9 +40,9 @@ def find_max_component(
 
 
 def split_components(
-        components: OrderedDict,
+        components: tp.OrderedDict,
         key: str,
-) -> tp.Tuple[OrderedDict, OrderedDict]:
+) -> tp.Tuple[tp.OrderedDict, tp.OrderedDict]:
     split = list(components.keys()).index(key)
     comp1 = OrderedDict(list(components.items())[:split])
     comp2 = OrderedDict(list(components.items())[(split + 1):])
@@ -69,7 +65,7 @@ def run_cutadapt(
     """
     min_overlap = round(len(sequences[0]) * min_overlap)
     cmd = f'cutadapt -o {output_file} {input_file} --info-file={info_file} ' \
-          f'-e {max_error_rate} -O {min_overlap} --trimmed-only' # --quiet
+          f'-e {max_error_rate} -O {min_overlap} --trimmed-only --quiet'
     for sequence in sequences:
         cmd += f' -{mode} {sequence}'
     subprocess.run(cmd.split(), stdout=subprocess.DEVNULL)
@@ -118,6 +114,7 @@ def map_sequences(
         min_overlap: int = 0.8,
 ) -> None:
 
+    # Find the component with the longest sequence.
     max_component = find_max_component(components)
 
     parent = input_file.parent
@@ -125,6 +122,7 @@ def map_sequences(
     output_file_a = parent / f'output_{max_component}a.fastq'
     output_file_b = Path(str(output_file_a).replace('a.fastq', 'b.fastq'))
 
+    # Map the respective sequence.
     run_cutadapt(
         sequences=components[max_component],
         mode='a',
@@ -134,10 +132,12 @@ def map_sequences(
         max_error_rate=max_error_rate,
         min_overlap=min_overlap,
     )
-
+    
+    # Update the indices.
     comp_idx = keys.index(max_component)
     update_indices(indices, info_file, output_file_a, comp_idx)
-
+    
+    # Do the recursion.
     comp1, comp2 = split_components(components, max_component)
     if comp1:
         map_sequences(comp1, keys, indices, output_file_a)
@@ -162,18 +162,5 @@ def create_table(
             code += sequences[i]
         counts[code] = counts.get(code, 0) + 1
     return counts
-
-
-
-if __name__ == '__main__':
-    
-    path = Path('/Users/Gary/Downloads/zivi/git/delt-core/data/simulation')
-    structure = read_json(path / 'structure/structure.json')
-    config = read_json(path / 'config/config_cutadapt.json')
-
-    counts = compute_counts(structure, config)
-
-    print(counts)
-    print(sum(counts.values()))
 
 

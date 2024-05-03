@@ -1,6 +1,7 @@
 # %%
 import json
 from pathlib import Path
+import typing as tp
 
 import click
 import numpy as np
@@ -41,17 +42,20 @@ def generate_reads(config):
     regions = elements[['start', 'end', 'barcodes']].to_records(index=False)
 
     read_length = elements.end.max() + 1
-    n = 0
     reads = []
-    while n < number_of_reads:
+
+    for _ in range(number_of_reads):
         read = np.array(['X'] * read_length)
+
         for region in regions:
             start, end, barcodes = region
+            # barcode = rng.choice(barcodes[:10])
             barcode = rng.choice(barcodes)
             assert end - start + 1 == len(barcode)
             read[start:(end + 1)] = barcode
+        
         reads.append(read)
-        n += 1
+
     return reads
 
 
@@ -59,7 +63,7 @@ def create_all_barcode_regions_single_position_error(reads, elements, relative_p
     # NOTE: this only works as long as all sequences have the same length and there were no insertions or deletions
     reads_stacked = np.stack(reads)
     regions = elements[elements.region_type.isin(['B'])]
-    assert relative_position < (regions.end - regions.start)  # note: +1?
+    # assert relative_position < (regions.end - regions.start)  # note: +1?
     positions = regions.start + relative_position
     reads_stacked[:, positions.values] = 'X'  # TODO: fix type of inserted base
     return [i for i in reads_stacked]
@@ -103,6 +107,17 @@ def generate_fastq_file(config, reads):
         f.writelines(content)
 
 
+def create_table(
+        reads: np.ndarray,
+):
+    counts = {}
+    for read in reads:
+        read = ''.join(read)
+        counts[read] = counts.get(read, 0) + 1
+    return counts
+
+
+
 # %%
 @click.command()
 @click.argument('path_to_config', type=click.Path(exists=True))
@@ -110,10 +125,14 @@ def main(path_to_config):
     path_to_config = Path(path_to_config)
     with open(path_to_config, 'r') as f:
         config = json.load(f)
-    path_to_struct_file, number_of_reads = config['path_to_struct_file'], config['number_of_reads']
+    path_to_struct_file = config['path_to_struct_file']
     struct_dict = read_struct_file(path_to_struct_file)
     config.update(struct_dict)
     reads = generate_reads(config)
+    counts = create_table(reads)
+    path_to_counts = Path(config['path_to_output']).parent / 'counts_true.json'
+    with open(path_to_counts, 'w') as file:
+        json.dump(counts, file)
     reads = create_errors(config, reads)
     generate_fastq_file(config, reads)
 

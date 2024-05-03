@@ -115,17 +115,6 @@ def perform_reaction(
         return compute_product(smarts, smiles_1, smiles_2)
 
 
-def write_txt(
-        rows: tp.List,
-        path: str = './',
-        mode: str = 'a',
-) -> None:
-    with open(path, mode) as file:
-        for row in rows:
-            file.write('\t'.join(row))
-            file.write('\n')
-
-
 def read_txt(
         path: str,
 ) -> tp.List:
@@ -133,9 +122,29 @@ def read_txt(
         return file.readlines()
 
 
+def write_txt(
+        rows: tp.List,
+        path: str = './',
+        mode: str = 'a',
+) -> None:
+    with open(path, mode) as file:
+        for row in rows:
+            # file.writelines('\t'.join(row))
+            file.write('\t'.join(row))
+            file.write('\n')
+
+
 def read_json(
         path: str,
 ) -> tp.Dict:
     with open(path, 'r') as file:
         return json.load(file)
+
+
+def write_json(
+        data: tp.Dict,
+        path: str,
+) -> None:
+    with open(path, 'w') as file:
+        json.dump(data, file)
 

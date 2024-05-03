@@ -26,8 +26,26 @@ def smiles(**kwargs):
 
 
 @compute.command()
-def counts():
-    cmds.compute_counts_cli()
+@click.argument(
+    'input_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.argument(
+    'struct_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.option(
+    '--output_file',
+    '-o',
+    default=None,
+    type=click.Path(writable=True),
+)
+def counts(**kwargs):
+    cmds.compute_counts_cli(**kwargs)
 
 
 @click.group()
