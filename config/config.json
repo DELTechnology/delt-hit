@@ -1,7 +1,7 @@
 {
   "path_to_struct_file": "/Users/Gary/Downloads/zivi/git/delt-core/data/simulation/sequences/structure.txt",
   "path_to_output": "/Users/Gary/Downloads/zivi/git/delt-core/data/simulation/simulation.fastq",
-  "number_of_reads": 10,
+  "number_of_reads": 100,
   "errors": [
     {
       "type": "all_barcode_regions_single_position",

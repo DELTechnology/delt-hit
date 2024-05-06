@@ -118,7 +118,8 @@ def perform_reaction(
 def read_txt(
         path: str,
 ) -> tp.List:
-    with open(path, 'r') as file:
+    mode = 'rb' if str(path)[-2:] == 'gz' else 'r'
+    with open(path, mode) as file:
         return file.readlines()
 
 

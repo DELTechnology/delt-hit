@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 # %%
-BASES = {'A', 'T', 'C', 'G'}
+BASES = ['A', 'T', 'C', 'G']
 rng = np.random.default_rng()
 
 
@@ -43,38 +43,39 @@ def generate_reads(config):
 
     read_length = elements.end.max() + 1
     reads = []
+    indices = np.full((len(regions), number_of_reads), -1)
 
-    for _ in range(number_of_reads):
+    for i in range(number_of_reads):
         read = np.array(['X'] * read_length)
 
-        for region in regions:
+        for j, region in enumerate(regions):
             start, end, barcodes = region
-            # barcode = rng.choice(barcodes[:10])
-            barcode = rng.choice(barcodes)
+            idx = rng.choice(range(0, len(barcodes)))
+            barcode = barcodes[idx]
+            indices[j, i] = idx
             assert end - start + 1 == len(barcode)
             read[start:(end + 1)] = barcode
         
         reads.append(read)
 
-    return reads
+    return reads, indices
 
 
 def create_all_barcode_regions_single_position_error(reads, elements, relative_position):
     # NOTE: this only works as long as all sequences have the same length and there were no insertions or deletions
     reads_stacked = np.stack(reads)
     regions = elements[elements.region_type.isin(['B'])]
-    # assert relative_position < (regions.end - regions.start)  # note: +1?
     positions = regions.start + relative_position
-    reads_stacked[:, positions.values] = 'X'  # TODO: fix type of inserted base
+    reads_stacked[:, positions.values] = rng.choice(BASES)
     return [i for i in reads_stacked]
 
 
 def create_insertion_at_read_start_error(reads, elements, insertion_length, min_length=None, max_length=None, p=None):
     if insertion_length == 'random':
-        inserts = [np.array(['X'] * l) for l in rng.choice(range(min_length, max_length+1), size=len(reads), p=p)]
+        inserts = [np.array([rng.choice(BASES)] * l) for l in rng.choice(range(min_length, max_length+1), size=len(reads), p=p)]
         reads = [np.insert(read, 0, insert) for read, insert in zip(reads, inserts)]
     else:
-        insert = np.array(['X'] * insertion_length)
+        insert = np.array([rng.choice(BASES)] * insertion_length)
         reads = list(map(lambda x: np.insert(x, 0, insert), reads))
     return reads
 
@@ -128,11 +129,12 @@ def main(path_to_config):
     path_to_struct_file = config['path_to_struct_file']
     struct_dict = read_struct_file(path_to_struct_file)
     config.update(struct_dict)
-    reads = generate_reads(config)
+    reads, indices = generate_reads(config)
     counts = create_table(reads)
     path_to_counts = Path(config['path_to_output']).parent / 'counts_true.json'
     with open(path_to_counts, 'w') as file:
         json.dump(counts, file)
+    np.save(path_to_counts.parent / 'indices_true', indices)
     reads = create_errors(config, reads)
     generate_fastq_file(config, reads)
 

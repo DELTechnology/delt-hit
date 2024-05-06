@@ -81,14 +81,13 @@ def update_indices(
     info = read_txt(info_file)
     output = read_txt(output_file)
     
-    for i, j in enumerate(range(1, len(output), 4)):
-        read = info[i].split('\t')
+    for read_idx, i in enumerate(range(1, len(output), 4)):
+        read = info[read_idx].split('\t')
         match = int(read[1]) >= 0
         
         if match:
-            output[j] = read[6] + '\n'
-            output[j+2] = read[10] + '\n'
-            read_idx = int(read[0].split('-')[-1])
+            output[i] = read[6] + '\n'
+            output[i+2] = read[10] + '\n'
             seq_idx = int(read[7]) - 1
             indices[comp_idx, read_idx] = seq_idx
 
@@ -110,8 +109,9 @@ def map_sequences(
         keys: tp.List,
         indices: np.ndarray,
         input_file: str,
-        max_error_rate: float = 0.1,
-        min_overlap: int = 0.8,
+        max_error_rate: float = 0.0,
+        # max_error_rate: float = 0.2,
+        min_overlap: int = 0.5,
 ) -> None:
 
     # Find the component with the longest sequence.
@@ -136,7 +136,7 @@ def map_sequences(
     # Update the indices.
     comp_idx = keys.index(max_component)
     update_indices(indices, info_file, output_file_a, comp_idx)
-    
+
     # Do the recursion.
     comp1, comp2 = split_components(components, max_component)
     if comp1:
@@ -153,14 +153,20 @@ def create_table(
         structure: tp.Dict,
         indices: np.ndarray,
 ):
+    code_indices = [i for i, key in enumerate(structure.keys()) if key[0] == 'B']
     counts = {}
     for index in indices.T:
         if -1 in index:
             continue
-        code = ''
-        for i, sequences in zip(index, structure.values()):
-            code += sequences[i]
+        code = tuple(index[code_indices])
         counts[code] = counts.get(code, 0) + 1
+    # counts = {}
+    # for index in indices.T:
+    #     if -1 in index:
+    #         continue
+    #     code = ''
+    #     for i, sequences in zip(index, structure.values()):
+    #         code += sequences[i]
+    #     counts[code] = counts.get(code, 0) + 1
     return counts
-
 
