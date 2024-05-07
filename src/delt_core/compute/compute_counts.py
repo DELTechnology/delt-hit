@@ -36,7 +36,7 @@ def compute_counts(
 def find_max_component(
         components: tp.Dict,
 ) -> str:
-    return max(components, key=lambda k: len(components[k][0]))
+    return max(components, key=lambda k: len(components[k]['Sequences'][0]))
 
 
 def split_components(
@@ -56,14 +56,13 @@ def run_cutadapt(
         info_file: str,
         output_file: str = '/dev/null',
         max_error_rate: float = 0.1,
-        min_overlap: float = 0.5,
+        min_overlap: float = 3,
 ) -> None:
     """
     Mode:
     -a: 3' adapter
     -g: 5' adapter
     """
-    min_overlap = round(len(sequences[0]) * min_overlap)
     cmd = f'cutadapt -o {output_file} {input_file} --info-file={info_file} ' \
           f'-e {max_error_rate} -O {min_overlap} --trimmed-only --quiet'
     for sequence in sequences:
@@ -109,9 +108,6 @@ def map_sequences(
         keys: tp.List,
         indices: np.ndarray,
         input_file: str,
-        max_error_rate: float = 0.0,
-        # max_error_rate: float = 0.2,
-        min_overlap: int = 0.5,
 ) -> None:
 
     # Find the component with the longest sequence.
@@ -124,13 +120,13 @@ def map_sequences(
 
     # Map the respective sequence.
     run_cutadapt(
-        sequences=components[max_component],
+        sequences=components[max_component]['Sequences'],
         mode='a',
         input_file=input_file,
         info_file=info_file,
         output_file=output_file_a,
-        max_error_rate=max_error_rate,
-        min_overlap=min_overlap,
+        max_error_rate=components[max_component]['Maximum Error Rate'],
+        min_overlap=components[max_component]['Minimum Overlap'],
     )
     
     # Update the indices.
@@ -152,7 +148,7 @@ def map_sequences(
 def create_table(
         structure: tp.Dict,
         indices: np.ndarray,
-):
+) -> tp.Dict:
     code_indices = [i for i, key in enumerate(structure.keys()) if key[0] == 'B']
     counts = {}
     for index in indices.T:
@@ -160,13 +156,18 @@ def create_table(
             continue
         code = tuple(index[code_indices])
         counts[code] = counts.get(code, 0) + 1
-    # counts = {}
-    # for index in indices.T:
-    #     if -1 in index:
-    #         continue
-    #     code = ''
-    #     for i, sequences in zip(index, structure.values()):
-    #         code += sequences[i]
-    #     counts[code] = counts.get(code, 0) + 1
     return counts
+
+
+def save_counts(
+        counts: tp.Dict,
+        path: str,
+) -> None:
+    with open(path, 'w') as file:
+        num_codes = len(next(iter(counts.keys())))
+        header = ['Count', *[f'Code{i}' for i in range(1, num_codes + 1)], '\n']
+        file.write('\t'.join(header))
+        for codes, count in counts.items():
+            row = '\t'.join(str(code) for code in codes)
+            file.write(f'{count}\t{row}\n')
 

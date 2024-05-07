@@ -66,7 +66,9 @@ def create_all_barcode_regions_single_position_error(reads, elements, relative_p
     reads_stacked = np.stack(reads)
     regions = elements[elements.region_type.isin(['B'])]
     positions = regions.start + relative_position
-    reads_stacked[:, positions.values] = rng.choice(BASES)
+    base = rng.choice(BASES)
+    print(base)
+    reads_stacked[:, positions.values] = base
     return [i for i in reads_stacked]
 
 
@@ -87,6 +89,7 @@ def create_errors(config, reads):
         if error['type'] == 'all_barcode_regions_single_position':
             reads = create_all_barcode_regions_single_position_error(reads, elements, **error['kwargs'])
         elif error['type'] == 'insertion_at_read_start':
+            pass
             reads = create_insertion_at_read_start_error(reads, elements, **error['kwargs'])
         else:
             raise NotImplementedError()
@@ -108,14 +111,33 @@ def generate_fastq_file(config, reads):
         f.writelines(content)
 
 
-def create_table(
-        reads: np.ndarray,
+def compute_counts(
+        structure: tp.Dict,
+        indices: np.ndarray,
 ):
+    code_indices = [i for i, key in enumerate(structure.keys()) if key[0] == 'B']
     counts = {}
-    for read in reads:
-        read = ''.join(read)
-        counts[read] = counts.get(read, 0) + 1
+    for index in indices.T:
+        if -1 in index:
+            continue
+        code = tuple(index[code_indices])
+        counts[code] = counts.get(code, 0) + 1
     return counts
+
+
+def save_counts(
+        counts: tp.Dict,
+        path: str,
+):
+    with open(path, 'w') as file:
+        num_codes = len(next(iter(counts.keys())))
+        header = ['Count', *[f'Code{i}' for i in range(1, num_codes + 1)], '\n']
+        file.write('\t'.join(header))
+        for codes, count in counts.items():
+            row = '\t'.join(str(code) for code in codes)
+            file.write(f'{count}\t{row}\n')
+
+
 
 
 
@@ -130,13 +152,16 @@ def main(path_to_config):
     struct_dict = read_struct_file(path_to_struct_file)
     config.update(struct_dict)
     reads, indices = generate_reads(config)
-    counts = create_table(reads)
-    path_to_counts = Path(config['path_to_output']).parent / 'counts_true.json'
-    with open(path_to_counts, 'w') as file:
-        json.dump(counts, file)
-    np.save(path_to_counts.parent / 'indices_true', indices)
     reads = create_errors(config, reads)
     generate_fastq_file(config, reads)
+
+    # Compute counts.
+    path_to_struct_file = Path(path_to_struct_file).parent.parent / 'structure.json'
+    with open(path_to_struct_file, 'r') as file:
+        structure = json.load(file)
+    counts = compute_counts(structure, indices)
+    path_to_counts = Path(config['path_to_output']).parent / 'counts_true.txt'
+    save_counts(counts, path_to_counts)
 
 
 if __name__ == '__main__':
