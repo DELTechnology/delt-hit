@@ -138,7 +138,9 @@ def save_counts(
             file.write(f'{count}\t{row}\n')
 
 
-
+def run_simulation(config: dict):
+    # TODO, make independent of CLI
+    pass
 
 
 # %%
