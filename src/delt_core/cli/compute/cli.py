@@ -39,7 +39,7 @@ def smiles(**kwargs):
     type=click.Path(exists=True),
 )
 @click.option(
-    '--output_file',
+    '--output_path',
     '-o',
     default=None,
     type=click.Path(writable=True),

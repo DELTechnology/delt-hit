@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 import typing as tp
 
@@ -6,23 +5,19 @@ import click
 import numpy as np
 import pandas as pd
 
+import utils
+from delt_core.compute.compute_counts import perform_selection, create_table, save_counts
+
 
 BASES = ['A', 'T', 'C', 'G']
 rng = np.random.default_rng()
-
-
-def read_json(
-        path: str,
-) -> None:
-    with open(path, 'r') as file:
-        return json.load(file)
 
 
 def read_struct_file(
         path: str,
 ) -> tp.Dict:
     
-    structure = read_json(path)
+    structure = utils.read_json(path)
     elements = []
     start = 0
 
@@ -30,7 +25,7 @@ def read_struct_file(
         seqs = list(map(lambda x: [*x], values['Sequences']))
         length = len(seqs[0])
         end = start + length - 1
-        elements += [[start, end, element[0], seqs[:2]]]
+        elements += [[start, end, element[0], seqs]]
         start += length
 
     elements = pd.DataFrame.from_records(elements, columns=['start', 'end', 'region_type', 'barcodes'])
@@ -113,33 +108,6 @@ def generate_fastq_file(config, reads):
         f.writelines(content)
 
 
-def compute_counts(
-        structure: tp.Dict,
-        indices: np.ndarray,
-) -> tp.Dict:
-    code_indices = [i for i, key in enumerate(structure.keys()) if key[0] == 'B']
-    counts = {}
-    for index in indices.T:
-        if -1 in index:
-            continue
-        code = tuple(index[code_indices])
-        counts[code] = counts.get(code, 0) + 1
-    return counts
-
-
-def save_counts(
-        counts: tp.Dict,
-        path: str,
-) -> None:
-    with open(path, 'w') as file:
-        num_codes = len(next(iter(counts.keys())))
-        header = ['Count', *[f'Code{i}' for i in range(1, num_codes + 1)], '\n']
-        file.write('\t'.join(header))
-        for codes, count in counts.items():
-            row = '\t'.join(str(code) for code in codes)
-            file.write(f'{count}\t{row}\n')
-
-
 def run_simulation(
         config: tp.Dict,
 ) -> None:
@@ -153,16 +121,20 @@ def run_simulation(
     generate_fastq_file(config, reads)
 
     # Generate table for counts.
-    structure = read_json(struct_file)
-    counts = compute_counts(structure, indices)
-    path_to_counts = Path(config['output_file']).parent / 'counts_true.txt'
-    save_counts(counts, path_to_counts)
+    output_path = Path(config['output_file']).parent / 'counts_true'
+    output_path.mkdir(parents=True, exist_ok=True)
+    structure = utils.read_json(struct_file)
+    selections = perform_selection(structure, indices)
+    for selection in selections:
+        s1, s2 = selection[0]
+        counts = create_table(structure, selection[1])
+        save_counts(counts, output_path / f'counts_{s1}_{s2}.txt')
 
 
 @click.command()
 @click.argument('config_file', type=click.Path(exists=True))
 def main(config_file):
-    config = read_json(config_file)
+    config = utils.read_json(config_file)
     run_simulation(config)
 
 

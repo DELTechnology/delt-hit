@@ -21,16 +21,15 @@ def compute_smiles_cli(
 def compute_counts_cli(
         input_file: str,
         struct_file: str,
-        output_file: str = None,
+        output_path: str = None,
 ) -> None:
     input_file = Path(input_file)
     structure = c.read_json(struct_file)
-    if not output_file:
-        output_file = input_file.parent / 'counts.txt'
+    if not output_path:
+        output_path = input_file.parent / 'counts'
+        output_path.mkdir(parents=True, exist_ok=True)
 
-    counts = c.compute_counts(structure, input_file)
-    c.save_counts(counts, output_file)
-    print(sum(counts.values()))
+    c.compute_counts(structure, input_file, output_path)
 
 
 def evaluate_cli():

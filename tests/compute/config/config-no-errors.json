@@ -1,0 +1,6 @@
+{
+    "struct_file": "./data/structure.json",
+    "output_file": "./data/simulation.fastq",
+    "num_reads": 100,
+    "errors": []  
+}

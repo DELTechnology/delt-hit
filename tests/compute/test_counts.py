@@ -1,64 +1,45 @@
-import json
 from pathlib import Path
-import typing as tp
+import tempfile
 
 import pytest
 
 from delt_core.cli.compute.cmds import compute_counts_cli
-from create_simulated_fastq import run_simulation
-
-
-def read_txt(
-        path: str,
-) -> tp.Dict:
-    with open(path, 'r') as file:
-        return file.readlines()
-
-
-def read_json(
-        path: str,
-) -> tp.Dict:
-    with open(path, 'r') as file:
-        return json.load(file)
+from run_simulation import run_simulation
+import utils
 
 
 @pytest.fixture
 def load_config():
     if 'exact':
-        config_file = '../config/config-no-errors.json'
+        config_file = 'config/config-no-errors.json'
     # elif 'one_error':
     #     config_file = '../config/config.json'
-    config = read_json(config_file)
+    config = utils.read_json(config_file)
     return config
 
 
-@pytest.fixture
+@pytest.fixture(scope='function')
 def load_counts(load_config):
-    config = load_config
-    output_path = Path(config['output_file']).parent
-    counts_true = read_txt(output_path / 'counts_true.txt')[1:]
-    counts_pred = read_txt(output_path / 'counts.txt')[1:]
-    return counts_true, counts_pred
+    def _load_counts():
+        config = load_config
+        output_path = Path(config['output_file']).parent
+        counts_true, counts_pred = [], []
+        files_true = sorted(list(Path(output_path / 'counts_true').iterdir()))
+        files_pred = sorted(list(Path(output_path / 'counts').iterdir()))
+        for file_true, file_pred in zip(files_true, files_pred):
+            counts_true += [utils.read_txt(file_true)]
+            counts_pred += [utils.read_txt(file_pred)]
+        return counts_true, counts_pred
+    yield _load_counts
 
 
 def test_simulation(load_config, load_counts):
     config = load_config
-    run_simulation(config)
-    compute_counts_cli(config['output_file'], config['struct_file'])
-    counts_true, counts_pred = load_counts
-    assert counts_true == counts_pred
-
-
-def test_num_codes(load_counts):
-    counts_true, counts_pred = load_counts
-    assert len(counts_true) == len(counts_pred)
-
-
-def test_num_matches(load_counts):
-    counts_true, counts_pred = load_counts
-    sum_true, sum_pred = 0, 0
-    for count_true, count_pred in zip(counts_true, counts_pred):
-        sum_true += int(count_true.split('\t')[0])
-        sum_pred += int(count_pred.split('\t')[0])
-    assert sum_true == sum_pred
+    dir = Path(config['output_file']).parent
+    with tempfile.TemporaryDirectory(dir=dir) as tmp:
+        config['output_file'] = Path(tmp) / Path(config['output_file']).name
+        run_simulation(config)
+        compute_counts_cli(config['output_file'], config['struct_file'])
+        counts_true, counts_pred = load_counts()
+        assert counts_true == counts_pred
 

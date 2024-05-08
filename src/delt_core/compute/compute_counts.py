@@ -13,6 +13,7 @@ from .utils import read_txt
 def compute_counts(
         structure: tp.OrderedDict,
         input_file: str,
+        output_path: str,
 ) -> tp.Dict:
     
     """
@@ -28,9 +29,11 @@ def compute_counts(
     indices = np.full((len(structure), num_reads), -1)
     
     map_sequences(structure, keys, indices, input_file)
-    counts = create_table(structure, indices)
-
-    return counts
+    selections = perform_selection(structure, indices)
+    for selection in selections:
+        s1, s2 = selection[0]
+        counts = create_table(structure, selection[1])
+        save_counts(counts, Path(output_path) / f'counts_{s1}_{s2}.txt')
 
 
 def find_max_component(
@@ -143,6 +146,30 @@ def map_sequences(
     os.remove(info_file)
     os.remove(output_file_a)
     os.remove(output_file_b)
+
+
+def perform_selection(
+        structure: tp.Dict,
+        indices: np.ndarray,
+):
+    locs = []
+    for loc, key in enumerate(structure.keys()):
+        if key[0] == 'S':
+            locs += [loc]
+    
+    selections = []
+    num_s1 = max(indices[locs[0], :]) + 1
+    num_s2 = max(indices[locs[1], :]) + 1
+    # num_s1 = max(indices[0, :]) + 1               # always 2 primers ?
+    # num_s2 = max(indices[-1, :]) + 1
+
+    for s1 in range(num_s1):
+        selection_s1 = indices[:, indices[0, :] == s1]
+        for s2 in range(num_s2):
+            selection_s2 = selection_s1[:, selection_s1[-1, :] == s2]
+            selections += [[(s1, s2), selection_s2]]
+    
+    return selections
 
 
 def create_table(
