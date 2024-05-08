@@ -1,4 +1,3 @@
-# %%
 import json
 from pathlib import Path
 import typing as tp
@@ -7,37 +6,39 @@ import click
 import numpy as np
 import pandas as pd
 
-# %%
+
 BASES = ['A', 'T', 'C', 'G']
 rng = np.random.default_rng()
 
 
-def read_struct_file(path_to_struct_file):
-    path_to_struct_file = Path(path_to_struct_file)
-    with open(path_to_struct_file, 'r') as f:
-        lines = f.readlines()
+def read_json(
+        path: str,
+) -> None:
+    with open(path, 'r') as file:
+        return json.load(file)
 
-    file_name = lines[0].strip()
-    elements = list(map(lambda x: x.strip().split('\t'), lines[2:]))
-    elements = pd.DataFrame.from_records(elements, columns=['start', 'end', 'region_type', 'path_to_barcode_list'])
-    elements['start'] = elements['start'].astype(int) - 1
-    elements['end'] = elements['end'].astype(int) - 1
-    elements['path_to_barcode_list'] = [path_to_struct_file.parent / i for i in elements['path_to_barcode_list']]
 
-    barcodes = [open(i, 'r').readlines() for i in elements['path_to_barcode_list']]
-    barcodes = map(lambda x: list(map(lambda y: y.strip(), x)), barcodes)
-    barcodes = map(lambda x: filter(lambda y: len(y) > 0, x), barcodes)
-    barcodes = map(lambda x: list(map(lambda y: list(y), x)), barcodes)
-    barcodes = list(barcodes)
-    elements['barcodes'] = barcodes
+def read_struct_file(
+        path: str,
+) -> tp.Dict:
+    
+    structure = read_json(path)
+    elements = []
+    start = 0
 
-    elements = elements.sort_values('start')
-    return dict(file_name=file_name,
-                elements=elements)
+    for element, values in structure.items():
+        seqs = list(map(lambda x: [*x], values['Sequences']))
+        length = len(seqs[0])
+        end = start + length - 1
+        elements += [[start, end, element[0], seqs[:2]]]
+        start += length
+
+    elements = pd.DataFrame.from_records(elements, columns=['start', 'end', 'region_type', 'barcodes'])
+    return (dict(elements=elements))
 
 
 def generate_reads(config):
-    number_of_reads = config['number_of_reads']
+    number_of_reads = config['num_reads']
     elements = config['elements']
     regions = elements[['start', 'end', 'barcodes']].to_records(index=False)
 
@@ -50,7 +51,8 @@ def generate_reads(config):
 
         for j, region in enumerate(regions):
             start, end, barcodes = region
-            idx = rng.choice(range(0, len(barcodes)))
+            idx = rng.choice(range(0, len(barcodes[:10])))
+            # idx = rng.choice(range(0, len(barcodes)))
             barcode = barcodes[idx]
             indices[j, i] = idx
             assert end - start + 1 == len(barcode)
@@ -98,7 +100,7 @@ def create_errors(config, reads):
 
 
 def generate_fastq_file(config, reads):
-    path_to_output = config['path_to_output']
+    path_to_output = config['output_file']
     content = []
     for i, read in enumerate(reads):
         phred_scores = '~' * len(read)
@@ -114,7 +116,7 @@ def generate_fastq_file(config, reads):
 def compute_counts(
         structure: tp.Dict,
         indices: np.ndarray,
-):
+) -> tp.Dict:
     code_indices = [i for i, key in enumerate(structure.keys()) if key[0] == 'B']
     counts = {}
     for index in indices.T:
@@ -128,7 +130,7 @@ def compute_counts(
 def save_counts(
         counts: tp.Dict,
         path: str,
-):
+) -> None:
     with open(path, 'w') as file:
         num_codes = len(next(iter(counts.keys())))
         header = ['Count', *[f'Code{i}' for i in range(1, num_codes + 1)], '\n']
@@ -138,31 +140,33 @@ def save_counts(
             file.write(f'{count}\t{row}\n')
 
 
-
-
-
-# %%
-@click.command()
-@click.argument('path_to_config', type=click.Path(exists=True))
-def main(path_to_config):
-    path_to_config = Path(path_to_config)
-    with open(path_to_config, 'r') as f:
-        config = json.load(f)
-    path_to_struct_file = config['path_to_struct_file']
-    struct_dict = read_struct_file(path_to_struct_file)
+def run_simulation(
+        config: tp.Dict,
+) -> None:
+    
+    # Generate FASTQ file.
+    struct_file = config['struct_file']
+    struct_dict = read_struct_file(struct_file)
     config.update(struct_dict)
     reads, indices = generate_reads(config)
     reads = create_errors(config, reads)
     generate_fastq_file(config, reads)
 
-    # Compute counts.
-    path_to_struct_file = Path(path_to_struct_file).parent.parent / 'structure.json'
-    with open(path_to_struct_file, 'r') as file:
-        structure = json.load(file)
+    # Generate table for counts.
+    structure = read_json(struct_file)
     counts = compute_counts(structure, indices)
-    path_to_counts = Path(config['path_to_output']).parent / 'counts_true.txt'
+    path_to_counts = Path(config['output_file']).parent / 'counts_true.txt'
     save_counts(counts, path_to_counts)
+
+
+@click.command()
+@click.argument('config_file', type=click.Path(exists=True))
+def main(config_file):
+    config = read_json(config_file)
+    run_simulation(config)
+
 
 
 if __name__ == '__main__':
     main()
+

@@ -1,0 +1,6 @@
+{
+  "struct_file": "/Users/Gary/Downloads/zivi/git/delt-core/data/simulation/structure.json",
+  "output_file": "/Users/Gary/Downloads/zivi/git/delt-core/data/simulation/simulation.fastq",
+  "num_reads": 100,
+  "errors": []
+}

@@ -7,7 +7,7 @@ from ... import compute as c
 def compute_smiles_cli(
         input_path: tp.Tuple,
         output_path: str = None,
-):
+) -> None:
     if not output_path:
         output_path = Path(input_path[0]).parent / 'smiles.txt'
 
@@ -22,7 +22,7 @@ def compute_counts_cli(
         input_file: str,
         struct_file: str,
         output_file: str = None,
-):
+) -> None:
     input_file = Path(input_file)
     structure = c.read_json(struct_file)
     if not output_file:
