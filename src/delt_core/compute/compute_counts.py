@@ -167,7 +167,8 @@ def perform_selection(
         selection_s1 = indices[:, indices[0, :] == s1]
         for s2 in range(num_s2):
             selection_s2 = selection_s1[:, selection_s1[-1, :] == s2]
-            selections += [[(s1, s2), selection_s2]]
+            if selection_s2.size:
+                selections += [[(s1, s2), selection_s2]]
     
     return selections
 
@@ -190,9 +191,9 @@ def save_counts(
         counts: tp.Dict,
         path: str,
 ) -> None:
+    num_codes = len(next(iter(counts.keys())))
+    header = ['Count', *[f'Code{i}' for i in range(1, num_codes + 1)], '\n']
     with open(path, 'w') as file:
-        num_codes = len(next(iter(counts.keys())))
-        header = ['Count', *[f'Code{i}' for i in range(1, num_codes + 1)], '\n']
         file.write('\t'.join(header))
         for codes, count in counts.items():
             row = '\t'.join(str(code) for code in codes)

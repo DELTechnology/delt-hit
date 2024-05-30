@@ -64,7 +64,6 @@ def create_all_barcode_regions_single_position_error(reads, elements, relative_p
     regions = elements[elements.region_type.isin(['B'])]
     positions = regions.start + relative_position
     base = rng.choice(BASES)
-    print(base)
     reads_stacked[:, positions.values] = base
     return [i for i in reads_stacked]
 
@@ -90,7 +89,6 @@ def create_errors(config, reads):
             reads = create_insertion_at_read_start_error(reads, elements, **error['kwargs'])
         else:
             raise NotImplementedError()
-
     return reads
 
 

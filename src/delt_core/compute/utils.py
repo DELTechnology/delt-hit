@@ -1,3 +1,4 @@
+import gzip
 import json
 import typing as tp
 
@@ -53,28 +54,34 @@ def get_smarts(
 
 
 def get_reverse(
-        codon: str,
+        const: str,
 ) -> str:
-    return codon[::-1]
+    return const[::-1].replace('{codon}'[::-1], '{codon}')
 
 
 def get_complement(
-        codon: str,
+        const: str,
 ) -> str:
     complement = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
-    codon = ''.join(complement.get(base, base) for base in codon)
-    return codon
+    return ''.join(complement.get(base, base) for base in const)
 
 
-def generate_code(
+def generate_const(
+        const: str,
+) -> str:
+    seq = const['Sequence']
+    if const['Reverse']:
+        seq = get_reverse(seq)
+    if const['Complement']:
+        seq = get_complement(seq)
+    return seq
+
+
+def insert_codon(
         const: str,
         codon: str,
 ) -> str:
-    if const['Reverse']:
-        codon = get_reverse(codon)
-    if const['Complement']:
-        codon = get_complement(codon)
-    return const['Sequence'].replace('{codon}', codon)
+    return const.replace('{codon}', codon, 1)
 
 
 def compute_product(
@@ -118,9 +125,12 @@ def perform_reaction(
 def read_txt(
         path: str,
 ) -> tp.List:
-    mode = 'rb' if str(path)[-2:] == 'gz' else 'r'
-    with open(path, mode) as file:
-        return file.readlines()
+    if str(path)[-2:] == 'gz':
+        with gzip.open(path, 'rt') as file:
+            return file.readlines()
+    else:
+        with open(path, 'r') as file:
+            return file.readlines()
 
 
 def write_txt(
@@ -130,7 +140,6 @@ def write_txt(
 ) -> None:
     with open(path, mode) as file:
         for row in rows:
-            # file.writelines('\t'.join(row))
             file.write('\t'.join(row))
             file.write('\n')
 
@@ -148,4 +157,11 @@ def write_json(
 ) -> None:
     with open(path, 'w') as file:
         json.dump(data, file)
+
+
+
+
+if __name__ == '__main__':
+
+    pass
 

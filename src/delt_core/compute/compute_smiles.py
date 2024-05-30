@@ -1,10 +1,14 @@
 import os
-from pathlib import Path
 import typing as tp
 
-import numpy as np
-
-from .utils import get_smiles, generate_code, perform_reaction, write_txt, read_txt
+from .utils import (
+    get_smiles,
+    generate_const,
+    insert_codon,
+    perform_reaction,
+    write_txt,
+    read_txt,
+)
 
 
 def compute_smiles(
@@ -37,10 +41,10 @@ def perform_reaction_steps(
     write_txt([header], output_path, 'w')
 
     bbs, scaffolds, reactions, consts = library
+    const = generate_const(consts.iloc[0])
 
     # Perform reaction step 1.
     bb1 = bbs.pop(0)
-    const1 = consts.iloc[0]
     rows = []
 
     for i, bb in bb1.iterrows():
@@ -50,13 +54,13 @@ def perform_reaction_steps(
             product = scaffold
             
             for reaction_type in bb['ReactionType'].split(','):
-                product = perform_reaction(reaction_type, reactions, bb['SMILES'], product)
+                product = perform_reaction(reaction_type.strip(), reactions, bb['SMILES'], product)
         
         else:
             scaffold = 'None'
             product = bb['SMILES']
         
-        code = generate_code(const1, bb['Codon'])
+        code = insert_codon(const, bb['Codon'])
         rows += [[scaffold, bb['SMILES'], product, code]]
     
     write_txt(rows, output_path)
@@ -65,8 +69,6 @@ def perform_reaction_steps(
     for i, bbn in enumerate(bbs, 2):
         header.insert(i, f'BuildingBlock{i}_L{index}')
         write_txt([header], tmp, 'w')
-        idx = (consts['ID'] == i).idxmax()
-        constn = consts.iloc[idx]
         
         with open(output_path, 'r') as interms:
             next(interms)
@@ -77,7 +79,7 @@ def perform_reaction_steps(
 
                 for _, bb in bbn.iterrows():
                     product = perform_reaction(bb['ReactionType'], reactions, interm[-2], bb['SMILES'])
-                    code = interm[-1] + generate_code(constn, bb['Codon'])
+                    code = insert_codon(interm[-1], bb['Codon'])
                     rows += [[*interm[:-2], bb['SMILES'], product, code]]
                 
                 write_txt(rows, tmp)
