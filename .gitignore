@@ -295,3 +295,6 @@ _version.py
 # nextflow
 .nextflow.log*
 .nextflow/
+
+# sequencing files
+*.gz
