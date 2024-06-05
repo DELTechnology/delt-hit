@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+import tempfile
 import typing as tp
 
 from .utils import (
@@ -6,8 +8,8 @@ from .utils import (
     generate_const,
     insert_codon,
     perform_reaction,
-    write_txt,
     read_txt,
+    write_txt,
 )
 
 
@@ -16,16 +18,20 @@ def compute_smiles(
         output_path: str,
 ) -> None:
     
-    parent = output_path.parent
+    # hybridize(Path('./smiles'))
+    # exit()
 
-    for i, library in enumerate(libraries, 1):
-        perform_reaction_steps(i, library, parent)
+    parent = output_path.parent
+    with tempfile.TemporaryDirectory(dir=parent) as tmp:
+        tmp = Path(tmp)
+
+        for i, library in enumerate(libraries, 1):  
+            perform_reaction_steps(i, library, tmp)
+        
+        if len(libraries) > 1:
+            hybridize(tmp)
     
-    num_steps = len(libraries) - 1
-    if num_steps:
-        hybridize(num_steps, parent)
-    
-    os.rename(parent / 'smiles1.txt', output_path)
+        os.rename(tmp / 'smiles1.txt', output_path)
 
 
 def perform_reaction_steps(
@@ -33,7 +39,7 @@ def perform_reaction_steps(
         library: tp.Tuple,
         output_path: str,
 ) -> None:
-    
+
     tmp = output_path / 'tmp.txt'
     output_path = output_path / f'smiles{index}.txt'
 
@@ -47,14 +53,14 @@ def perform_reaction_steps(
     bb1 = bbs.pop(0)
     rows = []
 
-    for i, bb in bb1.iterrows():
+    for _, bb in bb1.iterrows():
 
         if bb['ReactionType']:  
             scaffold = get_smiles(bb['ScaffoldID'], scaffolds)
             product = scaffold
             
             for reaction_type in bb['ReactionType'].split(','):
-                product = perform_reaction(reaction_type.strip(), reactions, bb['SMILES'], product)
+                product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
         
         else:
             scaffold = 'None'
@@ -73,12 +79,15 @@ def perform_reaction_steps(
         with open(output_path, 'r') as interms:
             next(interms)
 
-            for interm in interms:
+            for i, interm in enumerate(interms):
                 interm = interm.split()
                 rows = []
 
                 for _, bb in bbn.iterrows():
-                    product = perform_reaction(bb['ReactionType'], reactions, interm[-2], bb['SMILES'])
+                    product = interm[-2]
+                    for reaction_type in bb['ReactionType'].split(','):
+                        product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
+                    
                     code = insert_codon(interm[-1], bb['Codon'])
                     rows += [[*interm[:-2], bb['SMILES'], product, code]]
                 
@@ -88,39 +97,35 @@ def perform_reaction_steps(
 
 
 def hybridize(
-        num_steps: int,
         output_path: str,
 ) -> None:
     
-    tmp = output_path / 'tmp.txt'
     output_file = output_path / 'smiles1.txt'
+    tmp = output_path / 'tmp.txt'
 
-    for step in range(2, num_steps+2):
-        os.rename(output_file, tmp)
+    interms1 = read_txt(output_file)
+    header1 = interms1.pop(0).split()[:-1]
+
+    for i, interm1 in enumerate(interms1):
+        interm1 = interm1.split()
+        code1 = interm1.pop()
         rows = []
-
-        interms1 = read_txt(tmp)
-        header1 = interms1.pop(0).split()[:-1]
-
-        for i, interm1 in enumerate(interms1):
-            interm1 = interm1.split()
-            code1 = interm1.pop()
-            
-            path = output_path / f'smiles{step}.txt'
-            interms2 = read_txt(path)
-            header2 = interms2.pop(0).split()[:-1]
-            
-            if not i:
-                header = [*header1, *header2, "Sequence"]
-                write_txt([header], output_file, 'w')
-
-            for interm2 in interms2:
-                interm2 = interm2.split()
-                code = code1 + interm2.pop()
-                rows += [[*interm1, *interm2, code]]
         
-        write_txt(rows, output_file)
+        path = output_path / f'smiles2.txt'
+        interms2 = read_txt(path)
+        header2 = interms2.pop(0).split()[:-1]
         
-        os.remove(path)
-    os.remove(tmp)
+        if not i:
+            header = [*header1, *header2, "Sequence"]
+            write_txt([header], tmp, 'w')
+
+        for interm2 in interms2:
+            interm2 = interm2.split()
+            code = code1 + interm2.pop()
+            rows += [[*interm1, *interm2, code]]
+    
+        write_txt(rows, tmp)
+    
+    os.rename(tmp, output_file)
+    os.remove(path)
 

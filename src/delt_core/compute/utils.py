@@ -29,28 +29,19 @@ def get_smiles(
         scaffold_id: str,
         scaffolds: pd.DataFrame,
 ) -> str:
-    """
-    Returns the SMILES of the respective scaffold.
-    """
-    try:
-        mask = scaffolds['ScaffoldID'] == scaffold_id
-        return scaffolds['SMILES'][mask].values[0]
-    except:
-        raise ValueError('SMILES not available.')
+    mask = scaffolds['ScaffoldID'] == scaffold_id
+    return scaffolds['SMILES'][mask].values[0]
 
 
 def get_smarts(
         reaction_type: str,
         reactions: pd.DataFrame,
 ) -> str:
-    """
-    Returns the SMARTS of the respective reaction.
-    """
     try:
         mask = reactions['ReactionType'] == reaction_type
         return reactions['SMARTS'][mask].values[0]
     except:
-        raise ValueError('SMARTS not available.')
+        raise ValueError(f'SMARTS of {reaction_type} not available.')
 
 
 def get_reverse(
@@ -89,17 +80,17 @@ def compute_product(
         smiles_1: str,
         smiles_2: str = None,
 ) -> str:
-    """
-    Computes the product of the respective reaction.
-    """
     rxn = rdChemReactions.ReactionFromSmarts(smarts)
     if smiles_2:
-        reacts = (Chem.MolFromSmiles(smiles_1), Chem.MolFromSmiles(smiles_2))
-        product = rxn.RunReactants(reacts)
+        react_1, react_2 = Chem.MolFromSmiles(smiles_1), Chem.MolFromSmiles(smiles_2)
+        try:
+            product = rxn.RunReactants((react_1, react_2))[0][0]
+        except:
+            product = rxn.RunReactants((react_2, react_1))[0][0]
     else:
         react = Chem.MolFromSmiles(smiles_1)
-        product = rxn.RunReactant(react, 0)
-    return Chem.MolToSmiles(product[0][0])
+        product = rxn.RunReactant(react, 0)[0][0]
+    return Chem.MolToSmiles(product)
 
 
 def perform_reaction(
@@ -108,15 +99,11 @@ def perform_reaction(
         smiles_1: str,
         smiles_2: str,
 ) -> tp.Tuple:
-    """
-    Performs the respective reaction.
-    """
+    unimolecular = ['SR', 'DH', 'DT', 'SN2-1']
     if not reaction_type:
         return smiles_1
     smarts = get_smarts(reaction_type, reactions)
-    if reaction_type == 'SR':
-        return compute_product(smarts, smiles_2)
-    elif reaction_type == 'DH':
+    if reaction_type in unimolecular:
         return compute_product(smarts, smiles_1)
     else:
         return compute_product(smarts, smiles_1, smiles_2)
@@ -163,5 +150,17 @@ def write_json(
 
 if __name__ == '__main__':
 
-    pass
+    ABF = '[CX3:1](=[O:2])[OX2;H1].[N;H2:4]>>[CX3:1](=[O:2])[N;H:4]'
+    SR = '[#6:1][$([NX2-][NX2+]#[NX1]),$([NX2]=[NX2+]=[NX1-])]>>[#6:1][N;H2]'
+    CuAAC = '[CX2:1]#[CX2;H1:2].[N:3]=[N+:4]=[N-:5]>>[C:1]1=[C:2][N-0:3][N-0:4]=[N-0:5]1'
+    Suz = '[cX3:1][I].[#6:2][BX3]>>[cX3:1][#6:2]'
+    Son = '[cX3:1][I].[CX2:2]#[CX2;H1:3]>>[cX3:1]-[CX2:3]#[CX2:2]'
+    DH = '[cX3:1][I]>>[cX3;H1:1]'
+    DT = '[#6:1][N;H2:2]>>[#6:1][N:2]=[N+]=[N-]'
+
+    bb1 = 'C[C@H](N=[N+]=[N-])C(=O)N[C@@H](C)C(=O)NC(=O)[C@H](N)CS'
+    bb2 = 'C#CCCC(O)=O'
+
+    product = compute_product(CuAAC, bb1, bb2)
+    print(product)
 
