@@ -10,9 +10,6 @@ from rdkit.Chem import rdChemReactions
 def load_data(
         path: str,
 ) -> tp.Tuple[tp.List, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """
-    Returns the building blocks, the scaffolds, the reactions, and the constant regions.
-    """
     scaffolds = pd.read_excel(path, sheet_name='scaffolds')
     reactions = pd.read_excel(path, sheet_name='smarts')
     consts = pd.read_excel(path, sheet_name='const')
@@ -112,12 +109,8 @@ def perform_reaction(
 def read_txt(
         path: str,
 ) -> tp.List:
-    if str(path)[-2:] == 'gz':
-        with gzip.open(path, 'rt') as file:
-            return file.readlines()
-    else:
-        with open(path, 'r') as file:
-            return file.readlines()
+    with open(path, 'r') as file:
+        return file.readlines()
 
 
 def write_txt(
@@ -126,6 +119,24 @@ def write_txt(
         mode: str = 'a',
 ) -> None:
     with open(path, mode) as file:
+        for row in rows:
+            file.write('\t'.join(row))
+            file.write('\n')
+
+
+def read_gzip(
+        path: str,
+) -> tp.List:
+    with gzip.open(path, 'rt') as file:
+        return file.readlines()
+
+
+def write_gzip(
+        rows: tp.List,
+        path: str = './',
+        mode: str = 'at',
+) -> None:
+    with gzip.open(path, mode) as file:
         for row in rows:
             file.write('\t'.join(row))
             file.write('\n')
@@ -144,23 +155,4 @@ def write_json(
 ) -> None:
     with open(path, 'w') as file:
         json.dump(data, file)
-
-
-
-
-if __name__ == '__main__':
-
-    ABF = '[CX3:1](=[O:2])[OX2;H1].[N;H2:4]>>[CX3:1](=[O:2])[N;H:4]'
-    SR = '[#6:1][$([NX2-][NX2+]#[NX1]),$([NX2]=[NX2+]=[NX1-])]>>[#6:1][N;H2]'
-    CuAAC = '[CX2:1]#[CX2;H1:2].[N:3]=[N+:4]=[N-:5]>>[C:1]1=[C:2][N-0:3][N-0:4]=[N-0:5]1'
-    Suz = '[cX3:1][I].[#6:2][BX3]>>[cX3:1][#6:2]'
-    Son = '[cX3:1][I].[CX2:2]#[CX2;H1:3]>>[cX3:1]-[CX2:3]#[CX2:2]'
-    DH = '[cX3:1][I]>>[cX3;H1:1]'
-    DT = '[#6:1][N;H2:2]>>[#6:1][N:2]=[N+]=[N-]'
-
-    bb1 = 'C[C@H](N=[N+]=[N-])C(=O)N[C@@H](C)C(=O)NC(=O)[C@H](N)CS'
-    bb2 = 'C#CCCC(O)=O'
-
-    product = compute_product(CuAAC, bb1, bb2)
-    print(product)
 

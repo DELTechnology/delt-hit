@@ -1,3 +1,0 @@
-Count	Code1	Code2	
-1	6	2
-1	2	4
