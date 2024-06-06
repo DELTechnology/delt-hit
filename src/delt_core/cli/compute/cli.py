@@ -27,12 +27,6 @@ def smiles(**kwargs):
 
 @compute.command()
 @click.argument(
-    'input_file',
-    nargs=1,
-    required=True,
-    type=click.Path(exists=True),
-)
-@click.argument(
     'struct_file',
     nargs=1,
     required=True,

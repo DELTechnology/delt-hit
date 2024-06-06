@@ -146,21 +146,3 @@ def write_json(
         json.dump(data, file)
 
 
-
-
-if __name__ == '__main__':
-
-    ABF = '[CX3:1](=[O:2])[OX2;H1].[N;H2:4]>>[CX3:1](=[O:2])[N;H:4]'
-    SR = '[#6:1][$([NX2-][NX2+]#[NX1]),$([NX2]=[NX2+]=[NX1-])]>>[#6:1][N;H2]'
-    CuAAC = '[CX2:1]#[CX2;H1:2].[N:3]=[N+:4]=[N-:5]>>[C:1]1=[C:2][N-0:3][N-0:4]=[N-0:5]1'
-    Suz = '[cX3:1][I].[#6:2][BX3]>>[cX3:1][#6:2]'
-    Son = '[cX3:1][I].[CX2:2]#[CX2;H1:3]>>[cX3:1]-[CX2:3]#[CX2:2]'
-    DH = '[cX3:1][I]>>[cX3;H1:1]'
-    DT = '[#6:1][N;H2:2]>>[#6:1][N:2]=[N+]=[N-]'
-
-    bb1 = 'C[C@H](N=[N+]=[N-])C(=O)N[C@@H](C)C(=O)NC(=O)[C@H](N)CS'
-    bb2 = 'C#CCCC(O)=O'
-
-    product = compute_product(CuAAC, bb1, bb2)
-    print(product)
-
