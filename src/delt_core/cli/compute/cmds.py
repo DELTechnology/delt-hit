@@ -27,7 +27,6 @@ def compute_counts_cli(
     fastq_file = Path(fastq_file).resolve()
     struct_file = Path(struct_file).resolve()
     dir = struct_file.parent
-    # structure = c.read_json(struct_file)
     
     if not output_dir:
         output_dir = dir / 'counts'

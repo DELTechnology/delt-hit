@@ -1,8 +1,8 @@
 import gzip
-from pathlib import Path
+import json
+
 import pandas as pd
 from tqdm import tqdm
-import json
 
 
 def compute_counts(

@@ -4,55 +4,59 @@ import stat
 import textwrap
 import typing as tp
 
+import pandas as pd
 from pydantic import BaseModel, computed_field
 
 
 class Region(BaseModel):
-    start: int
-    end: int
-    type: str
-    codons: list[str]
+    name: str
+    codons: tp.List[str]
+    max_error_rate: float
     position_in_construct: int = None
 
     @computed_field
     @property
     def region_id(self) -> str:
-        return f'{self.position_in_construct}.{self.type}'
+        return f'{self.position_in_construct}-{self.name}'
+
+
+def read_struct(
+        path: str,
+) -> tp.Dict:
+    data = pd.read_excel(path).to_dict()
+    struct = {}
+    for key, value in data['Region'].items():
+        struct[value] = {
+            'path': data['Path'][key],
+            'max_error_rate': data['MER'][key],
+        }
+    return struct
 
 
 def get_regions(
         struct_file = str,
-):
-    with open(struct_file, 'r') as f:
-        struct = f.read().split('\n')
-    
+) -> tp.List:
+    struct = read_struct(struct_file)
     regions = []
-    for i in struct:
-        if len(i) == 0:
-            continue
-        idx_start, idx_end, _type, relative_path_to_codons = i.split('\t')
-
-        with open(struct_file.parent / relative_path_to_codons, 'r') as f:
+    for key, value in struct.items():
+        with open(struct_file.parent / value['path'], 'r') as f:
             codons = f.read().split('\n')
             codons = filter(len, codons)
-
-        region = Region(start=int(idx_start) - 1, end=int(idx_end) - 1, type=_type, codons=codons)
+        region = Region(name=key, codons=codons, max_error_rate=value['max_error_rate'])
         regions.append(region)
-
-    return sorted(regions, key=lambda x: x.start)
+    return regions
 
 
 def write_fastq_files(
         regions = tp.List,
         path = str,
-):
+) -> None:
     fastq = ''
     for i, region in enumerate(regions):
         region.position_in_construct = i
         fastq = [f'>{region.region_id}.{index}\n{codon}'
                 for index, codon in enumerate(region.codons)]
         fastq = '\n'.join(fastq)
-
         with open(path / f'{region.region_id}.fastq', 'w') as f:
             f.write(fastq)
 
@@ -62,7 +66,7 @@ def generate_input_files(
         path_struct_file: str,
         path_demultiplex_exec: str,
         path_final_reads: str,
-):
+) -> None:
     path_input_dir = path_demultiplex_exec.parent
     path_output_dir = path_final_reads.parent
     path_input_dir.mkdir(parents=True, exist_ok=True)
@@ -76,17 +80,16 @@ def generate_input_files(
         f.write('#!/bin/bash\n')
         f.write('# make sure you installed pigz with `brew install pigz` to enable parallel processing\n\n')
         f.write(f'mkdir "{path_output_dir}"\n')
-        # we symlink the fastq file we want to demultiplex
+        # NOTE: we symlink the fastq file we want to demultiplex
         f.write(f'ln -sf "{path_input_fastq}" "{path_output_fastq}"\n')
 
-    error_rate = 0
     rename_command = '{id} {comment}?{adapter_name}'
     n_cores = multiprocessing.cpu_count()
 
     for region in regions:
-        # path_output_info = path_output_dir / 'info.tsv'
+        error_rate = region.max_error_rate
         path_adapters = path_input_dir / f'{region.region_id}.fastq'
-        # note: from now on we use the output of the previous step as input
+        # NOTE: from now on we use the output of the previous step as input
         path_input_fastq = path_output_dir / 'input.fastq.gz'
 
         report_file_name = path_output_dir / f'{region.region_id}.cutadapt.json'
