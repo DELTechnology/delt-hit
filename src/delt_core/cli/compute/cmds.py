@@ -19,37 +19,27 @@ def compute_smiles_cli(
     c.compute_smiles(libraries, Path(output_path))
 
 
-# def compute_counts_cli(
-#         input_file: str,
-#         struct_file: str,
-#         output_path: str = None,
-# ) -> None:
-#     input_file = Path(input_file)
-#     structure = c.read_json(struct_file)
-#     if not output_path:
-#         output_path = input_file.parent / 'counts'
-#         output_path.mkdir(parents=True, exist_ok=True)
-
-#     c.compute_counts(structure, input_file, output_path)
-
-
 def compute_counts_cli(
+        fastq_file: str,
         struct_file: str,
-        output_path: str = None,
+        output_dir: str = None,
 ) -> None:
-    struct_file = Path(struct_file)
+    fastq_file = Path(fastq_file).resolve()
+    struct_file = Path(struct_file).resolve()
     dir = struct_file.parent
-    if not output_path:
-        output_path = dir / 'output'
-        output_path.mkdir(parents=True, exist_ok=True)
+    # structure = c.read_json(struct_file)
     
-    c.generate_input_files(struct_file, output_path)
+    if not output_dir:
+        output_dir = dir / 'counts'
+        output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = Path(output_dir).resolve()
     
-    bash = dir / 'cutadapt_input_files/demultiplex.sh'
-    subprocess.run(['bash', bash])
+    input_file = dir / 'cutadapt_input_files' / 'demultiplex.sh'
+    output_file = dir / 'cutadapt_output_files' / 'reads_with_adapters.gz'
     
-    reads = dir / 'reads_with_adapters.gz'
-    c.compute_counts(reads, output_path)
+    c.generate_input_files(fastq_file, struct_file, input_file, output_file)
+    subprocess.run(['bash', input_file])
+    c.compute_counts(output_file, output_dir)
 
 
 def evaluate_cli():

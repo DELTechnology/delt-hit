@@ -27,13 +27,19 @@ def smiles(**kwargs):
 
 @compute.command()
 @click.argument(
+    'fastq_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.argument(
     'struct_file',
     nargs=1,
     required=True,
     type=click.Path(exists=True),
 )
 @click.option(
-    '--output_path',
+    '--output_dir',
     '-o',
     default=None,
     type=click.Path(writable=True),

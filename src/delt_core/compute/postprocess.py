@@ -7,20 +7,19 @@ import json
 
 def compute_counts(
         input_file: str,
-        output_path: str,
+        output_dir: str,
 ) -> None:
 
     # Path to the gzip file
-    gzip_file_path = input_file.resolve()
-    assert gzip_file_path.exists()
-
-    output_file = sorted((output_path).glob('*.cutadapt.json'))[-1]
-    number_of_reads = json.load(open(output_file))['read_counts']['output']
+    input_dir = input_file.parent
+    number_of_reads = json.load(open(
+        sorted((input_dir).glob('*.cutadapt.json'))[-1]
+    ))['read_counts']['output']
 
     # Open the gzip file
     from collections import defaultdict, Counter
     selections = defaultdict(lambda: defaultdict(int))
-    with gzip.open(gzip_file_path, 'rt') as f:
+    with gzip.open(input_file, 'rt') as f:
         # Read the file line by line
         for line in tqdm(f, total=number_of_reads, ncols=100):
             # Split the line by '-'
@@ -38,6 +37,6 @@ def compute_counts(
         df = df.astype(int)
         df.sort_values(['barcode1', 'barcode2'], inplace=True)
 
-        path_counts = Path('counts') / f'{selection_id}.tsv'
+        path_counts = output_dir / f'{selection_id}.tsv'
         df.to_csv(path_counts, index=False, sep='\t')
 
