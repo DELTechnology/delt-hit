@@ -1,7 +1,7 @@
 # Package `delt-core`
 Core functionalities to work with DECL libraries
 
-# Installation
+## Installation
 
 Install the package for development purposes.
 Navigate to the root folder of the package and run the following command:
@@ -17,12 +17,14 @@ touch .env
 These configurations can be accessed using the `python-dotenv` package.
 
 
-# CLI
+## SMILES construction
 
-In a terminal, run the following commands to test the CLI:
-
+Standard use:
 ```bash
-delt-cli --help
-delt-cli welcome # Welcome to DEL Technology!
-delt-cli process # Processing...
+delt-cli compute smiles library1.xlsx
+```
+
+Hybridization of two libraries (the order of the libraries must match the final sequence in the 5'-to-3' direction, see README):
+```bash
+delt-cli compute smiles library1.xlsx library2.xlsx
 ```

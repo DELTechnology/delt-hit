@@ -1,3 +1,5 @@
+import gzip
+import json
 import typing as tp
 
 import pandas as pd
@@ -8,9 +10,6 @@ from rdkit.Chem import rdChemReactions
 def load_data(
         path: str,
 ) -> tp.Tuple[tp.List, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """
-    Returns the building blocks, the scaffolds, the reactions, and the constant regions.
-    """
     scaffolds = pd.read_excel(path, sheet_name='scaffolds')
     reactions = pd.read_excel(path, sheet_name='smarts')
     consts = pd.read_excel(path, sheet_name='const')
@@ -27,53 +26,50 @@ def get_smiles(
         scaffold_id: str,
         scaffolds: pd.DataFrame,
 ) -> str:
-    """
-    Returns the SMILES of the respective scaffold.
-    """
-    try:
-        mask = scaffolds['ScaffoldID'] == scaffold_id
-        return scaffolds['SMILES'][mask].values[0]
-    except:
-        raise ValueError('SMILES not available.')
+    mask = scaffolds['ScaffoldID'] == scaffold_id
+    return scaffolds['SMILES'][mask].values[0]
 
 
 def get_smarts(
         reaction_type: str,
         reactions: pd.DataFrame,
 ) -> str:
-    """
-    Returns the SMARTS of the respective reaction.
-    """
     try:
         mask = reactions['ReactionType'] == reaction_type
         return reactions['SMARTS'][mask].values[0]
     except:
-        raise ValueError('SMARTS not available.')
+        raise ValueError(f'SMARTS of {reaction_type} not available.')
 
 
 def get_reverse(
-        codon: str,
+        const: str,
 ) -> str:
-    return codon[::-1]
+    return const[::-1].replace('{codon}'[::-1], '{codon}')
 
 
 def get_complement(
-        codon: str,
+        const: str,
 ) -> str:
     complement = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
-    codon = ''.join(complement.get(base, base) for base in codon)
-    return codon
+    return ''.join(complement.get(base, base) for base in const)
 
 
-def generate_code(
+def generate_const(
+        const: str,
+) -> str:
+    seq = const['Sequence']
+    if const['Reverse']:
+        seq = get_reverse(seq)
+    if const['Complement']:
+        seq = get_complement(seq)
+    return seq
+
+
+def insert_codon(
         const: str,
         codon: str,
 ) -> str:
-    if const['Reverse']:
-        codon = get_reverse(codon)
-    if const['Complement']:
-        codon = get_complement(codon)
-    return const['Sequence'].replace('{codon}', codon)
+    return const.replace('{codon}', codon, 1)
 
 
 def compute_product(
@@ -81,17 +77,17 @@ def compute_product(
         smiles_1: str,
         smiles_2: str = None,
 ) -> str:
-    """
-    Computes the product of the respective reaction.
-    """
     rxn = rdChemReactions.ReactionFromSmarts(smarts)
     if smiles_2:
-        reacts = (Chem.MolFromSmiles(smiles_1), Chem.MolFromSmiles(smiles_2))
-        product = rxn.RunReactants(reacts)
+        react_1, react_2 = Chem.MolFromSmiles(smiles_1), Chem.MolFromSmiles(smiles_2)
+        try:
+            product = rxn.RunReactants((react_1, react_2))[0][0]
+        except:
+            product = rxn.RunReactants((react_2, react_1))[0][0]
     else:
         react = Chem.MolFromSmiles(smiles_1)
-        product = rxn.RunReactant(react, 0)
-    return Chem.MolToSmiles(product[0][0])
+        product = rxn.RunReactant(react, 0)[0][0]
+    return Chem.MolToSmiles(product)
 
 
 def perform_reaction(
@@ -100,18 +96,21 @@ def perform_reaction(
         smiles_1: str,
         smiles_2: str,
 ) -> tp.Tuple:
-    """
-    Performs the respective reaction.
-    """
+    unimolecular = ['SR', 'DH', 'DT', 'SN2-1']
     if not reaction_type:
         return smiles_1
     smarts = get_smarts(reaction_type, reactions)
-    if reaction_type == 'SR':
-        return compute_product(smarts, smiles_2)
-    elif reaction_type == 'DH':
+    if reaction_type in unimolecular:
         return compute_product(smarts, smiles_1)
     else:
         return compute_product(smarts, smiles_1, smiles_2)
+
+
+def read_txt(
+        path: str,
+) -> tp.List:
+    with open(path, 'r') as file:
+        return file.readlines()
 
 
 def write_txt(
@@ -125,9 +124,35 @@ def write_txt(
             file.write('\n')
 
 
-def read_txt(
+def read_gzip(
+        path: str,
+) -> tp.List:
+    with gzip.open(path, 'rt') as file:
+        return file.readlines()
+
+
+def write_gzip(
+        rows: tp.List,
+        path: str = './',
+        mode: str = 'at',
+) -> None:
+    with gzip.open(path, mode) as file:
+        for row in rows:
+            file.write('\t'.join(row))
+            file.write('\n')
+
+
+def read_json(
+        path: str,
+) -> tp.Dict:
+    with open(path, 'r') as file:
+        return json.load(file)
+
+
+def write_json(
+        data: tp.Dict,
         path: str,
 ) -> None:
-    with open(path, 'r') as file:
-        return file.readlines()
+    with open(path, 'w') as file:
+        json.dump(data, file)
 
