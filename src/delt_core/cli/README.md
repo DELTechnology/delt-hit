@@ -1,11 +1,12 @@
 # API
 
 ## Design (This code base might come from Alice)
-delt-cli design init  # create default config file
+delt-cli design init  # create default config file 
+delt-cli design init  --min-intra-codon-dist 3 --avoid-prefix-postfix-overlaps # create default config file
 delt-cli design run <PATH_TO_CONFIG_FILE>  # run design
 
 ## Compute
-delt-cli compute smiles
+delt-cli compute smiles  # PR#3
 delt-cli compute embeddings
 delt-cli compute diversity
 
