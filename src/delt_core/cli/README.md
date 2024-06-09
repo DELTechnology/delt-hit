@@ -14,14 +14,17 @@ delt-cli compute diversity
 delt-cli demultiplex init  # create default config file
 delt-cli demultiplex init --from-old-stucture <PATH_TO_OLD_STRUCT_FILE>
 delt-cli demultiplex init --from-library <PATH_TO_EXCEL_FILE_OF_LIBRARY>
-delt0cli demultiplex run <PATH_TO_CONFIG_FILE>  # run demultiplexing
+delt-cli demultiplex run <PATH_TO_CONFIG_FILE>  # run demultiplexing
 
 ## Simulation
-delt-cli simulate init  # create default config file
-delt-cli simulate run <PATH_TO_CONFIG_FILE>  # run simulation
+delt-cli simulation init  # create default config file
+delt-cli simulation run <PATH_TO_CONFIG_FILE>  # run simulation
 
 ## Quality Control
-delt-cli qc 
+delt-cli qc codon-dist  # plot_codon_hits
+delt-cli qc codon-flow  # 2.B.flow_analysis
+delt-cli qc trimmed-seq <CODON_ID>
+
 
 ## DB Management
 delt-cli db register library 
