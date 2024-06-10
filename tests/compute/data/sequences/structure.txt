@@ -1,9 +1,0 @@
-o306001_1-sample1_704_504_OST1_S55_R1_001.fasta
-Evaluation_2301_704504_NF2-AG_yOST/
-7	30	C	./const1.txt
-37	61	C	./const2.txt
-69	80	C	./const3.txt
-1	6	S	./primer1.txt
-81	89	S	./primer2.txt
-31	36	B	./code1.txt
-62	68	B	./code2.txt

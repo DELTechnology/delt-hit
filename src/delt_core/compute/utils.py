@@ -10,9 +10,6 @@ from rdkit.Chem import rdChemReactions
 def load_data(
         path: str,
 ) -> tp.Tuple[tp.List, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """
-    Returns the building blocks, the scaffolds, the reactions, and the constant regions.
-    """
     scaffolds = pd.read_excel(path, sheet_name='scaffolds')
     reactions = pd.read_excel(path, sheet_name='smarts')
     consts = pd.read_excel(path, sheet_name='const')
@@ -112,12 +109,8 @@ def perform_reaction(
 def read_txt(
         path: str,
 ) -> tp.List:
-    if str(path)[-2:] == 'gz':
-        with gzip.open(path, 'rt') as file:
-            return file.readlines()
-    else:
-        with open(path, 'r') as file:
-            return file.readlines()
+    with open(path, 'r') as file:
+        return file.readlines()
 
 
 def write_txt(
@@ -126,6 +119,24 @@ def write_txt(
         mode: str = 'a',
 ) -> None:
     with open(path, mode) as file:
+        for row in rows:
+            file.write('\t'.join(row))
+            file.write('\n')
+
+
+def read_gzip(
+        path: str,
+) -> tp.List:
+    with gzip.open(path, 'rt') as file:
+        return file.readlines()
+
+
+def write_gzip(
+        rows: tp.List,
+        path: str = './',
+        mode: str = 'at',
+) -> None:
+    with gzip.open(path, mode) as file:
         for row in rows:
             file.write('\t'.join(row))
             file.write('\n')

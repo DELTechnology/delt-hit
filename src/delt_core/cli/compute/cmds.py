@@ -10,7 +10,7 @@ def compute_smiles_cli(
         output_path: str = None,
 ) -> None:
     if not output_path:
-        output_path = Path(input_path[0]).parent / 'smiles.txt'
+        output_path = Path(input_path[0]).parent / 'smiles.txt.gz'
 
     libraries = []
     for library in input_path:
