@@ -1,6 +1,7 @@
 import click
 
 from . import compute as c
+from . import demultiplex as d
 
 
 @click.group()
@@ -9,7 +10,7 @@ def cli():
 
 
 cli.add_command(c.compute)
-cli.add_command(c.evaluate)
+cli.add_command(d.demultiplex)
 
 
 if __name__ == '__main__':

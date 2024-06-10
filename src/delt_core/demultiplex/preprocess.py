@@ -1,8 +1,8 @@
 import multiprocessing
 import os
+from pathlib import Path
 import stat
 import textwrap
-from pathlib import Path
 
 import pandas as pd
 from pydantic import BaseModel, computed_field
@@ -19,7 +19,7 @@ class Region(BaseModel):
     def region_id(self) -> str:
         return f'{self.position_in_construct}-{self.name}'
 
-
+    
 def read_struct(
         path: str,
 ) -> dict:

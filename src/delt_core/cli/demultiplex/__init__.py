@@ -1,5 +1,1 @@
-import click
-
-@click.group()
-def demultiplex():
-    pass
+from .cli import demultiplex
