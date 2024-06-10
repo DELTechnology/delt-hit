@@ -1,21 +1,34 @@
 # API
 
+## Package modules
+- compute: compute smiles, embeddings, diversity
+- demultiplex: demultiplexing fastq files
+- design: design oligos
+- simulate: simulate data
+
 ## Design (This code base might come from Alice)
 delt-cli design init  # create default config file 
 delt-cli design init  --min-intra-codon-dist 3 --avoid-prefix-postfix-overlaps # create default config file
 delt-cli design run <PATH_TO_CONFIG_FILE>  # run design
 
+## Demultiplex
+delt-cli demultiplex convert <PATH_TO_OLD_STRUCT_FILE> <PATH_TO_NEW_STRUCT_FILE> -> codon lists -> cutadapt_input -> demultiplex.sh
+delt-cli demultiplex init --from-library <PATH_TO_EXCEL_FILE_OF_LIBRARY> -> codon lists -> cutadapt_input -> demultiplex.sh
+
+delt-cli demultiplex create-lists <PATH_TO_EXCEL_FILE_OF_LIBRARY>
+delt-cli demultiplex create-cutadapt-input <PATH_TO_STRUCTUR_FILE> --input input.fastq.gz 
+./cutadapt-input-files/demultiplex.sh 
+delt-cli demultiplex compute-counts <PAHT_TO_FILE_WITH_ADAPTER> 
+
+# 
+# delt-cli demultiplex run <PATH_TO_DIR>  # run demultiplexing 
+
+
+
 ## Compute
 delt-cli compute smiles  # PR#3
 delt-cli compute embeddings
 delt-cli compute diversity
-
-## Demultiplex
-delt-cli demultiplex init  # create default config file
-delt-cli demultiplex init --from-fastq <PATH_TO_FASTQ>
-delt-cli demultiplex init --from-old-stucture <PATH_TO_OLD_STRUCT_FILE>
-delt-cli demultiplex init --from-library <PATH_TO_EXCEL_FILE_OF_LIBRARY>
-delt-cli demultiplex run <PATH_TO_CONFIG_FILE>  # run demultiplexing
 
 ## Simulation
 delt-cli simulate init  # create default config file

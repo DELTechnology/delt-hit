@@ -30,6 +30,7 @@ def read_struct(
         struct[value] = {
             'path': data['Path'][key],
             'max_error_rate': data['MER'][key],
+            # TODO: indel flag
         }
     return struct
 
@@ -117,6 +118,7 @@ def generate_input_files(
 
     with open(path_demultiplex_exec, 'a') as f:
         f.write(f'zgrep "@" "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
+        f.write(f'delt-cli compute-counts {path_final_reads}')
         f.write(f'rm {path_output_fastq} {path_input_fastq}')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
