@@ -9,12 +9,24 @@ def demultiplex():
 
 
 @demultiplex.command()
-@click.argument(
-    'fastq_file',
-    nargs=1,
-    required=True,
-    type=click.Path(exists=True),
-)
+# @click.argument()
+def convert(**kwargs):
+    cmds.convert(**kwargs)
+
+
+@demultiplex.command()
+# @click.argument()
+def init(**kwargs):
+    cmds.init(**kwargs)
+
+
+@demultiplex.command()
+# @click.argument()
+def create_lists(**kwargs):
+    cmds.create_lists(**kwargs)
+
+
+@demultiplex.command()
 @click.argument(
     'struct_file',
     nargs=1,
@@ -22,11 +34,45 @@ def demultiplex():
     type=click.Path(exists=True),
 )
 @click.option(
-    '--output_dir',
-    '-o',
+    '--fastq_file',
+    '-f',
     default=None,
     type=click.Path(writable=True),
 )
-def counts(**kwargs):
-    cmds.compute_counts_cli(**kwargs)
+def create_cutadapt_input(**kwargs):
+    cmds.create_cutadapt_input(**kwargs)
+
+
+@demultiplex.command()
+@click.argument(
+    'input_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.argument(
+    'output_dir',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=False),
+)
+def compute_counts(**kwargs):
+    cmds.compute_counts(**kwargs)
+
+
+@demultiplex.command()
+@click.argument(
+    'struct_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.option(
+    '--fastq_file',
+    '-f',
+    default=None,
+    type=click.Path(writable=True),
+)
+def run(**kwargs):
+    cmds.run(**kwargs)
 

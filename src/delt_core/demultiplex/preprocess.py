@@ -64,16 +64,17 @@ def write_fastq_files(
 
 
 def generate_input_files(
-        path_input_fastq: Path,
         path_struct_file: Path,
-        path_demultiplex_exec: Path,
-        path_final_reads: Path,
+        path_input_fastq: Path,
 ) -> None:
-    path_input_dir = path_demultiplex_exec.parent
-    path_output_dir = path_final_reads.parent
+    dir = path_struct_file.parent
+    path_input_dir = dir / 'cutadapt_input_files'
     path_input_dir.mkdir(parents=True, exist_ok=True)
-    path_output_dir.mkdir(parents=True, exist_ok=True)
+    path_output_dir = dir / 'cutadapt_output_files'
+    path_demultiplex_exec = path_input_dir / 'demultiplex.sh'
+    path_final_reads = path_output_dir / 'reads_with_adapters.gz'
     path_output_fastq = path_output_dir / 'out.fastq.gz'
+    path_counts = dir / 'counts'
 
     regions = get_regions(path_struct_file)
     write_fastq_files(regions, path_input_dir)
@@ -81,9 +82,10 @@ def generate_input_files(
     with open(path_demultiplex_exec, 'w') as f:
         f.write('#!/bin/bash\n')
         f.write('# make sure you installed pigz with `brew install pigz` to enable parallel processing\n\n')
-        f.write(f'mkdir "{path_output_dir}"\n')
+        f.write(f'mkdir {path_output_dir}\n')
+        f.write(f'mkdir {path_counts}\n')
         # NOTE: we symlink the fastq file we want to demultiplex
-        f.write(f'ln -sf "{path_input_fastq}" "{path_output_fastq}"\n')
+        f.write(f'ln -sf {path_input_fastq} {path_output_fastq}\n')
 
     rename_command = '{id} {comment}?{adapter_name}'
     n_cores = multiprocessing.cpu_count()
@@ -102,10 +104,10 @@ def generate_input_files(
             cmd = f"""
                 mv {path_output_fastq} {path_input_fastq}
                 
-                cutadapt "{path_input_fastq}" \\
-                -o "{path_output_fastq}" \\
+                cutadapt {path_input_fastq} \\
+                -o {path_output_fastq} \\
                 -e {error_rate} \\
-                -g "^file:{path_adapters}" \\
+                -g ^file:{path_adapters} \\
                 --rename '{rename_command}' \\
                 --discard-untrimmed \\
                 --json='{report_file_name}' \\
@@ -117,8 +119,8 @@ def generate_input_files(
             f.write(cmd)
 
     with open(path_demultiplex_exec, 'a') as f:
-        f.write(f'zgrep "@" "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
-        f.write(f'delt-cli compute-counts {path_final_reads}')
+        f.write(f'zgrep @ {path_output_fastq} | gzip -c > {path_final_reads}\n')
+        f.write(f'delt-cli demultiplex compute-counts {path_final_reads} {path_counts}\n')
         f.write(f'rm {path_output_fastq} {path_input_fastq}')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
