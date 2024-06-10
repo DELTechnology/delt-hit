@@ -12,9 +12,10 @@ delt-cli compute diversity
 
 ## Demultiplex
 delt-cli demultiplex init  # create default config file
+delt-cli demultiplex init --from-fastq <PATH_TO_FASTQ>
 delt-cli demultiplex init --from-old-stucture <PATH_TO_OLD_STRUCT_FILE>
 delt-cli demultiplex init --from-library <PATH_TO_EXCEL_FILE_OF_LIBRARY>
-delt0cli demultiplex run <PATH_TO_CONFIG_FILE>  # run demultiplexing
+delt-cli demultiplex run <PATH_TO_CONFIG_FILE>  # run demultiplexing
 
 ## Simulation
 delt-cli simulate init  # create default config file
