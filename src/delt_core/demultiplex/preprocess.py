@@ -111,10 +111,10 @@ def generate_input_files(
     with open(path_demultiplex_exec, 'w') as f:
         f.write('#!/bin/bash\n')
         f.write('# make sure you installed pigz with `brew install pigz` to enable parallel processing\n\n')
-        f.write(f'mkdir {path_output_dir}\n')
-        f.write(f'mkdir {path_counts}\n')
+        f.write(f'mkdir "{path_output_dir}"\n')
+        f.write(f'mkdir "{path_counts}"\n')
         # NOTE: we symlink the fastq file we want to demultiplex
-        f.write(f'ln -sf {path_input_fastq} {path_output_fastq}\n')
+        f.write(f'ln -sf "{path_input_fastq}" "{path_output_fastq}"\n')
 
     rename_command = '{id} {comment}?{adapter_name}'
     n_cores = multiprocessing.cpu_count()
