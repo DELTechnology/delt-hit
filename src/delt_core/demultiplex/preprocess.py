@@ -131,17 +131,17 @@ def generate_input_files(
 
         with open(path_demultiplex_exec, 'a') as f:
             cmd = f"""
-                mv {path_output_fastq} {path_input_fastq}
+                mv "{path_output_fastq}" "{path_input_fastq}"
                 
-                cutadapt {path_input_fastq} \\
-                -o {path_output_fastq} \\
+                cutadapt "{path_input_fastq}" \\
+                -o "{path_output_fastq}" \\
                 -e {error_rate} \\
-                -g ^file:{path_adapters} \\
+                -g "^file:{path_adapters}" \\
                 --rename '{rename_command}' \\
                 --discard-untrimmed \\
-                --json='{report_file_name}' \\
-                --info-file='{info_file_name}' \\
-                --cores={n_cores} 2>&1 | tee '{stdout_file_name}'
+                --json="{report_file_name}" \\
+                --info-file="{info_file_name}" \\
+                --cores={n_cores} 2>&1 | tee "{stdout_file_name}"
                 
                 """
             cmd = textwrap.dedent(cmd)
@@ -149,8 +149,8 @@ def generate_input_files(
 
     with open(path_demultiplex_exec, 'a') as f:
         f.write(f'zgrep @ {path_output_fastq} | gzip -c > {path_final_reads}\n')
-        f.write(f'delt-cli demultiplex compute-counts {path_final_reads} {path_counts}\n')
-        f.write(f'rm {path_output_fastq} {path_input_fastq}')
+        f.write(f'delt-cli demultiplex compute-counts "{path_final_reads}" "{path_counts}"\n')
+        f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 
