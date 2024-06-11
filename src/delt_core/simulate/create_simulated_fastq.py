@@ -1,4 +1,3 @@
-# %%
 import json
 from pathlib import Path
 
@@ -6,13 +5,11 @@ import click
 import numpy as np
 import pandas as pd
 
-# %%
 BASES = {'A', 'T', 'C', 'G'}
 rng = np.random.default_rng()
 
 
 def read_struct_file(path_to_struct_file):
-    # path_to_struct_file = Path('/Users/adrianomartinelli/projects/DECLDecoder/simulation/structureNF2.txt')
     path_to_struct_file = Path(path_to_struct_file)
     with open(path_to_struct_file, 'r') as f:
         lines = f.readlines()
@@ -105,7 +102,6 @@ def generate_fastq_file(config, reads):
         f.writelines(content)
 
 
-# %%
 @click.command()
 @click.argument('path_to_config', type=click.Path(exists=True))
 def main(path_to_config):
