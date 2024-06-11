@@ -1,5 +1,4 @@
 from pathlib import Path
-import typing as tp
 
 import click
 import numpy as np
@@ -15,7 +14,7 @@ rng = np.random.default_rng()
 
 def read_struct_file(
         path: str,
-) -> tp.Dict:
+) -> dict:
     
     structure = utils.read_json(path)
     elements = []
@@ -107,7 +106,7 @@ def generate_fastq_file(config, reads):
 
 
 def run_simulation(
-        config: tp.Dict,
+        config: dict,
 ) -> None:
     
     # Generate FASTQ file.

@@ -2,7 +2,6 @@ import gzip
 import os
 from pathlib import Path
 import tempfile
-import typing as tp
 
 from .utils import (
     get_smiles,
@@ -15,7 +14,7 @@ from .utils import (
 
 
 def compute_smiles(
-        libraries: tp.List,
+        libraries: list,
         output_path: str,
 ) -> None:
     
@@ -34,7 +33,7 @@ def compute_smiles(
 
 def perform_reaction_steps(
         index: int,
-        library: tp.Tuple,
+        library: tuple,
         output_path: str,
 ) -> None:
 

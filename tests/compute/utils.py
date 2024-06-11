@@ -1,24 +1,23 @@
 import json
 from pathlib import Path
-import typing as tp
 
 
 def read_txt(
         path: str,
-) -> tp.Dict:
+) -> dict:
     with open(path, 'r') as file:
         return file.readlines()
 
 
 def read_json(
         path: str,
-) -> tp.Dict:
+) -> dict:
     with open(path, 'r') as file:
         return json.load(file)
 
 
 def write_json(
-        data: tp.Dict,
+        data: dict,
         path: str,
 ) -> None:
     with open(path, 'w') as file:

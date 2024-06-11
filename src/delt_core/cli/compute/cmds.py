@@ -1,11 +1,10 @@
 from pathlib import Path
-import typing as tp
 
 from ... import compute as c
 
 
 def compute_smiles_cli(
-        input_path: tp.Tuple,
+        input_path: tuple,
         output_path: str = None,
 ) -> None:
     if not output_path:
