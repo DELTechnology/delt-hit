@@ -19,6 +19,7 @@ delt-cli demultiplex create-lists <PATH_TO_EXCEL_FILE_OF_LIBRARY>
 delt-cli demultiplex create-cutadapt-input <PATH_TO_STRUCTUR_FILE> --input input.fastq.gz 
 ./cutadapt-input-files/demultiplex.sh 
 delt-cli demultiplex compute-counts <PAHT_TO_FILE_WITH_ADAPTER> 
+delt-cli demultiplex report
 
 # 
 # delt-cli demultiplex run <PATH_TO_DIR>  # run demultiplexing 

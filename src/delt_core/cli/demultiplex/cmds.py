@@ -10,29 +10,7 @@ from ... import demultiplex as d
 def convert(
         struct_file: Path,
 ) -> None:
-    with open(struct_file, 'r') as f:
-        struct = f.readlines()[2:]
-    struct = sorted(struct, key=lambda line: int(line.split('\t')[0]))
-    regions = {
-        'Region': [],
-        'Path': [],
-        'MaxErrorRate': [],
-        'Indels': [],
-    }
-    max_error_rate = 0.0
-    indels = 0
-    indices = {}
-    for line in struct:
-        line = line.strip().split('\t')
-        _type = line[2]
-        indices[_type] = indices.get(_type, 0) + 1
-        regions['Region'] += [f'{_type}{indices[_type]}']
-        regions['Path'] += [line[3]]
-        regions['MaxErrorRate'] += [max_error_rate]
-        regions['Indels'] += [indels]
-    df = pd.DataFrame(regions)
-    output_file = Path(struct_file).with_suffix('.xlsx')
-    df.to_excel(output_file, index=False)
+    d.convert_struct_file(struct_file)
 
 
 def init(

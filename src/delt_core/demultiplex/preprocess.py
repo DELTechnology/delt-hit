@@ -6,6 +6,7 @@ import textwrap
 
 import pandas as pd
 from pydantic import BaseModel, computed_field
+from collections import defaultdict
 
 
 class Region(BaseModel):
@@ -20,7 +21,36 @@ class Region(BaseModel):
     def region_id(self) -> str:
         return f'{self.position_in_construct}-{self.name}'
 
-    
+
+def convert_struct_file(
+        struct_file: Path,
+) -> None:
+
+    with open(struct_file, 'r') as f:
+        struct = f.readlines()[2:]
+    struct = sorted(struct, key=lambda line: int(line.split('\t')[0]))
+    regions = {
+        'Region': [],
+        'Path': [],
+        'MaxErrorRate': [],
+        'Indels': [],
+    }
+    max_error_rate = 0.0
+    indels = 0
+    indices = {}
+    for line in struct:
+        line = line.strip().split('\t')
+        _type = line[2]
+        indices[_type] = indices.get(_type, 0) + 1
+        regions['Region'] += [f'{_type}{indices[_type]}']
+        regions['Path'] += [line[3]]
+        regions['MaxErrorRate'] += [max_error_rate]
+        regions['Indels'] += [indels]
+    df = pd.DataFrame(regions)
+    output_file = Path(struct_file).with_suffix('.xlsx')
+    df.to_excel(output_file, index=False)
+
+
 def read_struct(
         path: str,
 ) -> dict:
@@ -89,10 +119,10 @@ def generate_input_files(
     with open(path_demultiplex_exec, 'w') as f:
         f.write('#!/bin/bash\n')
         f.write('# make sure you installed pigz with `brew install pigz` to enable parallel processing\n\n')
-        f.write(f'mkdir {path_output_dir}\n')
-        f.write(f'mkdir {path_counts}\n')
+        f.write(f'mkdir "{path_output_dir}"\n')
+        f.write(f'mkdir "{path_counts}"\n')
         # NOTE: we symlink the fastq file we want to demultiplex
-        f.write(f'ln -sf {path_input_fastq} {path_output_fastq}\n')
+        f.write(f'ln -sf "{path_input_fastq}" "{path_output_fastq}"\n')
 
     rename_command = '{id} {comment}?{adapter_name}'
     n_cores = multiprocessing.cpu_count()
@@ -109,26 +139,26 @@ def generate_input_files(
 
         with open(path_demultiplex_exec, 'a') as f:
             cmd = f"""
-                mv {path_output_fastq} {path_input_fastq}
+                mv "{path_output_fastq}" "{path_input_fastq}"
                 
-                cutadapt {path_input_fastq} \\
-                -o {path_output_fastq} \\
+                cutadapt "{path_input_fastq}" \\
+                -o "{path_output_fastq}" \\
                 -e {error_rate} \\
-                -g ^file:{path_adapters} \\
+                -g "^file:{path_adapters}" \\
                 --rename '{rename_command}' \\
                 --discard-untrimmed \\
-                --json='{report_file_name}' \\
-                --info-file='{info_file_name}' \\
-                --cores={n_cores} 2>&1 | tee '{stdout_file_name}'
+                --json="{report_file_name}" \\
+                --info-file="{info_file_name}" \\
+                --cores={n_cores} 2>&1 | tee "{stdout_file_name}"
                 
                 """
             cmd = textwrap.dedent(cmd)
             f.write(cmd)
 
     with open(path_demultiplex_exec, 'a') as f:
-        f.write(f'zgrep @ {path_output_fastq} | gzip -c > {path_final_reads}\n')
-        f.write(f'delt-cli demultiplex compute-counts {path_final_reads} {path_counts}\n')
-        f.write(f'rm {path_output_fastq} {path_input_fastq}')
+        f.write(f'zgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
+        f.write(f'delt-cli demultiplex compute-counts "{path_final_reads}" "{path_counts}"\n')
+        f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 
