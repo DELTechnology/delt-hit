@@ -6,6 +6,7 @@ import textwrap
 
 import pandas as pd
 from pydantic import BaseModel, computed_field
+from collections import defaultdict
 
 
 class Region(BaseModel):
@@ -19,7 +20,35 @@ class Region(BaseModel):
     def region_id(self) -> str:
         return f'{self.position_in_construct}-{self.name}'
 
-    
+def migrate_to_new_structure(path_to_struct_file: Path):
+    with open(path_to_struct_file, 'r') as f:
+        lines = f.readlines()
+
+    path_to_fastq = lines[0]
+    path_to_output = lines[1]
+
+    cont = []
+    region_counter = defaultdict(lambda: 1)
+    for l in lines[2:]:
+        start, end, region_type, path_to_barcode_list = l.strip().split('\t')
+        i = region_counter[region_type]
+        region_counter[region_type] += 1
+        cont.append(
+            {
+                'Region': region_type + str(i),
+                'Path': path_to_barcode_list,
+                'MER': 0,
+                'Indels': False,
+                'Start': start,
+            }
+        )
+    cont = sorted(cont, key=lambda x: int(x['Start']))
+    struct_new = pd.DataFrame(cont)
+
+    file_name = path_to_struct_file.stem + '.xlsx'
+    struct_new.to_excel(path_to_struct_file.parent / file_name, index=False)
+
+
 def read_struct(
         path: str,
 ) -> dict:

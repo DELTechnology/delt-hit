@@ -4,8 +4,8 @@ import subprocess
 from ... import demultiplex as d
 
 
-def convert() -> None:
-    pass
+def convert(path_to_struct_file: Path) -> None:
+    d.migrate_to_new_structure(path_to_struct_file)
 
 
 def init() -> None:

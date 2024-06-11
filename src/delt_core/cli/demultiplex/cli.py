@@ -1,7 +1,7 @@
 import click
 
 from . import cmds
-
+from pathlib import Path
 
 @click.group()
 def demultiplex():
@@ -9,9 +9,9 @@ def demultiplex():
 
 
 @demultiplex.command()
-# @click.argument()
-def convert(**kwargs):
-    cmds.convert(**kwargs)
+@click.argument('path_to_struct_file', type=click.Path(exists=True, path_type=Path))
+def convert(path_to_struct_file: Path):
+    cmds.convert(path_to_struct_file)
 
 
 @demultiplex.command()
