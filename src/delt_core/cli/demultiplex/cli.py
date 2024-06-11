@@ -9,19 +9,52 @@ def demultiplex():
 
 
 @demultiplex.command()
-# @click.argument()
+@click.argument(
+    'struct_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
 def convert(**kwargs):
     cmds.convert(**kwargs)
 
 
 @demultiplex.command()
-# @click.argument()
+@click.argument(
+    'excel_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.argument(
+    'struct_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.argument(
+    'fastq_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
 def init(**kwargs):
     cmds.init(**kwargs)
 
 
 @demultiplex.command()
-# @click.argument()
+@click.argument(
+    'input_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.option(
+    '--output_dir',
+    '-o',
+    default=None,
+    type=click.Path(writable=True),
+)
 def create_lists(**kwargs):
     cmds.create_lists(**kwargs)
 

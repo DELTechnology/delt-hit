@@ -12,6 +12,7 @@ class Region(BaseModel):
     name: str
     codons: list[str]
     max_error_rate: float
+    indels: bool
     position_in_construct: int = None
 
     @computed_field
@@ -29,7 +30,8 @@ def read_struct(
         # TODO: create data model for struct
         struct[value] = {
             'path': data['Path'][key],
-            'max_error_rate': data['MER'][key],
+            'max_error_rate': data['MaxErrorRate'][key],
+            'indels': data['Indels'][key]
             # TODO: indel flag
         }
     return struct
@@ -44,7 +46,12 @@ def get_regions(
         with open(struct_file.parent / value['path'], 'r') as f:
             codons = f.read().split('\n')
             codons = filter(len, codons)
-        region = Region(name=key, codons=codons, max_error_rate=value['max_error_rate'])
+        region = Region(
+            name=key,
+            codons=codons,
+            max_error_rate=value['max_error_rate'],
+            indels=value['indels']
+        )
         regions.append(region)
     return regions
 
