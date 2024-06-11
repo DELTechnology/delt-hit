@@ -6,14 +6,13 @@ import textwrap
 
 import pandas as pd
 from pydantic import BaseModel, computed_field
-from collections import defaultdict
 
 
 class Region(BaseModel):
     name: str
     codons: list[str]
     max_error_rate: float
-    indels: bool
+    indels: int
     position_in_construct: int = None
 
     @computed_field
@@ -25,7 +24,6 @@ class Region(BaseModel):
 def convert_struct_file(
         struct_file: Path,
 ) -> None:
-
     with open(struct_file, 'r') as f:
         struct = f.readlines()[2:]
     struct = sorted(struct, key=lambda line: int(line.split('\t')[0]))
@@ -62,7 +60,6 @@ def read_struct(
             'path': data['Path'][key],
             'max_error_rate': data['MaxErrorRate'][key],
             'indels': data['Indels'][key]
-            # TODO: indel flag
         }
     return struct
 
@@ -129,6 +126,7 @@ def generate_input_files(
 
     for region in regions:
         error_rate = region.max_error_rate
+        indels = f' --no-indels' if not int(region.indels) else ''
         path_adapters = path_input_dir / f'{region.region_id}.fastq'
         # NOTE: from now on we use the output of the previous step as input
         path_input_fastq = path_output_dir / 'input.fastq.gz'
@@ -143,7 +141,7 @@ def generate_input_files(
                 
                 cutadapt "{path_input_fastq}" \\
                 -o "{path_output_fastq}" \\
-                -e {error_rate} \\
+                -e {error_rate}{indels} \\
                 -g "^file:{path_adapters}" \\
                 --rename '{rename_command}' \\
                 --discard-untrimmed \\

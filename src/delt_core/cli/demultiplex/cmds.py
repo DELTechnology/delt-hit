@@ -13,16 +13,6 @@ def convert(
     d.convert_struct_file(struct_file)
 
 
-def init(
-        excel_file: Path,
-        struct_file: Path,
-        fastq_file: Path,
-) -> None:
-    output_dir = Path(struct_file).parent / 'sequences'
-    create_lists(excel_file, output_dir)
-    create_cutadapt_input(struct_file, fastq_file)
-
-
 def create_lists(
         input_file: Path,
         output_dir: Path = None,

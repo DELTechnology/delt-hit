@@ -1,7 +1,7 @@
 import click
 
 from . import cmds
-from pathlib import Path
+
 
 @click.group()
 def demultiplex():
@@ -17,29 +17,6 @@ def demultiplex():
 )
 def convert(**kwargs):
     cmds.convert(**kwargs)
-
-
-@demultiplex.command()
-@click.argument(
-    'excel_file',
-    nargs=1,
-    required=True,
-    type=click.Path(exists=True),
-)
-@click.argument(
-    'struct_file',
-    nargs=1,
-    required=True,
-    type=click.Path(exists=True),
-)
-@click.argument(
-    'fastq_file',
-    nargs=1,
-    required=True,
-    type=click.Path(exists=True),
-)
-def init(**kwargs):
-    cmds.init(**kwargs)
 
 
 @demultiplex.command()
