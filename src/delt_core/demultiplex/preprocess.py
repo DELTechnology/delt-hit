@@ -148,7 +148,7 @@ def generate_input_files(
             f.write(cmd)
 
     with open(path_demultiplex_exec, 'a') as f:
-        f.write(f'zgrep @ {path_output_fastq} | gzip -c > {path_final_reads}\n')
+        f.write(f'zgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
         f.write(f'delt-cli demultiplex compute-counts "{path_final_reads}" "{path_counts}"\n')
         f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"')
 
