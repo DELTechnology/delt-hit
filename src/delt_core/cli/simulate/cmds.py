@@ -5,12 +5,15 @@ from ... import simulate as s
 
 def init(
         config_file: Path,
+        struct_file: Path,
+        output_file: Path,
+        num_reads: int,
 ) -> None:
-    pass
+    s.create_config_file(config_file, struct_file, output_file, int(num_reads))
 
 
 def run(
         config_file: Path,
 ) -> None:
-    pass
+    s.run_simulation(config_file)
 

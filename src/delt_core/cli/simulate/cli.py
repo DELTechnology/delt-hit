@@ -9,11 +9,29 @@ def simulate():
 
 
 @simulate.command()
-@click.argument(
-    'config_file',
-    nargs=-1,
-    required=True,
-    type=click.Path(exists=True),
+@click.option(
+    '--config_file',
+    '-c',
+    default='config.yaml',
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--struct_file',
+    '-s',
+    default='structure.xlsx',
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--output_file',
+    '-o',
+    default='simulation.fastq',
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--num_reads',
+    '-n',
+    default=100,
+    type=click.Path(writable=True),
 )
 def init(**kwargs):
     cmds.init(**kwargs)
@@ -26,12 +44,6 @@ def init(**kwargs):
     required=True,
     type=click.Path(exists=True),
 )
-# @click.option(
-#     '--output_dir',
-#     '-o',
-#     default=None,
-#     type=click.Path(writable=True),
-# )
 def run(**kwargs):
     cmds.run(**kwargs)
 
