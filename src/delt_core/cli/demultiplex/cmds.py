@@ -1,8 +1,6 @@
 from pathlib import Path
 import subprocess
 
-import pandas as pd
-
 from ... import compute as c
 from ... import demultiplex as d
 
@@ -44,6 +42,9 @@ def create_cutadapt_input(
     if not fastq_file:
         fastq_file = struct_file.parent / 'input.fastq.gz'
     fastq_file = Path(fastq_file).resolve()
+    if not d.is_gz_file(fastq_file):
+        subprocess.run(['gzip', fastq_file])
+        fastq_file = fastq_file.parent / (fastq_file.name + '.gz')
     d.generate_input_files(struct_file, fastq_file)
 
 
