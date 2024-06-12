@@ -21,6 +21,13 @@ class Region(BaseModel):
         return f'{self.position_in_construct}-{self.name}'
 
 
+def is_gz_file(
+        path: Path,
+) -> bool:
+    with open(path, 'rb') as file:
+        return file.read(2) == b'\x1f\x8b'
+
+
 def convert_struct_file(
         struct_file: Path,
 ) -> None:
