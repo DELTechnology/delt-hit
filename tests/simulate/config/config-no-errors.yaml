@@ -1,0 +1,4 @@
+errors: []
+num_reads: 100
+output_file: simulation.fastq
+struct_file: structure.xlsx
