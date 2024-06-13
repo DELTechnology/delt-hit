@@ -9,16 +9,28 @@ def qc():
 
 
 @qc.command()
+@click.argument(
+    'input_path',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
 def report(**kwargs):
     cmds.report(**kwargs)
 
 
 @qc.command()
-@click.option(
-    '--output_dir',
-    '-o',
-    default=None,
-    type=click.Path(writable=True),
+@click.argument(
+    'input_dir',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.argument(
+    'output_dir',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=False),
 )
 def plot(**kwargs):
     cmds.plot(**kwargs)
