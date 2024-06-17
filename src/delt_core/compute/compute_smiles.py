@@ -35,6 +35,7 @@ def perform_reaction_steps(
         index: int,
         library: tuple,
         output_path: str,
+        write_indices: bool = True,
 ) -> None:
 
     tmp = output_path / 'tmp.txt'
@@ -53,18 +54,22 @@ def perform_reaction_steps(
     for _, bb in bb1.iterrows():
 
         if bb['ReactionType']:  
-            scaffold = get_smiles(bb['ScaffoldID'], scaffolds)
+            scaffold_id = bb['ScaffoldID']
+            scaffold = get_smiles(scaffold_id, scaffolds)
             product = scaffold
             
             for reaction_type in bb['ReactionType'].split(','):
                 product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
         
         else:
-            scaffold = 'None'
+            scaffold = scaffold_id = 'None'
             product = bb['SMILES']
         
         code = insert_codon(const, bb['Codon'])
-        rows += [[scaffold, bb['SMILES'], product, code]]
+        if write_indices:
+            rows += [[str(scaffold_id), str(bb['ID']), product, code]]
+        else:
+            rows += [[scaffold, bb['SMILES'], product, code]]
     
     write_gzip(rows, output_path)
     
@@ -76,17 +81,20 @@ def perform_reaction_steps(
         with gzip.open(output_path, 'rt') as interms:
             next(interms)
 
-            for i, interm in enumerate(interms):
+            for interm in interms:
                 interm = interm.split()
                 rows = []
 
                 for _, bb in bbn.iterrows():
-                    product = interm[-2]
+                    product = interm[i]
                     for reaction_type in bb['ReactionType'].split(','):
                         product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
                     
                     code = insert_codon(interm[-1], bb['Codon'])
-                    rows += [[*interm[:-2], bb['SMILES'], product, code]]
+                    if write_indices:
+                        rows += [[*interm[:i], str(bb['ID']), product, code]]
+                    else:
+                        rows += [[*interm[:i], bb['SMILES'], product, code]]
                 
                 write_gzip(rows, tmp)
         
