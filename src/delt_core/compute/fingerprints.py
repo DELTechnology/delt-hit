@@ -1,3 +1,4 @@
+from collections import defaultdict
 from pathlib import Path
 
 import matplotlib.patches as mpatches
@@ -31,14 +32,14 @@ def compute_similarity(
 
 def plot_fingerprints(
         fingerprints: list,
-        labels: list,
+        counts: list,
         output_file: str = 'fingerprints.png',
 ) -> None:
-    cols = ['b', 'r', 'g', 'c', 'm', 'y', 'k']
+    cmap = plt.cm.YlGnBu
     plt.figure(figsize=(10, 5))
-    for fp, label in zip(fingerprints, labels):
-        col = cols[label % len(cols)]
-        plt.scatter(fp[0], fp[1], c=col)
+    x, y = zip(*fingerprints)
+    sc = plt.scatter(x, y, c=counts, edgecolor='k', s=20.0, alpha=1.0, cmap=cmap)
+    plt.colorbar(sc, label='Count')
     plt.savefig(output_file, dpi=300)
 
 
@@ -86,6 +87,7 @@ def plot_properties(
 
 def main(
         input_file: Path,
+        counts_file: Path,
 ) -> None:
 
     num_bb1 = 3
@@ -93,6 +95,7 @@ def main(
 
     data = read_txt(input_file)[1:]
     data = data[:num_bb1 * num_bb2]
+    table = read_txt(counts_file)[1:]
     smiles = [s.split('\t')[-2] for s in data]
     mols = [Chem.MolFromSmiles(m) for m in smiles]
 
@@ -102,17 +105,24 @@ def main(
     plot_properties(properties, num_bins)
     """
 
+    counts_dict = defaultdict(int)
+    for line in table:
+        count, bb1, bb2 = line.strip().split('\t')
+        counts_dict[f'{bb1}-{bb2}'] = int(count)
+    
     fps = [compute_fingerprint(mol) for mol in mols]
-    labels = [i for i in range(num_bb1) for _ in range(num_bb2)]
+    labels = [f'{bb1}-{bb2}' for bb1 in range(num_bb1) for bb2 in range(num_bb2)]
+    counts = [counts_dict[label] for label in labels]
 
     tsne = TSNE(n_components=2, random_state=42)
     fps_2d = tsne.fit_transform(np.array(fps))
-    plot_fingerprints(fps_2d, labels)
+    plot_fingerprints(fps_2d, counts)
 
 
 
 if __name__ == '__main__':
 
-    path = 'smiles_nf.txt'
-    main(path)
+    input_file = 'smiles_nf.txt'
+    counts_file = 'counts/0_0.tsv'
+    main(input_file, counts_file)
 
