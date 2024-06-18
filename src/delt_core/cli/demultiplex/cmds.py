@@ -1,4 +1,5 @@
 from pathlib import Path
+import shutil
 import subprocess
 
 from ... import compute as c
@@ -12,40 +13,55 @@ def convert(
 
 
 def create_lists(
-        input_file: Path,
+        config_file: Path,
         output_dir: Path = None,
 ) -> None:
-    # TODO: Add primer sequences.
     if not output_dir:
-        output_dir = Path(input_file).parent / 'sequences'
+        output_dir = Path.cwd() / 'sequences'
     Path(output_dir).mkdir(exist_ok=True)
-    bbs, _, _, consts = c.load_data(input_file)
-    for i, bb in enumerate(bbs, 1):
+    config_file = Path(config_file).resolve()
+    config = d.read_yaml(config_file)
+    keys = list(config['Structure'].keys())
+    selection = d.get_selection(config)
+    lib_file = selection['Library'][0]
+    bbs, _, _, consts = c.load_data(lib_file)
+    # Building blocks.
+    keys_b = [key for key in keys if key.startswith('B')]
+    for bb in bbs:
         codes = bb['Codon']
-        with open(output_dir / f'b{i}.txt', 'w') as f:
+        with open(output_dir / f'{keys_b.pop(0)}.txt', 'w') as f:
             for code in codes:
                 f.write(code)
                 f.write('\n')
+    # Constant regions.
+    keys_c = [key for key in keys if key.startswith('C')]
     sequence = consts['Sequence'][0]
     consts = sequence.split('{codon}')
-    for i, const in enumerate(consts, 1):
-        with open(output_dir / f'c{i}.txt', 'w') as f:
+    for const in consts:
+        with open(output_dir / f'{keys_c.pop(0)}.txt', 'w') as f:
             f.write(const)
             f.write('\n')
+    # Primers.
+    keys_s = [key for key in keys if key.startswith('S')]
+    s1 = selection['FwdPrimer1'][0]
+    s2 = selection['RevPrimer1'][0]
+    shutil.copy(s1, output_dir / f'{keys_s.pop(0)}.txt')
+    shutil.copy(s2, output_dir / f'{keys_s.pop(0)}.txt')
 
 
 def create_cutadapt_input(
-        struct_file: Path,
-        fastq_file: Path = None,
+        config_file: Path,
 ) -> None:
-    struct_file = Path(struct_file).resolve()
-    if not fastq_file:
-        fastq_file = struct_file.parent / 'input.fastq.gz'
+    create_lists(config_file)
+    exit()
+    selection = d.get_selection(config_file)
+    fastq_file = selection['FASTQFile'][0]
     fastq_file = Path(fastq_file).resolve()
     if not d.is_gz_file(fastq_file):
         subprocess.run(['gzip', fastq_file])
         fastq_file = fastq_file.parent / (fastq_file.name + '.gz')
-    d.generate_input_files(struct_file, fastq_file)
+    structure = d.read_yaml(config_file)['Structure']
+    d.generate_input_files(structure, fastq_file)
 
 
 def compute_counts(
@@ -59,11 +75,11 @@ def compute_counts(
 
 
 def run(
-        struct_file: Path,
-        fastq_file: Path = None,
+        config_file: Path,
 ) -> None:
-    struct_file = Path(struct_file).resolve()
-    create_cutadapt_input(struct_file, fastq_file)
+    create_cutadapt_input(config_file)
+    exit()
+    structure = config['Structure']
     input_file = struct_file.parent / 'cutadapt_input_files' / 'demultiplex.sh'
     subprocess.run(['bash', input_file])
 

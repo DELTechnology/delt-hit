@@ -6,6 +6,7 @@ import textwrap
 
 import pandas as pd
 from pydantic import BaseModel, computed_field
+import yaml
 
 
 class Region(BaseModel):
@@ -26,6 +27,23 @@ def is_gz_file(
 ) -> bool:
     with open(path, 'rb') as file:
         return file.read(2) == b'\x1f\x8b'
+
+
+def read_yaml(
+        path: Path,
+) -> None:
+    with open(path, 'r') as f:
+        return yaml.safe_load(f)
+
+
+def get_selection(
+        config: dict,
+) -> pd.DataFrame:
+    config_selection = config['Selection']
+    selection_file = config_selection['SelectionFile']
+    selection_id = config_selection['SelectionID']
+    selections = pd.read_excel(selection_file)
+    return selections[selections['SelectionID'] == selection_id]
 
 
 def convert_struct_file(
@@ -62,7 +80,6 @@ def read_struct(
     data = pd.read_excel(path).to_dict()
     struct = {}
     for key, value in data['Region'].items():
-        # TODO: create data model for struct
         struct[value] = {
             'path': data['Path'][key],
             'max_error_rate': data['MaxErrorRate'][key],
@@ -72,7 +89,7 @@ def read_struct(
 
 
 def get_regions(
-        struct_file: Path,
+        structure: dict,
 ) -> list[Region]:
     struct = read_struct(struct_file)
     regions = []
@@ -105,10 +122,10 @@ def write_fastq_files(
 
 
 def generate_input_files(
-        path_struct_file: Path,
+        structure: dict,
         path_input_fastq: Path,
 ) -> None:
-    dir = path_struct_file.parent
+    dir = path_input_fastq.parent
     path_input_dir = dir / 'cutadapt_input_files'
     path_input_dir.mkdir(parents=True, exist_ok=True)
     path_output_dir = dir / 'cutadapt_output_files'
@@ -117,7 +134,7 @@ def generate_input_files(
     path_output_fastq = path_output_dir / 'out.fastq.gz'
     path_counts = dir / 'counts'
 
-    regions = get_regions(path_struct_file)
+    regions = get_regions(structure)
     write_fastq_files(regions, path_input_dir)
 
     with open(path_demultiplex_exec, 'w') as f:
