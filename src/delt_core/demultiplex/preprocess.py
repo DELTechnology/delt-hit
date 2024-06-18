@@ -52,11 +52,12 @@ def convert_struct_file(
     with open(struct_file, 'r') as f:
         struct = f.readlines()[2:]
     struct = sorted(struct, key=lambda line: int(line.split('\t')[0]))
-    regions = {
-        'Region': [],
-        'Path': [],
-        'MaxErrorRate': [],
-        'Indels': [],
+    config = {
+        'Selection': {
+            'SelectionFile': 'selection.xlsx',
+            'SelectionID': 0,
+        },
+        'Structure': {},
     }
     max_error_rate = 0.0
     indels = 0
@@ -65,43 +66,28 @@ def convert_struct_file(
         line = line.strip().split('\t')
         _type = line[2]
         indices[_type] = indices.get(_type, 0) + 1
-        regions['Region'] += [f'{_type}{indices[_type]}']
-        regions['Path'] += [line[3]]
-        regions['MaxErrorRate'] += [max_error_rate]
-        regions['Indels'] += [indels]
-    df = pd.DataFrame(regions)
-    output_file = Path(struct_file).with_suffix('.xlsx')
-    df.to_excel(output_file, index=False)
-
-
-def read_struct(
-        path: str,
-) -> dict:
-    data = pd.read_excel(path).to_dict()
-    struct = {}
-    for key, value in data['Region'].items():
-        struct[value] = {
-            'path': data['Path'][key],
-            'max_error_rate': data['MaxErrorRate'][key],
-            'indels': data['Indels'][key]
-        }
-    return struct
+        region = f'{_type}{indices[_type]}'
+        config['Structure'][region] = {}
+        config['Structure'][region]['MaxErrorRate'] = max_error_rate
+        config['Structure'][region]['Indels'] = indels
+    output_file = Path(struct_file).parent / 'config.yml'
+    with open(output_file, 'w') as f:
+        yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
 
 def get_regions(
         structure: dict,
 ) -> list[Region]:
-    struct = read_struct(struct_file)
     regions = []
-    for key, value in struct.items():
-        with open(struct_file.parent / value['path'], 'r') as f:
+    for key, value in structure.items():
+        with open(value['Path'], 'r') as f:
             codons = f.read().split('\n')
             codons = filter(len, codons)
         region = Region(
             name=key,
             codons=codons,
-            max_error_rate=value['max_error_rate'],
-            indels=value['indels']
+            max_error_rate=value['MaxErrorRate'],
+            indels=value['Indels']
         )
         regions.append(region)
     return regions
