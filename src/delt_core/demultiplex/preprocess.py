@@ -1,3 +1,5 @@
+import hashlib
+import json
 import multiprocessing
 import os
 from pathlib import Path
@@ -34,6 +36,27 @@ def read_yaml(
 ) -> None:
     with open(path, 'r') as f:
         return yaml.safe_load(f)
+
+
+def convert_dict(
+        data: dict,
+) -> tuple:
+    if isinstance(data, dict):
+        return tuple((key, convert_dict(value)) for key, value in data.items())
+    elif isinstance(data, int):
+        return float(data)
+    else:
+        return data
+
+
+def hash_dict(
+        data: dict,
+) -> tuple:
+    data = convert_dict(data)
+    data_str = json.dumps(data)
+    hash_object = hashlib.sha256()
+    hash_object.update(data_str.encode())
+    return hash_object.hexdigest()
 
 
 def get_selection(
@@ -110,6 +133,7 @@ def write_fastq_files(
 def generate_input_files(
         structure: dict,
         path_input_fastq: Path,
+        path_counts: Path,
 ) -> None:
     dir = path_input_fastq.parent
     path_input_dir = dir / 'cutadapt_input_files'
@@ -118,7 +142,6 @@ def generate_input_files(
     path_demultiplex_exec = path_input_dir / 'demultiplex.sh'
     path_final_reads = path_output_dir / 'reads_with_adapters.gz'
     path_output_fastq = path_output_dir / 'out.fastq.gz'
-    path_counts = dir / 'counts'
 
     regions = get_regions(structure)
     write_fastq_files(regions, path_input_dir)
@@ -166,7 +189,8 @@ def generate_input_files(
     with open(path_demultiplex_exec, 'a') as f:
         f.write(f'zgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
         f.write(f'delt-cli demultiplex compute-counts "{path_final_reads}" "{path_counts}"\n')
-        f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"')
+        f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
+        f.write(f'echo Evaluation files can be found here: {path_counts}')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 
