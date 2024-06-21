@@ -35,26 +35,32 @@ delt-cli simulate
 ```
 
 ## Demultiplexing
-```bash
-delt-cli demultiplex run config.yml
-```
-
+Initialize folder structure for demultiplexing:
 ```bash
 delt-cli demultiplex init config.yml
 ```
 
+Run demultiplexing:
+```bash
+delt-cli demultiplex run config.yml
+```
+
+Create codon lists for the library specified in the configuration file:
 ```bash
 delt-cli demultiplex create-lists config.yml
 ```
 
+Create input files for running Cutadapt:
 ```bash
 delt-cli demultiplex create-cutadapt-input config.yml
 ```
 
+Compute count tables for the final reads:
 ```bash
 delt-cli demultiplex compute-counts reads_with_adapters.gz
 ```
 
+Convert old structure file to new configuration file:
 ```bash
 delt-cli demultiplex convert structure.txt
 ```
