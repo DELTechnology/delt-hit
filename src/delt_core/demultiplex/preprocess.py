@@ -1,3 +1,5 @@
+import hashlib
+import json
 import multiprocessing
 import os
 from pathlib import Path
@@ -6,6 +8,7 @@ import textwrap
 
 import pandas as pd
 from pydantic import BaseModel, computed_field
+import yaml
 
 
 class Region(BaseModel):
@@ -28,17 +31,56 @@ def is_gz_file(
         return file.read(2) == b'\x1f\x8b'
 
 
+def read_yaml(
+        path: Path,
+) -> None:
+    with open(path, 'r') as f:
+        return yaml.safe_load(f)
+
+
+def convert_dict(
+        data: dict,
+) -> tuple:
+    if isinstance(data, dict):
+        return tuple((key, convert_dict(value)) for key, value in data.items())
+    elif isinstance(data, int):
+        return float(data)
+    else:
+        return data
+
+
+def hash_dict(
+        data: dict,
+) -> tuple:
+    data = convert_dict(data)
+    data_str = json.dumps(data)
+    hash_object = hashlib.sha256()
+    hash_object.update(data_str.encode())
+    return hash_object.hexdigest()
+
+
+def get_selection(
+        config: dict,
+) -> pd.DataFrame:
+    config_selection = config['Selection']
+    selection_file = config_selection['SelectionFile']
+    selection_id = config_selection['SelectionID']
+    selections = pd.read_excel(selection_file)
+    return selections[selections['SelectionID'] == selection_id]
+
+
 def convert_struct_file(
         struct_file: Path,
 ) -> None:
     with open(struct_file, 'r') as f:
         struct = f.readlines()[2:]
     struct = sorted(struct, key=lambda line: int(line.split('\t')[0]))
-    regions = {
-        'Region': [],
-        'Path': [],
-        'MaxErrorRate': [],
-        'Indels': [],
+    config = {
+        'Selection': {
+            'SelectionFile': 'selection.xlsx',
+            'SelectionID': 0,
+        },
+        'Structure': {},
     }
     max_error_rate = 0.0
     indels = 0
@@ -47,44 +89,28 @@ def convert_struct_file(
         line = line.strip().split('\t')
         _type = line[2]
         indices[_type] = indices.get(_type, 0) + 1
-        regions['Region'] += [f'{_type}{indices[_type]}']
-        regions['Path'] += [line[3]]
-        regions['MaxErrorRate'] += [max_error_rate]
-        regions['Indels'] += [indels]
-    df = pd.DataFrame(regions)
-    output_file = Path(struct_file).with_suffix('.xlsx')
-    df.to_excel(output_file, index=False)
-
-
-def read_struct(
-        path: str,
-) -> dict:
-    data = pd.read_excel(path).to_dict()
-    struct = {}
-    for key, value in data['Region'].items():
-        # TODO: create data model for struct
-        struct[value] = {
-            'path': data['Path'][key],
-            'max_error_rate': data['MaxErrorRate'][key],
-            'indels': data['Indels'][key]
-        }
-    return struct
+        region = f'{_type}{indices[_type]}'
+        config['Structure'][region] = {}
+        config['Structure'][region]['MaxErrorRate'] = max_error_rate
+        config['Structure'][region]['Indels'] = indels
+    output_file = Path(struct_file).parent / 'config.yml'
+    with open(output_file, 'w') as f:
+        yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
 
 def get_regions(
-        struct_file: Path,
+        structure: dict,
 ) -> list[Region]:
-    struct = read_struct(struct_file)
     regions = []
-    for key, value in struct.items():
-        with open(struct_file.parent / value['path'], 'r') as f:
+    for key, value in structure.items():
+        with open(value['Path'], 'r') as f:
             codons = f.read().split('\n')
             codons = filter(len, codons)
         region = Region(
             name=key,
             codons=codons,
-            max_error_rate=value['max_error_rate'],
-            indels=value['indels']
+            max_error_rate=value['MaxErrorRate'],
+            indels=value['Indels']
         )
         regions.append(region)
     return regions
@@ -105,19 +131,19 @@ def write_fastq_files(
 
 
 def generate_input_files(
-        path_struct_file: Path,
+        structure: dict,
         path_input_fastq: Path,
+        path_counts: Path,
 ) -> None:
-    dir = path_struct_file.parent
+    dir = path_input_fastq.parent
     path_input_dir = dir / 'cutadapt_input_files'
     path_input_dir.mkdir(parents=True, exist_ok=True)
     path_output_dir = dir / 'cutadapt_output_files'
     path_demultiplex_exec = path_input_dir / 'demultiplex.sh'
     path_final_reads = path_output_dir / 'reads_with_adapters.gz'
     path_output_fastq = path_output_dir / 'out.fastq.gz'
-    path_counts = dir / 'counts'
 
-    regions = get_regions(path_struct_file)
+    regions = get_regions(structure)
     write_fastq_files(regions, path_input_dir)
 
     with open(path_demultiplex_exec, 'w') as f:
@@ -163,7 +189,8 @@ def generate_input_files(
     with open(path_demultiplex_exec, 'a') as f:
         f.write(f'zgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
         f.write(f'delt-cli demultiplex compute-counts "{path_final_reads}" "{path_counts}"\n')
-        f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"')
+        f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
+        f.write(f'echo Evaluation files can be found here: {path_counts}')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 

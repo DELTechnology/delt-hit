@@ -10,15 +10,15 @@ def simulate():
 
 @simulate.command()
 @click.option(
-    '--config_file',
-    '-c',
-    default='config.yaml',
+    '--config_simulation',
+    '-s',
+    default='config_simulation.yml',
     type=click.Path(writable=True),
 )
 @click.option(
-    '--struct_file',
-    '-s',
-    default='structure.xlsx',
+    '--config_file',
+    '-c',
+    default='config.yml',
     type=click.Path(writable=True),
 )
 @click.option(

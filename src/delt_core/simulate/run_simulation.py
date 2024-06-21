@@ -4,9 +4,9 @@ import numpy as np
 import pandas as pd
 
 from .utils import read_txt, read_yaml
-from delt_core.demultiplex.preprocess import read_struct
+from delt_core.cli.demultiplex.cmds import create_lists
 from delt_core.demultiplex.postprocess import perform_selection, save_counts
-# from delt_core.compute.compute_counts import perform_selection, create_table, save_counts
+from delt_core.demultiplex.preprocess import read_yaml
 
 
 BASES = ['A', 'T', 'C', 'G']
@@ -17,7 +17,9 @@ def read_struct_file(
         struct_file: str,
 ) -> dict:
     struct_file = Path(struct_file)
-    structure = read_struct(struct_file)
+    structure, _, _ = create_lists(struct_file)
+    print(structure)
+    exit()
     elements = []
     start = 0
     for element, values in structure.items():
@@ -106,7 +108,7 @@ def run_simulation(
     
     # Generate FASTQ file.
     config = read_yaml(config_file)
-    struct_file = config['struct_file']
+    struct_file = config['config_file']
     struct_dict = read_struct_file(struct_file)
     config.update(struct_dict)
     reads, reads_info = generate_reads(config)
@@ -123,6 +125,6 @@ def run_simulation(
 
 if __name__ == '__main__':
     
-    config_file = 'config/config.yaml'
+    config_file = 'config/config.yml'
     run_simulation(config_file)
 
