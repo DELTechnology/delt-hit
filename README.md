@@ -28,3 +28,38 @@ Hybridization of two libraries (the order of the libraries must match the final 
 ```bash
 delt-cli compute smiles library1.xlsx library2.xlsx
 ```
+
+## Simulation
+```bash
+delt-cli simulate
+```
+
+## Demultiplexing
+```bash
+delt-cli demultiplex run config.yml
+```
+
+```bash
+delt-cli demultiplex init config.yml
+```
+
+```bash
+delt-cli demultiplex create-lists config.yml
+```
+
+```bash
+delt-cli demultiplex create-cutadapt-input config.yml
+```
+
+```bash
+delt-cli demultiplex compute-counts reads_with_adapters.gz
+```
+
+```bash
+delt-cli demultiplex convert structure.txt
+```
+
+## Quality Control
+```bash
+delt-cli qc
+```
