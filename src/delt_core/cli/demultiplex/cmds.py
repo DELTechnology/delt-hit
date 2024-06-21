@@ -65,7 +65,7 @@ def create_lists(
             f.write('\n')
     # Primers.
     keys_s = [key for key in keys if key.startswith('S')]
-    selections = [selection['FwdPrimer1'].squeeze(), selection['RevPrimer1'].squeeze()]
+    selections = [selection['FwdPrimer'].squeeze(), selection['RevPrimer'].squeeze()]
     assert len(selections) == len(keys_s)
     for s in selections:
         key = keys_s.pop(0)

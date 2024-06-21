@@ -1,11 +1,12 @@
 from pathlib import Path
 
-import click
 import numpy as np
 import pandas as pd
 
-import utils
-from delt_core.compute.compute_counts import perform_selection, create_table, save_counts
+from .utils import read_txt, read_yaml
+from delt_core.cli.demultiplex.cmds import create_lists
+from delt_core.demultiplex.postprocess import perform_selection, save_counts
+from delt_core.demultiplex.preprocess import read_yaml
 
 
 BASES = ['A', 'T', 'C', 'G']
@@ -13,48 +14,45 @@ rng = np.random.default_rng()
 
 
 def read_struct_file(
-        path: str,
+        struct_file: str,
 ) -> dict:
-    
-    structure = utils.read_json(path)
+    struct_file = Path(struct_file)
+    structure, _, _ = create_lists(struct_file)
+    print(structure)
+    exit()
     elements = []
     start = 0
-
     for element, values in structure.items():
-        seqs = list(map(lambda x: [*x], values['Sequences']))
-        length = len(seqs[0])
+        sequences = read_txt(struct_file.parent / values['path'])
+        sequences = list(map(lambda x: [*x.strip()], sequences))
+        length = len(sequences[0])
         end = start + length - 1
-        elements += [[start, end, element[0], seqs]]
+        elements += [[element, element[0], start, end, sequences]]
         start += length
-
-    elements = pd.DataFrame.from_records(elements, columns=['start', 'end', 'region_type', 'barcodes'])
+    columns = ['region', 'region_type', 'start', 'end', 'barcodes']
+    elements = pd.DataFrame.from_records(elements, columns=columns)
     return (dict(elements=elements))
 
 
 def generate_reads(config):
-    number_of_reads = config['num_reads']
+    num_reads = config['num_reads']
     elements = config['elements']
-    regions = elements[['start', 'end', 'barcodes']].to_records(index=False)
-
+    regions = elements[['region', 'start', 'end', 'barcodes']].to_records(index=False)
     read_length = elements.end.max() + 1
-    reads = []
-    indices = np.full((len(regions), number_of_reads), -1)
-
-    for i in range(number_of_reads):
+    reads, reads_info = [], []
+    for i in range(num_reads):
         read = np.array(['X'] * read_length)
-
+        read_info = f'@simulated-read-{i} '
         for j, region in enumerate(regions):
-            start, end, barcodes = region
-            idx = rng.choice(range(0, len(barcodes[:10])))
-            # idx = rng.choice(range(0, len(barcodes)))
+            region, start, end, barcodes = region
+            idx = rng.choice(range(0, len(barcodes)))
             barcode = barcodes[idx]
-            indices[j, i] = idx
             assert end - start + 1 == len(barcode)
             read[start:(end + 1)] = barcode
-        
+            read_info += f'?{j}-{region}.{idx}'
         reads.append(read)
-
-    return reads, indices
+        reads_info.append(read_info)
+    return reads, reads_info
 
 
 def create_all_barcode_regions_single_position_error(reads, elements, relative_position):
@@ -100,42 +98,33 @@ def generate_fastq_file(config, reads):
         content.append(''.join(read) + '\n')
         content.append('+\n')
         content.append(phred_scores + '\n')
-
     with open(path_to_output, 'w') as f:
         f.writelines(content)
 
 
 def run_simulation(
-        config: dict,
+        config_file: Path,
 ) -> None:
     
     # Generate FASTQ file.
-    struct_file = config['struct_file']
+    config = read_yaml(config_file)
+    struct_file = config['config_file']
     struct_dict = read_struct_file(struct_file)
     config.update(struct_dict)
-    reads, indices = generate_reads(config)
+    reads, reads_info = generate_reads(config)
     reads = create_errors(config, reads)
     generate_fastq_file(config, reads)
 
     # Generate table for counts.
-    output_path = Path(config['output_file']).parent / 'counts_true'
-    output_path.mkdir(parents=True, exist_ok=True)
-    structure = utils.read_json(struct_file)
-    selections = perform_selection(structure, indices)
-    for selection in selections:
-        s1, s2 = selection[0]
-        counts = create_table(structure, selection[1])
-        save_counts(counts, output_path / f'counts_{s1}_{s2}.txt')
-
-
-@click.command()
-@click.argument('config_file', type=click.Path(exists=True))
-def main(config_file):
-    config = utils.read_json(config_file)
-    run_simulation(config)
+    output_dir = Path(config['output_file']).parent / 'counts_true'
+    output_dir.mkdir(parents=True, exist_ok=True)
+    selections = perform_selection(reads_info, config['num_reads'])
+    save_counts(selections, output_dir)
 
 
 
 if __name__ == '__main__':
-    main()
+    
+    config_file = 'config/config.yml'
+    run_simulation(config_file)
 
