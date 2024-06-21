@@ -29,12 +29,16 @@ Hybridization of two libraries (the order of the libraries must match the final 
 delt-cli compute smiles library1.xlsx library2.xlsx
 ```
 
+
 ## Simulation
+
 ```bash
 delt-cli simulate
 ```
 
+
 ## Demultiplexing
+
 Initialize folder structure for demultiplexing:
 ```bash
 delt-cli demultiplex init config.yml
@@ -64,6 +68,7 @@ Convert old structure file to new configuration file:
 ```bash
 delt-cli demultiplex convert structure.txt
 ```
+
 
 ## Quality Control
 ```bash
