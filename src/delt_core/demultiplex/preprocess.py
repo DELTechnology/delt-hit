@@ -59,14 +59,16 @@ def hash_dict(
     return hash_object.hexdigest()
 
 
-def get_selection(
+def get_selections(
         config: dict,
 ) -> pd.DataFrame:
+    root = Path(config['Root'])
     config_selection = config['Selection']
-    selection_file = config_selection['SelectionFile']
-    selection_id = config_selection['SelectionID']
+    selection_file = root / 'selections' / config_selection['SelectionFile']
+    fastq_file = config_selection['FASTQFile']
+    library = config_selection['Library']
     selections = pd.read_excel(selection_file)
-    return selections[selections['SelectionID'] == selection_id]
+    return selections[(selections['FASTQFile'] == fastq_file) & (selections['Library'] == library)]
 
 
 def convert_struct_file(
@@ -76,9 +78,11 @@ def convert_struct_file(
         struct = f.readlines()[2:]
     struct = sorted(struct, key=lambda line: int(line.split('\t')[0]))
     config = {
+        'Root': '~/',
         'Selection': {
             'SelectionFile': 'selection.xlsx',
-            'SelectionID': 0,
+            'FASTQFile': 'input.fastq.gz',
+            'Library': 'library.xlsx'
         },
         'Structure': {},
     }
@@ -131,17 +135,19 @@ def write_fastq_files(
 
 
 def generate_input_files(
+        config_file: Path,
         structure: dict,
+        root_dir: Path,
         path_input_fastq: Path,
-        path_counts: Path,
 ) -> None:
-    dir = path_input_fastq.parent
-    path_input_dir = dir / 'cutadapt_input_files'
+    
+    path_input_dir = root_dir / 'cutadapt_input_files'
     path_input_dir.mkdir(parents=True, exist_ok=True)
-    path_output_dir = dir / 'cutadapt_output_files'
+    path_output_dir = root_dir / 'cutadapt_output_files'
     path_demultiplex_exec = path_input_dir / 'demultiplex.sh'
     path_final_reads = path_output_dir / 'reads_with_adapters.gz'
     path_output_fastq = path_output_dir / 'out.fastq.gz'
+    path_counts = root_dir / 'evaluations'
 
     regions = get_regions(structure)
     write_fastq_files(regions, path_input_dir)
@@ -188,9 +194,8 @@ def generate_input_files(
 
     with open(path_demultiplex_exec, 'a') as f:
         f.write(f'zgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
-        f.write(f'delt-cli demultiplex compute-counts "{path_final_reads}" "{path_counts}"\n')
+        f.write(f'delt-cli demultiplex compute-counts {config_file} "{path_final_reads}" "{path_counts}"\n')
         f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
-        f.write(f'echo Evaluation files can be found here: {path_counts}')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 

@@ -1,5 +1,4 @@
 from pathlib import Path
-import shutil
 import subprocess
 
 from ... import compute as c
@@ -32,12 +31,11 @@ def create_lists(
     Path(output_dir).mkdir(exist_ok=True)
     config_file = Path(config_file).resolve()
     config = d.read_yaml(config_file)
-    selection_id = config['Selection']['SelectionID']
+    selections = d.get_selections(config)
     structure = config['Structure']
-    hash_value = d.hash_dict(structure)
     keys = list(structure.keys())
-    selection = d.get_selection(config)
-    lib_file = selection['Library'].squeeze()
+    root = Path(config['Root'])
+    lib_file = root / 'libraries' / config['Selection']['Library']
     bbs, _, _, consts = c.load_data(lib_file)
     # Building blocks.
     keys_b = [key for key in keys if key.startswith('B')]
@@ -65,42 +63,41 @@ def create_lists(
             f.write('\n')
     # Primers.
     keys_s = [key for key in keys if key.startswith('S')]
-    selections = [selection['FwdPrimer'].squeeze(), selection['RevPrimer'].squeeze()]
-    assert len(selections) == len(keys_s)
-    for s in selections:
+    primer_lists = [selections['FwdPrimer'], selections['RevPrimer']]
+    assert len(primer_lists) == len(keys_s)
+    for primer_list in primer_lists:
         key = keys_s.pop(0)
         output_file = output_dir / f'{key}.txt'
         structure[key]['Path'] = output_file
-        shutil.copy(s, output_file)
-    return structure, selection_id, hash_value
+        with open(output_file, 'w') as f:
+            for primer in primer_list.unique():
+                f.write(primer)
+                f.write('\n')
+    return structure
 
 
 def create_cutadapt_input(
         config_file: Path,
 ) -> None:
-    structure, selection_id, hash_value = create_lists(config_file)
-    output_dir = (Path('evaluations') / f'selection-{str(selection_id)}' / hash_value).resolve()
-    if output_dir.exists():
-        print(f'Evaluation files can be found here: {output_dir}')
-        exit()
+    structure = create_lists(config_file)
     config = d.read_yaml(config_file)
-    selection = d.get_selection(config)
-    fastq_file = selection['FASTQFile'].squeeze()
-    fastq_file = Path(fastq_file).resolve()
+    root = Path(config['Root'])
+    fastq_file = root / 'fastq_files' / config['Selection']['FASTQFile']
     if not d.is_gz_file(fastq_file):
         subprocess.run(['gzip', fastq_file])
         fastq_file = fastq_file.parent / (fastq_file.name + '.gz')
-    d.generate_input_files(structure, fastq_file, output_dir)
+    d.generate_input_files(config_file, structure, root, fastq_file)
 
 
 def compute_counts(
+        config_file: Path,
         input_file: Path,
         output_dir: Path,
 ) -> None:
     input_file = Path(input_file).resolve()
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
-    d.compute_counts(input_file, output_dir)
+    d.compute_counts(config_file, input_file, output_dir)
 
 
 def run(
@@ -108,8 +105,7 @@ def run(
 ) -> None:
     create_cutadapt_input(config_file)
     config = d.read_yaml(config_file)
-    selection = d.get_selection(config)
-    fastq_file = selection['FASTQFile'].squeeze()
-    input_file = Path(fastq_file).parent / 'cutadapt_input_files' / 'demultiplex.sh'
+    root = Path(config['Root'])
+    input_file = root / 'cutadapt_input_files' / 'demultiplex.sh'
     subprocess.run(['bash', input_file])
 

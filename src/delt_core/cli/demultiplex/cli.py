@@ -60,6 +60,12 @@ def create_cutadapt_input(**kwargs):
 
 @demultiplex.command()
 @click.argument(
+    'config_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+@click.argument(
     'input_file',
     nargs=1,
     required=True,
