@@ -10,17 +10,6 @@ def demultiplex():
 
 @demultiplex.command()
 @click.argument(
-    'config_file',
-    nargs=1,
-    required=True,
-    type=click.Path(exists=True),
-)
-def init(**kwargs):
-    cmds.init(**kwargs)
-
-
-@demultiplex.command()
-@click.argument(
     'struct_file',
     nargs=1,
     required=True,

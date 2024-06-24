@@ -5,17 +5,6 @@ from ... import compute as c
 from ... import demultiplex as d
 
 
-def init(
-        config_file: Path,
-) -> None:
-    config = d.read_yaml(config_file)
-    root = Path(config['Root'])
-    dirs = ['libraries', 'fastq_files', 'selections']
-    for dir in dirs:
-        path = root / dir
-        path.mkdir(exist_ok=True)
-
-
 def convert(
         struct_file: Path,
 ) -> None:
