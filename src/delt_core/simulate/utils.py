@@ -1,3 +1,4 @@
+import gzip
 from pathlib import Path
 
 import yaml
@@ -8,6 +9,18 @@ def read_txt(
 ) -> None:
     with open(path, 'r') as file:
         return file.readlines()
+
+
+def write_txt(
+        data: list,
+        path: Path,
+) -> None:
+    if Path(path).suffix == '.gz':
+        with gzip.open(path, 'wt') as f:
+            f.writelines(data)
+    else:
+        with open(path, 'w') as f:
+            f.writelines(data)
 
 
 def read_yaml(
@@ -26,16 +39,16 @@ def write_yaml(
 
 
 def create_config_file(
-        config_simulation: Path,
         config_file: Path,
+        struct_file: Path,
         output_file: Path,
         num_reads: int = 100,
 ) -> None:
     data = {
-        'config_file': config_file,
+        'struct_file': struct_file,
         'output_file': output_file,
         'num_reads': num_reads,
         'errors': [],
     }
-    write_yaml(data, config_simulation)
+    write_yaml(data, config_file)
 

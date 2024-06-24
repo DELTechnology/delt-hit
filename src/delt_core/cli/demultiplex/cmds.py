@@ -14,11 +14,11 @@ def convert(
 def create_lists(
         config_file: Path,
         output_dir: Path = None,
-) -> None:
-    if not output_dir:
-        output_dir = Path.cwd() / 'codon_lists'
-    Path(output_dir).mkdir(exist_ok=True)
+) -> dict:
     config_file = Path(config_file).resolve()
+    if not output_dir:
+        output_dir = config_file.parent / 'codon_lists'
+    Path(output_dir).mkdir(exist_ok=True)
     config = d.read_yaml(config_file)
     selections = d.get_selections(config)
     structure = config['Structure']

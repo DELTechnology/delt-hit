@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .utils import read_txt, read_yaml
+from .utils import read_txt, write_txt, read_yaml
 from delt_core.cli.demultiplex.cmds import create_lists
 from delt_core.demultiplex.postprocess import perform_selection, save_counts
 from delt_core.demultiplex.preprocess import read_yaml
@@ -17,13 +17,12 @@ def read_struct_file(
         struct_file: str,
 ) -> dict:
     struct_file = Path(struct_file)
-    structure, _, _ = create_lists(struct_file)
-    print(structure)
-    exit()
+    output_dir = struct_file.parent / 'codon_lists'
+    structure = create_lists(struct_file, output_dir)
     elements = []
     start = 0
     for element, values in structure.items():
-        sequences = read_txt(struct_file.parent / values['path'])
+        sequences = read_txt(values['Path'])
         sequences = list(map(lambda x: [*x.strip()], sequences))
         length = len(sequences[0])
         end = start + length - 1
@@ -65,7 +64,7 @@ def create_all_barcode_regions_single_position_error(reads, elements, relative_p
     return [i for i in reads_stacked]
 
 
-def create_insertion_at_read_start_error(reads, elements, insertion_length, min_length=None, max_length=None, p=None):
+def create_insertion_at_read_start_error(reads, insertion_length, min_length=None, max_length=None, p=None):
     if insertion_length == 'random':
         inserts = [np.array([rng.choice(BASES)] * l) for l in rng.choice(range(min_length, max_length+1), size=len(reads), p=p)]
         reads = [np.insert(read, 0, insert) for read, insert in zip(reads, inserts)]
@@ -90,7 +89,7 @@ def create_errors(config, reads):
 
 
 def generate_fastq_file(config, reads):
-    path_to_output = config['output_file']
+    path_to_output = Path(config['output_file'])
     content = []
     for i, read in enumerate(reads):
         phred_scores = '~' * len(read)
@@ -98,8 +97,7 @@ def generate_fastq_file(config, reads):
         content.append(''.join(read) + '\n')
         content.append('+\n')
         content.append(phred_scores + '\n')
-    with open(path_to_output, 'w') as f:
-        f.writelines(content)
+    write_txt(content, path_to_output)
 
 
 def run_simulation(
@@ -108,7 +106,7 @@ def run_simulation(
     
     # Generate FASTQ file.
     config = read_yaml(config_file)
-    struct_file = config['config_file']
+    struct_file = config['struct_file']
     struct_dict = read_struct_file(struct_file)
     config.update(struct_dict)
     reads, reads_info = generate_reads(config)
@@ -116,10 +114,10 @@ def run_simulation(
     generate_fastq_file(config, reads)
 
     # Generate table for counts.
-    output_dir = Path(config['output_file']).parent / 'counts_true'
+    output_dir = Path(struct_file).parent / 'evaluations_true'
     output_dir.mkdir(parents=True, exist_ok=True)
-    selections = perform_selection(reads_info, config['num_reads'])
-    save_counts(selections, output_dir)
+    selections = perform_selection(reads_info, config['num_reads'], struct_file)
+    save_counts(selections, output_dir, struct_file)
 
 
 

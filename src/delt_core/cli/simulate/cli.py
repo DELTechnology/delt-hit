@@ -10,21 +10,21 @@ def simulate():
 
 @simulate.command()
 @click.option(
-    '--config_simulation',
-    '-s',
+    '--config_file',
+    '-c',
     default='config_simulation.yml',
     type=click.Path(writable=True),
 )
 @click.option(
-    '--config_file',
-    '-c',
+    '--struct_file',
+    '-s',
     default='config.yml',
     type=click.Path(writable=True),
 )
 @click.option(
     '--output_file',
     '-o',
-    default='simulation.fastq',
+    default='simulation.fastq.gz',
     type=click.Path(writable=True),
 )
 @click.option(

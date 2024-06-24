@@ -4,12 +4,12 @@ from ... import simulate as s
 
 
 def init(
-        config_simulation: Path,
         config_file: Path,
-        output_file: Path,
-        num_reads: int,
+        struct_file: Path,
+        output_file: Path = 'simulation.fastq.gz',
+        num_reads: int = 100,
 ) -> None:
-    s.create_config_file(config_simulation, config_file, output_file, int(num_reads))
+    s.create_config_file(config_file, struct_file, output_file, int(num_reads))
 
 
 def run(
