@@ -32,8 +32,14 @@ delt-cli compute smiles library1.xlsx library2.xlsx
 
 ## Simulation
 
+Create configuration file for simulation:
 ```bash
-delt-cli simulate
+delt-cli simulate init
+```
+
+Generate reads (with or without erros):
+```bash
+delt-cli simulate run config_simulation.yml
 ```
 
 
