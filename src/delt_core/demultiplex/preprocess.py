@@ -64,9 +64,9 @@ def get_selections(
 ) -> pd.DataFrame:
     root = Path(config['Root'])
     config_selection = config['Selection']
-    selection_file = root / 'selections' / config_selection['SelectionFile']
-    fastq_file = config_selection['FASTQFile']
-    library = config_selection['Library']
+    selection_file = root / config_selection['SelectionFile']
+    fastq_file = str(Path(config_selection['FASTQFile']).name)
+    library = str(Path(config_selection['Library']).name)
     selections = pd.read_excel(selection_file)
     return selections[(selections['FASTQFile'] == fastq_file) & (selections['Library'] == library)]
 

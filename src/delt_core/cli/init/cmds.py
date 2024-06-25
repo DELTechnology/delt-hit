@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 def init(
-        root = None,
+        root: Path = None,
 ) -> None:
     if not root:
         root = Path.cwd()

@@ -13,12 +13,13 @@ BASES = ['A', 'T', 'C', 'G']
 rng = np.random.default_rng()
 
 
-def read_struct_file(
-        struct_file: str,
+def read_structure(
+        config_file: Path,
 ) -> dict:
-    struct_file = Path(struct_file)
-    output_dir = struct_file.parent / 'codon_lists'
-    structure = create_lists(struct_file, output_dir)
+    config = read_yaml(config_file)
+    root = Path(config['Root'])
+    output_dir = root / 'codon_lists'
+    structure = create_lists(config_file, output_dir)
     elements = []
     start = 0
     for element, values in structure.items():
@@ -34,7 +35,7 @@ def read_struct_file(
 
 
 def generate_reads(config):
-    num_reads = config['num_reads']
+    num_reads = config['Simulation']['NumReads']
     elements = config['elements']
     regions = elements[['region', 'start', 'end', 'barcodes']].to_records(index=False)
     read_length = elements.end.max() + 1
@@ -75,7 +76,7 @@ def create_insertion_at_read_start_error(reads, insertion_length, min_length=Non
 
 
 def create_errors(config, reads):
-    errors = config['errors']
+    errors = config['Simulation']['Errors']
     elements = config['elements']
     for error in errors:
         if error['type'] == 'all_barcode_regions_single_position':
@@ -89,7 +90,7 @@ def create_errors(config, reads):
 
 
 def generate_fastq_file(config, reads):
-    path_to_output = Path(config['output_file'])
+    path_to_output = Path(config['Simulation']['OutputFile'])
     content = []
     for i, read in enumerate(reads):
         phred_scores = '~' * len(read)
@@ -105,19 +106,19 @@ def run_simulation(
 ) -> None:
     
     # Generate FASTQ file.
+    struct_dict = read_structure(config_file)
     config = read_yaml(config_file)
-    struct_file = config['struct_file']
-    struct_dict = read_struct_file(struct_file)
     config.update(struct_dict)
     reads, reads_info = generate_reads(config)
     reads = create_errors(config, reads)
     generate_fastq_file(config, reads)
 
     # Generate table for counts.
-    output_dir = Path(struct_file).parent / 'evaluations_true'
+    root = Path(config['Root'])
+    output_dir = root / 'evaluations_true'
     output_dir.mkdir(parents=True, exist_ok=True)
-    selections = perform_selection(reads_info, config['num_reads'], struct_file)
-    save_counts(selections, output_dir, struct_file)
+    selections = perform_selection(reads_info, config['Simulation']['NumReads'], config_file)
+    save_counts(selections, output_dir, config_file)
 
 
 

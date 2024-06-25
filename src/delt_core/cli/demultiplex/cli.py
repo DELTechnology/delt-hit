@@ -9,6 +9,36 @@ def demultiplex():
 
 
 @demultiplex.command()
+@click.option(
+    '--root',
+    '-r',
+    default=None,
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--config_file',
+    '-c',
+    default='config.yml',
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--selection_file',
+    '-s',
+    default='selections/selection.xlsx',
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--library',
+    '-l',
+    default='libraries/library.xlsx',
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--fastq_file',
+    '-f',
+    default='fastq_files/input.fastq.gz',
+    type=click.Path(writable=True),
+)
 def init(**kwargs):
     cmds.init(**kwargs)
 

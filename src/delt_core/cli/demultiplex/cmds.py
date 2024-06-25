@@ -8,10 +8,12 @@ from ... import demultiplex as d
 
 
 def init(
-        root = None,
-        selection_file: Path = 'selection.xlsx',
-        fastq_file: Path = 'input.fastq.gz',
-        library: Path = 'library.xlsx',
+        root: Path,
+        config_file: Path,
+        selection_file: Path,
+        fastq_file: Path,
+        library: Path,
+        **kwargs,
 ) -> None:
     if not root:
         root = Path.cwd()
@@ -31,8 +33,8 @@ def init(
         config['Structure'][region] = {}
         config['Structure'][region]['MaxErrorRate'] = max_error_rate
         config['Structure'][region]['Indels'] = indels
-    output_file = Path(root) / 'config.yml'
-    with open(output_file, 'w') as f:
+    config_file = Path(root) / config_file
+    with open(config_file, 'w') as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
 
@@ -55,7 +57,7 @@ def create_lists(
     structure = config['Structure']
     keys = list(structure.keys())
     root = Path(config['Root'])
-    lib_file = root / 'libraries' / config['Selection']['Library']
+    lib_file = root / config['Selection']['Library']
     bbs, _, _, consts = c.load_data(lib_file)
     # Building blocks.
     keys_b = [key for key in keys if key.startswith('B')]
@@ -102,7 +104,7 @@ def create_cutadapt_input(
     structure = create_lists(config_file)
     config = d.read_yaml(config_file)
     root = Path(config['Root'])
-    fastq_file = root / 'fastq_files' / config['Selection']['FASTQFile']
+    fastq_file = root / config['Selection']['FASTQFile']
     if not d.is_gz_file(fastq_file):
         subprocess.run(['gzip', fastq_file])
         fastq_file = fastq_file.parent / (fastq_file.name + '.gz')

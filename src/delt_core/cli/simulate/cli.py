@@ -10,28 +10,46 @@ def simulate():
 
 @simulate.command()
 @click.option(
-    '--config_file',
-    '-c',
-    default='config_simulation.yml',
+    '--root',
+    '-r',
+    default=None,
     type=click.Path(writable=True),
 )
 @click.option(
-    '--struct_file',
-    '-s',
+    '--config_file',
+    '-c',
     default='config.yml',
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--selection_file',
+    '-s',
+    default='selections/selection_template.xlsx',
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--library',
+    '-l',
+    default='libraries/library_template.xlsx',
+    type=click.Path(writable=True),
+)
+@click.option(
+    '--fastq_file',
+    '-f',
+    default='fastq_files/input.fastq.gz',
     type=click.Path(writable=True),
 )
 @click.option(
     '--output_file',
     '-o',
-    default='simulation.fastq.gz',
+    default='fastq_files/simulation.fastq.gz',
     type=click.Path(writable=True),
 )
 @click.option(
     '--num_reads',
     '-n',
     default=100,
-    type=click.Path(writable=True),
+    type=int,
 )
 def init(**kwargs):
     cmds.init(**kwargs)
