@@ -9,6 +9,11 @@ def demultiplex():
 
 
 @demultiplex.command()
+def init(**kwargs):
+    cmds.init(**kwargs)
+
+
+@demultiplex.command()
 @click.argument(
     'struct_file',
     nargs=1,
