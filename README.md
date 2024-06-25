@@ -30,6 +30,14 @@ delt-cli compute smiles library1.xlsx library2.xlsx
 ```
 
 
+## Initialization
+
+Initialize folder structure:
+```bash
+delt-cli init
+```
+
+
 ## Simulation
 
 Create configuration file for simulation:
@@ -39,7 +47,7 @@ delt-cli simulate init
 
 Generate reads (with or without erros):
 ```bash
-delt-cli simulate run config_simulation.yml
+delt-cli simulate run config.yml
 ```
 
 
@@ -77,6 +85,29 @@ delt-cli demultiplex convert structure.txt
 
 
 ## Quality Control
+
 ```bash
 delt-cli qc
+```
+
+## Workflow
+
+The following commands will generate a new FASTQ file:
+```bash
+delt-cli init
+delt-cli simulate init
+delt-cli simulate run config.yml
+```
+
+The default initialization of the simulation generates a new library and a selection template that contain random codons. Alternatively, one can pass existing files:
+```bash
+delt-cli simulate init -l libraries/NF.xlsx -s selections/selection.xlsx
+```
+
+To demultiplex the newly generated FASTQ file, the file names have to be the same:
+```bash
+delt-cli simulate init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz -o fastq_files/input.fastq.gz
+delt-cli simulate run config.yml
+delt-cli demultiplex init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz
+delt-cli demultiplex run config.yml
 ```
