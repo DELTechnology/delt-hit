@@ -1,0 +1,113 @@
+# Package `delt-core`
+Core functionalities to work with DECL libraries
+
+## Installation
+
+Install the package for development purposes.
+Navigate to the root folder of the package and run the following command:
+
+```bash
+pip install -e ".[dev,test]"
+```
+
+Create a `.env` file to store environment configurations, keys and secrets.
+```bash
+touch .env
+```
+These configurations can be accessed using the `python-dotenv` package.
+
+
+## SMILES construction
+
+Standard use:
+```bash
+delt-cli compute smiles library1.xlsx
+```
+
+Hybridization of two libraries (the order of the libraries must match the final sequence in the 5'-to-3' direction, see README):
+```bash
+delt-cli compute smiles library1.xlsx library2.xlsx
+```
+
+
+## Initialization
+
+Initialize folder structure:
+```bash
+delt-cli init
+```
+
+
+## Simulation
+
+Create configuration file for simulation:
+```bash
+delt-cli simulate init
+```
+
+Generate reads (with or without erros):
+```bash
+delt-cli simulate run config.yml
+```
+
+
+## Demultiplexing
+
+Initialize folder structure for demultiplexing:
+```bash
+delt-cli demultiplex init config.yml
+```
+
+Run demultiplexing:
+```bash
+delt-cli demultiplex run config.yml
+```
+
+Create codon lists for the library specified in the configuration file:
+```bash
+delt-cli demultiplex create-lists config.yml
+```
+
+Create input files for running Cutadapt:
+```bash
+delt-cli demultiplex create-cutadapt-input config.yml
+```
+
+Compute count tables for the final reads:
+```bash
+delt-cli demultiplex compute-counts reads_with_adapters.gz
+```
+
+Convert old structure file to new configuration file:
+```bash
+delt-cli demultiplex convert structure.txt
+```
+
+
+## Quality Control
+
+```bash
+delt-cli qc
+```
+
+## Workflow
+
+The following commands will generate a new FASTQ file:
+```bash
+delt-cli init
+delt-cli simulate init
+delt-cli simulate run config.yml
+```
+
+The default initialization of the simulation generates a new library and a selection template that contain random codons. Alternatively, one can pass existing files:
+```bash
+delt-cli simulate init -l libraries/NF.xlsx -s selections/selection.xlsx
+```
+
+To demultiplex the newly generated FASTQ file, the file names have to be the same:
+```bash
+delt-cli simulate init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz -o fastq_files/input.fastq.gz
+delt-cli simulate run config.yml
+delt-cli demultiplex init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz
+delt-cli demultiplex run config.yml
+```
