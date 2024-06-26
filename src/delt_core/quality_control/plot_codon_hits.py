@@ -5,46 +5,43 @@ from matplotlib import pyplot as plt
 import pandas as pd
 
 
+def get_stats(
+        path: Path,
+) -> list:
+    items = []
+    report = json.load(path.open('r'))
+    stats = report['adapters_read1']
+    reads_in = report['read_counts']['input']
+    reads_out = report['read_counts']['output']
+    for stat in stats:
+        if stat['five_prime_end']['trimmed_lengths']:
+            item = {'reads_in': reads_in, 'reads_out': reads_out}
+            item['region_id'] = '_'.join(stat['name'].split('.')[:-1])
+            item['index'] = int(stat['name'].split('.')[-1])
+            ec = pd.concat([pd.DataFrame(i) for i in stat['five_prime_end']['trimmed_lengths']])
+            ec = ec.reset_index().rename(columns={'index': 'number_of_errors', 'counts': 'error_counts'})
+            ec = ec.assign(index=item['index'])
+            item['error_counts'] = ec
+            items += [item]
+    return items
+
+
 def plot_hits(
         input_dir: Path,
         output_dir: Path,
 ) -> None:
 
-    input_dir = Path(input_dir)
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    report_paths = Path(input_dir).glob('*.cutadapt.json')
-
-    cont = []
+    report_paths = input_dir.glob('*.cutadapt.json')
+    stats = []
     for report_path in report_paths:
-        report = json.load(report_path.open('r'))
-        stats = report['adapters_read1']
+        stats += [*get_stats(report_path)]
+    df = pd.DataFrame(stats)
 
-        reads_in = report['read_counts']['input']
-        reads_out = report['read_counts']['output']
-
-        for stat in stats:
-            if stat['five_prime_end']['trimmed_lengths']:
-                item = {'reads_in': reads_in, 'reads_out': reads_out}
-
-                item['region_id'] = '_'.join(stat['name'].split('.')[:-1])
-                item['index'] = int(stat['name'].split('.')[-1])
-
-                ec = pd.concat([pd.DataFrame(i) for i in stat['five_prime_end']['trimmed_lengths']])
-                ec = ec.reset_index().rename(columns={'index': 'number_of_errors', 'counts': 'error_counts'})
-                ec = ec.assign(index=item['index'])
-                item['error_counts'] = ec
-
-                cont.append(item)
-
-    df = pd.DataFrame(cont)
     # errors = df.counts.apply(pd.Series)
     # df = pd.concat([df, errors], axis=1).melt(id_vars=df.columns, var_name='number_of_errors', value_name='error_counts')
 
     for grp_name, grp_dat in df.groupby('region_id'):
         # grp_dat = pd.concat([grp_dat, grp_dat.assign(number_of_errors=1)])
-
         pdat = pd.concat(grp_dat['error_counts'].tolist())
         pdat = pdat[['index', 'number_of_errors', 'error_counts']] \
             .groupby(['index', 'number_of_errors']) \
@@ -72,7 +69,6 @@ def plot_hits(
 
         # axs[1].plot([0, grp_dat.index.max()], [expected, expected], 'k--')
 
-
         # g = sns.barplot(data=grp_dat,
         #                 x='index', y='error_counts',
         #                 hue='number_of_errors',
@@ -86,21 +82,6 @@ def plot_hits(
 
         for ax in axs:
             ax.set_xticklabels([])
-
         fig.tight_layout()
         fig.savefig(output_dir / f'hits_{grp_name}.pdf')
-        fig.show()
-
-
-    report = json.load((input_dir / '2-B1.cutadapt.json').open('r'))
-    stats = report['adapters_read1']
-    stats = sorted(stats, key=lambda x: x['total_matches'])
-    stats[-1]
-
-
-if __name__ == '__main__':
-
-    input_dir = 'cutadapt_output_files'
-    output_dir = 'plots'
-    plot_hits(input_dir, output_dir)
 
