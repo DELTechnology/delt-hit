@@ -6,7 +6,7 @@ import textwrap
 def print_report(
         path: Path,
 ) -> None:
-    report_files = Path(path).glob('*.cutadapt.json')
+    report_files = path.glob('*.cutadapt.json')
     reports = {i.name.replace('.cutadapt.json', ''): json.load(i.open('r')) for i in report_files}
 
     pipeline_report = []
@@ -51,10 +51,4 @@ def print_report(
     {'':<11}{RED}{overall_reads_discarded:,}{RESET} ({overall_proportion_reads_discarded:.2%}) reads discarded"""
     s = textwrap.dedent(s)
     print(s)
-
-
-if __name__ == '__main__':
-
-    dir = 'cutadapt_output_files'
-    print_report(dir)
 
