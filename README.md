@@ -86,9 +86,16 @@ delt-cli demultiplex convert structure.txt
 
 ## Quality Control
 
+Plot codon hits:
 ```bash
-delt-cli qc
+delt-cli qc plot
 ```
+
+Print report:
+```bash
+delt-cli qc report
+```
+
 
 ## Workflow
 
@@ -110,4 +117,11 @@ delt-cli simulate init -l libraries/library.xlsx -s selections/selection.xlsx -f
 delt-cli simulate run config.yml
 delt-cli demultiplex init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz
 delt-cli demultiplex run config.yml
+```
+
+To plot and report the results, one has to switch to the quality_control branch:
+```bash
+git checkout quality_control
+delt-cli qc plot
+delt-cli qc report
 ```
