@@ -121,6 +121,7 @@ delt-cli demultiplex run config.yml
 
 To plot and report the results, one has to switch to the quality_control branch:
 ```bash
+# TODO: this asks for an <INPUT_PATH>
 git checkout quality_control
 delt-cli qc plot
 delt-cli qc report
