@@ -53,13 +53,14 @@ def perform_reaction_steps(
 
     for _, bb in bb1.iterrows():
 
-        if bb['ReactionType']:  
+        if bb['ScaffoldID']:  
             scaffold_id = bb['ScaffoldID']
             scaffold = get_smiles(scaffold_id, scaffolds)
             product = scaffold
             
-            for reaction_type in bb['ReactionType'].split(','):
-                product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
+            if bb['SMILES']:
+                for reaction_type in bb['ReactionType'].split(','):
+                    product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
         
         else:
             scaffold = scaffold_id = 'None'
@@ -87,8 +88,9 @@ def perform_reaction_steps(
 
                 for _, bb in bbn.iterrows():
                     product = interm[i]
-                    for reaction_type in bb['ReactionType'].split(','):
-                        product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
+                    if bb['SMILES']:
+                        for reaction_type in bb['ReactionType'].split(','):
+                            product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
                     
                     code = insert_codon(interm[-1], bb['Codon'])
                     if write_indices:
