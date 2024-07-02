@@ -16,3 +16,9 @@ def compute_smiles(
     
     c.compute_smiles(libraries, Path(output_path))
 
+
+def compute_properties(
+        input_path: Path,
+) -> None:
+    c.compute_properties(Path(input_path))
+
