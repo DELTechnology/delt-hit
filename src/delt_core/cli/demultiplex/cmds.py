@@ -74,7 +74,7 @@ def create_lists(
     # Constant regions.
     keys_c = [key for key in keys if key.startswith('C')]
     sequence = consts['Sequence'].squeeze()
-    consts = sequence.split('{codon}')
+    consts = list(filter(None, sequence.split('{codon}')))
     assert len(consts) == len(keys_c)
     for const in consts:
         key = keys_c.pop(0)
