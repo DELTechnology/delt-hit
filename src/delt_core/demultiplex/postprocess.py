@@ -53,14 +53,14 @@ def save_counts(
 ) -> None:
     for selection_id, count in tqdm(counts.items(), ncols=100):
         count = [(j, *i) for i, j in zip(count.keys(), count.values())]
-        df = pd.DataFrame.from_records(count, columns=['count', 'barcode1', 'barcode2'])
+        df = pd.DataFrame.from_records(count, columns=['Count', 'Code1', 'Code2'])
         df = df.astype(int)
-        df.sort_values(['barcode1', 'barcode2'], inplace=True)
+        df.sort_values(['Code1', 'Code2'], inplace=True)
         selection_dir = output_dir / f'selection-{selection_id}'
         selection_dir.mkdir(parents=True, exist_ok=True)
         config = read_yaml(config_file)
         hash_value = hash_dict(config['Structure'])
-        output_file = selection_dir / f'{hash_value}.tsv'
+        output_file = selection_dir / f'{hash_value}.txt'
         df.to_csv(output_file, index=False, sep='\t')
         shutil.copy(config_file, output_file.with_suffix('.yml'))
 
