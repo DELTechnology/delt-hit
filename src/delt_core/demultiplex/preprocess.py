@@ -62,6 +62,7 @@ def hash_dict(
 
 def get_selections(
         config: dict,
+        selection_id: int = None,
 ) -> pd.DataFrame:
     root = Path(config['Root'])
     config_selection = config['Selection']
@@ -69,6 +70,8 @@ def get_selections(
     fastq_file = str(Path(config_selection['FASTQFile']).name)
     library = str(Path(config_selection['Library']).name)
     selections = pd.read_excel(selection_file)
+    if selection_id:
+        selections = selections[selections['SelectionID'] == selection_id]
     return selections[(selections['FASTQFile'] == fastq_file) & (selections['Library'] == library)]
 
 

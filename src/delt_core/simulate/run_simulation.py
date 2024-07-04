@@ -20,7 +20,7 @@ def read_structure(
     config = read_yaml(config_file)
     root = Path(config['Root'])
     output_dir = root / 'codon_lists'
-    structure = create_lists(config_file, output_dir)
+    structure = create_lists(config_file, output_dir=output_dir)
     elements = []
     start = 0
     for element, values in structure.items():

@@ -57,20 +57,20 @@ def create_lists(
     config = d.read_yaml(config_file)
     root = Path(config['Root'])
     structure = config['Structure']
+    
     hash_value = d.hash_dict(structure)
-    selections = d.get_selections(config)
-    if selection_id:
-        selections = selections[selections['SelectionID'] == selection_id]
+    selections = d.get_selections(config, selection_id)
     for selection_id in selections['SelectionID']:
         path = root / 'evaluations' / f'selection-{selection_id}' / f'{hash_value}.txt'
         if path.exists():
             selections = selections[selections['SelectionID'] != selection_id]
     if selections.empty:
         exit()
-    print(selections)
+
     keys = list(structure.keys())
     lib_file = root / config['Selection']['Library']
     bbs, _, _, consts = c.load_data(lib_file)
+
     # Building blocks.
     keys_b = [key for key in keys if key.startswith('B')]
     assert len(bbs) == len(keys_b)
@@ -83,6 +83,7 @@ def create_lists(
             for code in codes:
                 f.write(code)
                 f.write('\n')
+    
     # Constant regions.
     keys_c = [key for key in keys if key.startswith('C')]
     sequence = consts['Sequence'].squeeze()
@@ -95,6 +96,7 @@ def create_lists(
         with open(output_file, 'w') as f:
             f.write(const)
             f.write('\n')
+    
     # Primers.
     keys_s = [key for key in keys if key.startswith('S')]
     primer_lists = [selections['FwdPrimer'], selections['RevPrimer']]
@@ -107,6 +109,7 @@ def create_lists(
             for primer in primer_list.unique():
                 f.write(primer)
                 f.write('\n')
+    
     return structure
 
 
