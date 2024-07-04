@@ -22,6 +22,12 @@ def demultiplex():
     type=click.Path(writable=True),
 )
 @click.option(
+    '--experiment_name',
+    '-e',
+    default=None,
+    type=click.Path(writable=True),
+)
+@click.option(
     '--selection_file',
     '-s',
     default='selections/selection.xlsx',
@@ -77,6 +83,18 @@ def create_lists(**kwargs):
     nargs=1,
     required=True,
     type=click.Path(exists=True),
+)
+@click.option(
+    '--write_info_file',
+    '-i',
+    default=False,
+    is_flag=True,
+)
+@click.option(
+    '--write_json_file',
+    '-j',
+    default=True,
+    is_flag=True,
 )
 def create_cutadapt_input(**kwargs):
     cmds.create_cutadapt_input(**kwargs)

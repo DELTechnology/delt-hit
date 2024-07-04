@@ -14,17 +14,21 @@ def get_selection_ids(
         config: dict,
 ) -> list[int]:
     root = Path(config['Root'])
-    
+    experiment_name = config['Experiment']['name']
+
+    # NOTE: this requires to respect the order
     structure_keys = filter(lambda x: x.startswith('S'), config['Structure'].keys())
     primer_lists = []
     for key in structure_keys:
-        primer_file = root / 'codon_lists' / f'{key}.txt'
+        primer_file = root / 'experiments' / experiment_name / 'codon_lists' / f'{key}.txt'
         with open(primer_file, 'r') as f:
             primer_lists.append([primer.strip() for primer in f.readlines()])
-    
+
     selections = get_selections(config)
     selection_ids = []
     for selection_primer_ids in list_of_selection_primer_ids:
+        # TODO: this is not generic enough and susceptible to errors
+        #  we need to specify the column_name for the primers to avoid implicitly assume the order
         fwd_primer = primer_lists[0][selection_primer_ids[0]]
         rev_primer = primer_lists[1][selection_primer_ids[1]]
         p1 = (selections['FwdPrimer'] == fwd_primer)
@@ -74,7 +78,7 @@ def compute_counts(
         for line in tqdm(f, total=num_reads, ncols=100):
             ids = extract_ids(line)
             counts[ids['selection_ids']][ids['barcodes']] += 1
-    
+
     list_of_selection_primer_ids = list(counts.keys())
     selection_ids = get_selection_ids(list_of_selection_primer_ids, config)
     counts = {selection_id: val for selection_id, val in zip(selection_ids, counts.values())}

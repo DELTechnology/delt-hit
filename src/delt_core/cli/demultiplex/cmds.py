@@ -11,6 +11,7 @@ from ... import demultiplex as d
 def init(
         root: Path,
         config_file: Path,
+        experiment_name: str,
         selection_file: Path,
         fastq_file: Path,
         library: Path,
@@ -20,6 +21,7 @@ def init(
         root = Path.cwd()
     config = {
         'Root': str(root),
+        'Experiment': {'name': experiment_name},
         'Selection': {
             'SelectionFile': selection_file,
             'FASTQFile': fastq_file,
@@ -34,7 +36,10 @@ def init(
         config['Structure'][region] = {}
         config['Structure'][region]['MaxErrorRate'] = max_error_rate
         config['Structure'][region]['Indels'] = indels
-    config_file = Path(root) / config_file
+
+    experiment_name = experiment_name or d.preprocess.hash_dict(config)
+    config['Experiment']['name'] = experiment_name
+    config_file = Path(root) / 'experiments' / config_file
     with open(config_file, 'w') as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
@@ -57,7 +62,7 @@ def create_lists(
     config = d.read_yaml(config_file)
     root = Path(config['Root'])
     structure = config['Structure']
-    
+
     hash_value = d.hash_dict(structure)
     selections = d.get_selections(config, selection_id)
     for selection_id in selections['SelectionID']:
@@ -83,7 +88,7 @@ def create_lists(
             for code in codes:
                 f.write(code)
                 f.write('\n')
-    
+
     # Constant regions.
     keys_c = [key for key in keys if key.startswith('C')]
     sequence = consts['Sequence'].squeeze()
@@ -96,7 +101,7 @@ def create_lists(
         with open(output_file, 'w') as f:
             f.write(const)
             f.write('\n')
-    
+
     # Primers.
     keys_s = [key for key in keys if key.startswith('S')]
     primer_lists = [selections['FwdPrimer'], selections['RevPrimer']]
@@ -109,22 +114,27 @@ def create_lists(
             for primer in primer_list.unique():
                 f.write(primer)
                 f.write('\n')
-    
+
     return structure
 
 
 def create_cutadapt_input(
         config_file: Path,
+        write_json_file: bool = True,
+        write_info_file: bool = True,
         selection_id: int = None,
 ) -> None:
+
     structure = create_lists(config_file, selection_id)
     config = d.read_yaml(config_file)
-    root = Path(config['Root'])
-    fastq_file = root / config['Selection']['FASTQFile']
-    if not d.is_gz_file(fastq_file):
-        subprocess.run(['gzip', fastq_file])
-        fastq_file = fastq_file.parent / (fastq_file.name + '.gz')
-    d.generate_input_files(config_file, structure, root, fastq_file)
+    root_dir = Path(config['Root'])
+    path_input_fastq = root_dir / config['Selection']['FASTQFile']
+    if not d.is_gz_file(path_input_fastq):
+        subprocess.run(['gzip', path_input_fastq])
+        path_input_fastq = path_input_fastq.parent / (path_input_fastq.name + '.gz')
+    d.generate_input_files(config_file=config_file, structure=structure, root_dir=root_dir,
+                           path_input_fastq=path_input_fastq,
+                           write_json_file=write_json_file, write_info_file=write_info_file)
 
 
 def compute_counts(
@@ -150,6 +160,7 @@ def run(
     create_cutadapt_input(config_file, selection_id)
     config = d.read_yaml(config_file)
     root = Path(config['Root'])
-    input_file = root / 'cutadapt_input_files' / 'demultiplex.sh'
+    experiment_name = config['Experiment']['name']
+    input_file = root / 'experiments' / experiment_name / 'cutadapt_input_files' / 'demultiplex.sh'
     subprocess.run(['bash', input_file])
 

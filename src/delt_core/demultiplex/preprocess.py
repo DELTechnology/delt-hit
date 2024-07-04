@@ -2,13 +2,13 @@ import hashlib
 import json
 import multiprocessing
 import os
-from pathlib import Path
 import stat
 import textwrap
+from pathlib import Path
 
 import pandas as pd
-from pydantic import BaseModel, computed_field
 import yaml
+from pydantic import BaseModel, computed_field
 
 
 class Region(BaseModel):
@@ -45,6 +45,7 @@ def convert_dict(
         return tuple((key, convert_dict(value)) for key, value in data.items())
     elif isinstance(data, int):
         # TODO: fix return type to (float(data), )?
+        # TODO: WARNING: Why do you convert int's to float's? This might introduce bugs in the -e argument of the cutadapt command as it distinguishes between int and float values.
         return float(data)
     else:
         return data
@@ -52,7 +53,7 @@ def convert_dict(
 
 def hash_dict(
         data: dict,
-) -> tuple:
+) -> str:
     data = convert_dict(data)
     data_str = json.dumps(data)
     hash_object = hashlib.sha256()
@@ -80,9 +81,12 @@ def convert_struct_file(
 ) -> None:
     with open(struct_file, 'r') as f:
         struct = f.readlines()[2:]
-    struct = sorted(filter(None, [line.strip().split() for line in struct]))
+    # TODO: check this
+    struct = sorted(struct, key=lambda line: int(line.split('\t')[0]))
+    # struct = sorted(filter(None, [line.strip().split() for line in struct]))
     config = {
         'Root': str(Path.cwd()),
+        'Experiment': {'name': ''},
         'Selection': {
             'SelectionFile': 'selections/selection.xlsx',
             'FASTQFile': 'fastq_files/input.fastq.gz',
@@ -94,12 +98,15 @@ def convert_struct_file(
     indels = 0
     indices = {}
     for line in struct:
+        # TODO: this is related to aboves todo
+        # line = line.strip().split('\t')
         _type = line[2]
         indices[_type] = indices.get(_type, 0) + 1
         region = f'{_type}{indices[_type]}'
         config['Structure'][region] = {}
         config['Structure'][region]['MaxErrorRate'] = max_error_rate
         config['Structure'][region]['Indels'] = indels
+    config['Experiment']['name'] = hash_dict(config)
     output_file = Path(struct_file).parent / 'config.yml'
     with open(output_file, 'w') as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
@@ -127,11 +134,10 @@ def write_fastq_files(
         regions: list[Region],
         path: str,
 ) -> None:
-    fastq = ''
     for i, region in enumerate(regions):
         region.position_in_construct = i
         fastq = [f'>{region.region_id}.{index}\n{codon}'
-                for index, codon in enumerate(region.codons)]
+                 for index, codon in enumerate(region.codons)]
         fastq = '\n'.join(fastq)
         with open(path / f'{region.region_id}.fastq', 'w') as f:
             f.write(fastq)
@@ -142,23 +148,28 @@ def generate_input_files(
         structure: dict,
         root_dir: Path,
         path_input_fastq: Path,
+        write_json_file: bool,
+        write_info_file: bool
 ) -> None:
-    
-    path_input_dir = root_dir / 'cutadapt_input_files'
-    path_input_dir.mkdir(parents=True, exist_ok=True)
-    path_output_dir = root_dir / 'cutadapt_output_files'
-    path_demultiplex_exec = path_input_dir / 'demultiplex.sh'
-    path_final_reads = path_output_dir / 'reads_with_adapters.gz'
-    path_output_fastq = path_output_dir / 'out.fastq.gz'
+    config = read_yaml(config_file)
+    experiment_name = config['Experiment']['name']
+    cutadapt_input_files_dir = root_dir / 'experiments' / experiment_name / 'cutadapt_input_files'
+    cutadapt_output_files_dir = root_dir / 'experiments' / experiment_name / 'cutadapt_output_files'
+
+    cutadapt_input_files_dir.mkdir(parents=True, exist_ok=True)
+    path_demultiplex_exec = cutadapt_input_files_dir / 'demultiplex.sh'
+
+    path_final_reads = cutadapt_output_files_dir / 'reads_with_adapters.gz'
+    path_output_fastq = cutadapt_output_files_dir / 'out.fastq.gz'
     path_counts = root_dir / 'evaluations'
 
     regions = get_regions(structure)
-    write_fastq_files(regions, path_input_dir)
+    write_fastq_files(regions, cutadapt_output_files_dir)
 
     with open(path_demultiplex_exec, 'w') as f:
         f.write('#!/bin/bash\n')
         f.write('# make sure you installed pigz with `brew install pigz` to enable parallel processing\n\n')
-        f.write(f'mkdir "{path_output_dir}"\n')
+        f.write(f'mkdir "{cutadapt_output_files_dir}"\n')
         f.write(f'mkdir "{path_counts}"\n')
         # NOTE: we symlink the fastq file we want to demultiplex
         f.write(f'ln -sf "{path_input_fastq}" "{path_output_fastq}"\n')
@@ -169,13 +180,13 @@ def generate_input_files(
     for region in regions:
         error_rate = region.max_error_rate
         indels = f' --no-indels' if not int(region.indels) else ''
-        path_adapters = path_input_dir / f'{region.region_id}.fastq'
+        path_adapters = cutadapt_input_files_dir / f'{region.region_id}.fastq'
         # NOTE: from now on we use the output of the previous step as input
-        path_input_fastq = path_output_dir / 'input.fastq.gz'
+        path_input_fastq = cutadapt_output_files_dir / 'input.fastq.gz'
 
-        report_file_name = path_output_dir / f'{region.region_id}.cutadapt.json'
-        stdout_file_name = path_output_dir / f'{region.region_id}.cutadapt.log'
-        info_file_name = path_output_dir / f'{region.region_id}.cutadapt.info.gz'
+        report_file_name = cutadapt_output_files_dir / f'{region.region_id}.cutadapt.json'
+        stdout_file_name = cutadapt_output_files_dir / f'{region.region_id}.cutadapt.log'
+        info_file_name = cutadapt_output_files_dir / f'{region.region_id}.cutadapt.info.gz'
 
         with open(path_demultiplex_exec, 'a') as f:
             cmd = f"""
@@ -187,12 +198,13 @@ def generate_input_files(
                 -g "^file:{path_adapters}" \\
                 --rename '{rename_command}' \\
                 --discard-untrimmed \\
-                --json="{report_file_name}" \\
-                --info-file="{info_file_name}" \\
                 --cores={n_cores} 2>&1 | tee "{stdout_file_name}"
-                
                 """
             cmd = textwrap.dedent(cmd)
+            if write_json_file:
+                cmd += f'--json="{report_file_name}" \\'
+            if write_info_file:
+                cmd += f'--info-file="{info_file_name}" \\'
             f.write(cmd)
 
     with open(path_demultiplex_exec, 'a') as f:
@@ -201,4 +213,3 @@ def generate_input_files(
         f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
-
