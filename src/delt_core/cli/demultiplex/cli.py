@@ -112,6 +112,12 @@ def compute_counts(**kwargs):
     required=True,
     type=click.Path(exists=True),
 )
+@click.option(
+    '--selection_id',
+    '-i',
+    default=None,
+    type=int,
+)
 def run(**kwargs):
     cmds.run(**kwargs)
 

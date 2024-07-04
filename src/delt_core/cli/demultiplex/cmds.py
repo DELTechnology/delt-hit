@@ -46,6 +46,7 @@ def convert(
 
 def create_lists(
         config_file: Path,
+        selection_id: int = None,
         output_dir: Path = None,
 ) -> dict:
     config_file = Path(config_file).resolve()
@@ -53,10 +54,20 @@ def create_lists(
         output_dir = config_file.parent / 'codon_lists'
     Path(output_dir).mkdir(exist_ok=True)
     config = d.read_yaml(config_file)
-    selections = d.get_selections(config)
-    structure = config['Structure']
-    keys = list(structure.keys())
     root = Path(config['Root'])
+    structure = config['Structure']
+    hash_value = d.hash_dict(structure)
+    selections = d.get_selections(config)
+    if selection_id:
+        selections = selections[selections['SelectionID'] == selection_id]
+    for selection_id in selections['SelectionID']:
+        path = root / 'evaluations' / f'selection-{selection_id}' / f'{hash_value}.txt'
+        if path.exists():
+            selections = selections[selections['SelectionID'] != selection_id]
+    if selections.empty:
+        exit()
+    print(selections)
+    keys = list(structure.keys())
     lib_file = root / config['Selection']['Library']
     bbs, _, _, consts = c.load_data(lib_file)
     # Building blocks.
@@ -100,8 +111,9 @@ def create_lists(
 
 def create_cutadapt_input(
         config_file: Path,
+        selection_id: int = None,
 ) -> None:
-    structure = create_lists(config_file)
+    structure = create_lists(config_file, selection_id)
     config = d.read_yaml(config_file)
     root = Path(config['Root'])
     fastq_file = root / config['Selection']['FASTQFile']
@@ -124,8 +136,9 @@ def compute_counts(
 
 def run(
         config_file: Path,
+        selection_id: int = None,
 ) -> None:
-    create_cutadapt_input(config_file)
+    create_cutadapt_input(config_file, selection_id)
     config = d.read_yaml(config_file)
     root = Path(config['Root'])
     input_file = root / 'cutadapt_input_files' / 'demultiplex.sh'
