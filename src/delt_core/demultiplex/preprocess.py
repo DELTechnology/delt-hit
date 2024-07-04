@@ -76,13 +76,13 @@ def convert_struct_file(
 ) -> None:
     with open(struct_file, 'r') as f:
         struct = f.readlines()[2:]
-    struct = sorted(struct, key=lambda line: int(line.split('\t')[0]))
+    struct = sorted(filter(None, [line.strip().split() for line in struct]))
     config = {
-        'Root': '~/',
+        'Root': str(Path.cwd()),
         'Selection': {
-            'SelectionFile': 'selection.xlsx',
-            'FASTQFile': 'input.fastq.gz',
-            'Library': 'library.xlsx'
+            'SelectionFile': 'selections/selection.xlsx',
+            'FASTQFile': 'fastq_files/input.fastq.gz',
+            'Library': 'libraries/library.xlsx'
         },
         'Structure': {},
     }
@@ -90,7 +90,6 @@ def convert_struct_file(
     indels = 0
     indices = {}
     for line in struct:
-        line = line.strip().split('\t')
         _type = line[2]
         indices[_type] = indices.get(_type, 0) + 1
         region = f'{_type}{indices[_type]}'
