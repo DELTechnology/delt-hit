@@ -1,57 +1,52 @@
 from collections import defaultdict
 import gzip
-import json
 from pathlib import Path
-import shutil
 
 import pandas as pd
 from tqdm import tqdm
+import yaml
 
-from .preprocess import read_yaml, get_selections, hash_dict
+from .preprocess import get_selections, hash_dict
 
 
-def get_selection_id(
-        ids: list,
-        config_file: Path,
-) -> int:
-    config = read_yaml(config_file)
+def get_selection_ids(
+        list_of_selection_primer_ids: list[list],
+        config: dict,
+) -> list[int]:
     root = Path(config['Root'])
-    keys = config['Structure'].keys()
-    keys_s = [key for key in keys if key.startswith('S')]
-    primers = []
-    for id, key in zip(ids, keys_s):
+    
+    structure_keys = filter(lambda x: x.startswith('S'), config['Structure'].keys())
+    primer_lists = []
+    for key in structure_keys:
         primer_file = root / 'codon_lists' / f'{key}.txt'
         with open(primer_file, 'r') as f:
-            primer_list = [primer.strip() for primer in f.readlines()]
-        primers += [primer_list[id]]
+            primer_lists.append([primer.strip() for primer in f.readlines()])
+    
     selections = get_selections(config)
-    p1 = (selections['FwdPrimer'] == primers[0])
-    p2 = (selections['RevPrimer'] == primers[1])
-    return selections[p1 & p2]['SelectionID'].squeeze()
+    selection_ids = []
+    for selection_primer_ids in list_of_selection_primer_ids:
+        fwd_primer = primer_lists[0][selection_primer_ids[0]]
+        rev_primer = primer_lists[1][selection_primer_ids[1]]
+        p1 = (selections['FwdPrimer'] == fwd_primer)
+        p2 = (selections['RevPrimer'] == rev_primer)
+        selection_id = selections[p1 & p2]['SelectionID'].squeeze()
+        selection_ids.append(selection_id)
+    return selection_ids
 
 
-def perform_selection(
-        reads: list,
-        num_reads: int,
-        config_file: Path,
-) -> dict:
-    counts = defaultdict(lambda: defaultdict(int))
-    for line in tqdm(reads, total=num_reads, ncols=100):
-        _, *adapters = line.strip().split('?')
-        primer_ids = [i.split('.')[-1] for i in filter(lambda x: 'S' in x, adapters)]
-        primer_ids = list(map(int, primer_ids))
-        selection_id = get_selection_id(primer_ids, config_file)
-        barcodes = tuple(i.split('.')[-1] for i in filter(lambda x: 'B' in x, adapters))
-        counts[selection_id][barcodes] += 1
-    return counts
+def extract_ids(line: str):
+    _, *adapters = line.strip().split('?')
+    selection_ids = [i.split('.')[-1] for i in filter(lambda x: 'S' in x, adapters)]
+    selection_ids = tuple(map(int, selection_ids))
+    barcodes = tuple(i.split('.')[-1] for i in filter(lambda x: 'B' in x, adapters))
+    return {'selection_ids': selection_ids, 'barcodes': barcodes}
 
 
 def save_counts(
         counts: dict,
         output_dir: Path,
-        config_file: Path,
+        config: dict,
 ) -> None:
-    config = read_yaml(config_file)
     hash_value = hash_dict(config['Structure'])
     for selection_id, count in tqdm(counts.items(), ncols=100):
         count = [(j, *i) for i, j in zip(count.keys(), count.values())]
@@ -62,19 +57,26 @@ def save_counts(
         selection_dir.mkdir(parents=True, exist_ok=True)
         output_file = selection_dir / f'{hash_value}.txt'
         df.to_csv(output_file, index=False, sep='\t')
-        shutil.copy(config_file, output_file.with_suffix('.yml'))
+
+        with open(output_file.with_suffix('.yml'), 'w') as f:
+            yaml.dump(config, f, default_flow_style=False)
 
 
 def compute_counts(
-        config_file: Path,
-        input_file: str,
-        output_dir: str,
+        *,
+        config: dict,
+        input_file: Path,
+        output_dir: Path,
+        num_reads: int,
 ) -> None:
-    input_dir = input_file.parent
-    num_reads = json.load(open(
-        sorted((input_dir).glob('*.cutadapt.json'))[-1]
-    ))['read_counts']['output']
     with gzip.open(input_file, 'rt') as f:
-        counts = perform_selection(f, num_reads, config_file)
-    save_counts(counts, output_dir, config_file)
+        counts = defaultdict(lambda: defaultdict(int))
+        for line in tqdm(f, total=num_reads, ncols=100):
+            ids = extract_ids(line)
+            counts[ids['selection_ids']][ids['barcodes']] += 1
+    
+    list_of_selection_primer_ids = list(counts.keys())
+    selection_ids = get_selection_ids(list_of_selection_primer_ids, config)
+    counts = {selection_id: val for selection_id, val in zip(selection_ids, counts.values())}
+    save_counts(counts, output_dir, config)
 

@@ -33,7 +33,7 @@ def is_gz_file(
 
 def read_yaml(
         path: Path,
-) -> None:
+) -> dict:
     with open(path, 'r') as f:
         return yaml.safe_load(f)
 
@@ -44,6 +44,7 @@ def convert_dict(
     if isinstance(data, dict):
         return tuple((key, convert_dict(value)) for key, value in data.items())
     elif isinstance(data, int):
+        # TODO: fix return type to (float(data), )?
         return float(data)
     else:
         return data
