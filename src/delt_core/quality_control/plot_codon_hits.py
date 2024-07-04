@@ -37,11 +37,7 @@ def plot_hits(
         stats += [*get_stats(report_path)]
     df = pd.DataFrame(stats)
 
-    # errors = df.counts.apply(pd.Series)
-    # df = pd.concat([df, errors], axis=1).melt(id_vars=df.columns, var_name='number_of_errors', value_name='error_counts')
-
     for grp_name, grp_dat in df.groupby('region_id'):
-        # grp_dat = pd.concat([grp_dat, grp_dat.assign(number_of_errors=1)])
         pdat = pd.concat(grp_dat['error_counts'].tolist())
         pdat = pdat[['index', 'number_of_errors', 'error_counts']] \
             .groupby(['index', 'number_of_errors']) \
@@ -66,19 +62,6 @@ def plot_hits(
         ylim = (1, _max)
         axs[1].set_yscale('log')
         axs[1].set_ylim(ylim)
-
-        # axs[1].plot([0, grp_dat.index.max()], [expected, expected], 'k--')
-
-        # g = sns.barplot(data=grp_dat,
-        #                 x='index', y='error_counts',
-        #                 hue='number_of_errors',
-        #                 estimator='sum',
-        #                 ax=axs[0])
-        # g = sns.barplot(data=grp_dat,
-        #                     x='index', y='error_counts',
-        #                     hue='number_of_errors',
-        #                 estimator='sum',
-        #                     ax=axs[1])
 
         for ax in axs:
             ax.set_xticklabels([])
