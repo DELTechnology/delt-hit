@@ -3,18 +3,15 @@ from pathlib import Path
 from ... import quality_control as q
 
 
-def report() -> None:
-    input_dir = Path.cwd() / 'cutadapt_output_files'
-    q.print_report(input_dir)
+def report(experiment_dir: Path) -> None:
+    q.print_report(experiment_dir)
 
 
 def plot(
-        output_dir: Path,
+        experiment_dir: Path,
+        output_dir: Path = None,
 ) -> None:
-    input_dir = Path.cwd() / 'cutadapt_output_files'
-    if not output_dir:
-        output_dir = Path.cwd() / 'plots'
-    output_dir = Path(output_dir)
+    output_dir = output_dir or experiment_dir / 'quality_control' / 'plots'
     output_dir.mkdir(parents=True, exist_ok=True)
-    q.plot_hits(input_dir, output_dir)
+    q.plot_hits(experiment_dir, output_dir)
 

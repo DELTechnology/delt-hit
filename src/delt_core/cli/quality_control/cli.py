@@ -1,7 +1,7 @@
 import click
 
 from . import cmds
-
+from pathlib import Path
 
 @click.group()
 def qc():
@@ -9,11 +9,17 @@ def qc():
 
 
 @qc.command()
+@click.argument(
+    'experiment_dir', type=click.Path(exists=True, path_type=Path)
+)
 def report(**kwargs):
     cmds.report(**kwargs)
 
 
 @qc.command()
+@click.argument(
+    'experiment_dir', type=click.Path(exists=True, path_type=Path)
+)
 @click.option(
     '--output_dir',
     '-o',

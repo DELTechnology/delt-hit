@@ -4,9 +4,9 @@ import textwrap
 
 
 def print_report(
-        path: Path,
+        experiment_path: Path,
 ) -> None:
-    report_files = path.glob('*.cutadapt.json')
+    report_files = (experiment_path / 'cutadapt_output_files').glob('*.cutadapt.json')
     reports = {i.name.replace('.cutadapt.json', ''): json.load(i.open('r')) for i in report_files}
 
     pipeline_report = []
@@ -50,5 +50,7 @@ def print_report(
         f"""{'Overall':<10}: {GREEN}{rr['reads_with_adapters']:,}{RESET} reads with adapters ({overall_proportion_reads_with_adapter:.2%})
     {'':<11}{RED}{overall_reads_discarded:,}{RESET} ({overall_proportion_reads_discarded:.2%}) reads discarded"""
     s = textwrap.dedent(s)
+    with open(experiment_path / 'report.txt', 'w') as f:
+        f.write(s)
     print(s)
 

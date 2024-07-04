@@ -6,10 +6,10 @@ import pandas as pd
 
 
 def get_stats(
-        path: Path,
+        experiment_path: Path,
 ) -> list:
     items = []
-    report = json.load(path.open('r'))
+    report = json.load(experiment_path.open('r'))
     stats = report['adapters_read1']
     reads_in = report['read_counts']['input']
     reads_out = report['read_counts']['output']
@@ -27,12 +27,11 @@ def get_stats(
 
 
 def plot_hits(
-        input_dir: Path,
+        experiment_dir: Path,
         output_dir: Path,
 ) -> None:
-
-    report_paths = input_dir.glob('*.cutadapt.json')
     stats = []
+    report_paths = (experiment_dir / 'cutadapt_output_files').glob('*.cutadapt.json')
     for report_path in report_paths:
         stats += [*get_stats(report_path)]
     df = pd.DataFrame(stats)
