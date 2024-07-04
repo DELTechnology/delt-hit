@@ -81,9 +81,7 @@ def convert_struct_file(
 ) -> None:
     with open(struct_file, 'r') as f:
         struct = f.readlines()[2:]
-    # TODO: check this
-    struct = sorted(struct, key=lambda line: int(line.split('\t')[0]))
-    # struct = sorted(filter(None, [line.strip().split() for line in struct]))
+    struct = sorted(filter(None, [line.strip().split() for line in struct]))
     config = {
         'Root': str(Path.cwd()),
         'Experiment': {'name': ''},
@@ -98,8 +96,6 @@ def convert_struct_file(
     indels = 0
     indices = {}
     for line in struct:
-        # TODO: this is related to aboves todo
-        # line = line.strip().split('\t')
         _type = line[2]
         indices[_type] = indices.get(_type, 0) + 1
         region = f'{_type}{indices[_type]}'
@@ -149,7 +145,8 @@ def generate_input_files(
         root_dir: Path,
         path_input_fastq: Path,
         write_json_file: bool,
-        write_info_file: bool
+        write_info_file: bool,
+        fast_dev_run: bool = False,
 ) -> None:
     config = read_yaml(config_file)
     experiment_name = config['Experiment']['name']
@@ -164,7 +161,7 @@ def generate_input_files(
     path_counts = root_dir / 'evaluations'
 
     regions = get_regions(structure)
-    write_fastq_files(regions, cutadapt_output_files_dir)
+    write_fastq_files(regions, cutadapt_input_files_dir)
 
     with open(path_demultiplex_exec, 'w') as f:
         f.write('#!/bin/bash\n')
@@ -173,6 +170,20 @@ def generate_input_files(
         f.write(f'mkdir "{path_counts}"\n')
         # NOTE: we symlink the fastq file we want to demultiplex
         f.write(f'ln -sf "{path_input_fastq}" "{path_output_fastq}"\n')
+
+        if fast_dev_run:
+            n_reads_for_fast_dev_run = 1000
+            n_lines = 4 * n_reads_for_fast_dev_run
+            f.write(f'# fast-dev-run enabled\n')
+
+            cmd = f"""
+            tmp_file=$(mktemp)
+            gzcat "{path_output_fastq}" | head -n {n_lines} | gzip -c > "$tmp_file"
+            mv $tmp_file "{path_output_fastq}"
+            """
+
+            cmd = textwrap.dedent(cmd)
+            f.write(cmd)
 
     rename_command = '{id} {comment}?{adapter_name}'
     n_cores = multiprocessing.cpu_count()
@@ -198,13 +209,17 @@ def generate_input_files(
                 -g "^file:{path_adapters}" \\
                 --rename '{rename_command}' \\
                 --discard-untrimmed \\
-                --cores={n_cores} 2>&1 | tee "{stdout_file_name}"
                 """
+
             cmd = textwrap.dedent(cmd)
+
             if write_json_file:
-                cmd += f'--json="{report_file_name}" \\'
+                cmd += f'--json="{report_file_name}" \\\n'
             if write_info_file:
-                cmd += f'--info-file="{info_file_name}" \\'
+                cmd += f'--info-file="{info_file_name}" \\\n'
+
+            cmd += f'--cores={n_cores} 2>&1 | tee "{stdout_file_name}"\n'
+
             f.write(cmd)
 
     with open(path_demultiplex_exec, 'a') as f:
