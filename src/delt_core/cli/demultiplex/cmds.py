@@ -120,13 +120,11 @@ def compute_counts(
     input_file = Path(input_file).resolve()
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
-
     input_dir = input_file.parent
     config = d.preprocess.read_yaml(config_file)
     num_reads = json.load(open(
         sorted(input_dir.glob('*.cutadapt.json'))[-1]
     ))['read_counts']['output']
-
     d.compute_counts(config=config, input_file=input_file, num_reads=num_reads, output_dir=output_dir)
 
 

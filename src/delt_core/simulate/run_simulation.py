@@ -1,3 +1,4 @@
+from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -5,7 +6,7 @@ import pandas as pd
 
 from .utils import read_txt, write_txt, read_yaml
 from delt_core.cli.demultiplex.cmds import create_lists
-from delt_core.demultiplex.postprocess import perform_selection, save_counts
+from delt_core.demultiplex.postprocess import extract_ids, get_selection_ids, save_counts
 from delt_core.demultiplex.preprocess import read_yaml
 
 
@@ -117,9 +118,14 @@ def run_simulation(
     root = Path(config['Root'])
     output_dir = root / 'evaluations_true'
     output_dir.mkdir(parents=True, exist_ok=True)
-    selections = perform_selection(reads_info, config['Simulation']['NumReads'], config_file)
-    save_counts(selections, output_dir, config_file)
-
+    counts = defaultdict(lambda: defaultdict(int))
+    for line in reads_info:
+        ids = extract_ids(line)
+        counts[ids['selection_ids']][ids['barcodes']] += 1
+    list_of_selection_primer_ids = list(counts.keys())
+    selection_ids = get_selection_ids(list_of_selection_primer_ids, config)
+    counts = {selection_id: val for selection_id, val in zip(selection_ids, counts.values())}
+    save_counts(counts, output_dir, config)
 
 
 if __name__ == '__main__':
