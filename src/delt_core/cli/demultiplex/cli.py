@@ -24,7 +24,7 @@ def demultiplex():
 @click.option(
     '--experiment_name',
     '-e',
-    default=None,
+    default='',
     type=click.Path(writable=True),
 )
 @click.option(
@@ -96,6 +96,13 @@ def create_lists(**kwargs):
     default=True,
     is_flag=True,
 )
+@click.option(
+    '--fast-dev-run',
+    '-d',
+    default=False,
+    is_flag=True,
+    help='Run demultiplexing with the first 1000 reads',
+)
 def create_cutadapt_input(**kwargs):
     cmds.create_cutadapt_input(**kwargs)
 
@@ -132,9 +139,28 @@ def compute_counts(**kwargs):
 )
 @click.option(
     '--selection_id',
-    '-i',
+    '-s',
     default=None,
     type=int,
+)
+@click.option(
+    '--write_info_file',
+    '-i',
+    default=False,
+    is_flag=True,
+)
+@click.option(
+    '--write_json_file',
+    '-j',
+    default=True,
+    is_flag=True,
+)
+@click.option(
+    '--fast-dev-run',
+    '-d',
+    default=False,
+    is_flag=True,
+    help='Run demultiplexing with the first 1000 reads',
 )
 def run(**kwargs):
     cmds.run(**kwargs)

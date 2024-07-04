@@ -6,7 +6,7 @@ import json
 
 from ... import compute as c
 from ... import demultiplex as d
-
+from datetime import datetime
 
 def init(
         root: Path,
@@ -19,9 +19,14 @@ def init(
 ) -> None:
     if not root:
         root = Path.cwd()
+    experiment_name = experiment_name or 'default'
+    timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    experiment_name = f'{experiment_name}-{timestamp}'
     config = {
         'Root': str(root),
-        'Experiment': {'name': experiment_name},
+        'Experiment': {
+            'name': experiment_name
+        },
         'Selection': {
             'SelectionFile': selection_file,
             'FASTQFile': fastq_file,
@@ -37,9 +42,8 @@ def init(
         config['Structure'][region]['MaxErrorRate'] = max_error_rate
         config['Structure'][region]['Indels'] = indels
 
-    experiment_name = experiment_name or d.preprocess.hash_dict(config)
-    config['Experiment']['name'] = experiment_name
-    config_file = Path(root) / 'experiments' / config_file
+    config_file = Path(root) / 'experiments' / experiment_name / config_file
+    config_file.parent.mkdir(parents=True, exist_ok=True)
     with open(config_file, 'w') as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
@@ -119,10 +123,12 @@ def create_lists(
 
 
 def create_cutadapt_input(
+        *,
         config_file: Path,
+        selection_id: int = None,
         write_json_file: bool = True,
         write_info_file: bool = True,
-        selection_id: int = None,
+        fast_dev_run: bool = False,
 ) -> None:
 
     structure = create_lists(config_file, selection_id)
@@ -134,7 +140,7 @@ def create_cutadapt_input(
         path_input_fastq = path_input_fastq.parent / (path_input_fastq.name + '.gz')
     d.generate_input_files(config_file=config_file, structure=structure, root_dir=root_dir,
                            path_input_fastq=path_input_fastq,
-                           write_json_file=write_json_file, write_info_file=write_info_file)
+                           write_json_file=write_json_file, write_info_file=write_info_file, fast_dev_run=fast_dev_run)
 
 
 def compute_counts(
@@ -154,10 +160,15 @@ def compute_counts(
 
 
 def run(
+        *,
         config_file: Path,
         selection_id: int = None,
+        write_json_file: bool = True,
+        write_info_file: bool = False,
+        fast_dev_run: bool = False,
 ) -> None:
-    create_cutadapt_input(config_file, selection_id)
+    create_cutadapt_input(config_file=config_file, selection_id=selection_id,
+                          write_json_file=write_json_file, write_info_file=write_info_file, fast_dev_run=fast_dev_run)
     config = d.read_yaml(config_file)
     root = Path(config['Root'])
     experiment_name = config['Experiment']['name']
