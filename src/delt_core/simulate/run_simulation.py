@@ -19,7 +19,8 @@ def read_structure(
 ) -> dict:
     config = read_yaml(config_file)
     root = Path(config['Root'])
-    output_dir = root / 'codon_lists'
+    experiment_name = config['Experiment']['Name']
+    output_dir = root / 'experiments' / experiment_name / 'codon_lists'
     structure = create_lists(config_file, output_dir=output_dir)
     elements = []
     start = 0

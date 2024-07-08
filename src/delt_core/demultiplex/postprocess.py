@@ -14,7 +14,7 @@ def get_selection_ids(
         config: dict,
 ) -> list[int]:
     root = Path(config['Root'])
-    experiment_name = config['Experiment']['name']
+    experiment_name = config['Experiment']['Name']
 
     # NOTE: this requires to respect the order
     structure_keys = filter(lambda x: x.startswith('S'), config['Structure'].keys())

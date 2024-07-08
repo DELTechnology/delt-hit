@@ -8,6 +8,15 @@ from ... import compute as c
 from ... import demultiplex as d
 from datetime import datetime
 
+
+def get_experiment_name(
+        experiment_name: str,
+) -> str:
+    experiment_name = experiment_name or 'default'
+    timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    return f'{experiment_name}-{timestamp}'
+
+
 def init(
         root: Path,
         config_file: Path,
@@ -19,13 +28,11 @@ def init(
 ) -> None:
     if not root:
         root = Path.cwd()
-    experiment_name = experiment_name or 'default'
-    timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-    experiment_name = f'{experiment_name}-{timestamp}'
+    experiment_name = get_experiment_name(experiment_name)
     config = {
         'Root': str(root),
         'Experiment': {
-            'name': experiment_name
+            'Name': experiment_name
         },
         'Selection': {
             'SelectionFile': selection_file,
@@ -60,9 +67,6 @@ def create_lists(
         output_dir: Path = None,
 ) -> dict:
     config_file = Path(config_file).resolve()
-    if not output_dir:
-        output_dir = config_file.parent / 'codon_lists'
-    Path(output_dir).mkdir(exist_ok=True)
     config = d.read_yaml(config_file)
     root = Path(config['Root'])
     structure = config['Structure']
@@ -79,6 +83,9 @@ def create_lists(
     keys = list(structure.keys())
     lib_file = root / config['Selection']['Library']
     bbs, _, _, consts = c.load_data(lib_file)
+    if not output_dir:
+        output_dir = config_file.parent / 'codon_lists'
+    Path(output_dir).mkdir(exist_ok=True)
 
     # Building blocks.
     keys_b = [key for key in keys if key.startswith('B')]
@@ -171,7 +178,7 @@ def run(
                           write_json_file=write_json_file, write_info_file=write_info_file, fast_dev_run=fast_dev_run)
     config = d.read_yaml(config_file)
     root = Path(config['Root'])
-    experiment_name = config['Experiment']['name']
+    experiment_name = config['Experiment']['Name']
     input_file = root / 'experiments' / experiment_name / 'cutadapt_input_files' / 'demultiplex.sh'
     subprocess.run(['bash', input_file])
 

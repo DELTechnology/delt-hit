@@ -25,7 +25,7 @@ def demultiplex():
     '--experiment_name',
     '-e',
     default='',
-    type=click.Path(writable=True),
+    type=str,
 )
 @click.option(
     '--selection_file',

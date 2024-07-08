@@ -4,7 +4,6 @@ import tempfile
 
 import pytest
 
-from delt_core.cli.demultiplex.cmds import init as init_demultiplexing
 from delt_core.cli.demultiplex.cmds import run as run_demultiplexing
 from delt_core.cli.init.cmds import init
 from delt_core.cli.simulate.cmds import init as init_simulation
@@ -16,6 +15,7 @@ from delt_core.simulate.utils import read_txt
 def load_config():
     return {
         'config_file': 'config.yml',
+        'experiment_name': 'test',
         'selection_file': 'selections/selection.xlsx',
         'library': 'libraries/library.xlsx',
         'fastq_file': 'fastq_files/input.fastq.gz',
@@ -44,12 +44,13 @@ def test_simulation(load_config, load_counts):
     dir = Path.cwd()
     with tempfile.TemporaryDirectory(dir=dir) as tmp:
         os.chdir(tmp)
-        config['root'] = Path.cwd()
         init()
+        config['root'] = Path.cwd()
         init_simulation(**config)
-        run_simulation(config['config_file'])
-        init_demultiplexing(**config)
-        run_demultiplexing(config['config_file'])
+        experiments = config['root'] / 'experiments'
+        config_file = experiments / os.listdir(experiments)[0] / config['config_file']
+        run_simulation(config_file=config_file)
+        run_demultiplexing(config_file=config_file)
         counts_true, counts_pred = load_counts()
         assert counts_true == counts_pred
 

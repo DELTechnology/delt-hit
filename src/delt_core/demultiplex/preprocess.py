@@ -84,7 +84,7 @@ def convert_struct_file(
     struct = sorted(filter(None, [line.strip().split() for line in struct]))
     config = {
         'Root': str(Path.cwd()),
-        'Experiment': {'name': ''},
+        'Experiment': {'Name': ''},
         'Selection': {
             'SelectionFile': 'selections/selection.xlsx',
             'FASTQFile': 'fastq_files/input.fastq.gz',
@@ -102,7 +102,7 @@ def convert_struct_file(
         config['Structure'][region] = {}
         config['Structure'][region]['MaxErrorRate'] = max_error_rate
         config['Structure'][region]['Indels'] = indels
-    config['Experiment']['name'] = hash_dict(config)
+    config['Experiment']['Name'] = hash_dict(config['Structure'])
     output_file = Path(struct_file).parent / 'config.yml'
     with open(output_file, 'w') as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
@@ -149,7 +149,7 @@ def generate_input_files(
         fast_dev_run: bool = False,
 ) -> None:
     config = read_yaml(config_file)
-    experiment_name = config['Experiment']['name']
+    experiment_name = config['Experiment']['Name']
     cutadapt_input_files_dir = root_dir / 'experiments' / experiment_name / 'cutadapt_input_files'
     cutadapt_output_files_dir = root_dir / 'experiments' / experiment_name / 'cutadapt_output_files'
 

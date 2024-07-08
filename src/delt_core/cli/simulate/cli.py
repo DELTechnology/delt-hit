@@ -22,6 +22,12 @@ def simulate():
     type=click.Path(writable=True),
 )
 @click.option(
+    '--experiment_name',
+    '-e',
+    default='',
+    type=str,
+)
+@click.option(
     '--selection_file',
     '-s',
     default='selections/selection_template.xlsx',
