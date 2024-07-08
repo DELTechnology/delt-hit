@@ -14,5 +14,5 @@ def compute_smiles(
     for library in input_path:
         libraries += [c.load_data(library)]
     
-    c.compute_smiles(libraries, Path(output_path))
+    c.compute_smiles(libraries, input_path, Path(output_path))
 

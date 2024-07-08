@@ -17,6 +17,7 @@ from .utils import (
 
 def compute_smiles(
         libraries: list,
+        input_path: tuple,
         output_path: str,
 ) -> None:
     
@@ -29,7 +30,7 @@ def compute_smiles(
         
         if len(libraries) > 1:
             hybridize(tmp)
-            merge_excel_files(libraries, 'hybrid.xlsx')
+            merge_excel_files(libraries, input_path)
     
         os.rename(tmp / 'smiles1.txt', output_path)
 
@@ -74,7 +75,6 @@ def perform_reaction_steps(
             rows += [[str(scaffold_id), str(bb['ID']), product, code]]
         else:
             rows += [[scaffold, bb['SMILES'], product, code]]
-        break
     
     write_gzip(rows, output_path)
     
@@ -143,11 +143,12 @@ def hybridize(
 
 def merge_excel_files(
         libraries: list,
-        output_file: Path,
+        input_path: Path,
 ) -> None:
+    output_path = f'{Path(input_path[0]).stem}-{Path(input_path[1]).stem}.xlsx'
     l1, l2 = libraries
     names = ['step', 'scaffolds', 'smarts', 'const']
-    with pd.ExcelWriter(output_file) as writer:
+    with pd.ExcelWriter(output_path) as writer:
         for sheet_l1, sheet_l2, name in zip(l1, l2, names):
             if name == 'step':
                 step = 0
