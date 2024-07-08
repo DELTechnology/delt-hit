@@ -146,15 +146,23 @@ def merge_excel_files(
         output_file: Path,
 ) -> None:
     l1, l2 = libraries
-    sheets = [[l1[0], l2[0]], 'scaffolds', 'smarts', 'const']
+    names = ['step', 'scaffolds', 'smarts', 'const']
     with pd.ExcelWriter(output_file) as writer:
-        for i, sheet in enumerate(sheets):
-            if not i:
+        for sheet_l1, sheet_l2, name in zip(l1, l2, names):
+            if name == 'step':
                 step = 0
-                for bbs in [sheet[0], sheet[1]]:
+                for bbs in [sheet_l1, sheet_l2]:
                     for bb in bbs:
                         step += 1
-                        bb.to_excel(writer, sheet_name=f'step{step}', index=False)
+                        bb.to_excel(writer, sheet_name=f'{name}{step}', index=False)
+            elif name == 'const':
+                sequence = generate_const(sheet_l1.iloc[0]) + generate_const(sheet_l2.iloc[0])
+                const = {
+                    'Sequence': [sequence],
+                    'Reverse': [0],
+                    'Complement': [0],
+                }
+                pd.DataFrame(const).to_excel(writer, sheet_name=name, index=False)
             else:
-                pd.DataFrame().to_excel(writer, sheet_name=sheet, index=False)
+                pd.DataFrame().to_excel(writer, sheet_name=name, index=False)
 

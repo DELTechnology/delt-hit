@@ -54,7 +54,7 @@ def get_complement(
 
 
 def generate_const(
-        const: str,
+        const: pd.DataFrame,
 ) -> str:
     seq = const['Sequence']
     if const['Reverse']:
