@@ -155,14 +155,20 @@ def merge_excel_files(
                     for bb in bbs:
                         step += 1
                         bb.to_excel(writer, sheet_name=f'{name}{step}', index=False)
+                continue
+            elif name == 'scaffolds':
+                sheet = {
+                    'ScaffoldID': [],
+                    'SMILES': [],
+                }
+            elif name == 'smarts':
+                sheet = sheet_l1
             elif name == 'const':
                 sequence = generate_const(sheet_l1.iloc[0]) + generate_const(sheet_l2.iloc[0])
-                const = {
+                sheet = {
                     'Sequence': [sequence],
                     'Reverse': [0],
                     'Complement': [0],
                 }
-                pd.DataFrame(const).to_excel(writer, sheet_name=name, index=False)
-            else:
-                pd.DataFrame().to_excel(writer, sheet_name=name, index=False)
+            pd.DataFrame(sheet).to_excel(writer, sheet_name=name, index=False)
 
