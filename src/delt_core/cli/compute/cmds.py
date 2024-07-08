@@ -4,7 +4,7 @@ import typing as tp
 from ... import compute as c
 
 
-def compute_smiles_cli(
+def compute_smiles(
         input_path: tp.Tuple,
         output_path: str = None,
 ) -> None:
@@ -16,22 +16,4 @@ def compute_smiles_cli(
         libraries += [c.load_data(library)]
     
     c.compute_smiles(libraries, Path(output_path))
-
-
-def compute_counts_cli(
-        input_file: str,
-        struct_file: str,
-        output_path: str = None,
-) -> None:
-    input_file = Path(input_file)
-    structure = c.read_json(struct_file)
-    if not output_path:
-        output_path = input_file.parent / 'counts'
-        output_path.mkdir(parents=True, exist_ok=True)
-
-    c.compute_counts(structure, input_file, output_path)
-
-
-def evaluate_cli():
-    pass
 

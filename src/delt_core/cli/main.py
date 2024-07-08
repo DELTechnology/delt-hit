@@ -9,7 +9,6 @@ def cli():
 
 
 cli.add_command(c.compute)
-cli.add_command(c.evaluate)
 
 
 if __name__ == '__main__':
