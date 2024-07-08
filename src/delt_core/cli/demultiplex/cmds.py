@@ -43,7 +43,12 @@ def init(
     }
     max_error_rate = 0.0
     indels = 0
-    structure = ['S1', 'C1', 'B1', 'C2', 'B2', 'C3', 'S2']
+    bbs, _, _, _ = c.load_data(library)
+    structure = ['S1']
+    for i in range(1, len(bbs) + 1):
+        structure += [f'C{i}']
+        structure += [f'B{i}']
+    structure += [f'C{len(bbs) + 1}', 'S2']
     for region in structure:
         config['Structure'][region] = {}
         config['Structure'][region]['MaxErrorRate'] = max_error_rate
