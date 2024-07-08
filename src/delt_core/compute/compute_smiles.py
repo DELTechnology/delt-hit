@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 import tempfile
 
+import pandas as pd
+
 from .utils import (
     get_smiles,
     generate_const,
@@ -27,6 +29,7 @@ def compute_smiles(
         
         if len(libraries) > 1:
             hybridize(tmp)
+            merge_excel_files(libraries, 'hybrid.xlsx')
     
         os.rename(tmp / 'smiles1.txt', output_path)
 
@@ -48,7 +51,7 @@ def perform_reaction_steps(
     const = generate_const(consts.iloc[0])
 
     # Perform reaction step 1.
-    bb1 = bbs.pop(0)
+    bb1, *bbs = bbs
     rows = []
 
     for _, bb in bb1.iterrows():
@@ -71,6 +74,7 @@ def perform_reaction_steps(
             rows += [[str(scaffold_id), str(bb['ID']), product, code]]
         else:
             rows += [[scaffold, bb['SMILES'], product, code]]
+        break
     
     write_gzip(rows, output_path)
     
@@ -135,4 +139,22 @@ def hybridize(
     
     os.rename(tmp, output_file)
     os.remove(path)
+
+
+def merge_excel_files(
+        libraries: list,
+        output_file: Path,
+) -> None:
+    l1, l2 = libraries
+    sheets = [[l1[0], l2[0]], 'scaffolds', 'smarts', 'const']
+    with pd.ExcelWriter(output_file) as writer:
+        for i, sheet in enumerate(sheets):
+            if not i:
+                step = 0
+                for bbs in [sheet[0], sheet[1]]:
+                    for bb in bbs:
+                        step += 1
+                        bb.to_excel(writer, sheet_name=f'step{step}', index=False)
+            else:
+                pd.DataFrame().to_excel(writer, sheet_name=sheet, index=False)
 
