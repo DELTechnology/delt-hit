@@ -52,11 +52,15 @@ def save_counts(
         config: dict,
 ) -> None:
     hash_value = hash_dict(config['Structure'])
+    num_codes = len(list(list(counts.values())[0].keys())[0])
+    columns = [f'Code{i}' for i in range(1, num_codes + 1)]
+    columns.insert(0, 'Count')
+    
     for selection_id, count in tqdm(counts.items(), ncols=100):
         count = [(j, *i) for i, j in zip(count.keys(), count.values())]
-        df = pd.DataFrame.from_records(count, columns=['Count', 'Code1', 'Code2'])
+        df = pd.DataFrame.from_records(count, columns=columns)
         df = df.astype(int)
-        df.sort_values(['Code1', 'Code2'], inplace=True)
+        df.sort_values(columns[1:], inplace=True)
         selection_dir = output_dir / f'selection-{selection_id}'
         selection_dir.mkdir(parents=True, exist_ok=True)
         output_file = selection_dir / f'{hash_value}.txt'
