@@ -18,7 +18,20 @@ def compute_smiles(
 
 
 def compute_properties(
-        input_path: Path,
+        input_file: Path,
 ) -> None:
-    c.compute_properties(Path(input_path))
+    input_file = Path(input_file)
+    output_dir = input_file.parent.parent / 'properties'
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_file = output_dir / 'properties.txt.gz'
+    c.compute_properties(input_file, output_file)
+
+
+def plot(
+        input_file: Path,
+) -> None:
+    input_file = Path(input_file)
+    output_dir = input_file.parent / 'plots'
+    output_dir.mkdir(parents=True, exist_ok=True)
+    c.plot_properties(input_file, output_dir)
 

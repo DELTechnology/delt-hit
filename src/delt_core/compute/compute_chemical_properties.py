@@ -1,59 +1,82 @@
+from collections import Counter
+from collections.abc import Generator
+import gzip
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-import numpy as np
 from rdkit import Chem
 from rdkit.Chem import QED
 
-from .utils import read_txt
+from .utils import write_gzip
 
 
-def compute_qed(
+PROPERTIES = ['ALERTS', 'ALOGP', 'AROM', 'HBA', 'HBD', 'MW', 'PSA', 'ROTB']
+
+
+def read_gzip(
+        file: Path,
+        chunk_size: int = 1000,
+) -> Generator:
+    with gzip.open(file, 'rt') as f:
+        while True:
+            chunks = []
+            try:
+                for _ in range(chunk_size):
+                    chunk = next(f)
+                    chunks += [chunk]
+            except StopIteration:
+                if chunks:
+                    yield chunks
+                break
+            yield chunks
+
+
+def compute_qed_properties(
         mol_structures: list,
-) -> dict:
-    qed_properties = [QED.properties(mol) for mol in mol_structures]
-    mw = [p.MW for p in qed_properties]
-    alogp = [p.ALOGP for p in qed_properties]
-    psa = [p.PSA for p in qed_properties]
-    hbd = [p.HBD for p in qed_properties]
-    hba = [p.HBA for p in qed_properties]
-    rotb = [p.ROTB for p in qed_properties]
-    return {
-        'MW [g/mol]': mw,
-        'AlogP': alogp,
-        'TPSA [A^2]': psa,
-        'HBDs': hbd,
-        'HBAs': hba,
-        'NRotBs': rotb,
-    }
+) -> list:
+    return [QED.properties(mol) for mol in mol_structures]
 
 
 def plot_properties(
-        properties: list,
-        output_file: Path,
-        num_bins: list = None,
+        input_file: Path,
+        output_dir: Path,
 ) -> None:
-    plt.figure(figsize=(10, 5))
-    for i, ((key, values), bins) in enumerate(zip(properties.items(), num_bins), 1):
-        plt.subplot(2, 3, i)
-        if not bins:
-            bins = np.arange(np.min(values), np.max(values) + 1) - 0.5
-        plt.hist(values, bins=bins)
-        plt.xlabel(key)
-    plt.subplots_adjust(hspace=0.5, wspace=0.5)
-    plt.savefig(output_file, dpi=300)
+
+    for i, property in enumerate(PROPERTIES):
+        
+        plt.figure()
+        output_file = output_dir / f'{property}.png'
+        counter = Counter()
+
+        chunks = read_gzip(input_file)
+        for j, chunk in enumerate(chunks):
+            if not j:
+                chunk.pop(0)
+            data = [float(line.split('\t')[i]) for line in chunk]
+            counter.update(data)
+        
+        data = list(counter.elements())
+        plt.hist(data)
+        plt.xlabel(property)
+        plt.savefig(output_file, dpi=300)
 
 
 def compute_properties(
         input_file: Path,
+        output_file: Path = 'properties.txt.gz',
 ) -> None:
 
-    data = read_txt(input_file)[1:]
-    smiles = [s.split('\t')[-2] for s in data]
-    mols = [Chem.MolFromSmiles(m) for m in smiles]
+    chunks = read_gzip(input_file)
+    for i, chunk in enumerate(chunks):
+        
+        if not i:
+            chunk.pop(0)
+            write_gzip([PROPERTIES], output_file, 'wt')
+        
+        smiles = [line.split('\t')[-2] for line in chunk]
+        mols = [Chem.MolFromSmiles(m) for m in smiles]
+        qed_properties = compute_qed_properties(mols)
+        properties = [[str(getattr(molecule, property)) for property in PROPERTIES] for molecule in qed_properties]
+        write_gzip(properties, output_file)
 
-    properties = compute_qed(mols)
-    num_bins = [30, 30, 30, None, None, None]
-    output_file = input_file.parent / 'properties.png'
-    plot_properties(properties, output_file, num_bins)
 
