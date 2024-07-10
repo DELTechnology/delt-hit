@@ -24,3 +24,25 @@ def compute():
 def smiles(**kwargs):
     cmds.compute_smiles(**kwargs)
 
+
+@compute.command()
+@click.argument(
+    'input_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+def properties(**kwargs):
+    cmds.compute_properties(**kwargs)
+
+
+@compute.command()
+@click.argument(
+    'input_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+def plot(**kwargs):
+    cmds.plot(**kwargs)
+
