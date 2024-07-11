@@ -17,6 +17,15 @@ def compute_smiles(
     c.compute_smiles(libraries, input_path, Path(output_path))
 
 
+def merge_libraries(
+        input_path: tuple,
+) -> None:
+    libraries = []
+    for library in input_path:
+        libraries += [c.load_data(library)]
+    c.merge_excel_files(libraries, input_path)
+
+
 def compute_properties(
         input_file: Path,
 ) -> None:

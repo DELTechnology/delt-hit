@@ -30,7 +30,6 @@ def compute_smiles(
         
         if len(libraries) > 1:
             hybridize(tmp)
-            merge_excel_files(libraries, input_path)
     
         os.rename(tmp / 'smiles1.txt', output_path)
 

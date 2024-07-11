@@ -27,6 +27,17 @@ def smiles(**kwargs):
 
 @compute.command()
 @click.argument(
+    'input_path',
+    nargs=2,
+    required=True,
+    type=click.Path(exists=True),
+)
+def merge(**kwargs):
+    cmds.merge_libraries(**kwargs)
+
+
+@compute.command()
+@click.argument(
     'input_file',
     nargs=1,
     required=True,
