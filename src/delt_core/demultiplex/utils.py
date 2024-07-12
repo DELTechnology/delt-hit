@@ -1,32 +1,37 @@
-from datetime import datetime
 import hashlib
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from pydantic import BaseModel
 import yaml
-
+from pydantic import BaseModel
 
 """
 Pydantic model for configuration.
 """
+
+
 class Experiment(BaseModel):
-    Name: Path
+    Name: str
+
 
 class Selection(BaseModel):
     SelectionFile: Path
     FASTQFile: Path
     Library: Path
 
+
 class StructureItem(BaseModel):
     MaxErrorRate: float
     Indels: bool
+
 
 class ConfigSimulation(BaseModel):
     OutputFile: Path
     NumReads: int
     Errors: list
+
 
 class Config(BaseModel):
     Root: Path
@@ -35,12 +40,18 @@ class Config(BaseModel):
     Structure: dict[str, StructureItem]
     Simulation: Optional[ConfigSimulation] = None
 
+    def to_dict(self):
+        return json.loads(self.model_dump_json())
 
-def read_config(
-        config_file: Path,
-) -> dict:
-    config = read_yaml(config_file)
-    return Config(**config).model_dump()
+    def write_yaml(self, path: Path):
+        yaml_path = path.with_suffix('.yml')
+        with open(yaml_path, 'w') as f:
+            yaml.dump(self.to_dict(), f, default_flow_style=False, sort_keys=False)
+        return yaml_path
+
+    @classmethod
+    def from_yaml(cls, path: Path):
+        return cls(**read_yaml(path))
 
 
 def init_config(
@@ -75,7 +86,7 @@ def init_config(
         config['Simulation'] = simulation
     config_file = Path(root) / 'experiments' / experiment_name / 'config.yml'
     config_file.parent.mkdir(parents=True, exist_ok=True)
-    write_yaml(config, config_file)
+    Config(**config).write_yaml(config_file)
 
 
 def get_experiment_name(
@@ -84,17 +95,6 @@ def get_experiment_name(
     experiment_name = experiment_name or 'default'
     timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     return f'{experiment_name}-{timestamp}'
-
-
-def convert_paths(data):
-    if isinstance(data, dict):
-        return {key: convert_paths(value) for key, value in data.items()}
-    elif isinstance(data, list):
-        return [convert_paths(item) for item in data]
-    elif isinstance(data, Path):
-        return str(data)
-    else:
-        return data
 
 
 def is_gz_file(
@@ -112,10 +112,9 @@ def read_yaml(
 
 
 def write_yaml(
-        config: dict,
+        data: dict,
         path: Path,
 ) -> None:
-    data = convert_paths(config)
     with open(path, 'w') as f:
         yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
@@ -137,4 +136,3 @@ def hash_dict(
     hash_object = hashlib.sha256()
     hash_object.update(data_str.encode())
     return hash_object.hexdigest()
-
