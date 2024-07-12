@@ -15,3 +15,9 @@ def plot(
     output_dir.mkdir(parents=True, exist_ok=True)
     q.plot_hits(experiment_dir, output_dir)
 
+
+def compare_with_legacy(config_file: Path, legacy_results_dir: Path):
+    from ...demultiplex.utils import Config
+    from ...quality_control.compare_output import compare_counts_with_legacy
+    config = Config.from_file(config_file).model_dump()
+    compare_counts_with_legacy(config, legacy_results_dir)
