@@ -4,7 +4,7 @@ import subprocess
 
 from ... import compute as c
 from ... import demultiplex as d
-from delt_core.demultiplex.utils import hash_dict, is_gz_file, read_config, init_config
+from delt_core.demultiplex.utils import hash_dict, is_gz_file, init_config, Config
 
 
 def init(
@@ -61,7 +61,7 @@ def create_lists(
         output_dir: Path = None,
 ) -> dict:
     config_file = Path(config_file).resolve()
-    config = read_config(config_file)
+    config = Config.from_yaml(config_file).model_dump()
     root = config['Root']
     structure = config['Structure']
 
@@ -133,7 +133,7 @@ def create_cutadapt_input(
 ) -> None:
 
     structure = create_lists(config_file, selection_id)
-    config = read_config(config_file)
+    config = Config.from_yaml(config_file).model_dump()
     root_dir = config['Root']
     path_input_fastq = root_dir / config['Selection']['FASTQFile']
     if not is_gz_file(path_input_fastq):
@@ -153,7 +153,7 @@ def compute_counts(
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     input_dir = input_file.parent
-    config = read_config(config_file)
+    config = Config.from_yaml(config_file).model_dump()
     num_reads = json.load(open(
         sorted(input_dir.glob('*.cutadapt.json'))[-1]
     ))['read_counts']['output']
@@ -170,7 +170,7 @@ def run(
 ) -> None:
     create_cutadapt_input(config_file=config_file, selection_id=selection_id,
                           write_json_file=write_json_file, write_info_file=write_info_file, fast_dev_run=fast_dev_run)
-    config = read_config(config_file)
+    config = Config.from_yaml(config_file).model_dump()
     root = config['Root']
     experiment_name = config['Experiment']['Name']
     input_file = root / 'experiments' / experiment_name / 'cutadapt_input_files' / 'demultiplex.sh'

@@ -1,4 +1,4 @@
-from delt_core.quality_control.compare_output import compare_counts_with_legacy
+
 from pathlib import Path
 from delt_core.demultiplex.utils import Config
 
