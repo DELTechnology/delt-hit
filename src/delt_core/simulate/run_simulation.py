@@ -17,7 +17,7 @@ rng = np.random.default_rng()
 def read_structure(
         config_file: Path,
 ) -> dict:
-    config = Config.from_yaml(config_file)
+    config = Config.from_yaml(config_file).model_dump()
     root = config['Root']
     experiment_name = config['Experiment']['Name']
     output_dir = root / 'experiments' / experiment_name / 'codon_lists'
@@ -108,7 +108,7 @@ def run_simulation(
 ) -> None:
     
     # Generate FASTQ file.
-    config = Config.from_yaml(config_file)
+    config = Config.from_yaml(config_file).model_dump()
     struct_dict = read_structure(config_file)
     config_simulation = config.copy()
     config_simulation.update(struct_dict)
