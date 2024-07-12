@@ -65,14 +65,7 @@ def create_lists(
     root = config['Root']
     structure = config['Structure']
 
-    hash_value = hash_dict(structure)
     selections = d.get_selections(config, selection_id)
-    for selection_id in selections['SelectionID']:
-        path = root / 'evaluations' / f'selection-{selection_id}' / f'{hash_value}.txt'
-        if path.exists():
-            selections = selections[selections['SelectionID'] != selection_id]
-    if selections.empty:
-        exit()
 
     keys = list(structure.keys())
     lib_file = root / config['Selection']['Library']
