@@ -16,12 +16,6 @@ def demultiplex():
     type=click.Path(writable=True),
 )
 @click.option(
-    '--config_file',
-    '-c',
-    default='config.yml',
-    type=click.Path(writable=True),
-)
-@click.option(
     '--experiment_name',
     '-e',
     default='',

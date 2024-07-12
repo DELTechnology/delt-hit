@@ -6,7 +6,6 @@ from ... import simulate as s
 def init(
         *,
         root: Path,
-        config_file: Path,
         experiment_name: str,
         selection_file: Path,
         library: Path,
@@ -20,7 +19,6 @@ def init(
         s.create_selection_template(root, selection_file, library, fastq_file)
     s.create_config_file(
         root=root,
-        config_file=config_file,
         experiment_name=experiment_name,
         selection_file=selection_file,
         fastq_file=fastq_file,

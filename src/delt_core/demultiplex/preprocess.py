@@ -1,14 +1,13 @@
-import hashlib
-import json
 import multiprocessing
 import os
+from pathlib import Path
 import stat
 import textwrap
-from pathlib import Path
 
 import pandas as pd
-import yaml
 from pydantic import BaseModel, computed_field
+
+from .utils import read_yaml
 
 
 class Region(BaseModel):
@@ -24,48 +23,11 @@ class Region(BaseModel):
         return f'{self.position_in_construct}-{self.name}'
 
 
-def is_gz_file(
-        path: Path,
-) -> bool:
-    with open(path, 'rb') as file:
-        return file.read(2) == b'\x1f\x8b'
-
-
-def read_yaml(
-        path: Path,
-) -> dict:
-    with open(path, 'r') as f:
-        return yaml.safe_load(f)
-
-
-def convert_dict(
-        data: dict,
-) -> tuple:
-    if isinstance(data, dict):
-        return tuple((key, convert_dict(value)) for key, value in data.items())
-    elif isinstance(data, int):
-        # TODO: fix return type to (float(data), )?
-        # TODO: WARNING: Why do you convert int's to float's? This might introduce bugs in the -e argument of the cutadapt command as it distinguishes between int and float values.
-        return float(data)
-    else:
-        return data
-
-
-def hash_dict(
-        data: dict,
-) -> str:
-    data = convert_dict(data)
-    data_str = json.dumps(data)
-    hash_object = hashlib.sha256()
-    hash_object.update(data_str.encode())
-    return hash_object.hexdigest()
-
-
 def get_selections(
         config: dict,
         selection_id: int = None,
 ) -> pd.DataFrame:
-    root = Path(config['Root'])
+    root = config['Root']
     config_selection = config['Selection']
     selection_file = root / config_selection['SelectionFile']
     fastq_file = str(Path(config_selection['FASTQFile']).name)
@@ -74,38 +36,6 @@ def get_selections(
     if selection_id:
         selections = selections[selections['SelectionID'] == selection_id]
     return selections[(selections['FASTQFile'] == fastq_file) & (selections['Library'] == library)]
-
-
-def convert_struct_file(
-        struct_file: Path,
-) -> None:
-    with open(struct_file, 'r') as f:
-        struct = f.readlines()[2:]
-    struct = sorted(filter(None, [line.strip().split() for line in struct]))
-    config = {
-        'Root': str(Path.cwd()),
-        'Experiment': {'Name': ''},
-        'Selection': {
-            'SelectionFile': 'selections/selection.xlsx',
-            'FASTQFile': 'fastq_files/input.fastq.gz',
-            'Library': 'libraries/library.xlsx'
-        },
-        'Structure': {},
-    }
-    max_error_rate = 0.0
-    indels = 0
-    indices = {}
-    for line in struct:
-        _type = line[2]
-        indices[_type] = indices.get(_type, 0) + 1
-        region = f'{_type}{indices[_type]}'
-        config['Structure'][region] = {}
-        config['Structure'][region]['MaxErrorRate'] = max_error_rate
-        config['Structure'][region]['Indels'] = indels
-    config['Experiment']['Name'] = hash_dict(config['Structure'])
-    output_file = Path(struct_file).parent / 'config.yml'
-    with open(output_file, 'w') as f:
-        yaml.dump(config, f, default_flow_style=False, sort_keys=False)
 
 
 def get_regions(

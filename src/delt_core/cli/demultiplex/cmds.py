@@ -1,69 +1,58 @@
+import json
 from pathlib import Path
 import subprocess
 
-import yaml
-import json
-
 from ... import compute as c
 from ... import demultiplex as d
-from datetime import datetime
-
-
-def get_experiment_name(
-        experiment_name: str,
-) -> str:
-    experiment_name = experiment_name or 'default'
-    timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-    return f'{experiment_name}-{timestamp}'
+from delt_core.demultiplex.utils import hash_dict, is_gz_file, read_config, init_config
 
 
 def init(
         root: Path,
-        config_file: Path,
         experiment_name: str,
         selection_file: Path,
         fastq_file: Path,
         library: Path,
-        **kwargs,
+        simulation: dict = None,
 ) -> None:
     if not root:
         root = Path.cwd()
-    experiment_name = get_experiment_name(experiment_name)
-    config = {
-        'Root': str(root),
-        'Experiment': {
-            'Name': experiment_name
-        },
-        'Selection': {
-            'SelectionFile': selection_file,
-            'FASTQFile': fastq_file,
-            'Library': library,
-        },
-        'Structure': {},
-    }
-    max_error_rate = 0.0
-    indels = 0
-    bbs, _, _, _ = c.load_data(library)
-    structure = ['S1']
-    for i in range(1, len(bbs) + 1):
-        structure += [f'C{i}']
-        structure += [f'B{i}']
-    structure += [f'C{len(bbs) + 1}', 'S2']
-    for region in structure:
-        config['Structure'][region] = {}
-        config['Structure'][region]['MaxErrorRate'] = max_error_rate
-        config['Structure'][region]['Indels'] = indels
-
-    config_file = Path(root) / 'experiments' / experiment_name / config_file
-    config_file.parent.mkdir(parents=True, exist_ok=True)
-    with open(config_file, 'w') as f:
-        yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+    if Path(library).exists():
+        bbs, _, _, _ = c.load_data(library)
+        structure = ['S1']
+        for i in range(1, len(bbs) + 1):
+            structure += [f'C{i}']
+            structure += [f'B{i}']
+        structure += [f'C{len(bbs) + 1}', 'S2']
+    else:
+        structure = ['S1', 'C1', 'B1', 'C2', 'B2', 'C3', 'S2']
+    init_config(
+        structure=structure,
+        root=root,
+        experiment_name=experiment_name,
+        selection_file=selection_file,
+        fastq_file=fastq_file,
+        library=library,
+        simulation=simulation,
+    )
 
 
 def convert(
         struct_file: Path,
 ) -> None:
-    d.convert_struct_file(struct_file)
+    with open(struct_file, 'r') as f:
+        lines = f.readlines()[2:]
+    lines = [line.strip().split() for line in lines]
+    lines = sorted(filter(None, lines), key=lambda x: int(x[0]))
+    indices = {}
+    structure = []
+    for line in lines:
+        _type = line[2]
+        indices[_type] = indices.get(_type, 0) + 1
+        structure += [f'{_type}{indices[_type]}']
+    init_config(
+        structure=structure,
+    )
 
 
 def create_lists(
@@ -72,11 +61,11 @@ def create_lists(
         output_dir: Path = None,
 ) -> dict:
     config_file = Path(config_file).resolve()
-    config = d.read_yaml(config_file)
-    root = Path(config['Root'])
+    config = read_config(config_file)
+    root = config['Root']
     structure = config['Structure']
 
-    hash_value = d.hash_dict(structure)
+    hash_value = hash_dict(structure)
     selections = d.get_selections(config, selection_id)
     for selection_id in selections['SelectionID']:
         path = root / 'evaluations' / f'selection-{selection_id}' / f'{hash_value}.txt'
@@ -144,10 +133,10 @@ def create_cutadapt_input(
 ) -> None:
 
     structure = create_lists(config_file, selection_id)
-    config = d.read_yaml(config_file)
-    root_dir = Path(config['Root'])
+    config = read_config(config_file)
+    root_dir = config['Root']
     path_input_fastq = root_dir / config['Selection']['FASTQFile']
-    if not d.is_gz_file(path_input_fastq):
+    if not is_gz_file(path_input_fastq):
         subprocess.run(['gzip', path_input_fastq])
         path_input_fastq = path_input_fastq.parent / (path_input_fastq.name + '.gz')
     d.generate_input_files(config_file=config_file, structure=structure, root_dir=root_dir,
@@ -164,7 +153,7 @@ def compute_counts(
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     input_dir = input_file.parent
-    config = d.preprocess.read_yaml(config_file)
+    config = read_config(config_file)
     num_reads = json.load(open(
         sorted(input_dir.glob('*.cutadapt.json'))[-1]
     ))['read_counts']['output']
@@ -181,8 +170,8 @@ def run(
 ) -> None:
     create_cutadapt_input(config_file=config_file, selection_id=selection_id,
                           write_json_file=write_json_file, write_info_file=write_info_file, fast_dev_run=fast_dev_run)
-    config = d.read_yaml(config_file)
-    root = Path(config['Root'])
+    config = read_config(config_file)
+    root = config['Root']
     experiment_name = config['Experiment']['Name']
     input_file = root / 'experiments' / experiment_name / 'cutadapt_input_files' / 'demultiplex.sh'
     subprocess.run(['bash', input_file])

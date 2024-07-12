@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pandas as pd
 from tqdm import tqdm
-import yaml
 
-from .preprocess import get_selections, hash_dict
+from .preprocess import get_selections
+from .utils import write_yaml, hash_dict
 
 
 def get_selection_ids(
@@ -27,8 +27,7 @@ def get_selection_ids(
     selections = get_selections(config)
     selection_ids = []
     for selection_primer_ids in list_of_selection_primer_ids:
-        # TODO: this is not generic enough and susceptible to errors
-        #  we need to specify the column_name for the primers to avoid implicitly assume the order
+        # NOTE: we would need to specify the column_name for the primers to avoid implicitly assume the order
         fwd_primer = primer_lists[0][selection_primer_ids[0]]
         rev_primer = primer_lists[1][selection_primer_ids[1]]
         p1 = (selections['FwdPrimer'] == fwd_primer)
@@ -51,6 +50,8 @@ def save_counts(
         output_dir: Path,
         config: dict,
 ) -> None:
+    if not counts:
+        return
     hash_value = hash_dict(config['Structure'])
     num_codes = len(list(list(counts.values())[0].keys())[0])
     columns = [f'Code{i}' for i in range(1, num_codes + 1)]
@@ -65,9 +66,7 @@ def save_counts(
         selection_dir.mkdir(parents=True, exist_ok=True)
         output_file = selection_dir / f'{hash_value}.txt'
         df.to_csv(output_file, index=False, sep='\t')
-
-        with open(output_file.with_suffix('.yml'), 'w') as f:
-            yaml.dump(config, f, default_flow_style=False)
+        write_yaml(config, output_file.with_suffix('.yml'))
 
 
 def compute_counts(

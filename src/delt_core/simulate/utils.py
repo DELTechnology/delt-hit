@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from delt_core.cli.demultiplex.cmds import init, get_experiment_name
+from delt_core.cli.demultiplex.cmds import init
+from delt_core.demultiplex.utils import get_experiment_name
 
 
 def read_txt(
@@ -44,7 +45,6 @@ def write_yaml(
 
 def create_config_file(
         root: Path,
-        config_file: Path,
         experiment_name: str,
         selection_file: Path,
         library: Path,
@@ -54,22 +54,18 @@ def create_config_file(
 ) -> None:
     if not root:
         root = Path.cwd()
+    simulation = {}
+    simulation['OutputFile'] = output_file
+    simulation['NumReads'] = num_reads
+    simulation['Errors'] = []
     init(
         root=root,
-        config_file=config_file,
         experiment_name=experiment_name,
         selection_file=selection_file,
         fastq_file=fastq_file,
         library=library,
+        simulation=simulation,
     )
-    experiment_name = get_experiment_name(experiment_name)
-    config_file = Path(root) / 'experiments' / experiment_name / config_file
-    config = read_yaml(config_file)
-    config['Simulation'] = {}
-    config['Simulation']['OutputFile'] = output_file
-    config['Simulation']['NumReads'] = num_reads
-    config['Simulation']['Errors'] = []
-    write_yaml(config, config_file)
 
 
 def generate_codons(

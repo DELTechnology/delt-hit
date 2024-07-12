@@ -4,10 +4,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .utils import read_txt, write_txt, read_yaml
+from .utils import read_txt, write_txt
 from delt_core.cli.demultiplex.cmds import create_lists
 from delt_core.demultiplex.postprocess import extract_ids, get_selection_ids, save_counts
-from delt_core.demultiplex.preprocess import read_yaml
+from delt_core.demultiplex.utils import read_config
 
 
 BASES = ['A', 'T', 'C', 'G']
@@ -17,8 +17,8 @@ rng = np.random.default_rng()
 def read_structure(
         config_file: Path,
 ) -> dict:
-    config = read_yaml(config_file)
-    root = Path(config['Root'])
+    config = read_config(config_file)
+    root = config['Root']
     experiment_name = config['Experiment']['Name']
     output_dir = root / 'experiments' / experiment_name / 'codon_lists'
     structure = create_lists(config_file, output_dir=output_dir)
@@ -108,15 +108,16 @@ def run_simulation(
 ) -> None:
     
     # Generate FASTQ file.
+    config = read_config(config_file)
     struct_dict = read_structure(config_file)
-    config = read_yaml(config_file)
-    config.update(struct_dict)
-    reads, reads_info = generate_reads(config)
-    reads = create_errors(config, reads)
-    generate_fastq_file(config, reads)
+    config_simulation = config.copy()
+    config_simulation.update(struct_dict)
+    reads, reads_info = generate_reads(config_simulation)
+    reads = create_errors(config_simulation, reads)
+    generate_fastq_file(config_simulation, reads)
 
     # Generate table for counts.
-    root = Path(config['Root'])
+    root = config['Root']
     output_dir = root / 'evaluations_true'
     output_dir.mkdir(parents=True, exist_ok=True)
     counts = defaultdict(lambda: defaultdict(int))
