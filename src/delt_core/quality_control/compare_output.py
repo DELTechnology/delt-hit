@@ -23,11 +23,12 @@ def get_selection_primer_ids_from_legacy_identifier(selection_name: str):
 
 def compare_counts_with_legacy(config: dict, legacy_results_dir: Path):
     root = Path(config['Root']) / 'evaluations'
-    hash = d.preprocess.hash_dict(config['Structure'])
+    hash = d.utils.hash_dict(config['Structure'])
 
-    # assert len(list(legacy_results_dir.glob('selection*.txt'))) == len(list(root.glob(f'selection-*/{hash}.txt')))
+    if not len(list(legacy_results_dir.glob('selection*.txt'))) == len(list(root.glob(f'selection-*/{hash}.txt'))):
+        raise ValueError('Number of selections does not match between legacy and new results.')
 
-    for legacy_result_path in legacy_results_dir.glob('*.txt'):
+    for legacy_result_path in legacy_results_dir.glob('selection*.txt'):
         selection_primer_ids = get_selection_primer_ids_from_legacy_identifier(legacy_result_path.stem)
         selection_id = d.postprocess.get_selection_ids([selection_primer_ids], config=config)[0]
 
