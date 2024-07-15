@@ -39,10 +39,13 @@ def compare_counts_with_legacy(config: dict, legacy_results_dir: Path):
 
         results_legacy = pd.read_csv(legacy_result_path, sep='\t')
         result_path = root / f'selection-{selection_id}' / f'{_hash}.txt'
-        assert result_path.exists()
+        if not result_path.exists():
+            print(f'⛔️ no results found ({selection_id} ↔️ {legacy_result_path.name})')
+            continue
+
         results = pd.read_csv(result_path, sep='\t')
 
         if not counts_are_identical(results, results_legacy):
-            print(f'Evaluation results differ for original {legacy_result_path.name}')
+            print(f'⛔️ results differ ({selection_id} ↔️ {legacy_result_path.name})')
         else:
-            print(f'Evaluation results are identical for {selection_id} ↔️ {legacy_result_path.name}')
+            print(f'✅ results identical ({selection_id} ↔️ {legacy_result_path.name})')
