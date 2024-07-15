@@ -64,6 +64,7 @@ def plot_properties(
 
 def compute_properties(
         input_file: Path,
+        index: int,
         output_file: Path = 'properties.txt.gz',
 ) -> None:
 
@@ -74,10 +75,9 @@ def compute_properties(
             chunk.pop(0)
             write_gzip([PROPERTIES], output_file, 'wt')
         
-        smiles = [line.split('\t')[-2] for line in chunk]
+        smiles = [line.split('\t')[index] for line in chunk]
         mols = [Chem.MolFromSmiles(m) for m in smiles]
         qed_properties = compute_qed_properties(mols)
         properties = [[str(getattr(molecule, property)) for property in PROPERTIES] for molecule in qed_properties]
         write_gzip(properties, output_file)
-
 

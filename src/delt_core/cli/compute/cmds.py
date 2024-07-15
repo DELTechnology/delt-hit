@@ -1,3 +1,4 @@
+import gzip
 from pathlib import Path
 
 from ... import compute as c
@@ -32,8 +33,12 @@ def compute_properties(
     input_file = Path(input_file)
     output_dir = input_file.parent.parent / 'properties'
     output_dir.mkdir(parents=True, exist_ok=True)
-    output_file = output_dir / 'properties.txt.gz'
-    c.compute_properties(input_file, output_file)
+    with gzip.open(input_file, 'rt') as file:
+        header = file.readline().split('\t')
+    indices = [header.index(i) for i in header if i.split('_')[0] == 'Product']
+    for i, index in enumerate(indices, 1):
+        output_file = output_dir / f'properties_L{i}.txt.gz'
+        c.compute_properties(input_file, index, output_file)
 
 
 def plot(
