@@ -6,7 +6,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from .preprocess import get_selections
-from .utils import write_yaml, hash_dict
+from .utils import write_yaml, hash_dict, Config
 
 
 def get_selection_ids(
@@ -66,7 +66,7 @@ def save_counts(
         selection_dir.mkdir(parents=True, exist_ok=True)
         output_file = selection_dir / f'{hash_value}.txt'
         df.to_csv(output_file, index=False, sep='\t')
-        write_yaml(config, output_file.with_suffix('.yml'))
+        Config(**config).write_yaml(output_file)
 
 
 def compute_counts(

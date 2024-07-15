@@ -7,7 +7,7 @@ import pandas as pd
 from .utils import read_txt, write_txt
 from delt_core.cli.demultiplex.cmds import create_lists
 from delt_core.demultiplex.postprocess import extract_ids, get_selection_ids, save_counts
-from delt_core.demultiplex.utils import read_config
+from delt_core.demultiplex.utils import Config
 
 
 BASES = ['A', 'T', 'C', 'G']
@@ -17,7 +17,7 @@ rng = np.random.default_rng()
 def read_structure(
         config_file: Path,
 ) -> dict:
-    config = read_config(config_file)
+    config = Config.from_yaml(config_file).model_dump()
     root = config['Root']
     experiment_name = config['Experiment']['Name']
     output_dir = root / 'experiments' / experiment_name / 'codon_lists'
@@ -108,7 +108,7 @@ def run_simulation(
 ) -> None:
     
     # Generate FASTQ file.
-    config = read_config(config_file)
+    config = Config.from_yaml(config_file).model_dump()
     struct_dict = read_structure(config_file)
     config_simulation = config.copy()
     config_simulation.update(struct_dict)
@@ -130,8 +130,4 @@ def run_simulation(
     save_counts(counts, output_dir, config)
 
 
-if __name__ == '__main__':
-    
-    config_file = 'config/config.yml'
-    run_simulation(config_file)
 
