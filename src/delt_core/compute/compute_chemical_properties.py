@@ -11,6 +11,7 @@ from .utils import write_gzip
 
 
 PROPERTIES = ['ALERTS', 'ALOGP', 'AROM', 'HBA', 'HBD', 'MW', 'PSA', 'ROTB']
+BINS = [None, 30, None, None, None, 30, 30, 20]
 
 
 def read_gzip(
@@ -54,9 +55,9 @@ def plot_properties(
                 chunk.pop(0)
             data = [float(line.split('\t')[i]) for line in chunk]
             counter.update(data)
-        
+
         data = list(counter.elements())
-        plt.hist(data)
+        plt.hist(data, bins=BINS[i])
         plt.xlabel(property)
         plt.savefig(output_file, dpi=300)
 
