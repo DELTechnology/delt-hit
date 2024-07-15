@@ -6,7 +6,7 @@ import pandas as pd
 from tqdm import tqdm
 
 from .preprocess import get_selections
-from .utils import write_yaml, hash_dict, Config
+from .utils import hash_dict, Config
 
 
 def get_selection_ids(

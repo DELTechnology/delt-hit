@@ -23,7 +23,7 @@ class Selection(BaseModel):
 
 
 class StructureItem(BaseModel):
-    MaxErrorRate: float
+    MaxErrorRate: float | int
     Indels: bool
 
 
@@ -119,20 +119,11 @@ def write_yaml(
         yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
 
-def convert_dict(
-        data: dict,
-) -> tuple:
-    if isinstance(data, dict):
-        return tuple((key, convert_dict(value)) for key, value in data.items())
-    else:
-        return data
-
-
 def hash_dict(
         data: dict,
 ) -> str:
-    data_tuple = convert_dict(data)
-    data_str = json.dumps(data_tuple)
+    data_str = json.dumps(data, sort_keys=False)
     hash_object = hashlib.sha256()
     hash_object.update(data_str.encode())
     return hash_object.hexdigest()
+

@@ -132,12 +132,6 @@ def compute_counts(**kwargs):
     type=click.Path(exists=True),
 )
 @click.option(
-    '--selection_id',
-    '-s',
-    default=None,
-    type=int,
-)
-@click.option(
     '--write_info_file',
     '-i',
     default=False,

@@ -4,7 +4,7 @@ import subprocess
 
 from ... import compute as c
 from ... import demultiplex as d
-from delt_core.demultiplex.utils import hash_dict, is_gz_file, init_config, Config
+from delt_core.demultiplex.utils import is_gz_file, init_config, Config
 
 
 def init(
@@ -119,22 +119,27 @@ def create_lists(
 def create_cutadapt_input(
         *,
         config_file: Path,
-        selection_id: int = None,
         write_json_file: bool = True,
         write_info_file: bool = True,
         fast_dev_run: bool = False,
 ) -> None:
 
-    structure = create_lists(config_file, selection_id)
+    structure = create_lists(config_file)
     config = Config.from_yaml(config_file).model_dump()
     root_dir = config['Root']
     path_input_fastq = root_dir / config['Selection']['FASTQFile']
     if not is_gz_file(path_input_fastq):
         subprocess.run(['gzip', path_input_fastq])
         path_input_fastq = path_input_fastq.parent / (path_input_fastq.name + '.gz')
-    d.generate_input_files(config_file=config_file, structure=structure, root_dir=root_dir,
-                           path_input_fastq=path_input_fastq,
-                           write_json_file=write_json_file, write_info_file=write_info_file, fast_dev_run=fast_dev_run)
+    d.generate_input_files(
+        config_file=config_file,
+        structure=structure,
+        root_dir=root_dir,
+        path_input_fastq=path_input_fastq,
+        write_json_file=write_json_file,
+        write_info_file=write_info_file,
+        fast_dev_run=fast_dev_run,
+    )
 
 
 def compute_counts(
@@ -150,19 +155,27 @@ def compute_counts(
     num_reads = json.load(open(
         sorted(input_dir.glob('*.cutadapt.json'))[-1]
     ))['read_counts']['output']
-    d.compute_counts(config=config, input_file=input_file, num_reads=num_reads, output_dir=output_dir)
+    d.compute_counts(
+        config=config,
+        input_file=input_file,
+        num_reads=num_reads,
+        output_dir=output_dir,
+    )
 
 
 def run(
         *,
         config_file: Path,
-        selection_id: int = None,
         write_json_file: bool = True,
         write_info_file: bool = False,
         fast_dev_run: bool = False,
 ) -> None:
-    create_cutadapt_input(config_file=config_file, selection_id=selection_id,
-                          write_json_file=write_json_file, write_info_file=write_info_file, fast_dev_run=fast_dev_run)
+    create_cutadapt_input(
+        config_file=config_file,
+        write_json_file=write_json_file,
+        write_info_file=write_info_file,
+        fast_dev_run=fast_dev_run,
+    )
     config = Config.from_yaml(config_file).model_dump()
     root = config['Root']
     experiment_name = config['Experiment']['Name']
