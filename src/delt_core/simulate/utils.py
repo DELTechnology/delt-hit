@@ -6,7 +6,6 @@ import pandas as pd
 import yaml
 
 from delt_core.cli.demultiplex.cmds import init
-from delt_core.demultiplex.utils import get_experiment_name
 
 
 def read_txt(

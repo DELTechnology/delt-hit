@@ -14,7 +14,6 @@ from delt_core.simulate.utils import read_txt
 @pytest.fixture
 def load_config():
     return {
-        'config_file': 'config.yml',
         'experiment_name': 'test',
         'selection_file': 'selections/selection.xlsx',
         'library': 'libraries/library.xlsx',
@@ -48,7 +47,7 @@ def test_simulation(load_config, load_counts):
         config['root'] = Path.cwd()
         init_simulation(**config)
         experiments = config['root'] / 'experiments'
-        config_file = experiments / os.listdir(experiments)[0] / config['config_file']
+        config_file = experiments / os.listdir(experiments)[0] / 'config.yml'
         run_simulation(config_file=config_file)
         run_demultiplexing(config_file=config_file)
         counts_true, counts_pred = load_counts()
