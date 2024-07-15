@@ -1,5 +1,11 @@
 # API
 
+## Package modules
+- compute: compute smiles, embeddings, diversity
+- demultiplex: demultiplexing fastq files
+- design: design oligos
+- simulate: simulate data
+
 ## Design (This code base might come from Alice)
 delt-cli design init  # create default config file 
 delt-cli design init  --min-intra-codon-dist 3 --avoid-prefix-postfix-overlaps # create default config file
@@ -14,6 +20,11 @@ delt-cli demultiplex create-cutadapt-input <PATH_TO_STRUCTUR_FILE> --input input
 ./cutadapt-input-files/demultiplex.sh 
 delt-cli demultiplex compute-counts <PAHT_TO_FILE_WITH_ADAPTER> 
 delt-cli demultiplex report
+
+# 
+# delt-cli demultiplex run <PATH_TO_DIR>  # run demultiplexing 
+
+
 
 ## Compute
 delt-cli compute smiles  # PR#3

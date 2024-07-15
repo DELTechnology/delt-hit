@@ -1,7 +1,5 @@
 import click
 
-from . import cmds
-
 
 @click.group()
 def compute():

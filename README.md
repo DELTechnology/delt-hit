@@ -28,3 +28,101 @@ Hybridization of two libraries (the order of the libraries must match the final 
 ```bash
 delt-cli compute smiles library1.xlsx library2.xlsx
 ```
+
+
+## Initialization
+
+Initialize folder structure:
+```bash
+delt-cli init
+```
+
+
+## Simulation
+
+Create configuration file for simulation:
+```bash
+delt-cli simulate init
+```
+
+Generate reads (with or without erros):
+```bash
+delt-cli simulate run config.yml
+```
+
+
+## Demultiplexing
+
+Initialize folder structure for demultiplexing:
+```bash
+delt-cli demultiplex init config.yml
+```
+
+Run demultiplexing:
+```bash
+delt-cli demultiplex run config.yml
+```
+
+Create codon lists for the library specified in the configuration file:
+```bash
+delt-cli demultiplex create-lists config.yml
+```
+
+Create input files for running Cutadapt:
+```bash
+delt-cli demultiplex create-cutadapt-input config.yml
+```
+
+Compute count tables for the final reads:
+```bash
+delt-cli demultiplex compute-counts reads_with_adapters.gz
+```
+
+Convert old structure file to new configuration file:
+```bash
+delt-cli demultiplex convert structure.txt
+```
+
+
+## Quality Control
+
+Plot codon hits:
+```bash
+delt-cli qc plot
+```
+
+Print report:
+```bash
+delt-cli qc report
+```
+
+
+## Workflow
+
+The following commands will generate a new FASTQ file:
+```bash
+delt-cli init
+delt-cli simulate init
+delt-cli simulate run config.yml
+```
+
+The default initialization of the simulation generates a new library and a selection template that contain random codons. Alternatively, one can pass existing files:
+```bash
+delt-cli simulate init -l libraries/NF.xlsx -s selections/selection.xlsx
+```
+
+To demultiplex the newly generated FASTQ file, the file names have to be the same:
+```bash
+delt-cli simulate init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz -o fastq_files/input.fastq.gz
+delt-cli simulate run config.yml
+delt-cli demultiplex init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz
+delt-cli demultiplex run config.yml
+```
+
+To plot and report the results, one has to switch to the quality_control branch:
+```bash
+# TODO: this asks for an <INPUT_PATH>
+git checkout quality_control
+delt-cli qc plot
+delt-cli qc report
+```

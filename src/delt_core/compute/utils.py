@@ -1,6 +1,5 @@
 import gzip
 import json
-import typing as tp
 
 import pandas as pd
 from rdkit import Chem
@@ -9,7 +8,7 @@ from rdkit.Chem import rdChemReactions
 
 def load_data(
         path: str,
-) -> tp.Tuple[tp.List, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+) -> tuple[list, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     scaffolds = pd.read_excel(path, sheet_name='scaffolds')
     reactions = pd.read_excel(path, sheet_name='smarts')
     consts = pd.read_excel(path, sheet_name='const')
@@ -95,7 +94,7 @@ def perform_reaction(
         reactions: pd.DataFrame,
         smiles_1: str,
         smiles_2: str,
-) -> tp.Tuple:
+) -> tuple:
     unimolecular = ['SR', 'DH', 'DT', 'SN2-1']
     if not reaction_type:
         return smiles_1
@@ -108,13 +107,13 @@ def perform_reaction(
 
 def read_txt(
         path: str,
-) -> tp.List:
+) -> list:
     with open(path, 'r') as file:
         return file.readlines()
 
 
 def write_txt(
-        rows: tp.List,
+        rows: list,
         path: str = './',
         mode: str = 'a',
 ) -> None:
@@ -126,13 +125,13 @@ def write_txt(
 
 def read_gzip(
         path: str,
-) -> tp.List:
+) -> list:
     with gzip.open(path, 'rt') as file:
         return file.readlines()
 
 
 def write_gzip(
-        rows: tp.List,
+        rows: list,
         path: str = './',
         mode: str = 'at',
 ) -> None:
@@ -144,13 +143,13 @@ def write_gzip(
 
 def read_json(
         path: str,
-) -> tp.Dict:
+) -> dict:
     with open(path, 'r') as file:
         return json.load(file)
 
 
 def write_json(
-        data: tp.Dict,
+        data: dict,
         path: str,
 ) -> None:
     with open(path, 'w') as file:
