@@ -6,16 +6,21 @@ from ... import compute as c
 
 def compute_smiles(
         input_path: tuple,
-        output_path: str = None,
 ) -> None:
-    if not output_path:
-        output_path = Path(input_path[0]).parent / 'smiles.txt.gz'
+    if len(input_path) == 1:
+        output_file = f'{Path(input_path[0]).stem}_smiles.txt.gz'
+    else:
+        output_file = f'{Path(input_path[0]).stem}-{Path(input_path[1]).stem}_smiles.txt.gz'
+
+    output_dir = Path(input_path[0]).parent / 'smiles'
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / output_file
 
     libraries = []
     for library in input_path:
         libraries += [c.load_data(library)]
     
-    c.compute_smiles(libraries, input_path, Path(output_path))
+    c.compute_smiles(libraries, output_path)
 
 
 def merge_libraries(
@@ -24,7 +29,8 @@ def merge_libraries(
     libraries = []
     for library in input_path:
         libraries += [c.load_data(library)]
-    c.merge_excel_files(libraries, input_path)
+    output_file = f'{Path(input_path[0]).stem}-{Path(input_path[1]).stem}.xlsx'
+    c.merge_excel_files(libraries, output_file)
 
 
 def compute_properties(

@@ -1,22 +1,89 @@
 import gzip
-import json
+from typing import Optional
 
+import numpy as np
 import pandas as pd
+from pydantic import BaseModel, validator, ValidationError
 from rdkit import Chem
 from rdkit.Chem import rdChemReactions
+
+
+class BuildingBlock(BaseModel):
+    ID: int
+    SMILES: Optional[str] = None
+    ScaffoldID: Optional[int] = None
+    Codon: Optional[str] = None
+    ReactionType: Optional[str] = None
+
+    @validator('ReactionType')
+    def set_reaction_type(cls, reaction_type):
+        return reaction_type or ''
+
+
+class Scaffold(BaseModel):
+    ScaffoldID: Optional[int] = None
+    SMILES: Optional[str] = None
+
+
+class Reaction(BaseModel):
+    ReactionType: str
+    SMARTS: str
+
+
+class ConstRegions(BaseModel):
+    Sequence: str
+    Reverse: bool
+    Complement: bool
+
+
+"""
+class Library(BaseModel):
+    BuildingBlocks: list[BuildingBlock]
+    Scaffolds: dict[Scaffold]
+    Reactions: dict[Reaction]
+    ConstRegions: ConstRegions
+"""
+
+
+def validate_buliding_block(
+        data: pd.DataFrame,
+        model: BaseModel,
+) -> list:
+    bb = []
+    records = data.to_dict(orient='records')
+    for record in records:
+        try:
+            bb += [model(**record)]
+        except ValidationError as e:
+            print(f'Validation error: {e.json()}')
+    return bb
+
+
+def validate(
+        data: pd.DataFrame,
+        model: BaseModel,
+) -> dict:
+    records = data.to_dict(orient='records')
+    for record in records:
+        try:
+            model(**record)
+        except ValidationError as e:
+            print(f'Validation error: {e.json()}')
+    return data
 
 
 def load_data(
         path: str,
 ) -> tuple[list, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    scaffolds = pd.read_excel(path, sheet_name='scaffolds')
-    reactions = pd.read_excel(path, sheet_name='smarts')
-    consts = pd.read_excel(path, sheet_name='const')
+    scaffolds = validate(pd.read_excel(path, sheet_name='scaffolds'), Scaffold)
+    reactions = validate(pd.read_excel(path, sheet_name='smarts'), Reaction)
+    consts = validate(pd.read_excel(path, sheet_name='const'), ConstRegions)
     bbs = []
     try:
         while True:
             step = len(bbs) + 1
-            bbs += [pd.read_excel(path, sheet_name=f'step{step}').fillna('')]
+            bb = pd.read_excel(path, sheet_name=f'step{step}').replace({np.nan: None})
+            bbs += [validate_buliding_block(bb, BuildingBlock)]
     except:
         return (bbs, scaffolds, reactions, consts)
 
@@ -139,19 +206,4 @@ def write_gzip(
         for row in rows:
             file.write('\t'.join(row))
             file.write('\n')
-
-
-def read_json(
-        path: str,
-) -> dict:
-    with open(path, 'r') as file:
-        return json.load(file)
-
-
-def write_json(
-        data: dict,
-        path: str,
-) -> None:
-    with open(path, 'w') as file:
-        json.dump(data, file)
 

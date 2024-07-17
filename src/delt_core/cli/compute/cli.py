@@ -15,12 +15,6 @@ def compute():
     required=True,
     type=click.Path(exists=True),
 )
-@click.option(
-    '--output_path',
-    '-o',
-    default=None,
-    type=click.Path(writable=True),
-)
 def smiles(**kwargs):
     cmds.compute_smiles(**kwargs)
 
