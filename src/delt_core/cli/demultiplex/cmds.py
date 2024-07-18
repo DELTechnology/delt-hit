@@ -4,7 +4,8 @@ import subprocess
 
 from ... import compute as c
 from ... import demultiplex as d
-from delt_core.demultiplex.utils import is_gz_file, init_config, Config
+from delt_core.demultiplex.utils import is_gz_file
+from delt_core.demultiplex.validation import init_config, Config
 
 
 def init(

@@ -7,7 +7,7 @@ import pandas as pd
 from .utils import read_txt, write_txt
 from delt_core.cli.demultiplex.cmds import create_lists
 from delt_core.demultiplex.postprocess import extract_ids, get_selection_ids, save_counts
-from delt_core.demultiplex.utils import Config
+from delt_core.demultiplex.validation import Config
 
 
 BASES = ['A', 'T', 'C', 'G']

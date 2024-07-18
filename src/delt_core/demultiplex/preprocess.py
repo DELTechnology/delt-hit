@@ -5,22 +5,9 @@ import stat
 import textwrap
 
 import pandas as pd
-from pydantic import BaseModel, computed_field
 
 from .utils import read_yaml
-
-
-class Region(BaseModel):
-    name: str
-    codons: list[str]
-    max_error_rate: float
-    indels: int
-    position_in_construct: int = None
-
-    @computed_field
-    @property
-    def region_id(self) -> str:
-        return f'{self.position_in_construct}-{self.name}'
+from .validation import validate, Region, SelectionFile
 
 
 def get_selections(
@@ -32,7 +19,7 @@ def get_selections(
     selection_file = root / config_selection['SelectionFile']
     fastq_file = str(Path(config_selection['FASTQFile']).name)
     library = str(Path(config_selection['Library']).name)
-    selections = pd.read_excel(selection_file)
+    selections = validate(pd.read_excel(selection_file), SelectionFile)
     if selection_id:
         selections = selections[selections['SelectionID'] == selection_id]
     return selections[(selections['FASTQFile'] == fastq_file) & (selections['Library'] == library)]

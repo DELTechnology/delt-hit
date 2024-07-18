@@ -127,3 +127,4 @@ def create_selection_template(
     with pd.ExcelWriter(selection_file) as writer:
         pd.DataFrame(selection).to_excel(writer, sheet_name='selections', index=False)
     return selection_file
+
