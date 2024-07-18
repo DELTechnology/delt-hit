@@ -152,7 +152,8 @@ def merge_excel_files(
                 for bbs in [sheet_l1, sheet_l2]:
                     for bb in bbs:
                         step += 1
-                        bb.to_excel(writer, sheet_name=f'{name}{step}', index=False)
+                        records = [record.dict() for record in bb]
+                        pd.DataFrame(records).to_excel(writer, sheet_name=f'{name}{step}', index=False)
                 continue
             elif name == 'scaffolds':
                 sheet = {
