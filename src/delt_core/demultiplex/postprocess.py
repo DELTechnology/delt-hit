@@ -41,7 +41,7 @@ def extract_ids(line: str):
     _, *adapters = line.strip().split('?')
     selection_ids = [i.split('.')[-1] for i in filter(lambda x: 'S' in x, adapters)]
     selection_ids = tuple(map(int, selection_ids))
-    barcodes = tuple(i.split('.')[-1] for i in filter(lambda x: 'B' in x, adapters))
+    barcodes = tuple(int(i.split('.')[-1]) + 1 for i in filter(lambda x: 'B' in x, adapters))
     return {'selection_ids': selection_ids, 'barcodes': barcodes}
 
 
