@@ -62,7 +62,7 @@ def validate_buliding_block(
 def validate(
         data: pd.DataFrame,
         model: BaseModel,
-) -> dict:
+) -> pd.DataFrame:
     records = data.to_dict(orient='records')
     for record in records:
         try:
