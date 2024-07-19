@@ -47,7 +47,7 @@ delt-cli simulate init
 
 Generate reads (with or without erros):
 ```bash
-delt-cli simulate run config.yml
+delt-cli simulate run experiments/default-*/config.yml
 ```
 
 
@@ -60,22 +60,27 @@ delt-cli demultiplex init
 
 Run demultiplexing:
 ```bash
-delt-cli demultiplex run config.yml
+delt-cli demultiplex run experiments/default-*/config.yml
 ```
 
 Create codon lists for the library specified in the configuration file:
 ```bash
-delt-cli demultiplex create-lists config.yml
+delt-cli demultiplex create-lists experiments/default-*/config.yml
 ```
 
 Create input files for running Cutadapt:
 ```bash
-delt-cli demultiplex create-cutadapt-input config.yml
+delt-cli demultiplex create-cutadapt-input experiments/default-*/config.yml
+```
+
+Run bash script:
+```bash
+bash experiments/default-*/cutadapt_input_files/demultiplex.sh
 ```
 
 Compute count tables for the final reads:
 ```bash
-delt-cli demultiplex compute-counts reads_with_adapters.gz
+delt-cli demultiplex compute-counts experiments/default-*/config.yml experiments/default-*/cutadapt_output_files/reads_with_adapters.gz output_dir
 ```
 
 Convert old structure file to new configuration file:
@@ -99,7 +104,7 @@ delt-cli qc report /path/to/experiment
 
 ## Workflow
 
-Initialize the folder structure and move the library, selection, and FASTQ files in the corresponding directories:
+Initialize the folder structure and move the library, selection, and FASTQ files to the corresponding directories:
 ```bash
 delt-cli init
 mv /path/to/input.fastq.gz fastq_files
