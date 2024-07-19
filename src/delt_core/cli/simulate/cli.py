@@ -24,13 +24,13 @@ def simulate():
 @click.option(
     '--selection_file',
     '-s',
-    default='selections/selection_template.xlsx',
+    default=None,
     type=click.Path(writable=True),
 )
 @click.option(
     '--library',
     '-l',
-    default='libraries/library_template.xlsx',
+    default=None,
     type=click.Path(writable=True),
 )
 @click.option(
