@@ -138,11 +138,11 @@ If there are no library, selection, or FASTQ files available, one can generate t
 ```bash
 git checkout main
 delt-cli simulate init
-delt-cli simulate run config.yml
+delt-cli simulate run experiments/default-*
 ```
 
 The default initialization of the simulation generates a new library and a selection template that contain random codons. Alternatively, one can pass existing files using the following commands:
 ```bash
 delt-cli simulate init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz -o fastq_files/input.fastq.gz
-delt-cli simulate run config.yml
+delt-cli simulate run experiments/default-*
 ```
