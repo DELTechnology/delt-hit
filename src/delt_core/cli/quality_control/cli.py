@@ -1,7 +1,9 @@
+from pathlib import Path
+
 import click
 
 from . import cmds
-from pathlib import Path
+
 
 @click.group()
 def qc():
@@ -29,3 +31,13 @@ def report(**kwargs):
 def plot(**kwargs):
     cmds.plot(**kwargs)
 
+
+@qc.command()
+@click.argument(
+    'config_file', type=click.Path(exists=True, path_type=Path)
+)
+@click.argument(
+    'legacy_results_dir', type=click.Path(exists=True, path_type=Path)
+)
+def compare_with_legacy(**kwargs):
+    cmds.compare_with_legacy(**kwargs)

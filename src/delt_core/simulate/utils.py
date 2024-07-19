@@ -3,10 +3,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import yaml
 
 from delt_core.cli.demultiplex.cmds import init
-from delt_core.demultiplex.utils import get_experiment_name
 
 
 def read_txt(
@@ -26,21 +24,6 @@ def write_txt(
     else:
         with open(path, 'w') as f:
             f.writelines(data)
-
-
-def read_yaml(
-        path: Path,
-) -> None:
-    with open(path, 'r') as file:
-        return yaml.safe_load(file)
-
-
-def write_yaml(
-        data: dict,
-        path: Path,
-) -> None:
-    with open(path, 'w') as file:
-        yaml.dump(data, file, default_flow_style=False, sort_keys=False)
 
 
 def create_config_file(
@@ -144,4 +127,3 @@ def create_selection_template(
     with pd.ExcelWriter(selection_file) as writer:
         pd.DataFrame(selection).to_excel(writer, sheet_name='selections', index=False)
     return selection_file
-

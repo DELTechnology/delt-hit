@@ -6,13 +6,21 @@ from .. import demultiplex as d
 
 
 def counts_are_identical(results: Path, legacy_results):
-    legacy_results = legacy_results.rename(
-        columns=dict(zip(['count', 'barcode1', 'barcode2'], ['Count', 'Code1', 'Code2'])))
-    legacy_results = legacy_results.assign(Code1=legacy_results.Code1 + 1, Code2=legacy_results.Code2 + 1)
+    legacy_results = legacy_results.assign(Code1=legacy_results.Code1 - 1, Code2=legacy_results.Code2 - 1)
 
     cols = ['Count', 'Code1', 'Code2']
     results = results[cols].sort_values(cols)
     legacy_results = legacy_results[cols].sort_values(cols)
+
+    # TODO: remove after fixing the issue with the NF library
+    # bb1_legacy = pd.read_csv('/Users/adrianomartinelli/polybox/decl-data/raw-files/code1_NF2.txt')
+    # bb1_new = pd.read_csv(
+    #     '/Users/adrianomartinelli/polybox/decl-data/db/experiments/OST1-e0-2024-07-12-20-29-10/codon_lists/B1.txt')
+    # pd.concat((bb1_legacy, bb1_new, bb1_legacy == bb1_new), axis=1)
+    # tmp = pd.concat((bb1_legacy, bb1_new, bb1_legacy == bb1_new), axis=1)
+    #
+    # results = results[results.Code1 <= 199]
+    # legacy_results = legacy_results[legacy_results.Code1 <= 199]
 
     return (results == legacy_results).all().all()
 
@@ -23,18 +31,21 @@ def get_selection_primer_ids_from_legacy_identifier(selection_name: str):
 
 def compare_counts_with_legacy(config: dict, legacy_results_dir: Path):
     root = Path(config['Root']) / 'evaluations'
-    hash = d.preprocess.hash_dict(config['Structure'])
+    _hash = d.utils.hash_dict(config['Structure'])
 
-    # assert len(list(legacy_results_dir.glob('selection*.txt'))) == len(list(root.glob(f'selection-*/{hash}.txt')))
-
-    for legacy_result_path in legacy_results_dir.glob('*.txt'):
+    for legacy_result_path in legacy_results_dir.glob('selection*.txt'):
         selection_primer_ids = get_selection_primer_ids_from_legacy_identifier(legacy_result_path.stem)
         selection_id = d.postprocess.get_selection_ids([selection_primer_ids], config=config)[0]
 
         results_legacy = pd.read_csv(legacy_result_path, sep='\t')
-        result_path = root / f'selection-{selection_id}' / f'{hash}.txt'
-        assert result_path.exists()
+        result_path = root / f'selection-{selection_id}' / f'{_hash}.txt'
+        if not result_path.exists():
+            print(f'⛔️ no results found ({selection_id} ↔️ {legacy_result_path.name})')
+            continue
+
         results = pd.read_csv(result_path, sep='\t')
 
         if not counts_are_identical(results, results_legacy):
-            print(f'Evaluation results differ for original {legacy_result_path.name}')
+            print(f'⛔️ results differ ({selection_id} ↔️ {legacy_result_path.name})')
+        else:
+            print(f'✅ results identical ({selection_id} ↔️ {legacy_result_path.name})')
