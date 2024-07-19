@@ -68,7 +68,7 @@ Create codon lists for the library specified in the configuration file:
 delt-cli demultiplex create-lists experiments/default-*/config.yml
 ```
 
-Create input files for running Cutadapt:
+Create input files for Cutadapt:
 ```bash
 delt-cli demultiplex create-cutadapt-input experiments/default-*/config.yml
 ```
@@ -93,12 +93,12 @@ delt-cli demultiplex convert structure.txt
 
 Plot codon hits:
 ```bash
-delt-cli qc plot /path/to/experiment
+delt-cli qc plot experiments/default-*
 ```
 
 Print report:
 ```bash
-delt-cli qc report /path/to/experiment
+delt-cli qc report experiments/default-*
 ```
 
 
