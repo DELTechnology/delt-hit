@@ -55,7 +55,7 @@ delt-cli simulate run config.yml
 
 Initialize folder structure for demultiplexing:
 ```bash
-delt-cli demultiplex init config.yml
+delt-cli demultiplex init
 ```
 
 Run demultiplexing:
@@ -88,41 +88,56 @@ delt-cli demultiplex convert structure.txt
 
 Plot codon hits:
 ```bash
-delt-cli qc plot
+delt-cli qc plot /path/to/experiment
 ```
 
 Print report:
 ```bash
-delt-cli qc report
+delt-cli qc report /path/to/experiment
 ```
 
 
 ## Workflow
 
-The following commands will generate a new FASTQ file:
+Initialize the folder structure and move the library, selection, and FASTQ files in the corresponding directories:
 ```bash
 delt-cli init
+mv /path/to/input.fastq.gz fastq_files
+mv /path/to/library.xlsx libraries
+mv /path/to/selection.xlsx selections
+```
+
+Switch to the <smiles> branch and compute the SMILES and some chemical properties of a library:
+```bash
+git checkout smiles
+delt-cli compute smiles libraries/NF.xlsx
+delt-cli compute properties libraries/smiles/NF_smiles.txt.gz
+delt-cli compute plot libraries/properties/properties_L1.txt.gz
+```
+
+Switch back to the <main> branch, create the configuration file, demultiplex the FASTQ file, and store the counts according to the selections defined in the selection file:
+```bash
+git checkout main
+delt-cli demultiplex init -f fastq_files/input.fastq.gz -l libraries/NF.xlsx -s selections/selection.xlsx
+delt-cli demultiplex run experiments/default-*/config.yml
+```
+
+Switch to the <quality_control> branch, report and plot the results:
+```bash
+git checkout quality_control
+delt-cli qc report experiments/default-*
+delt-cli qc plot experiments/default-*
+```
+
+If there are no library, selection, or FASTQ files available, one can generate them using the following commands:
+```bash
+git checkout main
 delt-cli simulate init
 delt-cli simulate run config.yml
 ```
 
-The default initialization of the simulation generates a new library and a selection template that contain random codons. Alternatively, one can pass existing files:
-```bash
-delt-cli simulate init -l libraries/NF.xlsx -s selections/selection.xlsx
-```
-
-To demultiplex the newly generated FASTQ file, the file names have to be the same:
+The default initialization of the simulation generates a new library and a selection template that contain random codons. Alternatively, one can pass existing files using the following commands:
 ```bash
 delt-cli simulate init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz -o fastq_files/input.fastq.gz
 delt-cli simulate run config.yml
-delt-cli demultiplex init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz
-delt-cli demultiplex run config.yml
-```
-
-To plot and report the results, one has to switch to the quality_control branch:
-```bash
-# TODO: this asks for an <INPUT_PATH>
-git checkout quality_control
-delt-cli qc plot
-delt-cli qc report
 ```
