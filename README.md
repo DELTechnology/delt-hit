@@ -112,7 +112,7 @@ mv /path/to/library.xlsx libraries
 mv /path/to/selection.xlsx selections
 ```
 
-Switch to the <smiles> branch and compute the SMILES and some chemical properties of a library:
+Switch to the ```smiles``` branch and compute the SMILES and some chemical properties of a library:
 ```bash
 git checkout smiles
 delt-cli compute smiles libraries/NF.xlsx
@@ -120,14 +120,14 @@ delt-cli compute properties libraries/smiles/NF_smiles.txt.gz
 delt-cli compute plot libraries/properties/properties_L1.txt.gz
 ```
 
-Switch back to the <main> branch, create the configuration file, demultiplex the FASTQ file, and store the counts according to the selections defined in the selection file:
+Switch back to the ```main``` branch, create the configuration file, demultiplex the FASTQ file, and store the counts according to the selections defined in the selection file:
 ```bash
 git checkout main
 delt-cli demultiplex init -f fastq_files/input.fastq.gz -l libraries/NF.xlsx -s selections/selection.xlsx
 delt-cli demultiplex run experiments/default-*/config.yml
 ```
 
-Switch to the <quality_control> branch, report and plot the results:
+Switch to the ```quality_control``` branch, report and plot the results:
 ```bash
 git checkout quality_control
 delt-cli qc report experiments/default-*
