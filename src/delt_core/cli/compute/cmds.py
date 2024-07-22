@@ -43,7 +43,8 @@ def compute_properties(
         header = file.readline().split('\t')
     indices = [header.index(i) for i in header if i.split('_')[0] == 'Product']
     for i, index in enumerate(indices, 1):
-        output_file = output_dir / f'properties_L{i}.txt.gz'
+        library = input_file.stem.split('_smiles')[0]
+        output_file = output_dir / f'{library}_properties_L{i}.txt.gz'
         c.compute_properties(input_file, index, output_file)
 
 
