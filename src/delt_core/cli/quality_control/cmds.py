@@ -1,6 +1,8 @@
 from pathlib import Path
 
+from ...demultiplex.utils import Config
 from ... import quality_control as q
+from delt_core.cli.demultiplex.cmds import create_lists
 
 
 def report(experiment_dir: Path) -> None:
@@ -17,7 +19,15 @@ def plot(
 
 
 def compare_with_legacy(config_file: Path, legacy_results_dir: Path):
-    from ...demultiplex.utils import Config
-    from ...quality_control.compare_output import compare_counts_with_legacy
     config = Config.from_yaml(config_file).model_dump()
-    compare_counts_with_legacy(config, legacy_results_dir)
+    q.compare_counts_with_legacy(config, legacy_results_dir)
+
+
+def analyze_codons(
+        config_file: Path,
+) -> None:
+    output_dir = Path(config_file).parent / 'edit_distances'
+    output_dir.mkdir(parents=True, exist_ok=True)
+    structure = create_lists(config_file)
+    q.analyze_codons(structure, output_dir)
+

@@ -41,3 +41,12 @@ def plot(**kwargs):
 )
 def compare_with_legacy(**kwargs):
     cmds.compare_with_legacy(**kwargs)
+
+
+@qc.command()
+@click.argument(
+    'config_file', type=click.Path(exists=True, path_type=Path)
+)
+def analyze_codons(**kwargs):
+    cmds.analyze_codons(**kwargs)
+
