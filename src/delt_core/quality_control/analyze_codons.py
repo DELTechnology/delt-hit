@@ -70,8 +70,8 @@ def compute_overlap(
 ) -> dict:
     overlap = {}
     for a, b in pairwise(codons.keys()):
-        last_base = [i[-1] for i in codons[a]]
-        first_base = [i[0] for i in codons[b]]
+        last_base = [i.strip()[-1] for i in codons[a]]
+        first_base = [i.strip()[0] for i in codons[b]]
         item = {'number_of_comparisons': 0, 'number_of_matches': 0, 'proportion_of_matches': 0}
         res = reduce(lambda x, y: compute_stats(x, a=y[0], b=y[1]), product(last_base, first_base), item)
         overlap[(a, b)] = res
@@ -81,7 +81,6 @@ def compute_overlap(
 def print_overlap(
         codons: dict,
 ) -> None:
-    # find number of codons that end with the same base as the const region starts
     # NOTE: as expected around 1/4 of the codons in the const region end with the same base as the next region starts
     # The overall probability that a codon is not completely removed is given by
     # p = prob_of_insert * prop_of_matching_pre_postfix

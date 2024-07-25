@@ -112,7 +112,7 @@ def create_lists(
 
     # Primers.
     keys_s = [key for key in keys if key.startswith('S')]
-    primer_lists = [selections['FwdPrimer'], selections['RevPrimer']]
+    primer_lists = [selections['FwdPrimer1'], selections['RevPrimer1']]
     assert len(primer_lists) == len(keys_s)
     for primer_list in primer_lists:
         key = keys_s.pop(0)
