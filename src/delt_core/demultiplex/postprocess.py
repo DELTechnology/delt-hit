@@ -31,8 +31,8 @@ def get_selection_ids(
         # NOTE: we would need to specify the column_name for the primers to avoid implicitly assume the order
         fwd_primer = primer_lists[0][selection_primer_ids[0]]
         rev_primer = primer_lists[1][selection_primer_ids[1]]
-        p1 = (selections['FwdPrimer'] == fwd_primer)
-        p2 = (selections['RevPrimer'] == rev_primer)
+        p1 = (selections['FwdPrimer1'] == fwd_primer)
+        p2 = (selections['RevPrimer1'] == rev_primer)
         selection_id = selections[p1 & p2]['SelectionID'].squeeze()
         selection_ids.append(selection_id)
     return selection_ids

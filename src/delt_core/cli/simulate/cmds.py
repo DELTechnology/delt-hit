@@ -14,10 +14,10 @@ def init(
         num_reads: int = 100,
 ) -> None:
     if not library:
-        library = 'selections/selection_template.xlsx'
+        library = 'libraries/library_template.xlsx'
         s.create_library_template(root, library)
     if not selection_file:
-        selection_file = 'libraries/library_template.xlsx'
+        selection_file = 'selections/selection_template.xlsx'
         s.create_selection_template(root, selection_file, library, fastq_file)
     s.create_config_file(
         root=root,

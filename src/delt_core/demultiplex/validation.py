@@ -25,8 +25,8 @@ class Region(BaseModel):
 class SelectionFile(BaseModel):
     SelectionID: int
     Library: str
-    FwdPrimer: str
-    RevPrimer: str
+    FwdPrimer1: str
+    RevPrimer1: str
     FASTQFile: str
 
 

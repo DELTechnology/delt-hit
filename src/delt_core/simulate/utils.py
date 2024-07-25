@@ -120,8 +120,8 @@ def create_selection_template(
     selection = {
         'SelectionID': np.arange(1, num_entries + 1),
         'Library': num_entries * [Path(library).name],
-        'FwdPrimer': num_rev_primers * [*generate_codons(num_fwd_primers)],
-        'RevPrimer': [codon for codon in generate_codons(num_rev_primers) for _ in range(num_fwd_primers)],
+        'FwdPrimer1': num_rev_primers * [*generate_codons(num_fwd_primers)],
+        'RevPrimer1': [codon for codon in generate_codons(num_rev_primers) for _ in range(num_fwd_primers)],
         'FASTQFile': num_entries * [Path(fastq_file).name],
     }
     with pd.ExcelWriter(selection_file) as writer:
