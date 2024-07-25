@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from ...demultiplex.utils import Config
-from ... import quality_control as q
+from delt_core import quality_control as q
 from delt_core.cli.demultiplex.cmds import create_lists
+from delt_core.demultiplex.validation import Config
 
 
 def report(experiment_dir: Path) -> None:
