@@ -17,19 +17,6 @@ touch .env
 These configurations can be accessed using the `python-dotenv` package.
 
 
-## SMILES construction
-
-Standard use:
-```bash
-delt-cli compute smiles library1.xlsx
-```
-
-Hybridization of two libraries (the order of the libraries must match the final sequence in the 5'-to-3' direction, see README):
-```bash
-delt-cli compute smiles library1.xlsx library2.xlsx
-```
-
-
 ## Initialization
 
 Initialize folder structure:
@@ -38,16 +25,31 @@ delt-cli init
 ```
 
 
-## Simulation
+## Library description
 
-Create configuration file for simulation:
+Compute SMILES of a library:
 ```bash
-delt-cli simulate init
+delt-cli compute smiles library1.xlsx
 ```
 
-Generate reads (with or without erros):
+Compute SMILES of a hybridized library (the order of the libraries must match the final sequence in the 5'-to-3' direction, see README):
 ```bash
-delt-cli simulate run experiments/default-*/config.yml
+delt-cli compute smiles library1.xlsx library2.xlsx
+```
+
+Merge two libraries (for demultiplexing):
+```bash
+delt-cli compute merge library1.xlsx library2.xlsx
+```
+
+Compute chemical properties of a library:
+```bash
+delt-cli compute properties smiles/library1_smiles.txt.gz
+```
+
+Plot chemical properties of a library:
+```bash
+delt-cli compute plot properties/properties_L1.txt.gz
 ```
 
 
@@ -99,6 +101,19 @@ delt-cli qc plot experiments/default-*
 Print report:
 ```bash
 delt-cli qc report experiments/default-*
+```
+
+
+## Simulation
+
+Create configuration file for simulation:
+```bash
+delt-cli simulate init
+```
+
+Generate reads (with or without erros):
+```bash
+delt-cli simulate run experiments/default-*/config.yml
 ```
 
 
