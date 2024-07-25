@@ -10,17 +10,44 @@ def compute():
 
 @compute.command()
 @click.argument(
-    'input_path',
+    'input_files',
     nargs=-1,
     required=True,
     type=click.Path(exists=True),
 )
-@click.option(
-    '--output_path',
-    '-o',
-    default=None,
-    type=click.Path(writable=True),
-)
 def smiles(**kwargs):
     cmds.compute_smiles(**kwargs)
+
+
+@compute.command()
+@click.argument(
+    'input_files',
+    nargs=2,
+    required=True,
+    type=click.Path(exists=True),
+)
+def merge(**kwargs):
+    cmds.merge_libraries(**kwargs)
+
+
+@compute.command()
+@click.argument(
+    'input_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+def properties(**kwargs):
+    cmds.compute_properties(**kwargs)
+
+
+@compute.command()
+@click.argument(
+    'input_file',
+    nargs=1,
+    required=True,
+    type=click.Path(exists=True),
+)
+def plot(**kwargs):
+    cmds.plot(**kwargs)
 

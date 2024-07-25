@@ -1,22 +1,32 @@
 import gzip
-import json
 
+import numpy as np
 import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import rdChemReactions
+
+from .validation import (
+    validate,
+    validate_buliding_block,
+    Scaffold,
+    Reaction,
+    ConstRegions,
+    BuildingBlock,
+)
 
 
 def load_data(
         path: str,
 ) -> tuple[list, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    scaffolds = pd.read_excel(path, sheet_name='scaffolds')
-    reactions = pd.read_excel(path, sheet_name='smarts')
-    consts = pd.read_excel(path, sheet_name='const')
+    scaffolds = validate(pd.read_excel(path, sheet_name='scaffolds'), Scaffold)
+    reactions = validate(pd.read_excel(path, sheet_name='smarts'), Reaction)
+    consts = validate(pd.read_excel(path, sheet_name='const'), ConstRegions)
     bbs = []
     try:
         while True:
             step = len(bbs) + 1
-            bbs += [pd.read_excel(path, sheet_name=f'step{step}').fillna('')]
+            bb = pd.read_excel(path, sheet_name=f'step{step}').replace({np.nan: None})
+            bbs += [validate_buliding_block(bb, BuildingBlock)]
     except:
         return (bbs, scaffolds, reactions, consts)
 
@@ -54,7 +64,7 @@ def get_complement(
 
 
 def generate_const(
-        const: str,
+        const: pd.DataFrame,
 ) -> str:
     seq = const['Sequence']
     if const['Reverse']:
@@ -139,19 +149,4 @@ def write_gzip(
         for row in rows:
             file.write('\t'.join(row))
             file.write('\n')
-
-
-def read_json(
-        path: str,
-) -> dict:
-    with open(path, 'r') as file:
-        return json.load(file)
-
-
-def write_json(
-        data: dict,
-        path: str,
-) -> None:
-    with open(path, 'w') as file:
-        json.dump(data, file)
 

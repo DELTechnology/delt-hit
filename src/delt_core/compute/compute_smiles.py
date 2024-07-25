@@ -17,7 +17,6 @@ from .utils import (
 
 def compute_smiles(
         libraries: list,
-        input_path: tuple,
         output_path: str,
 ) -> None:
     
@@ -54,26 +53,26 @@ def perform_reaction_steps(
     bb1, *bbs = bbs
     rows = []
 
-    for _, bb in bb1.iterrows():
+    for bb in bb1:
 
-        if bb['ScaffoldID']:  
-            scaffold_id = bb['ScaffoldID']
+        if bb.ScaffoldID:  
+            scaffold_id = bb.ScaffoldID
             scaffold = get_smiles(scaffold_id, scaffolds)
             product = scaffold
             
-            if bb['SMILES']:
-                for reaction_type in bb['ReactionType'].split(','):
-                    product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
+            if bb.SMILES:
+                for reaction_type in bb.ReactionType.split(','):
+                    product = perform_reaction(reaction_type.strip(), reactions, product, bb.SMILES)
         
         else:
             scaffold = scaffold_id = 'None'
-            product = bb['SMILES']
+            product = bb.SMILES
         
-        code = insert_codon(const, bb['Codon'])
+        code = insert_codon(const, bb.Codon)
         if write_indices:
-            rows += [[str(scaffold_id), str(bb['ID']), product, code]]
+            rows += [[str(scaffold_id), str(bb.ID), product, code]]
         else:
-            rows += [[scaffold, bb['SMILES'], product, code]]
+            rows += [[scaffold, bb.SMILES, product, code]]
     
     write_gzip(rows, output_path)
     
@@ -89,17 +88,17 @@ def perform_reaction_steps(
                 interm = interm.split()
                 rows = []
 
-                for _, bb in bbn.iterrows():
+                for bb in bbn:
                     product = interm[i]
-                    if bb['SMILES']:
-                        for reaction_type in bb['ReactionType'].split(','):
-                            product = perform_reaction(reaction_type.strip(), reactions, product, bb['SMILES'])
+                    if bb.SMILES:
+                        for reaction_type in bb.ReactionType.split(','):
+                            product = perform_reaction(reaction_type.strip(), reactions, product, bb.SMILES)
                     
-                    code = insert_codon(interm[-1], bb['Codon'])
+                    code = insert_codon(interm[-1], bb.Codon)
                     if write_indices:
-                        rows += [[*interm[:i], str(bb['ID']), product, code]]
+                        rows += [[*interm[:i], str(bb.ID), product, code]]
                     else:
-                        rows += [[*interm[:i], bb['SMILES'], product, code]]
+                        rows += [[*interm[:i], bb.SMILES, product, code]]
                 
                 write_gzip(rows, tmp)
         
@@ -142,19 +141,19 @@ def hybridize(
 
 def merge_excel_files(
         libraries: list,
-        input_path: Path,
+        output_file: Path,
 ) -> None:
-    output_path = f'{Path(input_path[0]).stem}-{Path(input_path[1]).stem}.xlsx'
     l1, l2 = libraries
     names = ['step', 'scaffolds', 'smarts', 'const']
-    with pd.ExcelWriter(output_path) as writer:
+    with pd.ExcelWriter(output_file) as writer:
         for sheet_l1, sheet_l2, name in zip(l1, l2, names):
             if name == 'step':
                 step = 0
                 for bbs in [sheet_l1, sheet_l2]:
                     for bb in bbs:
                         step += 1
-                        bb.to_excel(writer, sheet_name=f'{name}{step}', index=False)
+                        records = [record.dict() for record in bb]
+                        pd.DataFrame(records).to_excel(writer, sheet_name=f'{name}{step}', index=False)
                 continue
             elif name == 'scaffolds':
                 sheet = {
