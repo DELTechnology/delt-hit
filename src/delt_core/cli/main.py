@@ -17,7 +17,6 @@ cli.add_command(d.demultiplex)
 cli.add_command(i.init)
 cli.add_command(s.simulate)
 cli.add_command(qc.qc)
-# cli.add_command(qc.report)
 
 
 if __name__ == '__main__':
