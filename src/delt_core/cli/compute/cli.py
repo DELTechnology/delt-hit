@@ -10,7 +10,7 @@ def compute():
 
 @compute.command()
 @click.argument(
-    'input_path',
+    'input_files',
     nargs=-1,
     required=True,
     type=click.Path(exists=True),
@@ -21,7 +21,7 @@ def smiles(**kwargs):
 
 @compute.command()
 @click.argument(
-    'input_path',
+    'input_files',
     nargs=2,
     required=True,
     type=click.Path(exists=True),

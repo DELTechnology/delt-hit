@@ -5,31 +5,31 @@ from ... import compute as c
 
 
 def compute_smiles(
-        input_path: tuple,
+        input_files: tuple[Path, Path],
 ) -> None:
-    if len(input_path) == 1:
-        output_file = f'{Path(input_path[0]).stem}_smiles.txt.gz'
+    if len(input_files) == 1:
+        output_file = f'{Path(input_files[0]).stem}_smiles.txt.gz'
     else:
-        output_file = f'{Path(input_path[0]).stem}-{Path(input_path[1]).stem}_smiles.txt.gz'
+        output_file = f'{Path(input_files[0]).stem}-{Path(input_files[1]).stem}_smiles.txt.gz'
 
-    output_dir = Path(input_path[0]).parent / 'smiles'
+    output_dir = Path(input_files[0]).parent / 'smiles'
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / output_file
 
     libraries = []
-    for library in input_path:
+    for library in input_files:
         libraries += [c.load_data(library)]
     
     c.compute_smiles(libraries, output_path)
 
 
 def merge_libraries(
-        input_path: tuple,
+        input_files: tuple[Path, Path],
 ) -> None:
     libraries = []
-    for library in input_path:
+    for library in input_files:
         libraries += [c.load_data(library)]
-    output_file = f'{Path(input_path[0]).stem}-{Path(input_path[1]).stem}.xlsx'
+    output_file = f'{Path(input_files[0]).stem}-{Path(input_files[1]).stem}.xlsx'
     c.merge_excel_files(libraries, output_file)
 
 
