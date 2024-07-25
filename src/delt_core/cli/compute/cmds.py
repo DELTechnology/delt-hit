@@ -29,7 +29,9 @@ def merge_libraries(
     libraries = []
     for library in input_files:
         libraries += [c.load_data(library)]
-    output_file = f'{Path(input_files[0]).stem}-{Path(input_files[1]).stem}.xlsx'
+    output_dir = Path(input_files[0]).parent
+    name = f'{Path(input_files[0]).stem}-{Path(input_files[1]).stem}'
+    output_file = output_dir / f'{name}.xlsx'
     c.merge_excel_files(libraries, output_file)
 
 

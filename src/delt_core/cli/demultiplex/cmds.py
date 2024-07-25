@@ -79,7 +79,7 @@ def create_lists(
     keys_b = [key for key in keys if key.startswith('B')]
     assert len(bbs) == len(keys_b)
     for bb in bbs:
-        codes = bb['Codon']
+        codes = [item.Codon for item in bb]
         key = keys_b.pop(0)
         output_file = output_dir / f'{key}.txt'
         structure[key]['Path'] = output_file
