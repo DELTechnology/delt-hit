@@ -42,8 +42,9 @@ def convert(
         struct_file: Path,
 ) -> None:
     with open(struct_file, 'r') as f:
-        lines = f.readlines()[2:]
-    lines = [line.strip().split() for line in lines]
+        lines = f.readlines()
+    fastq_file = lines[0].strip()
+    lines = [line.strip().split() for line in lines[2:]]
     lines = sorted(filter(None, lines), key=lambda x: int(x[0]))
     indices = {}
     structure = []
@@ -53,6 +54,7 @@ def convert(
         structure += [f'{_type}{indices[_type]}']
     init_config(
         structure=structure,
+        fastq_file=fastq_file,
     )
 
 
