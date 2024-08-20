@@ -25,7 +25,7 @@ delt-cli init
 ```
 
 
-## Library description
+## Computation
 
 Compute SMILES of a library:
 ```bash
@@ -104,6 +104,14 @@ delt-cli qc report experiments/default-*
 ```
 
 
+## Normalization
+
+Compare target selections (e.g., ID 1-3) with control selections (e.g., ID 4-6):
+```bash
+delt-cli normalize run experiments/default-*/config.yml '1 2 3' '4 5 6'
+```
+
+
 ## Simulation
 
 Create configuration file for simulation:
@@ -127,31 +135,32 @@ mv /path/to/library.xlsx libraries
 mv /path/to/selection.xlsx selections
 ```
 
-Switch to the ```smiles``` branch and compute the SMILES and some chemical properties of a library:
+Compute the SMILES and some chemical properties of a library:
 ```bash
-git checkout smiles
 delt-cli compute smiles libraries/NF.xlsx
 delt-cli compute properties libraries/smiles/NF_smiles.txt.gz
 delt-cli compute plot libraries/properties/properties_L1.txt.gz
 ```
 
-Switch back to the ```main``` branch, create the configuration file, demultiplex the FASTQ file, and store the counts according to the selections defined in the selection file:
+Create the configuration file, demultiplex the FASTQ file, and store the counts according to the selections defined in the selection file:
 ```bash
-git checkout main
 delt-cli demultiplex init -f fastq_files/input.fastq.gz -l libraries/NF.xlsx -s selections/selection.xlsx
 delt-cli demultiplex run experiments/default-*/config.yml
 ```
 
-Switch to the ```quality_control``` branch, report and plot the results:
+Report and plot the results of the demultiplexing:
 ```bash
-git checkout quality_control
 delt-cli qc report experiments/default-*
 delt-cli qc plot experiments/default-*
 ```
 
+Normalize your target selections (e.g., ID 1-3) by means of your control selections (e.g., ID 4-6):
+```bash
+delt-cli normalize run experiments/default-*/config.yml '1 2 3' '4 5 6'
+```
+
 If there are no library, selection, or FASTQ files available, one can generate them using the following commands:
 ```bash
-git checkout main
 delt-cli simulate init
 delt-cli simulate run experiments/default-*/config.yml
 ```
