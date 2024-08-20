@@ -106,7 +106,7 @@ delt-cli qc report experiments/default-*
 
 ## Normalization
 
-Compare target selections (e.g., ID 1-3) with control selections (e.g., ID 4-6):
+Compare a set of target selections (e.g., ID 1-3) to a set of control selections (e.g., ID 4-6):
 ```bash
 delt-cli normalize run experiments/default-*/config.yml '1 2 3' '4 5 6'
 ```
@@ -154,7 +154,7 @@ delt-cli qc report experiments/default-*
 delt-cli qc plot experiments/default-*
 ```
 
-Normalize your target selections (e.g., ID 1-3) by means of your control selections (e.g., ID 4-6):
+Compare a set of target selections (e.g., ID 1-3) to a set of control selections (e.g., ID 4-6):
 ```bash
 delt-cli normalize run experiments/default-*/config.yml '1 2 3' '4 5 6'
 ```
