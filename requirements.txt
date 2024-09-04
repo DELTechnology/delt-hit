@@ -4,9 +4,11 @@ cfgv==3.4.0
 click==8.1.7
 contourpy==1.3.0
 coverage==7.6.1
+cutadapt==4.9
 cycler==0.12.1
--e git+ssh://git@github.com/DELTechnology/delt-core.git@08481e51e600ed8307f1bf332f74872a2394103f#egg=delt_core
+-e git+ssh://git@github.com/DELTechnology/delt-core.git@b85dfdc5b0f745cb2556082d2123b1d2228399ea#egg=delt_core
 distlib==0.3.8
+dnaio==1.2.1
 et-xmlfile==1.1.0
 exceptiongroup==1.2.2
 filelock==3.15.4
@@ -14,6 +16,7 @@ flake8==7.1.1
 fonttools==4.53.1
 identify==2.6.0
 iniconfig==2.0.0
+isal==1.7.0
 isort==5.13.2
 kiwisolver==1.4.7
 Levenshtein==0.25.1
@@ -52,3 +55,5 @@ tqdm==4.66.5
 typing_extensions==4.12.2
 tzdata==2024.1
 virtualenv==20.26.3
+xopen==2.0.2
+zlib-ng==0.5.0
