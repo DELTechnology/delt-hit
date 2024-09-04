@@ -13,6 +13,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "click",
+    "levenshtein",
     "matplotlib",
     "numpy",
     "openpyxl",
@@ -22,6 +23,7 @@ dependencies = [
     "python-dotenv",
     "rdkit",
     "seaborn",
+    "tqdm",
 ]
 version = "0.0.1"  # refactor to dynamic with setuptools_scm
 classifiers = [
