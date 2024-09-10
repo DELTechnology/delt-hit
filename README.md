@@ -1,7 +1,7 @@
 # Package `delt-core`
-Core functionalities to work with DECL libraries
+Core functionalities to work with DECL libraries.
 
-## Software requirements
+## Software requirements and installation
 
 Download Miniconda (select the installer that matches your operating system): https://docs.anaconda.com/miniconda. For macOS users: Choose the `pkg` installer, if you prefer a standard graphical installation process. If you are comfortable using the terminal, you can also use the `bash` installer. After installation, open the terminal and verify the installation by typing `conda --version`.
 
@@ -12,9 +12,8 @@ Generate a new SSH key by typing `ssh-keygen -t ed25519 -C "your_email@example.c
 Go to the repository on GitHub: https://github.com/DELTechnology/delt-core. Click the **Code** button, select **SSH**, and copy the URL to the clipboard. In the terminal, navigate to the directory where you want to clone the repository and type `git clone URL` (replace URL with the link in the clipboard). Verify the download by typing `ls delt-core`. Navigate to the root folder of the package by typing `cd delt-core`, install pip by typing `conda install pip`, and run the following command: `pip install .`. Verify the installation by typing `delt-cli --help`.
 
 
-## Installation
+## Installation (only for development purposes)
 
-Install the package for development purposes.
 Navigate to the root folder of the package and run the following command:
 
 ```bash
