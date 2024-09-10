@@ -25,6 +25,7 @@ dependencies = [
     "rdkit",
     "seaborn",
     "tqdm",
+    "pyaml",
 ]
 version = "0.0.1"  # refactor to dynamic with setuptools_scm
 classifiers = [
