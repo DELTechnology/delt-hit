@@ -1,6 +1,17 @@
 # Package `delt-core`
 Core functionalities to work with DECL libraries
 
+## Software requirements
+
+Download Miniconda (select the installer that matches your operating system): https://docs.anaconda.com/miniconda. For macOS users: Choose the `pkg` installer, if you prefer a standard graphical installation process. If you are comfortable using the terminal, you can also use the `bash` installer. After installation, open the terminal and verify the installation by typing `conda --version`.
+
+Use the following command to create a new environment called *del*: `conda create -n del` (type `y` and press **Enter** to proceed). You can list all your environments by typing `conda env list`. Activate the environment by typing `conda activate del`. The `delt-core` package will be installed only within the currently activated environment. This also means that whenever you want to work with the `delt-core` package, you need to activate the environment first. When an environment is activated, the name of the environment usually appears in parentheses at the beginning of the command prompt.
+
+Generate a new SSH key by typing `ssh-keygen -t ed25519 -C "your_email@example.com"` in the terminal (enter your email address). When you're prompted to "Enter file in which to save the key", you can press **Enter** to accept the default file location. Start the ssh-agent by typing `eval "$(ssh-agent -s)"` and add your SSH private key to the ssh-agent by typing `ssh-add ~/.ssh/id_ed25519`. Copy the SSH public key to your clipboard by typing `pbcopy < ~/.ssh/id_ed25519.pub`. Go to GitHub, click on your profile picture (in the upper right corner), then click **Settings**. Go to **SSH and GPG keys** (in the sidebar) and click **New SSH key**. Add a title, paste the key in the corresponding field, and click **Add SSH key**.
+
+Go to the repository on GitHub: https://github.com/DELTechnology/delt-core. Click the **Code** button, select **SSH**, and copy the URL to the clipboard. In the terminal, navigate to the directory where you want to clone the repository and type `git clone URL` (replace URL with the link in the clipboard). Verify the download by typing `ls delt-core`. Navigate to the root folder of the package by typing `cd delt-core`, install pip by typing `conda install pip`, and run the following command: `pip install .`. Verify the installation by typing `delt-cli --help`.
+
+
 ## Installation
 
 Install the package for development purposes.
@@ -91,7 +102,7 @@ delt-cli demultiplex convert structure.txt
 ```
 
 
-## Quality Control
+## Quality control
 
 Plot codon hits:
 ```bash
