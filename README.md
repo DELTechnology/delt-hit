@@ -1,6 +1,7 @@
 # Package `delt-core`
 Core functionalities to work with DECL libraries.
 
+
 ## Software requirements and installation
 
 Download Miniconda (select the installer that matches your operating system): https://docs.anaconda.com/miniconda. For macOS users: Choose the `pkg` installer, if you prefer a standard graphical installation process. If you are comfortable using the terminal, you can also use the `bash` installer. After installation, open the terminal and verify the installation by typing `conda --version`.
@@ -27,6 +28,53 @@ touch .env
 These configurations can be accessed using the `python-dotenv` package.
 
 
+## Workflow
+
+Initialize the folder structure and move the library, selection, and FASTQ files to the corresponding directories:
+```bash
+delt-cli init
+mv /path/to/input.fastq.gz fastq_files
+mv /path/to/library.xlsx libraries
+mv /path/to/selection.xlsx selections
+```
+
+Compute the SMILES and some chemical properties of a library:
+```bash
+delt-cli compute smiles libraries/NF.xlsx
+delt-cli compute properties libraries/smiles/NF_smiles.txt.gz
+delt-cli compute plot libraries/properties/properties_L1.txt.gz
+```
+
+Initialize the configuration file and demultiplex the FASTQ file (adjust the configuration file manually if needed):
+```bash
+delt-cli demultiplex init -f fastq_files/input.fastq.gz -l libraries/NF.xlsx -s selections/selection.xlsx
+delt-cli demultiplex run experiments/default-*/config.yml
+```
+
+Report and plot the results of the demultiplexing:
+```bash
+delt-cli qc report experiments/default-*
+delt-cli qc plot experiments/default-*
+```
+
+Compare a set of target selections (e.g., ID 1-3) to a set of control selections (e.g., ID 4-6):
+```bash
+delt-cli normalize run experiments/default-*/config.yml '1 2 3' '4 5 6'
+```
+
+If there are no library, selection, or FASTQ files available, one can generate them using the following commands:
+```bash
+delt-cli simulate init
+delt-cli simulate run experiments/default-*/config.yml
+```
+
+The default initialization of the simulation generates a new library and a selection template that contain random codons. Alternatively, one can pass existing files using the following commands:
+```bash
+delt-cli simulate init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz -o fastq_files/input.fastq.gz
+delt-cli simulate run experiments/default-*/config.yml
+```
+
+
 ## Initialization
 
 Initialize folder structure:
@@ -47,7 +95,7 @@ Compute SMILES of a hybridized library (the order of the libraries must match th
 delt-cli compute smiles library1.xlsx library2.xlsx
 ```
 
-Merge two libraries (for demultiplexing):
+Merge two library files to one Excel file (required for the demultiplexing of a hybridized library):
 ```bash
 delt-cli compute merge library1.xlsx library2.xlsx
 ```
@@ -131,52 +179,5 @@ delt-cli simulate init
 
 Generate reads (with or without erros):
 ```bash
-delt-cli simulate run experiments/default-*/config.yml
-```
-
-
-## Workflow
-
-Initialize the folder structure and move the library, selection, and FASTQ files to the corresponding directories:
-```bash
-delt-cli init
-mv /path/to/input.fastq.gz fastq_files
-mv /path/to/library.xlsx libraries
-mv /path/to/selection.xlsx selections
-```
-
-Compute the SMILES and some chemical properties of a library:
-```bash
-delt-cli compute smiles libraries/NF.xlsx
-delt-cli compute properties libraries/smiles/NF_smiles.txt.gz
-delt-cli compute plot libraries/properties/properties_L1.txt.gz
-```
-
-Create the configuration file, demultiplex the FASTQ file, and store the counts according to the selections defined in the selection file:
-```bash
-delt-cli demultiplex init -f fastq_files/input.fastq.gz -l libraries/NF.xlsx -s selections/selection.xlsx
-delt-cli demultiplex run experiments/default-*/config.yml
-```
-
-Report and plot the results of the demultiplexing:
-```bash
-delt-cli qc report experiments/default-*
-delt-cli qc plot experiments/default-*
-```
-
-Compare a set of target selections (e.g., ID 1-3) to a set of control selections (e.g., ID 4-6):
-```bash
-delt-cli normalize run experiments/default-*/config.yml '1 2 3' '4 5 6'
-```
-
-If there are no library, selection, or FASTQ files available, one can generate them using the following commands:
-```bash
-delt-cli simulate init
-delt-cli simulate run experiments/default-*/config.yml
-```
-
-The default initialization of the simulation generates a new library and a selection template that contain random codons. Alternatively, one can pass existing files using the following commands:
-```bash
-delt-cli simulate init -l libraries/library.xlsx -s selections/selection.xlsx -f fastq_files/input.fastq.gz -o fastq_files/input.fastq.gz
 delt-cli simulate run experiments/default-*/config.yml
 ```
