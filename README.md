@@ -42,7 +42,7 @@ Compute SMILES of a library:
 delt-cli compute smiles library1.xlsx
 ```
 
-Compute SMILES of a hybridized library (the order of the libraries must match the final sequence in the 5'-to-3' direction, see README):
+Compute SMILES of a hybridized library (the order of the libraries must match the final sequence in the 5'-to-3' direction, see templates/README.txt):
 ```bash
 delt-cli compute smiles library1.xlsx library2.xlsx
 ```
