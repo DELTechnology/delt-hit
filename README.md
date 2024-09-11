@@ -94,7 +94,7 @@ Compute SMILES of a hybridized library (the order of the libraries must match th
 delt-cli compute smiles library1.xlsx library2.xlsx
 ```
 
-Merge two library files to one Excel file (required for the demultiplexing of a hybridized library):
+Merge two library files into one Excel file (required for the demultiplexing of a hybridized library):
 ```bash
 delt-cli compute merge library1.xlsx library2.xlsx
 ```
