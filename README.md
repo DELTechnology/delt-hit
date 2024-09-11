@@ -1,5 +1,5 @@
 # Package `delt-core`
-Core functionalities to work with DECL libraries.
+Core functionalities to work with DNA-encoded chemical libraries.
 
 
 ## Software requirements and installation
