@@ -8,6 +8,7 @@ for EVAL_DIR in /work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/experiments/ev
 
   echo "Processing $EVAL_DIR"
   delt-cli demultiplex run "$EVAL_DIR"/config.yml > "$EVAL_DIR/output.log" 2>&1
-  delt-cli qc report "$EVAL_DIR" > "$EVAL_DIR/qc_report.txt"
+  delt-cli qc report "$EVAL_DIR" > "$EVAL_DIR/qc_report.txt" 2>&1
+  delt-cli qc plot "$EVAL_DIR"
   cat "$EVAL_DIR/qc_report.txt"
 done

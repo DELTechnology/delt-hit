@@ -1,0 +1,12 @@
+rsync -avz \
+  --prune-empty-dirs \
+  --include='*/' \
+  --include='eval-*/' \
+  --include='config.yml' \
+  --include='quality_control/***' \
+  --include='qc_report.txt' \
+  --exclude='2025-06-11/***' \
+  --exclude='old/***' \
+  --exclude='*' \
+  unil:/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/experiments/ \
+  ./experiments/
