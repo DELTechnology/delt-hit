@@ -92,6 +92,7 @@ def init_config(
         selection_file: str = 'selections/selection.xlsx',
         fastq_file: str = 'fastq_files/input.fastq.gz',
         library: str = 'libraries/library.xlsx',
+        errors: dict[str, float] | None = None,
         simulation: dict = None,
 ) -> None:
     experiment_name = get_experiment_name(experiment_name)
@@ -107,11 +108,12 @@ def init_config(
         },
         'Structure': {},
     }
+    errors = errors or {}
     max_error_rate = 0.0
     indels = 0
     for region in structure:
         config['Structure'][region] = {}
-        config['Structure'][region]['MaxErrorRate'] = max_error_rate
+        config['Structure'][region]['MaxErrorRate'] = errors.get(region, max_error_rate)
         config['Structure'][region]['Indels'] = indels
     if simulation:
         config['Simulation'] = simulation

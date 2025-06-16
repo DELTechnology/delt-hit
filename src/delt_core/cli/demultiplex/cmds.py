@@ -14,10 +14,16 @@ def init(
         selection_file: Path,
         fastq_file: Path,
         library: Path,
+        errors: list[tuple[str, float]] | None = None,
         simulation: dict = None,
 ) -> None:
+
     if not root:
         root = Path.cwd()
+
+    if errors is not None:
+        errors = {k:v for k,v in errors}
+
     if Path(library).exists():
         bbs, _, _, _ = c.load_data(library)
         structure = ['S1']
@@ -34,6 +40,7 @@ def init(
         selection_file=selection_file,
         fastq_file=fastq_file,
         library=library,
+        errors=errors,
         simulation=simulation,
     )
 

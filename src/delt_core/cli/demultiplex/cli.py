@@ -39,6 +39,13 @@ def demultiplex():
     default='fastq_files/input.fastq.gz',
     type=click.Path(writable=True),
 )
+@click.option(
+    '--errors',
+    type=(str, float),
+    multiple=True,
+    default=None,
+    help='allowed error per region'
+)
 def init(**kwargs):
     cmds.init(**kwargs)
 
