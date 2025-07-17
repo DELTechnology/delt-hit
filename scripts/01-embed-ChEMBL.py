@@ -1,17 +1,20 @@
+from itertools import batched
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import umap.plot
+from ai4bmr_datasets import ChEMBL
+from loguru import logger
 from rdkit import Chem
 from rdkit.Chem import AllChem
-import numpy as np
-from ai4bmr_datasets import ChEMBL
 from tqdm import tqdm
-from pathlib import Path
-import pandas as pd
-from itertools import batched
-from loguru import logger
 
-
-# %%
 chembl_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings/ChEMBL')
 chembl_dir.mkdir(parents=True, exist_ok=True)
+
+nf2_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings/NF2')
+nf2_dir.mkdir(parents=True, exist_ok=True)
 
 # %% DATA
 logger.info('Loading ChEMBL')
@@ -107,9 +110,6 @@ import pandas as pd
 path = "/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/libraries/smiles/NF_smiles.txt.gz"
 df = pd.read_csv(path, compression='gzip', sep='\t')
 
-nf2_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings/NF2')
-nf2_dir.mkdir(parents=True, exist_ok=True)
-
 df[['Scaffold_L1', 'Product_L1']]
 
 smiles = df.Product_L1
@@ -138,11 +138,10 @@ else:
     bert_fp.to_parquet(save_path, engine='fastparquet')
 
 # %%
-import umap
-import umap.plot
 num_obs = 1000
 save_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings')
-for fp in ['bert_fp', 'morgan_fp']:
+# for fp in ['morgan_fp', 'bert_fp']:
+for fp in ['morgan_fp']:
     logger.info(f'Computing UMAP for {fp}')
 
     chembl_fp = pd.read_parquet(chembl_dir / f'{fp}.parquet', engine='fastparquet')

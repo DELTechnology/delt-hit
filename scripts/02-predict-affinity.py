@@ -17,13 +17,22 @@ morgan_fp = pd.concat([morgan_fp, df], axis=1).set_index(['Code1', 'Code2'])
 
 # %%
 counts = counts.set_index(['Code1', 'Code2']).squeeze()
+# counts = counts.sample(1_000)
 counts, morgan_fp = counts.align(morgan_fp, join='inner', axis=0)
 
 # %%
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_validate
+from sklearn.metrics import mean_absolute_error
+import numpy as np
 
 reg = RandomForestRegressor(max_depth=5)
-scores = cross_validate(estimator=reg, X=morgan_fp, y=counts, scoring='neg_mean_absolute_error', cv=5, n_jobs=-1)
+scores = cross_validate(estimator=reg, X=morgan_fp, y=counts, scoring='neg_mean_absolute_error', cv=5, n_jobs=-1, return_train_score=True)
+scores = pd.DataFrame(scores)
+print(scores)
+print(scores.mean())
 
-
+# %%
+mean_estimator = counts.mean()
+score = mean_absolute_error(counts, np.repeat(mean_estimator, len(counts)))
+print(score)
