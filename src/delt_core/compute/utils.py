@@ -86,16 +86,26 @@ def compute_product(
         smiles_1: str,
         smiles_2: str = None,
 ) -> str:
-    rxn = rdChemReactions.ReactionFromSmarts(smarts)
-    if smiles_2:
-        react_1, react_2 = Chem.MolFromSmiles(smiles_1), Chem.MolFromSmiles(smiles_2)
-        try:
-            product = rxn.RunReactants((react_1, react_2))[0][0]
-        except:
-            product = rxn.RunReactants((react_2, react_1))[0][0]
-    else:
-        react = Chem.MolFromSmiles(smiles_1)
-        product = rxn.RunReactant(react, 0)[0][0]
+    try:
+        rxn = rdChemReactions.ReactionFromSmarts(smarts)
+        if smiles_2:
+            react_1, react_2 = Chem.MolFromSmiles(smiles_1), Chem.MolFromSmiles(smiles_2)
+            try:
+                product = rxn.RunReactants((react_1, react_2))[0][0]
+            except:
+                product = rxn.RunReactants((react_2, react_1))[0][0]
+        else:
+            react = Chem.MolFromSmiles(smiles_1)
+            product = rxn.RunReactant(react, 0)[0][0]
+
+    except IndexError as e:
+        print(f'Index Error performing reaction with smarts: {smarts};smiles_1: {smiles_1};smiles_2: {smiles_2}')
+        return 'C1CCC1'
+
+    except ValueError as e:
+        print(f'Value Error performing reaction with smarts: {smarts};smiles_1: {smiles_1};smiles_2: {smiles_2}')
+        return 'C1CCC1'
+
     return Chem.MolToSmiles(product)
 
 
