@@ -1,21 +1,25 @@
+import pickle
 from itertools import batched
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 import umap.plot
 from ai4bmr_datasets import ChEMBL
 from loguru import logger
 from rdkit import Chem
 from rdkit.Chem import AllChem
+from scipy import sparse
 from tqdm import tqdm
 
-chembl_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/embeddings/ChEMBL')
-# chembl_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings/ChEMBL')
+# base_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/ChEMBL')
+base_dir = None
+# data_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB')
+data_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/')
+
+chembl_dir = data_dir / 'embeddings' / 'ChEMBL'
 chembl_dir.mkdir(parents=True, exist_ok=True)
 
-# nf2_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings/NF2')
-nf2_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/embeddings/NF2')
+nf2_dir = data_dir / 'embeddings' / 'NF2'
 nf2_dir.mkdir(parents=True, exist_ok=True)
 
 # %% DATA
@@ -38,7 +42,6 @@ WHERE
 LIMIT 5000;"""
 # """
 
-base_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/ChEMBL')
 ds = ChEMBL(base_dir=base_dir)
 ds.prepare_data()
 ds.setup(query=query)
@@ -59,114 +62,132 @@ def get_morgan_fp(smiles, radius=2, n_bits=2048):
 
     mfpgen = AllChem.GetMorganGenerator(radius=radius,fpSize=n_bits)
     fp = mfpgen.GetFingerprint(mol)
-    fp = np.asarray(fp)
+    fp = sparse.csr_array(fp, dtype=np.uint8)
     return fp
 
 smiles = data.canonical_smiles
-save_path = chembl_dir / 'morgan_fp.parquet'
+save_path = chembl_dir / 'morgan_fp.npz'
+index_path = chembl_dir / 'index.pkl'
 if save_path.exists():
     logger.info(f'Loading ChEMBL morgan_fp from cache: {save_path}')
-    morgan_fp = pd.read_parquet(save_path, engine='fastparquet')
+    morgan_fp = sparse.load_npz(save_path)
+    with open(index_path, 'rb') as f:
+        index = pickle.load(f)
 else:
     logger.info(f'Computing ChEMBL morgan_fp...')
-    morgan_fp = smiles.map(get_morgan_fp)
-    logger.info(f'Caching ChEMBL morgan_fp...')
-    filter_ = morgan_fp.notna()
-    morgan_fp = morgan_fp[filter_]
-    morgan_fp = pd.DataFrame(np.stack(morgan_fp.tolist()), index=morgan_fp.index)
-    morgan_fp.columns = morgan_fp.columns.astype(str)
-    morgan_fp.to_parquet(save_path, engine='fastparquet')
+    morgan_fps = [get_morgan_fp(s) for s in tqdm(smiles, total=len(smiles))]
+
+    filter_ = [fp is not None for fp in morgan_fps]
+    index = smiles.index[filter_].tolist()
+    morgan_fps = [fp for fp in morgan_fps if fp is not None]
+    morgan_fps = sparse.vstack(morgan_fps)
+    sparse.save_npz(save_path, morgan_fps)
+    with open(index_path, 'wb') as f:
+        pickle.dump(index, f)
 
 # %% BERT
 from transformers import BertTokenizerFast, BertModel
 import torch
 
-def get_bert_fp(smiles: list[str]):
+def get_bert_fp(smiles: list[str], device='cuda'):
     checkpoint = 'unikei/bert-base-smiles'
     tokenizer = BertTokenizerFast.from_pretrained(checkpoint)
     model = BertModel.from_pretrained(checkpoint)
-    model.to('cuda')
+    model.to(device)
 
     bert_fp = []
-    batch_size = 512
+    batch_size = 128
     for batch in tqdm(batched(smiles, batch_size), total= len(smiles) // batch_size + 1):
         tokens = tokenizer(batch, return_tensors='pt', padding=True, truncation=True, max_length=512)
-        tokens = {k: v.to('cuda') for k, v in tokens.items()}
+        tokens = {k: v.to(device) for k, v in tokens.items()}
         with torch.no_grad():
             predictions = model(**tokens)
         bert_fp.append(predictions.pooler_output.cpu().numpy())
 
     return bert_fp
 
-smiles = data.loc[morgan_fp.index].canonical_smiles
+smiles = data.loc[index].canonical_smiles
 
-smiles = data.canonical_smiles
-filter_ = smiles.notna()
-smiles = smiles[filter_]
-
-save_path = chembl_dir / 'bert_fp.parquet'
+save_path = chembl_dir / 'bert_fp.npy'
+device = 'mps'
 if save_path.exists():
     logger.info(f'Loading ChEMBL bert_fp from cache: {save_path}')
-    bert_fp = pd.read_parquet(save_path, engine='fastparquet')
+    bert_fp = np.load(save_path, allow_pickle=True)
 else:
     logger.info(f'Computing ChEMBL bert_fp...')
-    bert_fp = get_bert_fp(smiles.tolist())
-    bert_fp = pd.DataFrame(np.vstack(bert_fp), index=morgan_fp.index)
-    bert_fp.columns = bert_fp.columns.astype(str)
-    bert_fp.to_parquet(save_path, engine='fastparquet')
+    bert_fp = get_bert_fp(smiles.tolist(), device=device)
+    bert_fp = np.vstack(bert_fp)
+    np.save(save_path, bert_fp)
 
 # %% NF2
 import pandas as pd
-path = "/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/libraries/smiles/NF_smiles.txt.gz"
+path = data_dir / "libraries/smiles/NF_smiles.txt.gz"
 df = pd.read_csv(path, compression='gzip', sep='\t')
 
 df[['Scaffold_L1', 'Product_L1']]
 
-smiles = df.Product_L1
-save_path = nf2_dir / 'morgan_fp.parquet'
+smiles = df.Product_L1[:100]
+save_path = nf2_dir / 'morgan_fp.npz'
+index_path = nf2_dir / 'index.pkl'
 if save_path.exists():
     logger.info(f'Loading NF2 morgan_fp from cache: {save_path}')
-    morgan_fp = pd.read_parquet(save_path, engine='fastparquet')
+    morgan_fp = sparse.load_npz(save_path)
+    with open(index_path, 'rb') as f:
+        index = pickle.load(f)
 else:
     logger.info(f'Computing NF2 morgan_fp')
-    morgan_fp = smiles.map(get_morgan_fp)
-    filter_ = morgan_fp.notna()
-    morgan_fp = morgan_fp[filter_]
-    morgan_fp = pd.DataFrame(np.stack(morgan_fp.tolist()), index=morgan_fp.index)
-    morgan_fp.columns = morgan_fp.columns.astype(str)
-    morgan_fp.to_parquet(save_path, engine='fastparquet')
+    morgan_fps = [get_morgan_fp(s) for s in tqdm(smiles, total=len(smiles))]
 
-save_path = nf2_dir / 'bert_fp.parquet'
+    filter_ = [fp is not None for fp in morgan_fps]
+    index = smiles.index[filter_].tolist()
+    morgan_fps = [fp for fp in morgan_fps if fp is not None]
+    morgan_fps = sparse.vstack(morgan_fps)
+
+    sparse.save_npz(save_path, morgan_fps)
+    with open(index_path, 'wb') as f:
+        pickle.dump(index, f)
+
+save_path = nf2_dir / 'bert_fp.npy'
 if save_path.exists():
     logger.info(f'Loading NF2 bert_fp from cache: {save_path}')
-    bert_fp = pd.read_parquet(save_path, engine='fastparquet')
+    bert_fp = np.load(save_path, allow_pickle=True)
 else:
     logger.info(f'Computing NF2 bert_fp')
-    bert_fp = get_bert_fp(smiles.tolist())
-    bert_fp = pd.DataFrame(np.vstack(bert_fp))
-    bert_fp.columns = bert_fp.columns.astype(str)
-    bert_fp.to_parquet(save_path, engine='fastparquet')
+    bert_fp = get_bert_fp(smiles.tolist(), device=device)
+    bert_fp = np.vstack(bert_fp)
+    np.save(save_path, bert_fp)
 
 # %%
-num_obs = 1000
-save_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings')
-# for fp in ['morgan_fp', 'bert_fp']:
-for fp in ['morgan_fp']:
+num_obs = 100_000
+save_dir = data_dir / 'embeddings'
+rng = np.random.default_rng(42)
+is_sparse = False
+# for fp in ['morgan_fp']:
+for fp in ['morgan_fp.npz', 'bert_fp.npy']:
     logger.info(f'Computing UMAP for {fp}')
 
-    chembl_fp = pd.read_parquet(chembl_dir / f'{fp}.parquet', engine='fastparquet')
-    chembl_fp['lib'] = 'chembl'
-    chembl_fp = chembl_fp.sample(num_obs)
+    is_sparse = 'npz' in fp
 
-    nf2_fp = pd.read_parquet(nf2_dir / f'{fp}.parquet', engine='fastparquet')
-    nf2_fp['lib'] = 'nf2'
-    nf2_fp = nf2_fp.sample(num_obs)
+    chembl_fps = sparse.load_npz(chembl_dir / fp) if is_sparse else np.load(chembl_dir / fp, allow_pickle=True)
+    n = chembl_fps.shape[0]
+    idc = rng.choice(n, size=num_obs, replace=False)
+    chembl_fps = chembl_fps[idc]
+    labels = ['ChEMBL'] * num_obs
 
-    pdat = pd.concat([chembl_fp, nf2_fp], axis=0)
-    labels =  pdat.pop('lib')
+    nf2_fps = sparse.load_npz(nf2_dir / fp) if is_sparse else np.load(nf2_dir / fp, allow_pickle=True)
+    n = nf2_fps.shape[0]
+    idc = rng.choice(n, size=num_obs, replace=False)
+    nf2_fps = nf2_fps[idc]
+    labels += ['NF2'] * num_obs
 
-    mapper = umap.UMAP(metric='jaccard').fit(pdat)
+    pdat = sparse.vstack([chembl_fps, nf2_fps]) if is_sparse else np.vstack([chembl_fps, nf2_fps])
+    pdat = pdat.toarray() if is_sparse else pdat
+    labels = np.array(labels)
+
+    metric = 'jaccard' if fp == 'morgan_fp' else 'cosine'
+    mapper = umap.UMAP(metric=metric).fit(pdat)
     ax = umap.plot.points(mapper, labels=labels, background='black')
+    ax.set_title(f'{fp.split('.')[0]} - num_obs={num_obs}', fontsize=16)
     ax.figure.show()
     ax.figure.savefig(save_dir / f'{fp}-num_obs={num_obs}.png', dpi=300)
 
