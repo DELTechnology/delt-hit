@@ -10,10 +10,12 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 from tqdm import tqdm
 
-chembl_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings/ChEMBL')
+chembl_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/embeddings/ChEMBL')
+# chembl_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings/ChEMBL')
 chembl_dir.mkdir(parents=True, exist_ok=True)
 
-nf2_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings/NF2')
+# nf2_dir = Path('/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/embeddings/NF2')
+nf2_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/embeddings/NF2')
 nf2_dir.mkdir(parents=True, exist_ok=True)
 
 # %% DATA
@@ -33,10 +35,12 @@ LEFT JOIN
     drug_indication di ON md.molregno = di.molregno
 WHERE
     md.molecule_type IS NOT NULL
-LIMIT 500000;"""
+LIMIT 5000;"""
 # """
 
-ds = ChEMBL()
+base_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/ChEMBL')
+ds = ChEMBL(base_dir=base_dir)
+ds.prepare_data()
 ds.setup(query=query)
 smiles = ds[0]['canonical_smiles']
 
