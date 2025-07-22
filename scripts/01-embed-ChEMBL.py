@@ -88,8 +88,9 @@ def get_bert_fp(smiles: list[str]):
     model.to('cuda')
 
     bert_fp = []
-    for batch in tqdm(batched(smiles, 128)):
-        tokens = tokenizer(batch, return_tensors='pt', padding=True)
+    batch_size = 512
+    for batch in tqdm(batched(smiles, batch_size), total= len(smiles) // batch_size + 1):
+        tokens = tokenizer(batch, return_tensors='pt', padding=True, truncation=True, max_length=512)
         tokens = {k: v.to('cuda') for k, v in tokens.items()}
         with torch.no_grad():
             predictions = model(**tokens)
@@ -98,6 +99,11 @@ def get_bert_fp(smiles: list[str]):
     return bert_fp
 
 smiles = data.loc[morgan_fp.index].canonical_smiles
+
+smiles = data.canonical_smiles
+filter_ = smiles.notna()
+smiles = smiles[filter_]
+
 save_path = chembl_dir / 'bert_fp.parquet'
 if save_path.exists():
     logger.info(f'Loading ChEMBL bert_fp from cache: {save_path}')
@@ -162,6 +168,6 @@ for fp in ['morgan_fp']:
     mapper = umap.UMAP(metric='jaccard').fit(pdat)
     ax = umap.plot.points(mapper, labels=labels, background='black')
     ax.figure.show()
-    ax.figure.savefig(save_dir / f'{fp}.png', dpi=300)
+    ax.figure.savefig(save_dir / f'{fp}-num_obs={num_obs}.png', dpi=300)
 
 
