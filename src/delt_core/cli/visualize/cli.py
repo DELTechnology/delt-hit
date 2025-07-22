@@ -17,5 +17,5 @@ def viz():
 def show(path_to_file: Path):
     from ...visualizations.app import main
     import pandas as pd
-    df = pd.read_csv(path_to_file, sep='\t')
+    df = pd.read_csv(path_to_file, sep='\t', dtype=int)
     main(data=df)
