@@ -11,6 +11,9 @@ from rdkit.Chem import AllChem
 from scipy import sparse
 from tqdm import tqdm
 
+# device = 'mps'
+device = 'cuda'
+
 # base_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/ChEMBL')
 base_dir = None
 # data_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB')
@@ -39,8 +42,8 @@ LEFT JOIN
     drug_indication di ON md.molregno = di.molregno
 WHERE
     md.molecule_type IS NOT NULL
-LIMIT 5000;"""
-# """
+"""
+# LIMIT 5000;"""
 
 ds = ChEMBL(base_dir=base_dir)
 ds.prepare_data()
@@ -70,7 +73,7 @@ save_path = chembl_dir / 'morgan_fp.npz'
 index_path = chembl_dir / 'index.pkl'
 if save_path.exists():
     logger.info(f'Loading ChEMBL morgan_fp from cache: {save_path}')
-    morgan_fp = sparse.load_npz(save_path)
+    morgan_fps = sparse.load_npz(save_path)
     with open(index_path, 'rb') as f:
         index = pickle.load(f)
 else:
@@ -109,15 +112,14 @@ def get_bert_fp(smiles: list[str], device='cuda'):
 smiles = data.loc[index].canonical_smiles
 
 save_path = chembl_dir / 'bert_fp.npy'
-device = 'mps'
 if save_path.exists():
     logger.info(f'Loading ChEMBL bert_fp from cache: {save_path}')
-    bert_fp = np.load(save_path, allow_pickle=True)
+    bert_fps = np.load(save_path, allow_pickle=True)
 else:
-    logger.info(f'Computing ChEMBL bert_fp...')
-    bert_fp = get_bert_fp(smiles.tolist(), device=device)
-    bert_fp = np.vstack(bert_fp)
-    np.save(save_path, bert_fp)
+    logger.info(f'Computing ChEMBL bert_fps...')
+    bert_fps = get_bert_fp(smiles.tolist(), device=device)
+    bert_fps = np.vstack(bert_fps)
+    np.save(save_path, bert_fps)
 
 # %% NF2
 import pandas as pd
@@ -126,16 +128,17 @@ df = pd.read_csv(path, compression='gzip', sep='\t')
 
 df[['Scaffold_L1', 'Product_L1']]
 
-smiles = df.Product_L1[:100]
-save_path = nf2_dir / 'morgan_fp.npz'
+# smiles = df.Product_L1[:101]
+smiles = df.Product_L1
+save_path = nf2_dir / 'morgan_fps.npz'
 index_path = nf2_dir / 'index.pkl'
 if save_path.exists():
-    logger.info(f'Loading NF2 morgan_fp from cache: {save_path}')
-    morgan_fp = sparse.load_npz(save_path)
+    logger.info(f'Loading NF2 morgan_fps from cache: {save_path}')
+    morgan_fps = sparse.load_npz(save_path)
     with open(index_path, 'rb') as f:
         index = pickle.load(f)
 else:
-    logger.info(f'Computing NF2 morgan_fp')
+    logger.info(f'Computing NF2 morgan_fps')
     morgan_fps = [get_morgan_fp(s) for s in tqdm(smiles, total=len(smiles))]
 
     filter_ = [fp is not None for fp in morgan_fps]
@@ -147,23 +150,23 @@ else:
     with open(index_path, 'wb') as f:
         pickle.dump(index, f)
 
-save_path = nf2_dir / 'bert_fp.npy'
+save_path = nf2_dir / 'bert_fps.npy'
 if save_path.exists():
-    logger.info(f'Loading NF2 bert_fp from cache: {save_path}')
-    bert_fp = np.load(save_path, allow_pickle=True)
+    logger.info(f'Loading NF2 bert_fps from cache: {save_path}')
+    bert_fps = np.load(save_path, allow_pickle=True)
 else:
-    logger.info(f'Computing NF2 bert_fp')
-    bert_fp = get_bert_fp(smiles.tolist(), device=device)
-    bert_fp = np.vstack(bert_fp)
-    np.save(save_path, bert_fp)
+    logger.info(f'Computing NF2 bert_fps')
+    bert_fps = get_bert_fp(smiles.tolist(), device=device)
+    bert_fps = np.vstack(bert_fps)
+    np.save(save_path, bert_fps)
 
 # %%
 num_obs = 100_000
 save_dir = data_dir / 'embeddings'
 rng = np.random.default_rng(42)
 is_sparse = False
-# for fp in ['morgan_fp']:
-for fp in ['morgan_fp.npz', 'bert_fp.npy']:
+# for fp in ['morgan_fps']:
+for fp in ['morgan_fps.npz', 'bert_fps.npy']:
     logger.info(f'Computing UMAP for {fp}')
 
     is_sparse = 'npz' in fp
@@ -184,7 +187,7 @@ for fp in ['morgan_fp.npz', 'bert_fp.npy']:
     pdat = pdat.toarray() if is_sparse else pdat
     labels = np.array(labels)
 
-    metric = 'jaccard' if fp == 'morgan_fp' else 'cosine'
+    metric = 'jaccard' if fp == 'morgan_fps' else 'cosine'
     mapper = umap.UMAP(metric=metric).fit(pdat)
     ax = umap.plot.points(mapper, labels=labels, background='black')
     ax.set_title(f'{fp.split('.')[0]} - num_obs={num_obs}', fontsize=16)
