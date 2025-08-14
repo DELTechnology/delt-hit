@@ -24,7 +24,7 @@ delt-cli demultiplex init \
 -l $ROOT/libraries/AL_AGP_FC.xlsx \
 -s $ROOT/selections/selections_250812.xlsx
 
-EXPERIMENT_DIR=/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/experiments/alice-124-135-2025-08-14-09-34-40
+EXPERIMENT_DIR=/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/experiments/alice-124-135-2025-08-14-15-27-45
 delt-cli demultiplex run $EXPERIMENT_DIR/config.yml
 delt-cli qc report $EXPERIMENT_DIR
 delt-cli qc plot $EXPERIMENT_DIR
@@ -37,7 +37,7 @@ delt-cli demultiplex init \
 -l $ROOT/libraries/AL_CA.xlsx \
 -s $ROOT/selections/selections_250812.xlsx
 
-EXPERIMENT_DIR=/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/experiments/alice-136-151-2025-08-14-09-35-45
+EXPERIMENT_DIR=/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/experiments/alice-136-151-2025-08-14-15-28-22
 delt-cli demultiplex run $EXPERIMENT_DIR/config.yml
 delt-cli qc report $EXPERIMENT_DIR
 delt-cli qc plot $EXPERIMENT_DIR
