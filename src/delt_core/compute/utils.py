@@ -91,22 +91,31 @@ def compute_product(
         if smiles_2:
             react_1, react_2 = Chem.MolFromSmiles(smiles_1), Chem.MolFromSmiles(smiles_2)
             try:
-                product = rxn.RunReactants((react_1, react_2))[0][0]
+                products = rxn.RunReactants((react_1, react_2))
             except:
-                product = rxn.RunReactants((react_2, react_1))[0][0]
+                products = rxn.RunReactants((react_2, react_1))
         else:
             react = Chem.MolFromSmiles(smiles_1)
-            product = rxn.RunReactant(react, 0)[0][0]
+            products = rxn.RunReactant(react, 0)
+
+        if len(products) > 1:
+            error = {"smiles_1": smiles_1, "smiles_2": smiles_2, "smarts": smarts, 'error': 'MultipleProducts'}
+            return None, error
+
+        product = products[0][0]
+        # product = products[1][0]
 
     except IndexError as e:
-        print(f'Index Error performing reaction with smarts: {smarts};smiles_1: {smiles_1};smiles_2: {smiles_2}')
-        return 'C1CCC1'
+        # print(f'{{"smiles_1": "{smiles_1}", "smiles_2": "{smiles_2}", "smarts": "{smarts}"}},')
+        error = {"smiles_1": smiles_1, "smiles_2": smiles_2, "smarts": smarts, "error": "NoProduct"}
+        return None, error
 
     except ValueError as e:
-        print(f'Value Error performing reaction with smarts: {smarts};smiles_1: {smiles_1};smiles_2: {smiles_2}')
-        return 'C1CCC1'
+        error = {"smiles_1": smiles_1, "smiles_2": smiles_2, "smarts": smarts, 'error': 'ValueError'}
+        # print(f'Value Error performing reaction with smarts: {smarts};smiles_1: {smiles_1};smiles_2: {smiles_2}')
+        return None, error
 
-    return Chem.MolToSmiles(product)
+    return Chem.MolToSmiles(product), None
 
 
 def perform_reaction(

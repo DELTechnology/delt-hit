@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 import textwrap
 
+import numpy as np
+
 
 def print_report(
         experiment_path: Path,
@@ -13,7 +15,10 @@ def print_report(
     for region_id, report in reports.items():
         c_input = report['read_counts']['input']
         c_output = report['read_counts']['output']
-        c_output_proportion = c_output / c_input
+        if c_input == 0:
+            c_output_proportion = np.nan
+        else:
+            c_output_proportion = c_output / c_input
 
         region_report = {
             'region_id': region_id,

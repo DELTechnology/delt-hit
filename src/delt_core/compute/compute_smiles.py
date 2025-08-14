@@ -36,9 +36,11 @@ def compute_smiles(
 def perform_reaction_steps(
         index: int,
         library: tuple,
-        output_path: str,
+        output_path: Path,
         write_indices: bool = True,
 ) -> None:
+
+    errors = []
 
     tmp = output_path / 'tmp.txt'
     output_path = output_path / f'smiles{index}.txt'
@@ -54,7 +56,7 @@ def perform_reaction_steps(
     rows = []
 
     for bb in bb1:
-
+        errored = False
         if bb.ScaffoldID:  
             scaffold_id = bb.ScaffoldID
             scaffold = get_smiles(scaffold_id, scaffolds)
@@ -62,12 +64,19 @@ def perform_reaction_steps(
             
             if bb.SMILES:
                 for reaction_type in bb.ReactionType.split(','):
-                    product = perform_reaction(reaction_type.strip(), reactions, product, bb.SMILES)
-        
+                    product, error = perform_reaction(reaction_type.strip(), reactions, product, bb.SMILES)
+                    if product is None:
+                        assert error is not None
+                        errors.append(error)
+                        errored = True
+                        break
         else:
             scaffold = scaffold_id = 'None'
             product = bb.SMILES
-        
+
+        if errored:
+            continue
+
         code = insert_codon(const, bb.Codon)
         if write_indices:
             rows += [[str(scaffold_id), str(bb.ID), product, code]]
@@ -80,7 +89,7 @@ def perform_reaction_steps(
     for i, bbn in enumerate(bbs, 2):
         header.insert(i, f'BuildingBlock{i}_L{index}')
         write_gzip([header], tmp, 'wt')
-        
+
         with gzip.open(output_path, 'rt') as interms:
             next(interms)
 
@@ -92,8 +101,16 @@ def perform_reaction_steps(
                     product = interm[i]
                     if bb.SMILES:
                         for reaction_type in bb.ReactionType.split(','):
-                            product = perform_reaction(reaction_type.strip(), reactions, product, bb.SMILES)
-                    
+                            product, error = perform_reaction(reaction_type.strip(), reactions, product, bb.SMILES)
+                            if product is None:
+                                assert error is not None
+                                errors.append(error)
+                                errored = True
+                                break
+
+                    if errored:
+                        continue
+
                     code = insert_codon(interm[-1], bb.Codon)
                     if write_indices:
                         rows += [[*interm[:i], str(bb.ID), product, code]]
@@ -101,9 +118,14 @@ def perform_reaction_steps(
                         rows += [[*interm[:i], bb.SMILES, product, code]]
                 
                 write_gzip(rows, tmp)
-        
+
         os.rename(tmp, output_path)
 
+    errors = pd.DataFrame.from_records(errors)
+    errors_path = output_path.with_suffix('.err')
+    errors_path = '/work/FAC/FBM/DBC/mrapsoma/prometex/data/DECLT-DB/libraries/smiles/GB2.err'
+    print(errors_path)
+    errors.to_csv(errors_path, index=False)
 
 def hybridize(
         output_path: str,
