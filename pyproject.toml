@@ -26,8 +26,10 @@ dependencies = [
     "seaborn",
     "tqdm",
     "pyaml",
+    "jsonargparse",
+    "networkx",
 ]
-version = "0.0.1"  # refactor to dynamic with setuptools_scm
+version = "0.0.1"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -35,7 +37,7 @@ classifiers = [
 ]
 
 [project.scripts]
-delt-cli = "delt_core.cli.main:cli"
+delt-cli = "delt_core.cli.mainv2:cli"
 
 [project.urls]
 repository = "https://github.com/DELTechnology/delt-core"

@@ -10,6 +10,9 @@ from loguru import logger
 
 class Demultiplex:
 
+    def __init__(self):
+        pass
+
     def init(self, *, excel_path: Path):
         config = config_from_excel(excel_path)
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
@@ -23,7 +26,7 @@ class Demultiplex:
     def prepare(self, *, config_path: Path, fast_dev_run: bool = False):
         exec_path = generate_input_files(config_path=config_path, fast_dev_run=fast_dev_run)
 
-    def process(self, config_path: Path):
+    def process(self, *, config_path: Path):
         config = read_yaml(config_path)
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
         name = config['experiment']['name']
@@ -39,6 +42,28 @@ class Demultiplex:
 
         output_dir = save_dir / name / 'selections'
         save_counts(counts, output_dir=output_dir)
+
+    def report(self, *, config_path: Path):
+        from delt_core.quality_control.report import print_report
+        config = read_yaml(config_path)
+        save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
+        name = config['experiment']['name']
+
+        output_dir = save_dir / name / 'cutadapt_output_files'
+        save_path = save_dir / name / 'qc' / 'report.txt'
+        print_report(output_dir=output_dir, save_path=save_path)
+
+    def qc(self, *, config_path: Path):
+        from delt_core.quality_control.plot_codon_hits import plot_hits
+
+        config = read_yaml(config_path)
+        save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
+        name = config['experiment']['name']
+
+        output_dir = save_dir / name / 'cutadapt_output_files'
+        save_dir = save_dir / name / 'qc'
+        save_dir.mkdir(parents=True, exist_ok=True)
+        plot_hits(output_dir=output_dir, save_dir=save_dir)
 
     def run(self, *, config_path: Path, fast_dev_run: bool = False):
         exec_path = generate_input_files(config_path=config_path, fast_dev_run=fast_dev_run)

@@ -3,7 +3,7 @@ from jsonargparse import CLI
 from delt_core.cli.demultiplex.api import Demultiplex
 from delt_core.cli.assembly.api import Assembly  # add/remove as your modules land
 
-def main() -> None:
+def cli() -> None:
     """
     Entry point for the delt-core CLI.
 
@@ -22,4 +22,4 @@ def main() -> None:
     )
 
 if __name__ == "__main__":
-    main()
+    cli()

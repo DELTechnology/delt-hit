@@ -140,7 +140,7 @@ bash experiments/default-*/cutadapt_input_files/demultiplex.sh
 
 Compute count tables for the final reads:
 ```bash
-delt-cli demultiplex compute-counts experiments/default-*/config.yml experiments/default-*/cutadapt_output_files/reads_with_adapters.gz output_dir
+delt-cli demultiplex compute-counts experiments/default-*/config.yml experiments/default-*/cutadapt_output_files/reads_with_adapters.gz save_dir
 ```
 
 Convert old structure file to new configuration file:
