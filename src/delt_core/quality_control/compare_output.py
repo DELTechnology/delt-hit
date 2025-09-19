@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
+import delt_core.utils
 from .. import demultiplex as d
 
 
@@ -19,7 +20,7 @@ def get_selection_primer_ids_from_legacy_identifier(selection_name: str):
 
 def compare_counts_with_legacy(config: dict, legacy_results_dir: Path):
     root = Path(config['Root']) / 'evaluations'
-    _hash = d.utils.hash_dict(config['Structure'])
+    _hash = delt_core.utils.hash_dict(config['Structure'])
 
     for legacy_result_path in legacy_results_dir.glob('selection*.txt'):
         selection_primer_ids = get_selection_primer_ids_from_legacy_identifier(legacy_result_path.stem)

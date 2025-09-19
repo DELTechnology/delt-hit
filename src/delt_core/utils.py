@@ -1,6 +1,6 @@
-from datetime import datetime
 import hashlib
 import json
+from datetime import datetime
 from pathlib import Path
 
 import yaml
@@ -43,4 +43,3 @@ def hash_dict(
     hash_object = hashlib.sha256()
     hash_object.update(data_str.encode())
     return hash_object.hexdigest()
-

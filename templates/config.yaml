@@ -1,0 +1,3592 @@
+project:
+  name: test
+  date: 2025-09-16 00:00:00
+experiment:
+  name: test
+  fastq_path: /Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/fastq_files/368061_1-241105_AG_BZ_NC_pool1_NF_S3_R1_001.fastq.gz
+  save_dir: /Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/
+  num_cores: 10
+structure:
+- name: S0
+  type: selection
+  max_error_rate: 0
+  indels: false
+- name: C0
+  type: constant
+  max_error_rate: 0
+  indels: false
+- name: B0
+  type: building_block
+  max_error_rate: 0
+  indels: false
+- name: C1
+  type: constant
+  max_error_rate: 0
+  indels: false
+- name: B1
+  type: building_block
+  max_error_rate: 0
+  indels: false
+- name: S1
+  type: selection
+  max_error_rate: 0
+  indels: false
+catalog:
+  scaffolds:
+  - name: 1
+    smiles: Ic1ccc(CC(N=[N+]=[N-])C(O)=O)cc1
+  - name: 2
+    smiles: '[N-]=[N+]=NC(C(O)=O)Cc1cc(I)ccc1'
+  - name: 3
+    smiles: '[N-]=[N+]=NC(C(O)=O)Cc1c(I)cccc1'
+  reactions:
+  - name: ABF
+    smirks: '[CX3:1](=[O:2])[OX2;H1].[N;H2:4]>>[CX3:1](=[O:2])[N;H:4]'
+  - name: SR
+    smirks: '[#6:1][$([NX2-][NX2+]#[NX1]),$([NX2]=[NX2+]=[NX1-])]>>[#6:1][N;H2]'
+  - name: CuAAC
+    smirks: '[CX2:1]#[CX2;H1:2].[N:3]=[N+:4]=[N-:5]>>[C:1]1=[C:2][N-0:3][N-0:4]=[N-0:5]1'
+  - name: Suz
+    smirks: '[cX3:1][I].[#6:2][BX3]>>[cX3:1][#6:2]'
+  - name: Son
+    smirks: '[cX3:1][I].[CX2:2]#[CX2;H1:3]>>[cX3:1]-[CX2:3]#[CX2:2]'
+  - name: DH
+    smirks: '[cX3:1][I]>>[cX3;H1:1]'
+  - name: DT
+    smirks: '[#6:1][N;H2:2]>>[#6:1][N:2]=[N+]=[N-]'
+  - name: SN2-1
+    smirks: ([#6:1][S;H1:2].[C;H2:3][Cl,Br])>>[#6:1][S:2][C;H2:3]
+  - name: SN2-2
+    smirks: '[#6:1][S;H1:2].[C;H2:3][Cl,Br]>>[#6:1][S:2][C;H2:3]'
+whitelists:
+  S0:
+  - codon: GGAGCTTCTGAATTCTGTGTGCTG
+  S1:
+  - codon: CGAGTCCCATGGCGCCGGATCGACG
+  C0:
+  - codon: GGAGCTTCTGAATTCTGTGTGCTG
+  C1:
+  - codon: CGAGTCCCATGGCGCCGGATCGACG
+  C2:
+  - codon: GCGTCAGGCAGC
+  B1:
+  - smiles: OB(O)c1cc(ccc1Cl)C#N
+    codon: GTCTCAC
+    reaction: Suz
+  - smiles: COc1ccc(B(O)O)c(F)c1
+    codon: GTCGTAC
+    reaction: Suz
+  - smiles: O.Nc1cccc(c1)B(O)O
+    codon: CTCATTG
+    reaction: Suz
+  - smiles: Cc1cc(ccc1F)B(O)O
+    codon: GTAGAGA
+    reaction: Suz
+  - smiles: COc1ccc(cc1)B(O)O
+    codon: GTTACCT
+    reaction: Suz
+  - smiles: Cc1cc(F)cc(c1)B(O)O
+    codon: AGTAATT
+    reaction: Suz
+  - smiles: OCc1ccc(cc1)B(O)O
+    codon: AGTGAGC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(OC(F)F)cc1
+    codon: ACTGATA
+    reaction: Suz
+  - smiles: COc1ccc(cc1C)B(O)O
+    codon: ACGTATA
+    reaction: Suz
+  - smiles: COc1ccc(Cl)cc1B(O)O
+    codon: TTCTCCT
+    reaction: Suz
+  - smiles: Cc1cccc(C)c1B(O)O
+    codon: AACTGCT
+    reaction: Suz
+  - smiles: COc1cc(ccc1Cl)B(O)O
+    codon: CACACAC
+    reaction: Suz
+  - smiles: Cl.NCc1ccc(cc1)B(O)O
+    codon: CACGTGT
+    reaction: Suz
+  - smiles: OB(O)c1cccc(C#N)c1F
+    codon: CGAGGTG
+    reaction: Suz
+  - smiles: OB(O)c1cccc(c1)C(F)F
+    codon: AAGCGAG
+    reaction: Suz
+  - smiles: Cc1cccc(B(O)O)c1F
+    codon: GCGCATG
+    reaction: Suz
+  - smiles: OB(O)c1c(F)cc(O)cc1F
+    codon: GTTGGTC
+    reaction: Suz
+  - smiles: Cc1ccc(F)c(c1)B(O)O
+    codon: CTTCTCT
+    reaction: Suz
+  - smiles: OB(O)c1cccc(C=O)c1F
+    codon: TTGCACG
+    reaction: Suz
+  - smiles: COCc1ccc(cc1)B(O)O
+    codon: GAGTAGA
+    reaction: Suz
+  - smiles: COc1ccccc1B(O)O
+    codon: ATGTGAG
+    reaction: Suz
+  - smiles: COCc1ccccc1B(O)O
+    codon: AACGTAT
+    reaction: Suz
+  - smiles: COc1cccc(c1)B(O)O
+    codon: TCCGGCT
+    reaction: Suz
+  - smiles: CC(C)Oc1ccc(cc1)B(O)O
+    codon: TGATGAT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(O)c(Cl)c1
+    codon: TGTGGAC
+    reaction: Suz
+  - smiles: OB(O)c1cccc(c1)[N+](=O)[O-]
+    codon: GTAGTGC
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)ccc1C=C
+    codon: GCAACAC
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)ccc1C=O
+    codon: AAGACCG
+    reaction: Suz
+  - smiles: OB(O)c1cccc(c1)C(=O)O
+    codon: AGAGAGA
+    reaction: Suz
+  - smiles: OCCNS(=O)(=O)c1ccc(cc1)B(O)O
+    codon: TCGAGAT
+    reaction: Suz
+  - smiles: Cc1ccc(Cl)c(c1)B(O)O
+    codon: CCGACTT
+    reaction: Suz
+  - smiles: CCOc1ccc(C)cc1B(O)O
+    codon: TGAGATA
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)cc(C=O)c1
+    codon: TTGGCGT
+    reaction: Suz
+  - smiles: COc1cccc(B(O)O)c1F
+    codon: AATCCTC
+    reaction: Suz
+  - smiles: OB(O)c1cncc(F)c1
+    codon: CACGTAC
+    reaction: Suz
+  - smiles: OB(O)c1cccc2ncccc12
+    codon: CACACGA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)c(C=O)c1
+    codon: CGTAACA
+    reaction: Suz
+  - smiles: OCc1cc(F)cc(c1)B(O)O
+    codon: AATTCCG
+    reaction: Suz
+  - smiles: CS(=O)(=O)c1ccccc1B(O)O
+    codon: GCGTTAC
+    reaction: Suz
+  - smiles: OB(O)c1cc(O)ccc1Cl
+    codon: CTCCATT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(CC#N)cc1
+    codon: CGCCGGT
+    reaction: Suz
+  - smiles: Cc1cc(Cl)ccc1B(O)O
+    codon: GTAAGAC
+    reaction: Suz
+  - smiles: OB(O)c1cccc(CC(=O)O)c1
+    codon: GCTGAAT
+    reaction: Suz
+  - smiles: CCNC(=O)c1ccc(F)c(c1)B(O)O
+    codon: ATAAGGT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(C(=O)O)c(F)c1
+    codon: ATCATTC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)cc1C=O
+    codon: AGCGAGT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)C(F)F
+    codon: CCAGACT
+    reaction: Suz
+  - smiles: Cc1ccc(cc1Cl)B(O)O
+    codon: TGACCAG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)[N+](=O)[O-]
+    codon: GCCTACA
+    reaction: Suz
+  - smiles: COc1ccc(Cl)c(c1)B(O)O
+    codon: GCCTCGT
+    reaction: Suz
+  - smiles: COC(=O)c1cncc(c1)B(O)O
+    codon: TGTCGTT
+    reaction: Suz
+  - smiles: COCc1cccc(c1)B(O)O
+    codon: GTCTGAA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)C(=O)O
+    codon: CCGTACT
+    reaction: Suz
+  - smiles: OB(O)c1ccc2ncccc2c1
+    codon: AGGTGTC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)cc1
+    codon: TGCCTGG
+    reaction: Suz
+  - smiles: COc1ccncc1B(O)O
+    codon: AGGATGC
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1C(=O)O
+    codon: GTTATGC
+    reaction: Suz
+  - smiles: COc1cc(Cl)ccc1B(O)O
+    codon: GTAGGAA
+    reaction: Suz
+  - smiles: Cc1ccc(B(O)O)c(F)c1
+    codon: GTGTCGT
+    reaction: Suz
+  - smiles: Cc1ccc(Cl)cc1B(O)O
+    codon: GCTCCTT
+    reaction: Suz
+  - smiles: OB(O)c1cc(C=O)ccc1F
+    codon: TTCTGAG
+    reaction: Suz
+  - smiles: OCc1ccccc1B(O)O
+    codon: TCATGGA
+    reaction: Suz
+  - smiles: COc1cc(ccc1F)B(O)O
+    codon: ATCGTAA
+    reaction: Suz
+  - smiles: OB(O)C1=CCCCC1
+    codon: GACTTAT
+    reaction: Suz
+  - smiles: Cc1ccc(cc1F)B(O)O
+    codon: CAACGTT
+    reaction: Suz
+  - smiles: Cc1cc(F)ccc1B(O)O
+    codon: CGATACT
+    reaction: Suz
+  - smiles: COc1cc(C)c(cc1C)B(O)O
+    codon: TACGATG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(CC#N)cc1F
+    codon: CCAGTGT
+    reaction: Suz
+  - smiles: CCOc1ccc(B(O)O)c(C)c1
+    codon: CCTGGTG
+    reaction: Suz
+  - smiles: Cc1c(Cl)cccc1B(O)O
+    codon: CCAGTTG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)c(c1)C#N
+    codon: TCATCGT
+    reaction: Suz
+  - smiles: OB(O)c1ccc2ccncc2c1
+    codon: ATATATC
+    reaction: Suz
+  - smiles: COc1ccc(B(O)O)c(OC)c1
+    codon: GTGCCGA
+    reaction: Suz
+  - smiles: NC(=O)c1ccc(cc1)B(O)O
+    codon: CAGACCA
+    reaction: Suz
+  - smiles: OB(O)c1c(F)cccc1C=O
+    codon: CGATTGC
+    reaction: Suz
+  - smiles: COc1ccc(OC)c(c1)B(O)O
+    codon: TACCTAC
+    reaction: Suz
+  - smiles: OB(O)c1cncc(Cl)c1
+    codon: GATGAGC
+    reaction: Suz
+  - smiles: OB(O)c1cccc(F)c1Cl
+    codon: CAGGTTC
+    reaction: Suz
+  - smiles: COc1ccc(F)c(c1)B(O)O
+    codon: ATAACTA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(C=O)cc1F
+    codon: ACGTCCG
+    reaction: Suz
+  - smiles: OB(O)c1cccc(CCl)c1
+    codon: GTGCATA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)cc1C=O
+    codon: GAATCAA
+    reaction: Suz
+  - smiles: OCc1ccc(B(O)O)c(F)c1
+    codon: ACTTGCG
+    reaction: Suz
+  - smiles: COc1cccc(Cl)c1B(O)O
+    codon: TGTTCGT
+    reaction: Suz
+  - smiles: CC(C)c1ccccc1B(O)O
+    codon: CCTCCGC
+    reaction: Suz
+  - smiles: COc1cc(Cl)cc(c1)B(O)O
+    codon: CTCATAT
+    reaction: Suz
+  - smiles: CCOc1ccc(cc1F)B(O)O
+    codon: CTGAAGG
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)cc(F)c1
+    codon: TCTAGCT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)C2CC2
+    codon: TTCCTGT
+    reaction: Suz
+  - smiles: Cc1ccc(cc1N)B(O)O
+    codon: GACTGGA
+    reaction: Suz
+  - smiles: COc1c(Cl)cccc1B(O)O
+    codon: TTAACCG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(C=O)cc1
+    codon: AGACTGA
+    reaction: Suz
+  - smiles: Cc1ccccc1B(O)O
+    codon: ATCTTGC
+    reaction: Suz
+  - smiles: Nc1cc(ccc1F)B(O)O
+    codon: CTAAGGC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)c(Cl)c1
+    codon: ATCGCAT
+    reaction: Suz
+  - smiles: OB(O)c1cc(C=O)ccc1Cl
+    codon: AAGTCCA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)cc1Cl
+    codon: CATTACG
+    reaction: Suz
+  - smiles: OB(O)c1cccc(O)c1
+    codon: ATAGCCT
+    reaction: Suz
+  - smiles: CC(=O)c1ccc(F)c(c1)B(O)O
+    codon: CCAGGTA
+    reaction: Suz
+  - smiles: COc1ccc(B(O)O)c(C=O)c1
+    codon: AGTAGTA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)c(O)c1
+    codon: TATGGAG
+    reaction: Suz
+  - smiles: Cc1ccc(cc1)B(O)O
+    codon: AGCACGA
+    reaction: Suz
+  - smiles: OB(O)c1cccc(F)c1
+    codon: AATTGCA
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1
+    codon: CAGATTG
+    reaction: Suz
+  - smiles: OB(O)c1cc(ccc1F)C#N
+    codon: GTCCAAG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(nc1)C(F)(F)F
+    codon: ATGCGCT
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1F
+    codon: ACATAGT
+    reaction: Suz
+  - smiles: CNC(=O)c1ccc(cc1Cl)B(O)O
+    codon: ATAGAGC
+    reaction: Suz
+  - smiles: CC(C)c1cccc(c1)B(O)O
+    codon: TATGTCG
+    reaction: Suz
+  - smiles: Cc1ccc(cn1)B(O)O
+    codon: TATCATT
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)cc(Cl)c1
+    codon: CCTTCCG
+    reaction: Suz
+  - smiles: Cc1cccc(B(O)O)c1C
+    codon: TGCGTCG
+    reaction: Suz
+  - smiles: OB(O)c1cc(Cl)ccc1F
+    codon: AGAAGTG
+    reaction: Suz
+  - smiles: CCCc1ccc(cc1)B(O)O
+    codon: CGTAGGA
+    reaction: Suz
+  - smiles: COc1ccc(F)cc1B(O)O
+    codon: CTGTTAG
+    reaction: Suz
+  - smiles: OB(O)c1ccc2cc[nH]c2c1
+    codon: ACGATCA
+    reaction: Suz
+  - smiles: Cc1ccc(B(O)O)c(C)c1
+    codon: TCGTACA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)c2ccccc12
+    codon: CTATTAT
+    reaction: Suz
+  - smiles: CCc1ccc(cc1)B(O)O
+    codon: CGCAGGC
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)cc(c1)C#N
+    codon: TAGCTTC
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)c(F)c(F)c1
+    codon: CCTTCTC
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)ccc1F
+    codon: CTGGCCG
+    reaction: Suz
+  - smiles: OB(O)c1cc(O)cc(F)c1
+    codon: GTCGAGC
+    reaction: Suz
+  - smiles: Nc1cccc(c1)B(O)O
+    codon: TAGATTA
+    reaction: Suz
+  - smiles: CNC(=O)c1ccc(cc1)B(O)O
+    codon: TTGATAC
+    reaction: Suz
+  - smiles: OB(O)c1cccc(C=O)c1
+    codon: GCACAAT
+    reaction: Suz
+  - smiles: OB(O)c1cccc(F)c1F
+    codon: GCTTGAG
+    reaction: Suz
+  - smiles: CC(=O)c1cccc(c1)B(O)O
+    codon: TACTTGG
+    reaction: Suz
+  - smiles: OB(O)c1cc(Cl)ccc1Cl
+    codon: CCACATA
+    reaction: Suz
+  - smiles: CCc1ccccc1B(O)O
+    codon: GACAGTC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)cc1F
+    codon: CGCGTTA
+    reaction: Suz
+  - smiles: COc1ccc(cc1OC)B(O)O
+    codon: ATCTCCG
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1Cl
+    codon: CTTGCAC
+    reaction: Suz
+  - smiles: CCS(=O)(=O)c1ccc(cc1)B(O)O
+    codon: TGTCACT
+    reaction: Suz
+  - smiles: COc1cccc(B(O)O)c1OC
+    codon: GTGCGTG
+    reaction: Suz
+  - smiles: CC(=O)c1ccccc1B(O)O
+    codon: ACGCATC
+    reaction: Suz
+  - smiles: COc1cc(cc(F)c1F)B(O)O
+    codon: GACGCGT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)cc1
+    codon: AGCGACG
+    reaction: Suz
+  - smiles: CCOC(=O)c1cccc(B(O)O)c1F
+    codon: GCCGTAG
+    reaction: Suz
+  - smiles: OCc1cc(ccc1F)B(O)O
+    codon: CTCAGCA
+    reaction: Suz
+  - smiles: Cc1cccc(c1)B(O)O
+    codon: CTTACCA
+    reaction: Suz
+  - smiles: Cl.Nc1cccc(c1)B(O)O
+    codon: GCAGGTG
+    reaction: Suz
+  - smiles: CS(=O)c1ccccc1B(O)O
+    codon: CCGGCTG
+    reaction: Suz
+  - smiles: OB(O)c1cccc(c1)C#N
+    codon: CAACAAC
+    reaction: Suz
+  - smiles: CS(=O)(=O)Nc1ccccc1B(O)O
+    codon: CGTTCAG
+    reaction: Suz
+  - smiles: COc1c(Cl)cc(cc1Cl)B(O)O
+    codon: CCACGAA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)nc1
+    codon: CGGAGAG
+    reaction: Suz
+  - smiles: NC(=O)c1ccc(cc1F)B(O)O
+    codon: GTCATGA
+    reaction: Suz
+  - smiles: OB(O)c1cc(Cl)cc(Cl)c1
+    codon: ACTGACG
+    reaction: Suz
+  - smiles: NC(=O)c1cc(cc(c1)[N+](=O)[O-])B(O)O
+    codon: TGACGGA
+    reaction: Suz
+  - smiles: COc1ccc(OC)c(B(O)O)c1OC
+    codon: TCTTATT
+    reaction: Suz
+  - smiles: OB(O)c1cccc(OC(F)F)c1
+    codon: ATACTAC
+    reaction: Suz
+  - smiles: COC(=O)c1ccc(cc1OC)B(O)O
+    codon: TAGCCGT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)c(F)c1
+    codon: TCCACGG
+    reaction: Suz
+  - smiles: OCc1ccc(Cl)c(c1)B(O)O
+    codon: CGGCTTC
+    reaction: Suz
+  - smiles: Cc1c(F)cccc1B(O)O
+    codon: TGTGCTT
+    reaction: Suz
+  - smiles: COc1cc(cc(OC)c1OC)B(O)O
+    codon: TTGTCTT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(CBr)cc1
+    codon: ATAGTCA
+    reaction: Suz
+  - smiles: OB(O)c1cccc(F)c1O
+    codon: TGGAGTA
+    reaction: Suz
+  - smiles: COc1cc(OC)cc(c1)B(O)O
+    codon: CGGATGG
+    reaction: Suz
+  - smiles: CC(=O)c1ccc(cc1)B(O)O
+    codon: GCTACCA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)c(c1)C#N
+    codon: ACAACGA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1[N+](=O)[O-])C(=O)O
+    codon: TTGATGA
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1C2CC2
+    codon: GAGCCGC
+    reaction: Suz
+  - smiles: OB(O)c1ccc2[nH]ccc2c1
+    codon: GATTAAT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(OCC#N)cc1
+    codon: GATGCGG
+    reaction: Suz
+  - smiles: CC(=O)NCc1ccc(cc1)B(O)O
+    codon: TAACGTA
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)n1cccc1B(O)O
+    codon: ACGCGTT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)c(Cl)c1
+    codon: CGGCCGT
+    reaction: Suz
+  - smiles: CC(C)(C)NS(=O)(=O)c1ccc(cc1)B(O)O
+    codon: ATGGTTA
+    reaction: Suz
+  - smiles: OB(O)c1cccc(c1)C(F)(F)F
+    codon: GTCGCCG
+    reaction: Suz
+  - smiles: Cc1nn(C)c2cc(ccc12)B(O)O
+    codon: TACGTCA
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)cc(CC#N)c1
+    codon: AGCTCTT
+    reaction: Suz
+  - smiles: Cc1cc(ccc1B(O)O)S(=O)(=O)N
+    codon: CATTGTT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(C=O)s1
+    codon: ACAGGAA
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1C#N
+    codon: TCTATGC
+    reaction: Suz
+  - smiles: OB(O)c1oc2ccccc2c1
+    codon: TAATACA
+    reaction: Suz
+  - smiles: COc1ccc(C=O)cc1B(O)O
+    codon: TACTCGA
+    reaction: Suz
+  - smiles: CS(=O)(=O)c1cccc(c1)B(O)O
+    codon: TGTCTAG
+    reaction: Suz
+  - smiles: OB(O)c1cccc(Cl)c1F
+    codon: TTCGCTC
+    reaction: Suz
+  - smiles: CC(=O)Nc1cccc(c1)B(O)O
+    codon: GCTCAGT
+    reaction: Suz
+  - smiles: OB(O)c1cccc(OC(F)(F)F)c1F
+    codon: TACAGGA
+    reaction: Suz
+  - smiles: Cc1ccc(cc1B(O)O)S(=O)(=O)N2CCCC2
+    codon: CCGGAAG
+    reaction: Suz
+  - smiles: CN(C)S(=O)(=O)c1ccc(cc1)B(O)O
+    codon: CCACGCT
+    reaction: Suz
+  - smiles: CS(=O)(=O)Nc1cccc(c1)B(O)O
+    codon: AGATAAG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(OC2CCCCO2)cc1
+    codon: ATCAGAC
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)c1ccc(cc1)B(O)O
+    codon: ATCTCAA
+    reaction: Suz
+  - smiles: CS(=O)(=O)c1ccc(B(O)O)c(F)c1
+    codon: GTAACTC
+    reaction: Suz
+  - smiles: OB(O)c1ccc2cn[nH]c2c1
+    codon: ACAGTAG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)N2CCOCC2
+    codon: CGCTGTA
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1C=O
+    codon: GAGCCAT
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)ccc1Cl
+    codon: ACTCTTG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)cc1F
+    codon: TGTAGAG
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1OCC#N
+    codon: AGAACAA
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1C(F)(F)F
+    codon: ATCTACT
+    reaction: Suz
+  - smiles: Cc1c(cc(cc1[N+](=O)[O-])[N+](=O)[O-])B(O)O
+    codon: GATAACG
+    reaction: Suz
+  - smiles: COc1ncc(cn1)B(O)O
+    codon: TTACGCT
+    reaction: Suz
+  - smiles: CC(C)(C#N)c1ccc(cc1)B(O)O
+    codon: TAGACGA
+    reaction: Suz
+  - smiles: CNC(=O)c1cccc(c1)B(O)O
+    codon: AAGCATG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)C(=O)N2CCC(=O)CC2
+    codon: GACTTCA
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)NCc1ccc(F)cc1B(O)O
+    codon: ATGTGTT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)cc1Cl
+    codon: GTATGGA
+    reaction: Suz
+  - smiles: OB(O)c1cccc(CC#N)c1F
+    codon: CGGTTAA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)c(F)c1
+    codon: TTACGAG
+    reaction: Suz
+  - smiles: OB(O)c1cccnc1Cl
+    codon: ATTCTGG
+    reaction: Suz
+  - smiles: OB(O)c1cn[nH]c1
+    codon: CTATGCG
+    reaction: Suz
+  - smiles: COc1ccc(B(O)O)c(c1)C(F)(F)F
+    codon: CCGTTAT
+    reaction: Suz
+  - smiles: COc1cncc(c1)B(O)O
+    codon: ACGCTGT
+    reaction: Suz
+  - smiles: COc1cc2ccc(cc2cn1)B(O)O
+    codon: CTAGTGA
+    reaction: Suz
+  - smiles: OB(O)c1cc(ccc1Cl)C(F)(F)F
+    codon: TTACAGG
+    reaction: Suz
+  - smiles: O.CN(C)c1ccc(cn1)B(O)O
+    codon: GTAGCCA
+    reaction: Suz
+  - smiles: CS(=O)(=O)NCc1ccc(cc1)B(O)O
+    codon: CCTGTCG
+    reaction: Suz
+  - smiles: OB(O)c1cc(Cl)cc(c1)C(F)(F)F
+    codon: GCACGTC
+    reaction: Suz
+  - smiles: CC(C)(C)NS(=O)(=O)c1cccc(c1)B(O)O
+    codon: TTGGCTA
+    reaction: Suz
+  - smiles: OB(O)c1cccc(CC(=O)O)c1F
+    codon: TTAAGTG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(CC(=O)O)cc1F
+    codon: TAGGAAC
+    reaction: Suz
+  - smiles: CC(C)OC(=O)c1cccc(c1)B(O)O
+    codon: GTGATGG
+    reaction: Suz
+  - smiles: OB(O)c1cc(OC(F)(F)F)ccc1F
+    codon: ACAAGAG
+    reaction: Suz
+  - smiles: OB(O)c1ccc2OC(F)(F)C(F)(F)Oc2c1
+    codon: ACATGAT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)C(F)(F)F
+    codon: TTGCCTG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)cc1C(F)(F)F
+    codon: GAGTCTT
+    reaction: Suz
+  - smiles: COc1cc(C)c(cn1)B(O)O
+    codon: CGCGGAG
+    reaction: Suz
+  - smiles: CS(=O)(=O)c1ccc(cc1)B(O)O
+    codon: ATCTGTC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)c(c1)C(=O)O
+    codon: CGTAGTG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(F)nc1F
+    codon: GAGCAGG
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)c1cccc(c1)B(O)O
+    codon: AGCTGAA
+    reaction: Suz
+  - smiles: OCCNC(=O)c1cccc(c1)B(O)O
+    codon: TCGCCGC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(OC(F)(F)F)cc1
+    codon: CGCCTGC
+    reaction: Suz
+  - smiles: COc1ccc(cc1B(O)O)C(F)(F)F
+    codon: AACGACT
+    reaction: Suz
+  - smiles: OB(O)c1cccc2cc(Cl)ncc12
+    codon: GCGTATT
+    reaction: Suz
+  - smiles: OB(O)c1cccc2cnc(Cl)cc12
+    codon: CACGGTC
+    reaction: Suz
+  - smiles: OB(O)c1cc(O)cc(OC(F)(F)F)c1
+    codon: GAGCAAC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1Cl)C(F)(F)F
+    codon: ATTAAGT
+    reaction: Suz
+  - smiles: COc1cc2c(cccc2cn1)B(O)O
+    codon: GAGTATG
+    reaction: Suz
+  - smiles: OB(O)c1cc2ccccc2nc1Cl
+    codon: CCTTGGC
+    reaction: Suz
+  - smiles: Cn1ncc2cc(F)c(cc12)B(O)O
+    codon: CTTCCTC
+    reaction: Suz
+  - smiles: COc1ncc(B(O)O)c(OC)n1
+    codon: TTGGTCG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(c(Cl)c1)C(F)(F)F
+    codon: GTGGCTT
+    reaction: Suz
+  - smiles: OB(O)c1cccc2c(Cl)nccc12
+    codon: TCAACTC
+    reaction: Suz
+  - smiles: CC(C)(C)Oc1ncccc1B(O)O
+    codon: GTGAGTC
+    reaction: Suz
+  - smiles: Cn1ncc2cccc(B(O)O)c12
+    codon: AATGATG
+    reaction: Suz
+  - smiles: OB(O)c1cocc1
+    codon: CCAGCTC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)S(=O)(=O)n2cccc2
+    codon: AACAAGG
+    reaction: Suz
+  - smiles: OB(O)c1ccc2OCCOc2c1
+    codon: GCTGCCG
+    reaction: Suz
+  - smiles: Cl.COc1ccncc1B(O)O
+    codon: TTGTCCG
+    reaction: Suz
+  - smiles: CC(C)(C)OCc1cccc(c1)B(O)O
+    codon: GCGTAGG
+    reaction: Suz
+  - smiles: OB(O)c1cccc2[nH]ncc12
+    codon: GAACCTG
+    reaction: Suz
+  - smiles: CNC(=O)c1cc(ccc1F)B(O)O
+    codon: AGGTAGG
+    reaction: Suz
+  - smiles: OB(O)c1cccc2cnccc12
+    codon: CAATATT
+    reaction: Suz
+  - smiles: COC(=O)Nc1ccc(cc1)B(O)O
+    codon: ATCACTG
+    reaction: Suz
+  - smiles: COc1ccc(cn1)B(O)O
+    codon: CAACGAG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)C2CC(=O)NN2
+    codon: CGAACGC
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1S(=O)(=O)N2CCOCC2
+    codon: GCTCGCT
+    reaction: Suz
+  - smiles: CC1(C)OB(OC1(C)C)c2ccc(N)cc2
+    codon: TAACTAG
+    reaction: Suz
+  - smiles: CCN(CC)S(=O)(=O)c1ccc(C)c(c1)B(O)O
+    codon: CTTCTAC
+    reaction: Suz
+  - smiles: COc1ncccc1B(O)O
+    codon: ATATGCT
+    reaction: Suz
+  - smiles: Cn1ncc2cc(ccc12)B(O)O
+    codon: GCAAGCT
+    reaction: Suz
+  - smiles: CCOc1ncccc1B(O)O
+    codon: CGTGATT
+    reaction: Suz
+  - smiles: CC1(C)OB(OC1(C)C)c2ccc(cc2F)C#N
+    codon: CCGAATC
+    reaction: Suz
+  - smiles: Cl.COC(=O)c1cc(N)cc(c1)B2OC(C)(C)C(C)(C)O2
+    codon: TCAGGCG
+    reaction: Suz
+  - smiles: OB(O)c1cccc(CBr)c1F
+    codon: CATGCGT
+    reaction: Suz
+  - smiles: OB(O)c1cc(F)cc(c1)C(F)(F)F
+    codon: TGGAAGC
+    reaction: Suz
+  - smiles: Cc1cc(ccc1B(O)O)C(F)(F)F
+    codon: CTTAACT
+    reaction: Suz
+  - smiles: CCOc1ccc(Cl)cc1B(O)O
+    codon: AAGGCGT
+    reaction: Suz
+  - smiles: O.OB(O)c1ccc(F)nc1F
+    codon: AGGTTCT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(C(=O)O)c(Cl)c1
+    codon: TTACAAT
+    reaction: Suz
+  - smiles: CC1CCC(=CC1)B(O)O
+    codon: CGACGAC
+    reaction: Suz
+  - smiles: COc1ccc(C=O)c(c1)B(O)O
+    codon: CGTGAAG
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)Nc1cccc(c1)B(O)O
+    codon: ACACCGG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)c(c1)[N+](=O)[O-]
+    codon: AACCTTA
+    reaction: Suz
+  - smiles: NS(=O)(=O)c1ccc(cc1)B(O)O
+    codon: AGTTCGG
+    reaction: Suz
+  - smiles: COc1ccc(cc1B(O)O)C(=O)O
+    codon: TGATTCT
+    reaction: Suz
+  - smiles: OB(O)c1ccc2[nH]ncc2c1
+    codon: CTCGAGT
+    reaction: Suz
+  - smiles: CC1(C)OB(OC1(C)C)c2ccccc2OC(F)F
+    codon: TACACTC
+    reaction: Suz
+  - smiles: OB(O)c1cc(OC(F)(F)F)ccc1Cl
+    codon: CGTGTAC
+    reaction: Suz
+  - smiles: Cc1cc(Cl)ncc1B(O)O
+    codon: CCGCTGA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(s1)C(=O)O
+    codon: ACGCGCA
+    reaction: Suz
+  - smiles: OB(O)c1cn(c2ccccc12)S(=O)(=O)c3ccccc3
+    codon: GCCGCTT
+    reaction: Suz
+  - smiles: OB(O)c1ccsc1
+    codon: CACCTCT
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)Nc1ccc(cc1)B(O)O
+    codon: GCTTCAC
+    reaction: Suz
+  - smiles: OB(O)c1ccc2OCCCOc2c1
+    codon: GACCAGC
+    reaction: Suz
+  - smiles: CNC(=O)c1ccc(cc1F)B(O)O
+    codon: TCTTCAG
+    reaction: Suz
+  - smiles: CC1(C)OB(OC1(C)C)c2ccc(F)c(F)c2F
+    codon: TAGTCGG
+    reaction: Suz
+  - smiles: CS(=O)(=O)c1cncc(c1)B(O)O
+    codon: GTGTCAA
+    reaction: Suz
+  - smiles: COc1ncc(F)cc1B(O)O
+    codon: TAGGTCT
+    reaction: Suz
+  - smiles: OB(O)c1ccc2cccnc2c1
+    codon: GAACTAC
+    reaction: Suz
+  - smiles: OB(O)c1cnc2ccccc2c1
+    codon: CTGTAGT
+    reaction: Suz
+  - smiles: OB(O)c1cccc2ccncc12
+    codon: CAATTGG
+    reaction: Suz
+  - smiles: Cc1ccncc1B(O)O
+    codon: ATACAGT
+    reaction: Suz
+  - smiles: COc1ccc(B(O)O)c(OC)n1
+    codon: AAGCAAT
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)C(=O)NCc2occc2
+    codon: GCGTGCG
+    reaction: Suz
+  - smiles: CN(C)C(=O)c1ccc(cc1)B(O)O
+    codon: CGGTATG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)c(c1)C(F)(F)F
+    codon: TATCGGA
+    reaction: Suz
+  - smiles: CN(C)C(=O)c1ccc(cc1Cl)B(O)O
+    codon: TGGTAAC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)C(=O)NCCN2CCOCC2
+    codon: GCGGAGA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(Cl)nc1Cl
+    codon: AGCTAAC
+    reaction: Suz
+  - smiles: OB(O)c1occc1
+    codon: TGCCTTC
+    reaction: Suz
+  - smiles: Cc1onc(C)c1B(O)O
+    codon: TGCCGGC
+    reaction: Suz
+  - smiles: OB(O)c1cccnc1C(F)(F)F
+    codon: ACTGCTC
+    reaction: Suz
+  - smiles: CN(C)C(=O)c1ccccc1B(O)O
+    codon: TCCTATA
+    reaction: Suz
+  - smiles: Cn1ncc2ccc(cc12)B(O)O
+    codon: AACGGTT
+    reaction: Suz
+  - smiles: CCNS(=O)(=O)c1ccc(cc1)B(O)O
+    codon: ACTCCGA
+    reaction: Suz
+  - smiles: OB(O)c1ccc2occc2c1
+    codon: CACGCAA
+    reaction: Suz
+  - smiles: OB(O)c1ccc(OC(F)(F)F)c(F)c1
+    codon: GCTCTAT
+    reaction: Suz
+  - smiles: OB(O)c1cc(Cl)cc(c1)C(=O)N2CCOCC2
+    codon: AGAACCG
+    reaction: Suz
+  - smiles: CC(C)S(=O)(=O)c1ccc(cc1)B(O)O
+    codon: ATGATTG
+    reaction: Suz
+  - smiles: Cl.Cc1ccc(cn1)B(O)O
+    codon: GTGTACT
+    reaction: Suz
+  - smiles: CC(C)CC(=O)NS(=O)(=O)c1ccc(cc1)B(O)O
+    codon: GCTGCGC
+    reaction: Suz
+  - smiles: Cc1ccc(B(O)O)c(C)n1
+    codon: GCTTGTA
+    reaction: Suz
+  - smiles: CCOc1ccc(OC)cc1B(O)O
+    codon: GCTACTG
+    reaction: Suz
+  - smiles: OCCNC(=O)c1ccc(cc1F)B(O)O
+    codon: AGCATCT
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1OC(F)(F)F
+    codon: TATGCAC
+    reaction: Suz
+  - smiles: Cl.Nc1cc(cc(c1)B(O)O)C#N
+    codon: TTGACAT
+    reaction: Suz
+  - smiles: CN(C)C(=O)c1cccc(c1)B(O)O
+    codon: CCGTTCG
+    reaction: Suz
+  - smiles: OB(O)c1cccc(OC(F)(F)F)c1
+    codon: TATGATC
+    reaction: Suz
+  - smiles: COc1ccc(cc1C(=O)O)B(O)O
+    codon: CGTCAAC
+    reaction: Suz
+  - smiles: CNS(=O)(=O)c1ccc(cc1)B(O)O
+    codon: GCTCACA
+    reaction: Suz
+  - smiles: CC(C)OC(=O)c1ccc(cc1)B(O)O
+    codon: ACGAGAA
+    reaction: Suz
+  - smiles: Cc1cc(OC(F)(F)F)ccc1B(O)O
+    codon: TATATGA
+    reaction: Suz
+  - smiles: OB(O)c1cccnc1F
+    codon: TAGTAGT
+    reaction: Suz
+  - smiles: CC(C)(C)OCc1ccc(cc1)B(O)O
+    codon: CACAACG
+    reaction: Suz
+  - smiles: COc1cc(OC)c(B(O)O)c(OC)c1
+    codon: CAGTACA
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)n1c(cc2c(Cl)cccc12)B(O)O
+    codon: ACCGGAC
+    reaction: Suz
+  - smiles: Cc1cc2[nH]ncc2cc1B(O)O
+    codon: GCAGATT
+    reaction: Suz
+  - smiles: OB(O)c1ccc2cnc(Cl)cc2c1
+    codon: CCACCAC
+    reaction: Suz
+  - smiles: OB(O)c1cccc(c1)C(=O)N2CCOCC2
+    codon: AGAAGCA
+    reaction: Suz
+  - smiles: Cc1c(ccc2c1cnn2C)B(O)O
+    codon: TGCGATC
+    reaction: Suz
+  - smiles: OB(O)c1cccc2ccnc(Cl)c12
+    codon: AGGCAAC
+    reaction: Suz
+  - smiles: Cn1ncc2c(cccc12)B(O)O
+    codon: CATCAGC
+    reaction: Suz
+  - smiles: COc1ccc2c(c1)cc(B(O)O)n2C(=O)OC(C)(C)C
+    codon: GTTAGAT
+    reaction: Suz
+  - smiles: CC(C)NC(=O)c1cc(ccc1F)B(O)O
+    codon: CTGCAGC
+    reaction: Suz
+  - smiles: Cn1cc(cn1)B(O)O
+    codon: TCTTCCT
+    reaction: Suz
+  - smiles: Cc1c(cnn1C)B(O)O
+    codon: ATCTGGT
+    reaction: Suz
+  - smiles: OB(O)c1ccc2nccn2c1
+    codon: TGAACGG
+    reaction: Suz
+  - smiles: Cn1ccc2cc(ccc12)B(O)O
+    codon: CGCCACA
+    reaction: Suz
+  - smiles: Cc1ccc2c(c1)cc(B(O)O)n2C(=O)OC(C)(C)C
+    codon: TCATAGC
+    reaction: Suz
+  - smiles: Cl.Nc1cc(ccc1B(O)O)C#N
+    codon: ACCGATC
+    reaction: Suz
+  - smiles: CCCC\C=C\B(O)O
+    codon: ACCGTCA
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)n1c(cc2cc(ccc12)C#N)B(O)O
+    codon: TACTAAG
+    reaction: Suz
+  - smiles: Cn1c(cc2ccc(Cl)cc12)B(O)O
+    codon: GCACTAA
+    reaction: Suz
+  - smiles: OB(O)c1oc(C=O)cc1
+    codon: TAGGTGG
+    reaction: Suz
+  - smiles: OB(O)\C=C\c1ccccc1
+    codon: AGATATT
+    reaction: Suz
+  - smiles: OB(O)c1cccc(Cl)c1Cl
+    codon: ATTGTAG
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)n1c(cc2ccccc12)B(O)O
+    codon: TCACTCT
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)n1c(cc2ccc(cc12)C#N)B(O)O
+    codon: AACGCTA
+    reaction: Suz
+  - smiles: CC1(C)CCC(=CC1)B(O)O
+    codon: TATGGCT
+    reaction: Suz
+  - smiles: Cc1cncc(c1)B(O)O
+    codon: CCTTGAA
+    reaction: Suz
+  - smiles: CC(=O)NC1=CC=C(C=C1)B(O)O
+    codon: CTCGCAG
+    reaction: Suz
+  - smiles: CC(=C)B1OC(C)(C)C(C)(C)O1
+    codon: AGAGAAT
+    reaction: Suz
+  - smiles: OB(O)C1=CC=C(C=C1)C(=O)N1CCCCC1
+    codon: TCCTACG
+    reaction: Suz
+  - smiles: CC1(C)OB(OC1(C)C)C1=CN=CC2=C1C=CC=C2
+    codon: AGCTCGC
+    reaction: Suz
+  - smiles: CC1(C)OB(OC1(C)C)C1=CN=C(Cl)C=C1
+    codon: CAAGCCT
+    reaction: Suz
+  - smiles: OB(O)C1=CC2=C(OCO2)C=C1
+    codon: ATGTAGC
+    reaction: Suz
+  - smiles: CC1(C)OB(OC1(C)C)C1=CN=C(C=C1)N1CCOCC1
+    codon: GAAGGCT
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)N1CCN(CC1)C1=CC=C(C=C1)B1OC(C)(C)C(C)(C)O1
+    codon: TCATGAC
+    reaction: Suz
+  - smiles: OB(O)C1=CC=C(CNC(=O)C(F)(F)F)C=C1
+    codon: TTCTAGC
+    reaction: Suz
+  - smiles: OB(O)C1=C(SC=C1)C=O
+    codon: AACGTGA
+    reaction: Suz
+  - smiles: CC(C)(C)OC(=O)N1C=CC=C1B(O)O
+    codon: ACAATTA
+    reaction: Suz
+  - smiles: COC1=CC=C(B(O)O)C(OC)=C1
+    codon: GAATGTC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(C=O)c(F)c1
+    codon: TCGCCAT
+    reaction: Suz
+  - smiles: CC(=O)c1ccc(cc1F)B(O)O
+    codon: GAATGGT
+    reaction: Suz
+  - smiles: OB(O)c1cccc(F)c1C=O
+    codon: ATGCCGG
+    reaction: Suz
+  - smiles: Cc1oc(cc1)B(O)O
+    codon: CTTGATA
+    reaction: Suz
+  - smiles: OB(O)c1cccnc1
+    codon: GATCGGC
+    reaction: Suz
+  - smiles: COc1c(C=O)cccc1B(O)O
+    codon: GATAAGT
+    reaction: Suz
+  - smiles: OB(O)c1cc(Cl)ccc1O
+    codon: ACCACTC
+    reaction: Suz
+  - smiles: OB(O)c1ccc(cc1)C#N
+    codon: GCCAAGA
+    reaction: Suz
+  - smiles: OB(O)c1cc(cc(c1)[N+](=O)[O-])C(=O)O
+    codon: CGACTAA
+    reaction: Suz
+  - smiles: OB(O)c1ccccc1O
+    codon: CAACAGG
+    reaction: Suz
+  - smiles: OB(O)c1ccc(C#N)c(F)c1
+    codon: CGCTCAC
+    reaction: Suz
+  - smiles: CS(=O)(=O)Nc1ccc(cc1)B(O)O
+    codon: TGGATAG
+    reaction: Suz
+  - smiles: CS(=O)(=O)c1ccc(cc1F)B(O)O
+    codon: ACGGCAT
+    reaction: Suz
+  - smiles: NNC(=O)c1ccc(cc1)B(O)O
+    codon: TGCAAGT
+    reaction: Suz
+  - smiles: OB(O)c1cncnc1
+    codon: AATAATA
+    reaction: Suz
+  - smiles: CSc1ncc(cn1)B(O)O
+    codon: TGTAGGC
+    reaction: Suz
+  - smiles: OB(O)c1ccc2cnccc2c1
+    codon: ACTAACA
+    reaction: Suz
+  - smiles: OB(O)C1=CCCC1
+    codon: CATATAC
+    reaction: Suz
+  - smiles: CC(C)NS(=O)(=O)c1ccc(cc1)B(O)O
+    codon: CCTCGGT
+    reaction: Suz
+  - smiles: Cc1csc(c1)B(O)O
+    codon: GACTCCG
+    reaction: Suz
+  - smiles: CCOC(=O)C1=CC=C(C=C1)B1OC(C)(C)C(C)(C)O1
+    codon: CGCTATC
+    reaction: Suz
+  - smiles: CC1(C)OB(OC1(C)C)C1=CC=C2NC=NC2=C1
+    codon: ATCGCGA
+    reaction: Suz
+  - smiles: CC1(C)OB(C2=CC(NC3=C4C=CC=C3)=C4C=C2)OC1(C)C
+    codon: CGAGAGC
+    reaction: Suz
+  - smiles: NC1=NC=C(B2OC(C)(C)C(C)(C)O2)C=N1
+    codon: AAGAGGA
+    reaction: Suz
+  - smiles: CCC/C=C/B(O)O
+    codon: CAGAGAT
+    reaction: Suz
+  - smiles: CC1(C)OB(C2=CC=C(N3CCNCC3)N=C2)OC1(C)C
+    codon: CGCAATT
+    reaction: Suz
+  - smiles: O=C(N1CCN(C2=CC=C(B3OC(C)(C)C(C)(C)O3)C=N2)CC1)OC(C)(C)C
+    codon: TGGTACG
+    reaction: Suz
+  - smiles: OB(C1=CN=CC2=C1C=CC=C2)O
+    codon: ACGTCGA
+    reaction: Suz
+  - smiles: CC1(C)C(C)(C)OB(C2=CC=CC3=C2C=CN3)O1
+    codon: CCAAGGT
+    reaction: Suz
+  - smiles: C#CCN1C=CC2=C1C=CC=C2
+    codon: GAACCGT
+    reaction: Son
+  - smiles: ClC1=C(NC(=O)NCC#C)C=CC=C1
+    codon: AATCGTT
+    reaction: Son
+  - smiles: Cl.NCCC(O)CCC#C
+    codon: TAGGATT
+    reaction: Son
+  - smiles: FC1=C(NC(=O)NCC#C)C=CC=C1
+    codon: AGTACAT
+    reaction: Son
+  - smiles: CCOC(=O)C1=C(NCC#C)N=C(Cl)C=C1
+    codon: CGGAACT
+    reaction: Son
+  - smiles: Cl.NC1=C(C=CC=C1)C(=O)NCC#C
+    codon: CCGACGC
+    reaction: Son
+  - smiles: O=C(NCC#C)NC1=CC=CC=C1
+    codon: TGCTTAG
+    reaction: Son
+  - smiles: BrC1=CC2=C(C=C1)N(CC#C)C(=O)C2=O
+    codon: TCCGCAG
+    reaction: Son
+  - smiles: OC(=O)C1=C(NCC#C)N=C(Cl)C=C1
+    codon: GTACATT
+    reaction: Son
+  - smiles: O=C1N(CC#C)C2=C(C=CC=C2)C1=O
+    codon: CTTAAGC
+    reaction: Son
+  - smiles: Cl.C#CCNCC1=CC=CO1
+    codon: TGCTGCA
+    reaction: Son
+  - smiles: CC(O)CC#C
+    codon: GACTATT
+    reaction: Son
+  - smiles: OC(=O)C1=CC(=CN=C1)C#C
+    codon: AATACTT
+    reaction: Son
+  - smiles: COC1=C(Br)C=C(C=C1)C#C
+    codon: CCGAGGA
+    reaction: Son
+  - smiles: BrC1=CC2=C(OCC(=O)N2CC#C)C=C1
+    codon: CAGTTCT
+    reaction: Son
+  - smiles: ClC1=CC=CC(Cl)=C1C#C
+    codon: GCCTAGC
+    reaction: Son
+  - smiles: OC1=CC(OCC#C)=CC=C1
+    codon: GCCATCT
+    reaction: Son
+  - smiles: Cl.NC(CC#C)CC(F)(F)F
+    codon: GTTACGA
+    reaction: Son
+  - smiles: OC(=O)[C@@H]1CCCN1CC#C
+    codon: TCGGTGC
+    reaction: Son
+  - smiles: O=C1NCCN1CC#C
+    codon: AATATGT
+    reaction: Son
+  - smiles: NC(=O)C1=CC(=CN=C1)C#C
+    codon: TACGTTC
+    reaction: Son
+  - smiles: C#CCN1C2=C(C=CC=C2)C2=C1C=CC=C2
+    codon: AGTCCAA
+    reaction: Son
+  - smiles: COC1=C(N)C=C(C=C1)C#C
+    codon: TCAAGTT
+    reaction: Son
+  - smiles: COC1=C(C=C(Cl)C=C1)C#C
+    codon: CATCGTG
+    reaction: Son
+  - smiles: NC(=O)NC1=CC(=CC=C1)C#C
+    codon: CCGGAGC
+    reaction: Son
+  - smiles: COC1=C(F)C=C(C=C1)C#C
+    codon: GCGAGTT
+    reaction: Son
+  - smiles: FC(F)OC1=C(C=CC=C1)C#C
+    codon: GAGGACA
+    reaction: Son
+  - smiles: CCN1C=C(C=N1)C#C
+    codon: TGTGTGG
+    reaction: Son
+  - smiles: O=C(NCC#C)NC1CC1
+    codon: GCATCCA
+    reaction: Son
+  - smiles: ClC1=CC=C(NC(=O)NCC#C)C=C1
+    codon: CGGATTA
+    reaction: Son
+  - smiles: OC(=O)C1=CC=C(C=C1)S(=O)(=O)NCC#C
+    codon: GTGACTG
+    reaction: Son
+  - smiles: O=C(NCC#C)C1=CNC(=O)C=C1
+    codon: GTGTTGA
+    reaction: Son
+  - smiles: COC1=CC(C#C)=C(Cl)C=C1
+    codon: TGAGCGT
+    reaction: Son
+  - smiles: FC1=CC(=CC(F)=C1)C#C
+    codon: TCGGCGG
+    reaction: Son
+  - smiles: CC1=CC(NC(=O)CNCC#C)=CC=C1
+    codon: GATCTCT
+    reaction: Son
+  - smiles: OC(=O)CC(=O)NCC#C
+    codon: TGAGTAT
+    reaction: Son
+  - smiles: CC1=NC(=CS1)C#C
+    codon: TTCCACA
+    reaction: Son
+  - smiles: Cl.NC(C#C)C1CCOCC1
+    codon: TAATGCT
+    reaction: Son
+  - smiles: Cl.NC1(CCC1)C#C
+    codon: TCTAATC
+    reaction: Son
+  - smiles: CCC(C)(O)C#C
+    codon: ACACACT
+    reaction: Son
+  - smiles: CC1=NC(=CC=C1)C#C
+    codon: GAACAGA
+    reaction: Son
+  - smiles: CC1=CC(NC(=O)NCC#C)=CC=C1
+    codon: TCGGAGT
+    reaction: Son
+  - smiles: C#CCNC1CCCC1
+    codon: GCCACAG
+    reaction: Son
+  - smiles: C#CC1=CN=CN=C1
+    codon: TGGTGAA
+    reaction: Son
+  - smiles: ClC1=C(C=CC=C1)C#C
+    codon: AATCGAA
+    reaction: Son
+  - smiles: ClC1=CC2=C(C=C1)N(CC(=O)NCC#C)C(=O)C2=O
+    codon: TCGATAA
+    reaction: Son
+  - smiles: O=C1CCCCN1CC#C
+    codon: GAGAGCT
+    reaction: Son
+  - smiles: C#CC1=CC=NN1
+    codon: TTACATA
+    reaction: Son
+  - smiles: O=C1NC(CC#C)C(=O)N1
+    codon: TTGCTAA
+    reaction: Son
+  - smiles: O=S(=O)(NCC#C)C1=CC=CC=C1
+    codon: ACTCGAG
+    reaction: Son
+  - smiles: FC1=C(F)C=C(NC(=O)NCC#C)C=C1
+    codon: CCTAACG
+    reaction: Son
+  - smiles: Cl.C#CCN1C=NC2=C1C=CC=C2
+    codon: ACTTCTG
+    reaction: Son
+  - smiles: COC1=NC(=CC=C1)C#C
+    codon: AATCTAG
+    reaction: Son
+  - smiles: OC(=O)C1(CCC2=C1C=CC=C2)NC(=O)NCC#C
+    codon: AAGCTGA
+    reaction: Son
+  - smiles: CC1=C(OCC#C)C=CC=C1
+    codon: AGTATTC
+    reaction: Son
+  - smiles: BrC1=CC2=C(OCCC2NCC#C)C=C1
+    codon: AGGCATT
+    reaction: Son
+  - smiles: NNC(=O)CCC#C
+    codon: ACGGACA
+    reaction: Son
+  - smiles: CC(C)(NS(C)(=O)=O)C#C
+    codon: GTACGCA
+    reaction: Son
+  - smiles: Cl.NC(CC#C)C(N)=O
+    codon: ATCCGAA
+    reaction: Son
+  - smiles: COC1=CC(=NC=C1)C#C
+    codon: GTGAGAA
+    reaction: Son
+  - smiles: CC1=NC2=C(C=C1)C=C(C=C2)C#C
+    codon: GTCGGTT
+    reaction: Son
+  - smiles: CC(O)(C#C)C1=C(Br)C=CC=C1
+    codon: GCGAGAC
+    reaction: Son
+  - smiles: NC1=C(C=C(O)C=C1)C#C
+    codon: AGCTAGA
+    reaction: Son
+  - smiles: Cl.C#CCNCC1CC1
+    codon: AGAGTAC
+    reaction: Son
+  - smiles: C#CC1=CC=NC=C1
+    codon: ATATTGA
+    reaction: Son
+  - smiles: C#CC1=CN=CS1
+    codon: AGTCATA
+    reaction: Son
+  - smiles: CN1CCN(CCC#C)CC1
+    codon: CTAGTCG
+    reaction: Son
+  - smiles: OC(CC#C)C1CC1
+    codon: TTAGAAG
+    reaction: Son
+  - smiles: Cl.C#CC1CNC1
+    codon: ATCTAAG
+    reaction: Son
+  - smiles: OC(CC1=CC=CC=C1)C#C
+    codon: CATTAGT
+    reaction: Son
+  - smiles: COCCN(C)CC#C
+    codon: GCAGTTA
+    reaction: Son
+  - smiles: C#CCN1CCCC1
+    codon: TCTGTCA
+    reaction: Son
+  - smiles: CN1C=C(C=N1)C#C
+    codon: CTGTATC
+    reaction: Son
+  - smiles: COCC(N)C#C
+    codon: CGGTCCA
+    reaction: Son
+  - smiles: CN(C)CCC#C
+    codon: ATGTATG
+    reaction: Son
+  - smiles: ClC1=C(Cl)C(=CC=C1)C#C
+    codon: TAACGAT
+    reaction: Son
+  - smiles: C#CCCNC1COC1
+    codon: GTTCTCA
+    reaction: Son
+  - smiles: FC1=C(C=CN=C1)C#C
+    codon: CGCGTCT
+    reaction: Son
+  - smiles: CS(=O)(=O)NCCC#C
+    codon: TGACCTC
+    reaction: Son
+  - smiles: NC(CO)CC#C
+    codon: TTCGATA
+    reaction: Son
+  - smiles: CC1(C)OB(OC1(C)C)C#C
+    codon: TATTAGC
+    reaction: Son
+  - smiles: NC1=C(F)C(F)=C(C#C)C(F)=C1F
+    codon: ACCAGGC
+    reaction: Son
+  - smiles: OC(=O)C1=CC(=CC=C1)S(=O)(=O)NCC#C
+    codon: GTTCAGC
+    reaction: Son
+  - smiles: CC1=CC=C(NC(=O)NCC#C)C=C1
+    codon: TGCTTGT
+    reaction: Son
+  - smiles: O=S1(=O)CCN(CC#C)CC1
+    codon: TCATCTA
+    reaction: Son
+  - smiles: NC1=CC=CC(=C1)C#C
+    codon: TCTGTAT
+    reaction: Son
+  - smiles: NS(=O)(=O)C1=CC=C(C=C1)C#C
+    codon: CATCCGA
+    reaction: Son
+  - smiles: C#CCNC1CCC2=C1C=CC=C2
+    codon: TCGACCT
+    reaction: Son
+  - smiles: C#CCN1CCOCC1
+    codon: CAATCGA
+    reaction: Son
+  - smiles: COC1=CC(=CC=C1)C#C
+    codon: AATACAC
+    reaction: Son
+  - smiles: C#CC1=NC=CC=C1
+    codon: ACTATAG
+    reaction: Son
+  - smiles: NC1(CCCCC1)C#C
+    codon: ACGTAAT
+    reaction: Son
+  - smiles: CN(CC#C)CC1=CC=CC=C1
+    codon: GCTGTTG
+    reaction: Son
+  - smiles: OC(=O)CNCC#C
+    codon: CCTCAAT
+    reaction: Son
+  - smiles: CNCC#C
+    codon: TCACTGC
+    reaction: Son
+  - smiles: NCC#C
+    codon: TGTATGT
+    reaction: Son
+  - smiles: NC1=CC=C(C=C1)C#C
+    codon: TAGCCAA
+    reaction: Son
+  - smiles: CCCC#C
+    codon: CGCTTAT
+    reaction: Son
+  - smiles: OC(=O)CCC#C
+    codon: CTCGTCA
+    reaction: Son
+  - smiles: OCCC#C
+    codon: CGAACTG
+    reaction: Son
+  - smiles: C#CC1=CC=C2N=CC=NC2=C1
+    codon: TCTCTAA
+    reaction: Son
+  - smiles: OC(C#C)C1=CC=CC=C1
+    codon: ATGGATC
+    reaction: Son
+  - smiles: CC(C)(N)C#C
+    codon: AGCCTAT
+    reaction: Son
+  - smiles: C#CC1=CC2=C(NC=C2)C=C1
+    codon: TACGCAT
+    reaction: Son
+  - smiles: C#CC1=CC=CC=C1
+    codon: AACCGAT
+    reaction: Son
+  - smiles: C#CC1=CC=CN=C1
+    codon: AGGTACA
+    reaction: Son
+  - smiles: CN(C)C1=CC=C(C=C1)C#C
+    codon: GAACTTA
+    reaction: Son
+  - smiles: NC1=CC=CC=C1C#C
+    codon: CCAGCAG
+    reaction: Son
+  - smiles: C#CC1=CSC=C1
+    codon: TGTGCCA
+    reaction: Son
+  - smiles: FC(F)(F)C1=CC=CC=C1C#C
+    codon: GCCAACG
+    reaction: Son
+  - smiles: OC(C#C)(C1=CC=CC=C1)C(F)(F)F
+    codon: GCCGGAA
+    reaction: Son
+  - smiles: OC(=O)C#C
+    codon: GTAATTA
+    reaction: Son
+  - smiles: OCCCC#C
+    codon: CTCGTGG
+    reaction: Son
+  - smiles: COC1=CC=C(C#C)C(C)=C1
+    codon: TCGCTAC
+    reaction: Son
+  - smiles: OC1(CCCCC1)C#C
+    codon: TCAGCTG
+    reaction: Son
+  - smiles: OC(C#C)(C1=CC=CC=C1)C1=CC=CC=C1
+    codon: TGAGGTC
+    reaction: Son
+  - smiles: C#CC1=CSC=C1
+    codon: TCTTAGA
+    reaction: Son
+  - smiles: BrC1=CC=C(C=C1)C#C
+    codon: TTCAATC
+    reaction: Son
+  - smiles: CCCCCC(O)C#C
+    codon: TCCGTGT
+    reaction: Son
+  - smiles: CN1C=NC=C1C#C
+    codon: TTCATGG
+    reaction: Son
+  - smiles: C#CC1CCCCC1
+    codon: TGGTAGA
+    reaction: Son
+  - smiles: CC(O)(C=C)C#C
+    codon: TTGCATC
+    reaction: Son
+  - smiles: NC(=N)C1=CC=C(CNC(=O)CCC#C)C=C1
+    codon: CTACATG
+    reaction: Son
+  - smiles: CC1=CC(NC(=O)NCC#C)=NO1
+    codon: CGCATCG
+    reaction: Son
+  - smiles: C#CCN1C=CN=C1
+    codon: CGCATAA
+    reaction: Son
+  - smiles: C#CC1=C2CCCCC2=CC=C1
+    codon: CGTTAAT
+    reaction: Son
+  - smiles: FC(F)(F)C1=NC(OCC#C)=CC=C1
+    codon: TAAGAGC
+    reaction: Son
+  - smiles: Cl.NC(=N)NCC#C
+    codon: ACATTAA
+    reaction: Son
+  - smiles: C#CC1=CC(=CC=C1)C1=CC=CC=C1
+    codon: GAAGGAC
+    reaction: Son
+  - smiles: OC(=O)C1=CC2=C(C=C1)N(CC2)C(=O)C#C
+    codon: GTGAACG
+    reaction: Son
+  - smiles: NC(C#C)C1CCCCC1
+    codon: CTGGATG
+    reaction: Son
+  - smiles: CNC(=O)C#C
+    codon: CCTCGAC
+    reaction: Son
+  - smiles: ClC1=CC(=CC(Cl)=C1)C#C
+    codon: CACACTT
+    reaction: Son
+  - smiles: CC(=O)C(CC#C)C(C)=O
+    codon: TATTCAT
+    reaction: Son
+  - smiles: CC[C@]12CC[C@H]3[C@@H](CCC4=CC(=O)CC[C@H]34)[C@@H]1CC[C@@]2(O)C#C
+    codon: AGCTGTG
+    reaction: Son
+  - smiles: OC(CC#C)C(O)=O
+    codon: TATTGAC
+    reaction: Son
+  - smiles: CC(=O)O[C@]1(CCC2C3CCC4=CC(=O)CC[C@@H]4C3CC[C@@]12C)C#C
+    codon: TCACGGT
+    reaction: Son
+  - smiles: C#CC1CC1
+    codon: CGGTGGA
+    reaction: Son
+  - smiles: CC1=C(C=O)C2=C(C=CC=C2)N1CC#C
+    codon: GTTGACA
+    reaction: Son
+  - smiles: NS(=O)(=O)C1=NN=C(NC(=O)CCC#C)S1
+    codon: CGTCCAT
+    reaction: Son
+  - smiles: NC(=S)NC1=CC(=CC=C1)C#C
+    codon: CTAAGAG
+    reaction: Son
+  - smiles: CN(CC#C)C1=NC=C(N)N=C1
+    codon: GTATTCG
+    reaction: Son
+  - smiles: C#CCN1C=CN=C1C1=CC=CS1
+    codon: GCGCTGG
+    reaction: Son
+  - smiles: C#CC1=NC2=C(C=CC=C2)N=C1
+    codon: ATGCCAC
+    reaction: Son
+  - smiles: C#CCNCC1=NC2=C(C=CC=C2)C=C1
+    codon: TAGCAGC
+    reaction: Son
+  - smiles: C#CCN1C=NC=N1
+    codon: GAAGCTC
+    reaction: Son
+  - smiles: CNC1=CC=C(OCC#C)C=C1
+    codon: GTCCATC
+    reaction: Son
+  - smiles: CC(NCC#C)C1=CC2=C(OCC(=O)N2)C=C1
+    codon: CCAGCCA
+    reaction: Son
+  - smiles: C#CC1=NC=CS1
+    codon: TCACATG
+    reaction: Son
+  - smiles: O=CC1=CNC2=C1C=C(C=C2)C#C
+    codon: CTACACT
+    reaction: Son
+  - smiles: C#CC1=CC=C(C=C1)C1=CC=CC=C1
+    codon: ATGTTGT
+    reaction: Son
+  - smiles: FC(F)(F)C1=CC(=CC(=C1)C#C)C(F)(F)F
+    codon: CATAGAG
+    reaction: Son
+  - smiles: OC1=C(O)C=CC(C(CN2C(C=C(C(NCC#C)=O)C=C3)=C3N=C2)=O)=C1
+    codon: TTGTGAC
+    reaction: Son
+  - smiles: OC1=C(O)C=CC(C(CN2C=C(C(NCC#C)=O)C=N2)=O)=C1
+    codon: GCGGTGT
+    reaction: Son
+  - smiles: OC1=C(O)C=CC(C(CN2C(C=CC=C3C(NCC#C)=O)=C3N=C2)=O)=C1
+    codon: GTACTGG
+    reaction: Son
+  - smiles: OC1=C(O)C=CC(C(CN2C(C=C(C(NCC#C)=O)C=C3)=C3N=C2)=O)=C1
+    codon: TCGTCTC
+    reaction: Son
+  - smiles: OC1=C(O)C=CC(C(CN2C=C(C(NCC#C)=O)C=N2)=O)=C1
+    codon: TACCACT
+    reaction: Son
+  - smiles: OC1=C(O)C=CC(C(CN2C(C=CC=C3C(NCC#C)=O)=C3N=C2)=O)=C1
+    codon: AGTCTCA
+    reaction: Son
+  - smiles: '[H]'
+    codon: TGTTGCT
+    reaction: DH
+  - smiles: '[I]'
+    codon: TGGCAAT
+    reaction: .nan
+  structure:
+  - name: S0
+    type: selection
+    max_error_rate: 0
+    indels: false
+  - name: C0
+    type: constant
+    max_error_rate: 0
+    indels: false
+  - name: B0
+    type: building_block
+    max_error_rate: 0
+    indels: false
+  - name: C1
+    type: constant
+    max_error_rate: 0
+    indels: false
+  - name: B1
+    type: building_block
+    max_error_rate: 0
+    indels: false
+  - name: S1
+    type: selection
+    max_error_rate: 0
+    indels: false
+  project:
+  - variable: name
+    value: test
+  - variable: date
+    value: 2025-09-16 00:00:00
+  B0:
+  - smiles: OC(=O)C1=CC(=CN=C1)C#C
+    codon: GCCTCG
+    reaction: CuAAC
+  - smiles: BrC1=NC=C(OCC#C)C=C1
+    codon: TCCGAC
+    reaction: CuAAC
+  - smiles: CNC1=CC=C(OCC#C)C=C1
+    codon: CAAGTG
+    reaction: CuAAC
+  - smiles: NC(=O)C1=CC(=CN=C1)C#C
+    codon: GTCCGC
+    reaction: CuAAC
+  - smiles: O=C(NCC#C)NC1CC1
+    codon: GACGAC
+    reaction: CuAAC
+  - smiles: Cl.NCCC(O)CCC#C
+    codon: TTATAG
+    reaction: CuAAC
+  - smiles: OC1=CC(OCC#C)=CC=C1
+    codon: CCGAAG
+    reaction: CuAAC
+  - smiles: C#CCN1C=CC2=C1C=CC=C2
+    codon: GAACCA
+    reaction: CuAAC
+  - smiles: FC(F)(F)C1=NC(OCC#C)=CC=C1
+    codon: AGAGAA
+    reaction: CuAAC
+  - smiles: CC1=NC(=CC=C1)C#C
+    codon: CATGAG
+    reaction: CuAAC
+  - smiles: Cl.NC(=N)NCC#C
+    codon: ACATTA
+    reaction: CuAAC
+  - smiles: Cl.C#CCN1C=CN=C1C1=CC=CS1
+    codon: GGAATC
+    reaction: CuAAC
+  - smiles: OC(=O)CC(=O)NCC#C
+    codon: GCCAAC
+    reaction: CuAAC
+  - smiles: BrC1=CC2=C(OCC(=O)N2CC#C)C=C1
+    codon: GTGGCA
+    reaction: CuAAC
+  - smiles: BrC1=C(OCC#C)C=CC=N1
+    codon: ATAATA
+    reaction: CuAAC
+  - smiles: C#CC1=NC2=C(C=CC=C2)N=C1
+    codon: CGTAAG
+    reaction: CuAAC
+  - smiles: C#CCNC1CCCC1
+    codon: TCTTCT
+    reaction: CuAAC
+  - smiles: C#CC1=CN=CN=C1
+    codon: ATTCGC
+    reaction: CuAAC
+  - smiles: O=C1NCCN1CC#C
+    codon: GGAAGG
+    reaction: CuAAC
+  - smiles: COC1=NC(=CC=C1)C#C
+    codon: ATGGTA
+    reaction: CuAAC
+  - smiles: C#CCN1C=CN=C1
+    codon: TAATAA
+    reaction: CuAAC
+  - smiles: O=C(NCC#C)C1=CNC(=O)C=C1
+    codon: TTAACC
+    reaction: CuAAC
+  - smiles: C#CC1=CC=NC=C1
+    codon: AATACG
+    reaction: CuAAC
+  - smiles: O=C1COCC(=O)N1CC#C
+    codon: AAGCGG
+    reaction: CuAAC
+  - smiles: NC1=C(F)C(F)=C(C#C)C(F)=C1F
+    codon: CGCTTA
+    reaction: CuAAC
+  - smiles: CC1=NC2=C(C=C1)C=C(C=C2)C#C
+    codon: TGCTGC
+    reaction: CuAAC
+  - smiles: CS(=O)(=O)NCCC#C
+    codon: TGCACA
+    reaction: CuAAC
+  - smiles: C#CC1=CN=CS1
+    codon: CTTGCA
+    reaction: CuAAC
+  - smiles: C#CC1=NC=NC=C1
+    codon: TTAGAC
+    reaction: CuAAC
+  - smiles: Cl.C#CCNCC1CC1
+    codon: TGATGA
+    reaction: CuAAC
+  - smiles: COCCN(C)CC#C
+    codon: GATATT
+    reaction: CuAAC
+  - smiles: C#CC1=NC2=C(S1)C=CC=C2
+    codon: ACGGTG
+    reaction: CuAAC
+  - smiles: NC(CO)CC#C
+    codon: AGGTAC
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC=C(C=C1)S(=O)(=O)NCC#C
+    codon: GCCTGC
+    reaction: CuAAC
+  - smiles: CC1=CC(NC(=O)NCC#C)=NO1
+    codon: GCTCCG
+    reaction: CuAAC
+  - smiles: O=S(=O)(NCC#C)C1=CC=CC=C1
+    codon: GATAAC
+    reaction: CuAAC
+  - smiles: COC1=CC(=NC=C1)C#C
+    codon: GGCGTT
+    reaction: CuAAC
+  - smiles: NC(C#C)C1CCCCC1
+    codon: GCGGAA
+    reaction: CuAAC
+  - smiles: FC1=C(C=CN=C1)C#C
+    codon: GACAAT
+    reaction: CuAAC
+  - smiles: Cl.C#CCN1C=NC2=C1C=CC=C2
+    codon: CTTCAC
+    reaction: CuAAC
+  - smiles: O=CC1=CC=C(OCC#C)C=C1
+    codon: CGTGGC
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC=C(C=C1)C#C
+    codon: ACCTAC
+    reaction: CuAAC
+  - smiles: O=S1(=O)CCN(CC#C)CC1
+    codon: TTCGAA
+    reaction: CuAAC
+  - smiles: NC1=CC=CC(=C1)C#C
+    codon: CTCCGA
+    reaction: CuAAC
+  - smiles: NS(=O)(=O)C1=CC=C(C=C1)C#C
+    codon: AGAGCG
+    reaction: CuAAC
+  - smiles: C#CCNC1CCC2=C1C=CC=C2
+    codon: CGTGAA
+    reaction: CuAAC
+  - smiles: C#CC1=NC=CC=C1
+    codon: TCTCGG
+    reaction: CuAAC
+  - smiles: NC1(CCCCC1)C#C
+    codon: TCGGCT
+    reaction: CuAAC
+  - smiles: CNCC#C
+    codon: ACACTC
+    reaction: CuAAC
+  - smiles: NCC#C
+    codon: GTGGTG
+    reaction: CuAAC
+  - smiles: C#CC1=CC=C2N=CC=NC2=C1
+    codon: GGACTT
+    reaction: CuAAC
+  - smiles: CC1=C(C=O)C2=C(C=CC=C2)N1CC#C
+    codon: GTACTC
+    reaction: CuAAC
+  - smiles: C#CCN1CCOCC1
+    codon: AGCTAA
+    reaction: CuAAC
+  - smiles: NC1=CC=C(C=C1)C#C
+    codon: TAAGCG
+    reaction: CuAAC
+  - smiles: C#CC1=CC2=C(NC=C2)C=C1
+    codon: CAGCAG
+    reaction: CuAAC
+  - smiles: C#CCN1C2=C(C=CC=C2)C2=C1C=CC=C2
+    codon: CACGAA
+    reaction: CuAAC
+  - smiles: OC(CC#C)C(O)=O
+    codon: TATTAT
+    reaction: CuAAC
+  - smiles: CC(NCC#C)C1=CC2=C(OCC(=O)N2)C=C1
+    codon: ATGTCA
+    reaction: CuAAC
+  - smiles: CC(=O)O[C@]1(CCC2C3CCC4=CC(=O)CC[C@@H]4C3CC[C@@]12C)C#C
+    codon: CTAGGA
+    reaction: CuAAC
+  - smiles: NS(=O)(=O)C1=NN=C(NC(=O)CCC#C)S1
+    codon: CGGTGC
+    reaction: CuAAC
+  - smiles: NC(=N)C1=CC=C(CNC(=O)CCC#C)C=C1
+    codon: GGCAGA
+    reaction: CuAAC
+  - smiles: N
+    codon: AACCTG
+    reaction: SR
+  - smiles: CCC=CCC(O)=O
+    codon: TGGTAA
+    reaction: SR,ABF
+  - smiles: OCC(O)=O
+    codon: GAACGG
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(C=C1)S(=O)(=O)NCC(O)=O
+    codon: CAGAAC
+    reaction: SR,ABF
+  - smiles: CN(CC(O)=O)C(=O)C1=CC=CC=C1
+    codon: AAGACC
+    reaction: SR,ABF
+  - smiles: CN(C)C1=CC=C(CC(O)=O)C=C1
+    codon: ATATAA
+    reaction: SR,ABF
+  - smiles: COC1=C(OC)C=C(CCC(O)=O)C=C1
+    codon: AGAATT
+    reaction: SR,ABF
+  - smiles: COC1=CC(CC(O)=O)=CC(Br)=C1O
+    codon: GCCAGG
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1=CC=C2OCOC2=C1
+    codon: GCGTAG
+    reaction: SR,ABF
+  - smiles: COC1=CC(CCC(O)=O)=CC(OC)=C1OC
+    codon: GCGTCT
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=CNC2=C1C=CC=C2
+    codon: ACTGAG
+    reaction: SR,ABF
+  - smiles: COC1=CC(OC)=NC(CCC(O)=O)=N1
+    codon: GCTGTG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=CC=CN=C1
+    codon: AGTGGA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1CNC2=C1C=CC=C2
+    codon: CAGGAT
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1NC(=O)NC1=O
+    codon: CAGGCC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C(=O)OC2=C1C=CC=C2
+    codon: CTCTAA
+    reaction: SR,ABF
+  - smiles: CC1=CN(CC(O)=O)C(=O)NC1=O
+    codon: AACTTA
+    reaction: SR,ABF
+  - smiles: CN1C2N=CN(CC(O)=O)C2C(=O)N(C)C1=O
+    codon: TAGGTT
+    reaction: SR,ABF
+  - smiles: CN(CC(O)=O)S(=O)(=O)C1=CC=CC=C1
+    codon: TACTTG
+    reaction: SR,ABF
+  - smiles: OC(=O)COC1=CC2=C(C=CC(=O)O2)C=C1
+    codon: ACCTCA
+    reaction: SR,ABF
+  - smiles: CC1=C(C)C2=C(OC1=O)C=C(OCC(O)=O)C=C2
+    codon: GTGAAC
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1OC2=C(NC1=O)C=CC=C2
+    codon: AACCGC
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1=CC2=C(N1)C=CC=C2
+    codon: TAGAAT
+    reaction: SR,ABF
+  - smiles: COC1=C(CO)C=CC(OCC(O)=O)=C1
+    codon: CGGAAT
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(C=C1)C(=O)CCC(O)=O
+    codon: TATCAA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=CC(=O)C2=C(O1)C=CC(Br)=C2
+    codon: TTGCGG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=NN=C(O1)C1=CC=CC=C1
+    codon: TATTCA
+    reaction: SR,ABF
+  - smiles: OC(=O)CNC(=O)C1=CC=CO1
+    codon: ACCTGG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C(=O)COC2=C1C=C(Cl)C=C2
+    codon: CGACTC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=NC2=C(C=CC=C2)C1=O
+    codon: GTCGTC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=NC(=NO1)C1=CN=CC=C1
+    codon: CGCCAA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=CC(=O)NC1=O
+    codon: TAGTAG
+    reaction: SR,ABF
+  - smiles: CC(=O)C1=C(C)N(CCC(O)=O)N=C1C
+    codon: TATCGC
+    reaction: SR,ABF
+  - smiles: CC1=CC2=C(C=CC=C2)N1CCC(O)=O
+    codon: ACGAGT
+    reaction: SR,ABF
+  - smiles: CC1=CC2=C(C=C1)C(CC(O)=O)C(=O)N2
+    codon: ACTCTG
+    reaction: SR,ABF
+  - smiles: CC1=CC(=O)OC2=C1C=C(OCC(O)=O)C=C2
+    codon: ATCTAG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=NC(=NO1)C1=CC=CO1
+    codon: CACAGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C2C=CN=CC2=CC=C1
+    codon: TGAGTC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C2C=CC=CN2C1=O
+    codon: AACGAG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C2C=CNC2=C1
+    codon: AGGCCG
+    reaction: SR,ABF
+  - smiles: COC1=CC=C2NC(=CC2=C1)C(O)=O
+    codon: CAAGCA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC2=C1C=CC=C2
+    codon: ATACGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C2NC=NC2=C1
+    codon: CACTCA
+    reaction: SR,ABF
+  - smiles: CC1=NC(C)=C(CC(O)=O)C(O)=N1
+    codon: GAGACT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C(N=C1)N1CCOCC1
+    codon: TAGTCC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC(=C1)C1CC1
+    codon: AGCAGC
+    reaction: SR,ABF
+  - smiles: COC1=CC2=C(C=C1)C(CC(O)=O)=CO2
+    codon: CCGGAC
+    reaction: SR,ABF
+  - smiles: CC1=C(C=C(O1)S(=O)(=O)N1CCOCC1)C(O)=O
+    codon: CGCCGC
+    reaction: SR,ABF
+  - smiles: CC1=NC2=CC=C(C=C2N=C1C)C(O)=O
+    codon: TGTTGT
+    reaction: SR,ABF
+  - smiles: CCCC(=O)C1=CN(CC(O)=O)C2=CC=CC=C12
+    codon: GTGTGC
+    reaction: SR,ABF
+  - smiles: OCCN1C=NC2=CC(=CC=C12)C(O)=O
+    codon: TAACGA
+    reaction: SR,ABF
+  - smiles: OCCC1=CN2N=C(C=C2N=C1)C(O)=O
+    codon: GCGACC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(CN2C=CC=N2)O1
+    codon: GTTGTT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CCN(CC2=CC=CO2)CC1
+    codon: TGGAAC
+    reaction: SR,ABF
+  - smiles: NC(=O)CN1CCCC(C1)C(O)=O
+    codon: CGCTAT
+    reaction: SR,ABF
+  - smiles: CC1=CC=CN2C(CC(O)=O)=CN=C12
+    codon: TGTTCG
+    reaction: SR,ABF
+  - smiles: C[C@@H]1C[C@H](NC(=S)N1)C(O)=O
+    codon: CTCATG
+    reaction: SR,ABF
+  - smiles: OC(=O)[C@@H]1CCC(=O)N1
+    codon: CTCCTC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CN(CC2=CN=CC=C2)C(=O)C1
+    codon: CTGGTC
+    reaction: SR,ABF
+  - smiles: COC1=C2OCC(CC2=CC=C1)C(O)=O
+    codon: TGCGAT
+    reaction: SR,ABF
+  - smiles: CC(=O)C1=C(C)N(CC(O)=O)N=C1C
+    codon: CTCAGC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=CC=C1N1CCC(=O)NC1=O
+    codon: CCGTCA
+    reaction: SR,ABF
+  - smiles: COC1=C(Cl)C=C(C=C1)N1CC(CC1=O)C(O)=O
+    codon: CGTCCG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCCC1=NC(=NO1)C1=CC=NC=C1
+    codon: TGGTTC
+    reaction: SR,ABF
+  - smiles: CN(C)S(=O)(=O)C1=CC(C(O)=O)=C(C)O1
+    codon: CAAGGT
+    reaction: SR,ABF
+  - smiles: CC1=CC=CN=C1C(O)=O
+    codon: GAACAC
+    reaction: SR,ABF
+  - smiles: CCOC1=C(C=CC=N1)C(O)=O
+    codon: GGATAG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C(O)C=C1
+    codon: ACTCCA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(Br)C=N1
+    codon: CTAGTT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(OC2=CC=C3OCOC3=C2)N=C1
+    codon: AGTGCT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC(=O)C=C1
+    codon: AAGGCG
+    reaction: SR,ABF
+  - smiles: CC1=NC2=CC=CC=C2N1CC(O)=O
+    codon: AGAAGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CNN=C1
+    codon: CGGCGG
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(C(O)=O)C(O)=N1
+    codon: ATAGTC
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(O1)C1=NNC(=C1)C(O)=O
+    codon: CGTCGT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(N=CC=N1)C(=O)N1CCCCC1
+    codon: TGCGTA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C2SC=CN2C1=O
+    codon: TGGTGG
+    reaction: SR,ABF
+  - smiles: NC(=O)C1(CC1)C(O)=O
+    codon: GCACAG
+    reaction: SR,ABF
+  - smiles: CC1=NN2C(=C1)N=CC(C(O)=O)=C2C
+    codon: TCAAGG
+    reaction: SR,ABF
+  - smiles: CC1=C(C(O)=O)C(C)=NO1
+    codon: TTGGAT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(OC2=CC=CN=C2)O1
+    codon: AATGAC
+    reaction: SR,ABF
+  - smiles: O[C@H](C(O)=O)C1=CC=CC=C1
+    codon: GGCTCT
+    reaction: SR,ABF
+  - smiles: CNC(=O)C1=CC=C(C=C1)C(O)=O
+    codon: CAACAA
+    reaction: SR,ABF
+  - smiles: NS(=O)(=O)C1=CC=C(C=C1)C(O)=O
+    codon: AATCCT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(O)N=CC=C1
+    codon: TCCACG
+    reaction: SR,ABF
+  - smiles: COC1=NN2C(CCC(O)=O)=NN=C2C=C1
+    codon: GGCCAC
+    reaction: SR,ABF
+  - smiles: Cl.CN(C)CC1=CNC2=C1C=CC(=C2)C(O)=O
+    codon: CATTAC
+    reaction: SR,ABF
+  - smiles: CC1=C(CCC(O)=O)C(=O)NC(=O)N1
+    codon: GCTAGC
+    reaction: SR,ABF
+  - smiles: NC(=O)NC(CC(O)=O)C1=CC=CS1
+    codon: ATAAGT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C(C=C1)N1C=NC=N1
+    codon: TGTGAG
+    reaction: SR,ABF
+  - smiles: CC1=NC2=C(C=NN2C(C)=C1)C(O)=O
+    codon: CGTTGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NN(C(=O)C=C1)C1=CC=CC=C1
+    codon: GACGTG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CNN=N1
+    codon: AGATAT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CCCN1C(=O)C1CC1
+    codon: ATTACA
+    reaction: SR,ABF
+  - smiles: CN1NC(=O)C2=C1NC(=O)C(CC(O)=O)=C2C
+    codon: TTCGCG
+    reaction: SR,ABF
+  - smiles: CC1=C(CC(O)=O)C(=O)NC(N)=N1
+    codon: CAGTAA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC2=C1CCC2
+    codon: AGCGAC
+    reaction: SR,ABF
+  - smiles: CC1=C(C=NC=N1)C(O)=O
+    codon: CGTGTG
+    reaction: SR,ABF
+  - smiles: CC(NC(=O)C1=CC=C(Br)S1)C(O)=O
+    codon: GGACAA
+    reaction: SR,ABF
+  - smiles: CC1=NNC(C(O)=O)=C1Br
+    codon: ACCAGA
+    reaction: SR,ABF
+  - smiles: CN1C2=C(NC(CCC(O)=O)=N2)C(=O)NC1=O
+    codon: ACTCAC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(Br)C(=NN1)C1CC1
+    codon: CCAACC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CC1C(=O)N1CCN(CC1)C1=CC=CC=C1
+    codon: TGAACG
+    reaction: SR,ABF
+  - smiles: NC(=O)C1=CC=C(S1)C(O)=O
+    codon: TCCGCA
+    reaction: SR,ABF
+  - smiles: NC1=NC(Cl)=CC(=C1)C(O)=O
+    codon: TCCAAT
+    reaction: SR,ABF
+  - smiles: OC1CC(N(C1)C(=O)C1=CC=C(F)C=C1)C(O)=O
+    codon: TAGCGT
+    reaction: SR,ABF
+  - smiles: CCC(NC1=CC=CC=C1)C(O)=O
+    codon: TACTGA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=CNC(=O)C1=O
+    codon: CACGCG
+    reaction: SR,ABF
+  - smiles: OC(=O)CN1C=C2C=CC=CC2=N1
+    codon: CGGCTT
+    reaction: SR,ABF
+  - smiles: NC1=NNC(C(O)=O)=C1C1=CC=CC=C1
+    codon: GCGCGG
+    reaction: SR,ABF
+  - smiles: CN1N=C(C(O)=O)C(Br)=C1C
+    codon: CCACGG
+    reaction: SR,ABF
+  - smiles: CC1=NC(=NO1)C1=CC(=CC=C1)C(O)=O
+    codon: AACTCG
+    reaction: SR,ABF
+  - smiles: OC(=O)CN(CC1=CC=CC=C1)CC1=CC=CC=C1
+    codon: GAGTAC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(Br)SC=N1
+    codon: CTTACC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CNC(=O)C(Br)=C1
+    codon: AAGTCT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NC2=CC=CC=C2N=C1
+    codon: TCCAGC
+    reaction: SR,ABF
+  - smiles: NC1=C(N=C(Br)C=N1)C(O)=O
+    codon: CAACGC
+    reaction: SR,ABF
+  - smiles: CC1=CC(=NN1C1=CC(F)=CC=C1)C(O)=O
+    codon: CTCGTA
+    reaction: SR,ABF
+  - smiles: CC1=C(CCC(O)=O)C(=O)N2N=CN=C2N1
+    codon: ACTTCG
+    reaction: SR,ABF
+  - smiles: CCC1=CC2=C(S1)N=CN=C2NCCC(O)=O
+    codon: TATCTT
+    reaction: SR,ABF
+  - smiles: OC(=O)CN1C2=C(CCCC1=O)SC=C2
+    codon: ATCCAC
+    reaction: SR,ABF
+  - smiles: CN1C(=O)N(CCC(O)=O)C2=C1C=CC=C2
+    codon: TGCGCC
+    reaction: SR,ABF
+  - smiles: OC(=O)CN1C2=C(CCCC1=O)C=CC=C2
+    codon: GTCCTG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NC=C(F)C=C1
+    codon: GGTCCA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=C(Cl)C=N1
+    codon: GAGCAA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CSC2(CCC(=O)N12)C1=CC=CC=C1
+    codon: CGGTAG
+    reaction: SR,ABF
+  - smiles: CC1=NN(C(C)=C1CC(O)=O)C1=CC=CC=C1
+    codon: GAAGTT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NC=C(CC2=CC=CC=C2)C=C1
+    codon: TTAGCT
+    reaction: SR,ABF
+  - smiles: CCOC(=O)C1=C(NCC#C)N=C(Cl)C=C1
+    codon: TTCTAT
+    reaction: CuAAC
+  - smiles: Cl.C#CCNCC1=CC=CO1
+    codon: AATCTC
+    reaction: CuAAC
+  - smiles: Cl.NC(CC#C)CC(F)(F)F
+    codon: AGTCTA
+    reaction: CuAAC
+  - smiles: COC1=C(N)C=C(C=C1)C#C
+    codon: ACCAAG
+    reaction: CuAAC
+  - smiles: Cl.NC(C#C)C1CCOCC1
+    codon: TGTAGC
+    reaction: CuAAC
+  - smiles: Cl.NC1(CCC1)C#C
+    codon: ATACCT
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC2=C(C=C1)N(CC2)C(=O)C#C
+    codon: CACCTA
+    reaction: CuAAC
+  - smiles: NNC(=O)CCC#C
+    codon: ACTTAT
+    reaction: CuAAC
+  - smiles: CN1CCN(CCC#C)CC1
+    codon: TTGATC
+    reaction: CuAAC
+  - smiles: Cl.C#CC1CNC1
+    codon: CGATGT
+    reaction: CuAAC
+  - smiles: CN(C)CCC#C
+    codon: ATGCTC
+    reaction: CuAAC
+  - smiles: C#CCCNC1COC1
+    codon: GCGCCA
+    reaction: CuAAC
+  - smiles: OC1=CC=C(C(O)=C1)C2=CSC(NC(CCCC#C)=O)=N2
+    codon: CTAACT
+    reaction: CuAAC
+  - smiles: OC1=C(O)C=CC(C(CN2C=C(C(NCC#C)=O)C=N2)=O)=C1
+    codon: AATCAG
+    reaction: CuAAC
+  - smiles: OC1=C(O)C=CC(C(CN2C(C=C(C(NCC#C)=O)C=C3)=C3N=C2)=O)=C1
+    codon: GGATCA
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC(=CN=C1)C#C
+    codon: GCAGCA
+    reaction: CuAAC
+  - smiles: BrC1=NC=C(OCC#C)C=C1
+    codon: TATAGA
+    reaction: CuAAC
+  - smiles: CNC1=CC=C(OCC#C)C=C1
+    codon: AGGCGC
+    reaction: CuAAC
+  - smiles: NC(=O)C1=CC(=CN=C1)C#C
+    codon: CACTGT
+    reaction: CuAAC
+  - smiles: O=C(NCC#C)NC1CC1
+    codon: TCACAT
+    reaction: CuAAC
+  - smiles: Cl.NCCC(O)CCC#C
+    codon: TCTGCG
+    reaction: CuAAC
+  - smiles: OC1=CC(OCC#C)=CC=C1
+    codon: CGAGAT
+    reaction: CuAAC
+  - smiles: C#CCN1C=CC2=C1C=CC=C2
+    codon: TGGCGA
+    reaction: CuAAC
+  - smiles: FC(F)(F)C1=NC(OCC#C)=CC=C1
+    codon: GCGATG
+    reaction: CuAAC
+  - smiles: CC1=NC(=CC=C1)C#C
+    codon: CAATCC
+    reaction: CuAAC
+  - smiles: Cl.NC(=N)NCC#C
+    codon: CATCAT
+    reaction: CuAAC
+  - smiles: Cl.C#CCN1C=CN=C1C1=CC=CS1
+    codon: CATCCA
+    reaction: CuAAC
+  - smiles: OC(=O)CC(=O)NCC#C
+    codon: GTCGAT
+    reaction: CuAAC
+  - smiles: BrC1=CC2=C(OCC(=O)N2CC#C)C=C1
+    codon: GTACGT
+    reaction: CuAAC
+  - smiles: BrC1=C(OCC#C)C=CC=N1
+    codon: TGCATG
+    reaction: CuAAC
+  - smiles: C#CC1=NC2=C(C=CC=C2)N=C1
+    codon: GCACCT
+    reaction: CuAAC
+  - smiles: C#CCNC1CCCC1
+    codon: AAGTTG
+    reaction: CuAAC
+  - smiles: C#CC1=CN=CN=C1
+    codon: AATATA
+    reaction: CuAAC
+  - smiles: O=C1NCCN1CC#C
+    codon: GAGCGC
+    reaction: CuAAC
+  - smiles: COC1=NC(=CC=C1)C#C
+    codon: TCTGTT
+    reaction: CuAAC
+  - smiles: C#CCN1C=CN=C1
+    codon: GTTGAA
+    reaction: CuAAC
+  - smiles: O=C(NCC#C)C1=CNC(=O)C=C1
+    codon: TGTCCT
+    reaction: CuAAC
+  - smiles: C#CC1=CC=NC=C1
+    codon: GGTCTC
+    reaction: CuAAC
+  - smiles: O=C1COCC(=O)N1CC#C
+    codon: GCGCAC
+    reaction: CuAAC
+  - smiles: NC1=C(F)C(F)=C(C#C)C(F)=C1F
+    codon: AGTTGC
+    reaction: CuAAC
+  - smiles: CC1=NC2=C(C=C1)C=C(C=C2)C#C
+    codon: AGCGGT
+    reaction: CuAAC
+  - smiles: CS(=O)(=O)NCCC#C
+    codon: ACTGTA
+    reaction: CuAAC
+  - smiles: C#CC1=CN=CS1
+    codon: TCATAC
+    reaction: CuAAC
+  - smiles: C#CC1=NC=NC=C1
+    codon: GGAGTG
+    reaction: CuAAC
+  - smiles: Cl.C#CCNCC1CC1
+    codon: AACACA
+    reaction: CuAAC
+  - smiles: COCCN(C)CC#C
+    codon: TCCTCC
+    reaction: CuAAC
+  - smiles: C#CC1=NC2=C(S1)C=CC=C2
+    codon: AGTCAT
+    reaction: CuAAC
+  - smiles: NC(CO)CC#C
+    codon: CTACTA
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC=C(C=C1)S(=O)(=O)NCC#C
+    codon: TCCATA
+    reaction: CuAAC
+  - smiles: CC1=CC(NC(=O)NCC#C)=NO1
+    codon: TTGCCA
+    reaction: CuAAC
+  - smiles: O=S(=O)(NCC#C)C1=CC=CC=C1
+    codon: GACATA
+    reaction: CuAAC
+  - smiles: COC1=CC(=NC=C1)C#C
+    codon: TTGTCT
+    reaction: CuAAC
+  - smiles: NC(C#C)C1CCCCC1
+    codon: TACTAC
+    reaction: CuAAC
+  - smiles: FC1=C(C=CN=C1)C#C
+    codon: GCAAGT
+    reaction: CuAAC
+  - smiles: Cl.C#CCN1C=NC2=C1C=CC=C2
+    codon: ATGGAC
+    reaction: CuAAC
+  - smiles: O=CC1=CC=C(OCC#C)C=C1
+    codon: GATTGA
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC=C(C=C1)C#C
+    codon: TACATC
+    reaction: CuAAC
+  - smiles: O=S1(=O)CCN(CC#C)CC1
+    codon: CAGCCT
+    reaction: CuAAC
+  - smiles: NC1=CC=CC(=C1)C#C
+    codon: CGGTCT
+    reaction: CuAAC
+  - smiles: NS(=O)(=O)C1=CC=C(C=C1)C#C
+    codon: GATCGT
+    reaction: CuAAC
+  - smiles: C#CCNC1CCC2=C1C=CC=C2
+    codon: TATACC
+    reaction: CuAAC
+  - smiles: C#CC1=NC=CC=C1
+    codon: GTAACA
+    reaction: CuAAC
+  - smiles: NC1(CCCCC1)C#C
+    codon: ACGGCA
+    reaction: CuAAC
+  - smiles: CNCC#C
+    codon: GATGCG
+    reaction: CuAAC
+  - smiles: NCC#C
+    codon: CGCAGG
+    reaction: CuAAC
+  - smiles: C#CC1=CC=C2N=CC=NC2=C1
+    codon: CTAATC
+    reaction: CuAAC
+  - smiles: CC1=C(C=O)C2=C(C=CC=C2)N1CC#C
+    codon: TGATCC
+    reaction: CuAAC
+  - smiles: C#CCN1CCOCC1
+    codon: ATAGAT
+    reaction: CuAAC
+  - smiles: NC1=CC=C(C=C1)C#C
+    codon: CCTCCT
+    reaction: CuAAC
+  - smiles: C#CC1=CC2=C(NC=C2)C=C1
+    codon: CGGAGA
+    reaction: CuAAC
+  - smiles: C#CCN1C2=C(C=CC=C2)C2=C1C=CC=C2
+    codon: GGTGTA
+    reaction: CuAAC
+  - smiles: OC(CC#C)C(O)=O
+    codon: TGGACT
+    reaction: CuAAC
+  - smiles: CC(NCC#C)C1=CC2=C(OCC(=O)N2)C=C1
+    codon: GCCGGA
+    reaction: CuAAC
+  - smiles: CC(=O)O[C@]1(CCC2C3CCC4=CC(=O)CC[C@@H]4C3CC[C@@]12C)C#C
+    codon: TGCCGT
+    reaction: CuAAC
+  - smiles: NS(=O)(=O)C1=NN=C(NC(=O)CCC#C)S1
+    codon: AACGGA
+    reaction: CuAAC
+  - smiles: NC(=N)C1=CC=C(CNC(=O)CCC#C)C=C1
+    codon: ATATTG
+    reaction: CuAAC
+  - smiles: N
+    codon: GACCTC
+    reaction: SR
+  - smiles: CCC=CCC(O)=O
+    codon: CATGGA
+    reaction: SR,ABF
+  - smiles: OCC(O)=O
+    codon: CGAATG
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(C=C1)S(=O)(=O)NCC(O)=O
+    codon: ACATAG
+    reaction: SR,ABF
+  - smiles: CN(CC(O)=O)C(=O)C1=CC=CC=C1
+    codon: CCAGCG
+    reaction: SR,ABF
+  - smiles: CN(C)C1=CC=C(CC(O)=O)C=C1
+    codon: CGCACT
+    reaction: SR,ABF
+  - smiles: COC1=C(OC)C=C(CCC(O)=O)C=C1
+    codon: CCGCAA
+    reaction: SR,ABF
+  - smiles: COC1=CC(CC(O)=O)=CC(Br)=C1O
+    codon: GGCGAA
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1=CC=C2OCOC2=C1
+    codon: TTATTA
+    reaction: SR,ABF
+  - smiles: COC1=CC(CCC(O)=O)=CC(OC)=C1OC
+    codon: ATCACT
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=CNC2=C1C=CC=C2
+    codon: GACGGT
+    reaction: SR,ABF
+  - smiles: COC1=CC(OC)=NC(CCC(O)=O)=N1
+    codon: CGGACC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=CC=CN=C1
+    codon: GCTCAA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1CNC2=C1C=CC=C2
+    codon: GCCGAG
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1NC(=O)NC1=O
+    codon: AGTAGT
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C(=O)OC2=C1C=CC=C2
+    codon: AAGGTC
+    reaction: SR,ABF
+  - smiles: CC1=CN(CC(O)=O)C(=O)NC1=O
+    codon: AACAAC
+    reaction: SR,ABF
+  - smiles: CN1C2N=CN(CC(O)=O)C2C(=O)N(C)C1=O
+    codon: AGTTAG
+    reaction: SR,ABF
+  - smiles: CN(CC(O)=O)S(=O)(=O)C1=CC=CC=C1
+    codon: CCTCTC
+    reaction: SR,ABF
+  - smiles: OC(=O)COC1=CC2=C(C=CC(=O)O2)C=C1
+    codon: AGCGCA
+    reaction: SR,ABF
+  - smiles: CC1=C(C)C2=C(OC1=O)C=C(OCC(O)=O)C=C2
+    codon: ACCGTT
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1OC2=C(NC1=O)C=CC=C2
+    codon: AAGCCA
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1=CC2=C(N1)C=CC=C2
+    codon: CGAGTA
+    reaction: SR,ABF
+  - smiles: COC1=C(CO)C=CC(OCC(O)=O)=C1
+    codon: TCAACT
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(C=C1)C(=O)CCC(O)=O
+    codon: AGCATA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=CC(=O)C2=C(O1)C=CC(Br)=C2
+    codon: GAATGC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=NN=C(O1)C1=CC=CC=C1
+    codon: CCACAC
+    reaction: SR,ABF
+  - smiles: OC(=O)CNC(=O)C1=CC=CO1
+    codon: CAGACA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C(=O)COC2=C1C=C(Cl)C=C2
+    codon: TCGTAT
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=NC2=C(C=CC=C2)C1=O
+    codon: GGTACG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=NC(=NO1)C1=CN=CC=C1
+    codon: ACCGCG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=CC(=O)NC1=O
+    codon: ACGCAG
+    reaction: SR,ABF
+  - smiles: CC(=O)C1=C(C)N(CCC(O)=O)N=C1C
+    codon: GCTAAG
+    reaction: SR,ABF
+  - smiles: CC1=CC2=C(C=CC=C2)N1CCC(O)=O
+    codon: AGCTCC
+    reaction: SR,ABF
+  - smiles: CC1=CC2=C(C=C1)C(CC(O)=O)C(=O)N2
+    codon: GATACA
+    reaction: SR,ABF
+  - smiles: CC1=CC(=O)OC2=C1C=C(OCC(O)=O)C=C2
+    codon: CCTAGT
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=NC(=NO1)C1=CC=CO1
+    codon: CAATGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C2C=CN=CC2=CC=C1
+    codon: CTTGGT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C2C=CC=CN2C1=O
+    codon: TAGATA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C2C=CNC2=C1
+    codon: GTATGA
+    reaction: SR,ABF
+  - smiles: COC1=CC=C2NC(=CC2=C1)C(O)=O
+    codon: ATGGCT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC2=C1C=CC=C2
+    codon: TTCAGG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C2NC=NC2=C1
+    codon: CTTCTT
+    reaction: SR,ABF
+  - smiles: CC1=NC(C)=C(CC(O)=O)C(O)=N1
+    codon: TGAATA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C(N=C1)N1CCOCC1
+    codon: ATTATT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC(=C1)C1CC1
+    codon: ACGATA
+    reaction: SR,ABF
+  - smiles: COC1=CC2=C(C=C1)C(CC(O)=O)=CO2
+    codon: TAGGCA
+    reaction: SR,ABF
+  - smiles: CC1=C(C=C(O1)S(=O)(=O)N1CCOCC1)C(O)=O
+    codon: GGTTGG
+    reaction: SR,ABF
+  - smiles: CC1=NC2=CC=C(C=C2N=C1C)C(O)=O
+    codon: CCAATT
+    reaction: SR,ABF
+  - smiles: CCCC(=O)C1=CN(CC(O)=O)C2=CC=CC=C12
+    codon: ACACGT
+    reaction: SR,ABF
+  - smiles: OCCN1C=NC2=CC(=CC=C12)C(O)=O
+    codon: CACACC
+    reaction: SR,ABF
+  - smiles: OCCC1=CN2N=C(C=C2N=C1)C(O)=O
+    codon: GGCACC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(CN2C=CC=N2)O1
+    codon: GCCTAT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CCN(CC2=CC=CO2)CC1
+    codon: GTGCCT
+    reaction: SR,ABF
+  - smiles: NC(=O)CN1CCCC(C1)C(O)=O
+    codon: AGCCAG
+    reaction: SR,ABF
+  - smiles: CC1=CC=CN2C(CC(O)=O)=CN=C12
+    codon: GACGCA
+    reaction: SR,ABF
+  - smiles: C[C@@H]1C[C@H](NC(=S)N1)C(O)=O
+    codon: TAACCT
+    reaction: SR,ABF
+  - smiles: OC(=O)[C@@H]1CCC(=O)N1
+    codon: AGGACA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CN(CC2=CN=CC=C2)C(=O)C1
+    codon: CTGGAA
+    reaction: SR,ABF
+  - smiles: COC1=C2OCC(CC2=CC=C1)C(O)=O
+    codon: ACTACT
+    reaction: SR,ABF
+  - smiles: CC(=O)C1=C(C)N(CC(O)=O)N=C1C
+    codon: TCCTGT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=CC=C1N1CCC(=O)NC1=O
+    codon: CCTATG
+    reaction: SR,ABF
+  - smiles: COC1=C(Cl)C=C(C=C1)N1CC(CC1=O)C(O)=O
+    codon: ACGAAC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCCC1=NC(=NO1)C1=CC=NC=C1
+    codon: AGGCAA
+    reaction: SR,ABF
+  - smiles: CN(C)S(=O)(=O)C1=CC(C(O)=O)=C(C)O1
+    codon: TGACTG
+    reaction: SR,ABF
+  - smiles: CC1=CC=CN=C1C(O)=O
+    codon: AGTAAC
+    reaction: SR,ABF
+  - smiles: CCOC1=C(C=CC=N1)C(O)=O
+    codon: CCAGAA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C(O)C=C1
+    codon: AACAGG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(Br)C=N1
+    codon: AAGAGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(OC2=CC=C3OCOC3=C2)N=C1
+    codon: TTAAGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC(=O)C=C1
+    codon: CTCGCT
+    reaction: SR,ABF
+  - smiles: CC1=NC2=CC=CC=C2N1CC(O)=O
+    codon: CTGCGC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CNN=C1
+    codon: TCACTA
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(C(O)=O)C(O)=N1
+    codon: AATTAA
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(O1)C1=NNC(=C1)C(O)=O
+    codon: ACATCC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(N=CC=N1)C(=O)N1CCCCC1
+    codon: AAGCAC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C2SC=CN2C1=O
+    codon: TTGGCC
+    reaction: SR,ABF
+  - smiles: NC(=O)C1(CC1)C(O)=O
+    codon: TGAAGT
+    reaction: SR,ABF
+  - smiles: CC1=NN2C(=C1)N=CC(C(O)=O)=C2C
+    codon: AGTGTC
+    reaction: SR,ABF
+  - smiles: CC1=C(C(O)=O)C(C)=NO1
+    codon: CGAAGC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(OC2=CC=CN=C2)O1
+    codon: TTGTTG
+    reaction: SR,ABF
+  - smiles: O[C@H](C(O)=O)C1=CC=CC=C1
+    codon: GTCCAA
+    reaction: SR,ABF
+  - smiles: CNC(=O)C1=CC=C(C=C1)C(O)=O
+    codon: GTGTAA
+    reaction: SR,ABF
+  - smiles: NS(=O)(=O)C1=CC=C(C=C1)C(O)=O
+    codon: TCTTAG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(O)N=CC=C1
+    codon: TAGCTG
+    reaction: SR,ABF
+  - smiles: COC1=NN2C(CCC(O)=O)=NN=C2C=C1
+    codon: CACGGC
+    reaction: SR,ABF
+  - smiles: Cl.CN(C)CC1=CNC2=C1C=CC(=C2)C(O)=O
+    codon: CTACAT
+    reaction: SR,ABF
+  - smiles: CC1=C(CCC(O)=O)C(=O)NC(=O)N1
+    codon: GTCAGT
+    reaction: SR,ABF
+  - smiles: NC(=O)NC(CC(O)=O)C1=CC=CS1
+    codon: ACGTTC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C(C=C1)N1C=NC=N1
+    codon: ATTCCG
+    reaction: SR,ABF
+  - smiles: CC1=NC2=C(C=NN2C(C)=C1)C(O)=O
+    codon: CACCGG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NN(C(=O)C=C1)C1=CC=CC=C1
+    codon: TCAGCC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CNN=N1
+    codon: GGTGGT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CCCN1C(=O)C1CC1
+    codon: CAACTT
+    reaction: SR,ABF
+  - smiles: CN1NC(=O)C2=C1NC(=O)C(CC(O)=O)=C2C
+    codon: ATATGC
+    reaction: SR,ABF
+  - smiles: CC1=C(CC(O)=O)C(=O)NC(N)=N1
+    codon: GCATGG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC2=C1CCC2
+    codon: GGAACT
+    reaction: SR,ABF
+  - smiles: CC1=C(C=NC=N1)C(O)=O
+    codon: ATCATC
+    reaction: SR,ABF
+  - smiles: CC(NC(=O)C1=CC=C(Br)S1)C(O)=O
+    codon: AGTATG
+    reaction: SR,ABF
+  - smiles: CC1=NNC(C(O)=O)=C1Br
+    codon: GCGAGA
+    reaction: SR,ABF
+  - smiles: CN1C2=C(NC(CCC(O)=O)=N2)C(=O)NC1=O
+    codon: TATGCT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(Br)C(=NN1)C1CC1
+    codon: CTTCGG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CC1C(=O)N1CCN(CC1)C1=CC=CC=C1
+    codon: GGAGAC
+    reaction: SR,ABF
+  - smiles: NC(=O)C1=CC=C(S1)C(O)=O
+    codon: GGCGCG
+    reaction: SR,ABF
+  - smiles: NC1=NC(Cl)=CC(=C1)C(O)=O
+    codon: CGGCCA
+    reaction: SR,ABF
+  - smiles: OC1CC(N(C1)C(=O)C1=CC=C(F)C=C1)C(O)=O
+    codon: TTATGT
+    reaction: SR,ABF
+  - smiles: CCC(NC1=CC=CC=C1)C(O)=O
+    codon: TCTGAA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=CNC(=O)C1=O
+    codon: CTGTGA
+    reaction: SR,ABF
+  - smiles: OC(=O)CN1C=C2C=CC=CC2=N1
+    codon: ACCGGC
+    reaction: SR,ABF
+  - smiles: NC1=NNC(C(O)=O)=C1C1=CC=CC=C1
+    codon: CCTTCC
+    reaction: SR,ABF
+  - smiles: CN1N=C(C(O)=O)C(Br)=C1C
+    codon: GCCGCC
+    reaction: SR,ABF
+  - smiles: CC1=NC(=NO1)C1=CC(=CC=C1)C(O)=O
+    codon: GCTGCT
+    reaction: SR,ABF
+  - smiles: OC(=O)CN(CC1=CC=CC=C1)CC1=CC=CC=C1
+    codon: TTGCAC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(Br)SC=N1
+    codon: GAATTA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CNC(=O)C(Br)=C1
+    codon: CCATTC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NC2=CC=CC=C2N=C1
+    codon: GCACGA
+    reaction: SR,ABF
+  - smiles: NC1=C(N=C(Br)C=N1)C(O)=O
+    codon: TTACCG
+    reaction: SR,ABF
+  - smiles: CC1=CC(=NN1C1=CC(F)=CC=C1)C(O)=O
+    codon: ACGTAA
+    reaction: SR,ABF
+  - smiles: CC1=C(CCC(O)=O)C(=O)N2N=CN=C2N1
+    codon: CCAGGC
+    reaction: SR,ABF
+  - smiles: CCC1=CC2=C(S1)N=CN=C2NCCC(O)=O
+    codon: TCAGAG
+    reaction: SR,ABF
+  - smiles: OC(=O)CN1C2=C(CCCC1=O)SC=C2
+    codon: AGACAC
+    reaction: SR,ABF
+  - smiles: CN1C(=O)N(CCC(O)=O)C2=C1C=CC=C2
+    codon: GGTCAG
+    reaction: SR,ABF
+  - smiles: OC(=O)CN1C2=C(CCCC1=O)C=CC=C2
+    codon: AGAACC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NC=C(F)C=C1
+    codon: ATGAGC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=C(Cl)C=N1
+    codon: ACTTGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CSC2(CCC(=O)N12)C1=CC=CC=C1
+    codon: AGGAGG
+    reaction: SR,ABF
+  - smiles: CC1=NN(C(C)=C1CC(O)=O)C1=CC=CC=C1
+    codon: TCGTCG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NC=C(CC2=CC=CC=C2)C=C1
+    codon: GCTTCA
+    reaction: SR,ABF
+  - smiles: CCOC(=O)C1=C(NCC#C)N=C(Cl)C=C1
+    codon: TCAGGT
+    reaction: CuAAC
+  - smiles: Cl.C#CCNCC1=CC=CO1
+    codon: CGAACA
+    reaction: CuAAC
+  - smiles: Cl.NC(CC#C)CC(F)(F)F
+    codon: CGCGAG
+    reaction: CuAAC
+  - smiles: COC1=C(N)C=C(C=C1)C#C
+    codon: CCTCAG
+    reaction: CuAAC
+  - smiles: Cl.NC(C#C)C1CCOCC1
+    codon: GGCCTA
+    reaction: CuAAC
+  - smiles: Cl.NC1(CCC1)C#C
+    codon: TCGACA
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC2=C(C=C1)N(CC2)C(=O)C#C
+    codon: CATATC
+    reaction: CuAAC
+  - smiles: NNC(=O)CCC#C
+    codon: AGGATC
+    reaction: CuAAC
+  - smiles: CN1CCN(CCC#C)CC1
+    codon: AAGGAA
+    reaction: CuAAC
+  - smiles: Cl.C#CC1CNC1
+    codon: CTCGAC
+    reaction: CuAAC
+  - smiles: CN(C)CCC#C
+    codon: GTTACT
+    reaction: CuAAC
+  - smiles: C#CCCNC1COC1
+    codon: TGCTAG
+    reaction: CuAAC
+  - smiles: OC1=CC=C(C(O)=C1)C2=CSC(NC(CCCC#C)=O)=N2
+    codon: TCGGTA
+    reaction: CuAAC
+  - smiles: OC1=C(O)C=CC(C(CN2C=C(C(NCC#C)=O)C=N2)=O)=C1
+    codon: GCTTGT
+    reaction: CuAAC
+  - smiles: OC1=C(O)C=CC(C(CN2C(C=C(C(NCC#C)=O)C=C3)=C3N=C2)=O)=C1
+    codon: CCGCGT
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC(=CN=C1)C#C
+    codon: CGATCG
+    reaction: CuAAC
+  - smiles: BrC1=NC=C(OCC#C)C=C1
+    codon: ATGAAT
+    reaction: CuAAC
+  - smiles: CNC1=CC=C(OCC#C)C=C1
+    codon: CATACT
+    reaction: CuAAC
+  - smiles: NC(=O)C1=CC(=CN=C1)C#C
+    codon: CGACAG
+    reaction: CuAAC
+  - smiles: O=C(NCC#C)NC1CC1
+    codon: GAAGAA
+    reaction: CuAAC
+  - smiles: Cl.NCCC(O)CCC#C
+    codon: GGTTAA
+    reaction: CuAAC
+  - smiles: OC1=CC(OCC#C)=CC=C1
+    codon: ACGCCT
+    reaction: CuAAC
+  - smiles: C#CCN1C=CC2=C1C=CC=C2
+    codon: AATGTG
+    reaction: CuAAC
+  - smiles: FC(F)(F)C1=NC(OCC#C)=CC=C1
+    codon: ACAAGC
+    reaction: CuAAC
+  - smiles: CC1=NC(=CC=C1)C#C
+    codon: GACTGG
+    reaction: CuAAC
+  - smiles: Cl.NC(=N)NCC#C
+    codon: ACGGAT
+    reaction: CuAAC
+  - smiles: Cl.C#CCN1C=CN=C1C1=CC=CS1
+    codon: ATCTGA
+    reaction: CuAAC
+  - smiles: OC(=O)CC(=O)NCC#C
+    codon: CTCTCC
+    reaction: CuAAC
+  - smiles: BrC1=CC2=C(OCC(=O)N2CC#C)C=C1
+    codon: AACGCC
+    reaction: CuAAC
+  - smiles: BrC1=C(OCC#C)C=CC=N1
+    codon: CAGGTA
+    reaction: CuAAC
+  - smiles: C#CC1=NC2=C(C=CC=C2)N=C1
+    codon: GATCTA
+    reaction: CuAAC
+  - smiles: C#CCNC1CCCC1
+    codon: GCATAA
+    reaction: CuAAC
+  - smiles: C#CC1=CN=CN=C1
+    codon: AGCACG
+    reaction: CuAAC
+  - smiles: O=C1NCCN1CC#C
+    codon: ACCGAA
+    reaction: CuAAC
+  - smiles: COC1=NC(=CC=C1)C#C
+    codon: AACCAA
+    reaction: CuAAC
+  - smiles: C#CCN1C=CN=C1
+    codon: GCTGAC
+    reaction: CuAAC
+  - smiles: O=C(NCC#C)C1=CNC(=O)C=C1
+    codon: CAGTCG
+    reaction: CuAAC
+  - smiles: C#CC1=CC=NC=C1
+    codon: CACGTT
+    reaction: CuAAC
+  - smiles: O=C1COCC(=O)N1CC#C
+    codon: TCACGC
+    reaction: CuAAC
+  - smiles: NC1=C(F)C(F)=C(C#C)C(F)=C1F
+    codon: AAGCTT
+    reaction: CuAAC
+  - smiles: CC1=NC2=C(C=C1)C=C(C=C2)C#C
+    codon: CTCACA
+    reaction: CuAAC
+  - smiles: CS(=O)(=O)NCCC#C
+    codon: GCCTTA
+    reaction: CuAAC
+  - smiles: C#CC1=CN=CS1
+    codon: CGCGTC
+    reaction: CuAAC
+  - smiles: C#CC1=NC=NC=C1
+    codon: GCCATT
+    reaction: CuAAC
+  - smiles: Cl.C#CCNCC1CC1
+    codon: CCGTGG
+    reaction: CuAAC
+  - smiles: COCCN(C)CC#C
+    codon: ACTATC
+    reaction: CuAAC
+  - smiles: C#CC1=NC2=C(S1)C=CC=C2
+    codon: ACAACA
+    reaction: CuAAC
+  - smiles: NC(CO)CC#C
+    codon: TGAGCA
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC=C(C=C1)S(=O)(=O)NCC#C
+    codon: CTCAAT
+    reaction: CuAAC
+  - smiles: CC1=CC(NC(=O)NCC#C)=NO1
+    codon: CGCCTG
+    reaction: CuAAC
+  - smiles: O=S(=O)(NCC#C)C1=CC=CC=C1
+    codon: GTAGTA
+    reaction: CuAAC
+  - smiles: COC1=CC(=NC=C1)C#C
+    codon: GACACG
+    reaction: CuAAC
+  - smiles: NC(C#C)C1CCCCC1
+    codon: TCATTG
+    reaction: CuAAC
+  - smiles: FC1=C(C=CN=C1)C#C
+    codon: GACCAG
+    reaction: CuAAC
+  - smiles: Cl.C#CCN1C=NC2=C1C=CC=C2
+    codon: ATAACG
+    reaction: CuAAC
+  - smiles: O=CC1=CC=C(OCC#C)C=C1
+    codon: ATAGCA
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC=C(C=C1)C#C
+    codon: CTCTGG
+    reaction: CuAAC
+  - smiles: O=S1(=O)CCN(CC#C)CC1
+    codon: CCTGAT
+    reaction: CuAAC
+  - smiles: NC1=CC=CC(=C1)C#C
+    codon: ACAGAC
+    reaction: CuAAC
+  - smiles: NS(=O)(=O)C1=CC=C(C=C1)C#C
+    codon: CCTCGA
+    reaction: CuAAC
+  - smiles: C#CCNC1CCC2=C1C=CC=C2
+    codon: GCAGTC
+    reaction: CuAAC
+  - smiles: C#CC1=NC=CC=C1
+    codon: GGCGGC
+    reaction: CuAAC
+  - smiles: NC1(CCCCC1)C#C
+    codon: AATCGA
+    reaction: CuAAC
+  - smiles: CNCC#C
+    codon: ATACAG
+    reaction: CuAAC
+  - smiles: NCC#C
+    codon: CTGAGT
+    reaction: CuAAC
+  - smiles: C#CC1=CC=C2N=CC=NC2=C1
+    codon: CGCGGA
+    reaction: CuAAC
+  - smiles: CC1=C(C=O)C2=C(C=CC=C2)N1CC#C
+    codon: CGCAAC
+    reaction: CuAAC
+  - smiles: C#CCN1CCOCC1
+    codon: CATCTG
+    reaction: CuAAC
+  - smiles: NC1=CC=C(C=C1)C#C
+    codon: TATGTC
+    reaction: CuAAC
+  - smiles: C#CC1=CC2=C(NC=C2)C=C1
+    codon: CAGCGA
+    reaction: CuAAC
+  - smiles: C#CCN1C2=C(C=CC=C2)C2=C1C=CC=C2
+    codon: TAAGTA
+    reaction: CuAAC
+  - smiles: OC(CC#C)C(O)=O
+    codon: GGACGC
+    reaction: CuAAC
+  - smiles: CC(NCC#C)C1=CC2=C(OCC(=O)N2)C=C1
+    codon: ACTGCC
+    reaction: CuAAC
+  - smiles: CC(=O)O[C@]1(CCC2C3CCC4=CC(=O)CC[C@@H]4C3CC[C@@]12C)C#C
+    codon: GACAGC
+    reaction: CuAAC
+  - smiles: NS(=O)(=O)C1=NN=C(NC(=O)CCC#C)S1
+    codon: GTTATA
+    reaction: CuAAC
+  - smiles: NC(=N)C1=CC=C(CNC(=O)CCC#C)C=C1
+    codon: GAGGAG
+    reaction: CuAAC
+  - smiles: N
+    codon: AATTGG
+    reaction: SR
+  - smiles: CCC=CCC(O)=O
+    codon: CTCCAG
+    reaction: SR,ABF
+  - smiles: OCC(O)=O
+    codon: GCAACG
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(C=C1)S(=O)(=O)NCC(O)=O
+    codon: GATAGG
+    reaction: SR,ABF
+  - smiles: CN(CC(O)=O)C(=O)C1=CC=CC=C1
+    codon: TACCAT
+    reaction: SR,ABF
+  - smiles: CN(C)C1=CC=C(CC(O)=O)C=C1
+    codon: GTCTCA
+    reaction: SR,ABF
+  - smiles: COC1=C(OC)C=C(CCC(O)=O)C=C1
+    codon: CCGAGC
+    reaction: SR,ABF
+  - smiles: COC1=CC(CC(O)=O)=CC(Br)=C1O
+    codon: GAGATC
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1=CC=C2OCOC2=C1
+    codon: CCGGTT
+    reaction: SR,ABF
+  - smiles: COC1=CC(CCC(O)=O)=CC(OC)=C1OC
+    codon: GGAGGA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=CNC2=C1C=CC=C2
+    codon: TATCCG
+    reaction: SR,ABF
+  - smiles: COC1=CC(OC)=NC(CCC(O)=O)=N1
+    codon: ATGCGT
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=CC=CN=C1
+    codon: CAATAG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1CNC2=C1C=CC=C2
+    codon: TAGGAC
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1NC(=O)NC1=O
+    codon: CTGTAT
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C(=O)OC2=C1C=CC=C2
+    codon: TCGTGA
+    reaction: SR,ABF
+  - smiles: CC1=CN(CC(O)=O)C(=O)NC1=O
+    codon: GCGCTT
+    reaction: SR,ABF
+  - smiles: CN1C2N=CN(CC(O)=O)C2C(=O)N(C)C1=O
+    codon: GGCCGG
+    reaction: SR,ABF
+  - smiles: CN(CC(O)=O)S(=O)(=O)C1=CC=CC=C1
+    codon: GATTCT
+    reaction: SR,ABF
+  - smiles: OC(=O)COC1=CC2=C(C=CC(=O)O2)C=C1
+    codon: CACTTC
+    reaction: SR,ABF
+  - smiles: CC1=C(C)C2=C(OC1=O)C=C(OCC(O)=O)C=C2
+    codon: TAACTC
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1OC2=C(NC1=O)C=CC=C2
+    codon: ACAGCT
+    reaction: SR,ABF
+  - smiles: OC(=O)CC1=CC2=C(N1)C=CC=C2
+    codon: TAATGG
+    reaction: SR,ABF
+  - smiles: COC1=C(CO)C=CC(OCC(O)=O)=C1
+    codon: AATGGT
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(C=C1)C(=O)CCC(O)=O
+    codon: CCGCCG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=CC(=O)C2=C(O1)C=CC(Br)=C2
+    codon: TAAGGC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=NN=C(O1)C1=CC=CC=C1
+    codon: AAGTGC
+    reaction: SR,ABF
+  - smiles: OC(=O)CNC(=O)C1=CC=CO1
+    codon: TCAATC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C(=O)COC2=C1C=C(Cl)C=C2
+    codon: CACCAC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=NC2=C(C=CC=C2)C1=O
+    codon: CGTATA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=NC(=NO1)C1=CN=CC=C1
+    codon: ATCCTA
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=CC(=O)NC1=O
+    codon: GTGTCG
+    reaction: SR,ABF
+  - smiles: CC(=O)C1=C(C)N(CCC(O)=O)N=C1C
+    codon: TTGAAG
+    reaction: SR,ABF
+  - smiles: CC1=CC2=C(C=CC=C2)N1CCC(O)=O
+    codon: TCCGTG
+    reaction: SR,ABF
+  - smiles: CC1=CC2=C(C=C1)C(CC(O)=O)C(=O)N2
+    codon: GGTGCC
+    reaction: SR,ABF
+  - smiles: CC1=CC(=O)OC2=C1C=C(OCC(O)=O)C=C2
+    codon: ATGTGG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCC1=NC(=NO1)C1=CC=CO1
+    codon: GCAATA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C2C=CN=CC2=CC=C1
+    codon: TACACT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C2C=CC=CN2C1=O
+    codon: ACAGGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C2C=CNC2=C1
+    codon: ACCACC
+    reaction: SR,ABF
+  - smiles: COC1=CC=C2NC(=CC2=C1)C(O)=O
+    codon: GATTAG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC2=C1C=CC=C2
+    codon: CCTACA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C2NC=NC2=C1
+    codon: ATGATG
+    reaction: SR,ABF
+  - smiles: CC1=NC(C)=C(CC(O)=O)C(O)=N1
+    codon: ACAATG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C(N=C1)N1CCOCC1
+    codon: AGCCGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC(=C1)C1CC1
+    codon: TTAGTG
+    reaction: SR,ABF
+  - smiles: COC1=CC2=C(C=C1)C(CC(O)=O)=CO2
+    codon: GTAATG
+    reaction: SR,ABF
+  - smiles: CC1=C(C=C(O1)S(=O)(=O)N1CCOCC1)C(O)=O
+    codon: TTCTTC
+    reaction: SR,ABF
+  - smiles: CC1=NC2=CC=C(C=C2N=C1C)C(O)=O
+    codon: AAGAAG
+    reaction: SR,ABF
+  - smiles: CCCC(=O)C1=CN(CC(O)=O)C2=CC=CC=C12
+    codon: CTATAC
+    reaction: SR,ABF
+  - smiles: OCCN1C=NC2=CC(=CC=C12)C(O)=O
+    codon: CAAGAC
+    reaction: SR,ABF
+  - smiles: OCCC1=CN2N=C(C=C2N=C1)C(O)=O
+    codon: ACGACG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(CN2C=CC=N2)O1
+    codon: TCGATT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CCN(CC2=CC=CO2)CC1
+    codon: CCACCA
+    reaction: SR,ABF
+  - smiles: NC(=O)CN1CCCC(C1)C(O)=O
+    codon: TTCAAC
+    reaction: SR,ABF
+  - smiles: CC1=CC=CN2C(CC(O)=O)=CN=C12
+    codon: CCATAT
+    reaction: SR,ABF
+  - smiles: C[C@@H]1C[C@H](NC(=S)N1)C(O)=O
+    codon: CCGACT
+    reaction: SR,ABF
+  - smiles: OC(=O)[C@@H]1CCC(=O)N1
+    codon: TAAGAT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CN(CC2=CN=CC=C2)C(=O)C1
+    codon: GTGATT
+    reaction: SR,ABF
+  - smiles: COC1=C2OCC(CC2=CC=C1)C(O)=O
+    codon: AATGCA
+    reaction: SR,ABF
+  - smiles: CC(=O)C1=C(C)N(CC(O)=O)N=C1C
+    codon: ATTCAA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=CC=C1N1CCC(=O)NC1=O
+    codon: AGTTCA
+    reaction: SR,ABF
+  - smiles: COC1=C(Cl)C=C(C=C1)N1CC(CC1=O)C(O)=O
+    codon: AATAGC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCCC1=NC(=NO1)C1=CC=NC=C1
+    codon: GTAGCG
+    reaction: SR,ABF
+  - smiles: CN(C)S(=O)(=O)C1=CC(C(O)=O)=C(C)O1
+    codon: AGACGG
+    reaction: SR,ABF
+  - smiles: CC1=CC=CN=C1C(O)=O
+    codon: TTAATT
+    reaction: SR,ABF
+  - smiles: CCOC1=C(C=CC=N1)C(O)=O
+    codon: AACATT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C(O)C=C1
+    codon: AGCAAT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(Br)C=N1
+    codon: GTCTAC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(OC2=CC=C3OCOC3=C2)N=C1
+    codon: TAACAG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC(=O)C=C1
+    codon: AGCGTG
+    reaction: SR,ABF
+  - smiles: CC1=NC2=CC=CC=C2N1CC(O)=O
+    codon: CGAGCC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CNN=C1
+    codon: CTGATA
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(C(O)=O)C(O)=N1
+    codon: GTGAGG
+    reaction: SR,ABF
+  - smiles: CC1=CC=C(O1)C1=NNC(=C1)C(O)=O
+    codon: GAGCCG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(N=CC=N1)C(=O)N1CCCCC1
+    codon: GGTAAT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C2SC=CN2C1=O
+    codon: AATAAT
+    reaction: SR,ABF
+  - smiles: NC(=O)C1(CC1)C(O)=O
+    codon: TAGACG
+    reaction: SR,ABF
+  - smiles: CC1=NN2C(=C1)N=CC(C(O)=O)=C2C
+    codon: CCTTAA
+    reaction: SR,ABF
+  - smiles: CC1=C(C(O)=O)C(C)=NO1
+    codon: TATAAG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CC=C(OC2=CC=CN=C2)O1
+    codon: CGACCT
+    reaction: SR,ABF
+  - smiles: O[C@H](C(O)=O)C1=CC=CC=C1
+    codon: AGCCTC
+    reaction: SR,ABF
+  - smiles: CNC(=O)C1=CC=C(C=C1)C(O)=O
+    codon: CTTAGA
+    reaction: SR,ABF
+  - smiles: NS(=O)(=O)C1=CC=C(C=C1)C(O)=O
+    codon: GCCACA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(O)N=CC=C1
+    codon: TGTATT
+    reaction: SR,ABF
+  - smiles: COC1=NN2C(CCC(O)=O)=NN=C2C=C1
+    codon: ATCCGG
+    reaction: SR,ABF
+  - smiles: Cl.CN(C)CC1=CNC2=C1C=CC(=C2)C(O)=O
+    codon: AGGTGA
+    reaction: SR,ABF
+  - smiles: CC1=C(CCC(O)=O)C(=O)NC(=O)N1
+    codon: GTAAGC
+    reaction: SR,ABF
+  - smiles: NC(=O)NC(CC(O)=O)C1=CC=CS1
+    codon: ACACCG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CN=C(C=C1)N1C=NC=N1
+    codon: AGACCA
+    reaction: SR,ABF
+  - smiles: CC1=NC2=C(C=NN2C(C)=C1)C(O)=O
+    codon: TTACAA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NN(C(=O)C=C1)C1=CC=CC=C1
+    codon: GACTCC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CNN=N1
+    codon: TGGCAG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CCCN1C(=O)C1CC1
+    codon: CTAGAG
+    reaction: SR,ABF
+  - smiles: CN1NC(=O)C2=C1NC(=O)C(CC(O)=O)=C2C
+    codon: ACTAGG
+    reaction: SR,ABF
+  - smiles: CC1=C(CC(O)=O)C(=O)NC(N)=N1
+    codon: TAGAGC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NNC2=C1CCC2
+    codon: TTCGGC
+    reaction: SR,ABF
+  - smiles: CC1=C(C=NC=N1)C(O)=O
+    codon: GTATCC
+    reaction: SR,ABF
+  - smiles: CC(NC(=O)C1=CC=C(Br)S1)C(O)=O
+    codon: GACTAA
+    reaction: SR,ABF
+  - smiles: CC1=NNC(C(O)=O)=C1Br
+    codon: CTAAGG
+    reaction: SR,ABF
+  - smiles: CN1C2=C(NC(CCC(O)=O)=N2)C(=O)NC1=O
+    codon: GTGCGA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(Br)C(=NN1)C1CC1
+    codon: GTTCAT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CC1C(=O)N1CCN(CC1)C1=CC=CC=C1
+    codon: ACGCGA
+    reaction: SR,ABF
+  - smiles: NC(=O)C1=CC=C(S1)C(O)=O
+    codon: AGAGGC
+    reaction: SR,ABF
+  - smiles: NC1=NC(Cl)=CC(=C1)C(O)=O
+    codon: GATGAT
+    reaction: SR,ABF
+  - smiles: OC1CC(N(C1)C(=O)C1=CC=C(F)C=C1)C(O)=O
+    codon: GACCGA
+    reaction: SR,ABF
+  - smiles: CCC(NC1=CC=CC=C1)C(O)=O
+    codon: GGCAAG
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=CNC(=O)C1=O
+    codon: GAATAT
+    reaction: SR,ABF
+  - smiles: OC(=O)CN1C=C2C=CC=CC2=N1
+    codon: GAAGCC
+    reaction: SR,ABF
+  - smiles: NC1=NNC(C(O)=O)=C1C1=CC=CC=C1
+    codon: ACACAA
+    reaction: SR,ABF
+  - smiles: CN1N=C(C(O)=O)C(Br)=C1C
+    codon: CGGCAC
+    reaction: SR,ABF
+  - smiles: CC1=NC(=NO1)C1=CC(=CC=C1)C(O)=O
+    codon: CAGATT
+    reaction: SR,ABF
+  - smiles: OC(=O)CN(CC1=CC=CC=C1)CC1=CC=CC=C1
+    codon: TCATCA
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=C(Br)SC=N1
+    codon: TTCCTT
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=CNC(=O)C(Br)=C1
+    codon: CAGAGG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NC2=CC=CC=C2N=C1
+    codon: CAACCG
+    reaction: SR,ABF
+  - smiles: NC1=C(N=C(Br)C=N1)C(O)=O
+    codon: CAGCTC
+    reaction: SR,ABF
+  - smiles: CC1=CC(=NN1C1=CC(F)=CC=C1)C(O)=O
+    codon: CACAAG
+    reaction: SR,ABF
+  - smiles: CC1=C(CCC(O)=O)C(=O)N2N=CN=C2N1
+    codon: AACTAT
+    reaction: SR,ABF
+  - smiles: CCC1=CC2=C(S1)N=CN=C2NCCC(O)=O
+    codon: CTGCTG
+    reaction: SR,ABF
+  - smiles: OC(=O)CN1C2=C(CCCC1=O)SC=C2
+    codon: TCCTAA
+    reaction: SR,ABF
+  - smiles: CN1C(=O)N(CCC(O)=O)C2=C1C=CC=C2
+    codon: GAGTCA
+    reaction: SR,ABF
+  - smiles: OC(=O)CN1C2=C(CCCC1=O)C=CC=C2
+    codon: CTGACG
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NC=C(F)C=C1
+    codon: TCGCTC
+    reaction: SR,ABF
+  - smiles: OC(=O)CCN1C=C(Cl)C=N1
+    codon: AGATTC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1CSC2(CCC(=O)N12)C1=CC=CC=C1
+    codon: GATGGC
+    reaction: SR,ABF
+  - smiles: CC1=NN(C(C)=C1CC(O)=O)C1=CC=CC=C1
+    codon: AATTCC
+    reaction: SR,ABF
+  - smiles: OC(=O)C1=NC=C(CC2=CC=CC=C2)C=C1
+    codon: GGCTTC
+    reaction: SR,ABF
+  - smiles: CCOC(=O)C1=C(NCC#C)N=C(Cl)C=C1
+    codon: GAATCG
+    reaction: CuAAC
+  - smiles: Cl.C#CCNCC1=CC=CO1
+    codon: CGACGA
+    reaction: CuAAC
+  - smiles: Cl.NC(CC#C)CC(F)(F)F
+    codon: GGACCG
+    reaction: CuAAC
+  - smiles: COC1=C(N)C=C(C=C1)C#C
+    codon: GCGAAT
+    reaction: CuAAC
+  - smiles: Cl.NC(C#C)C1CCOCC1
+    codon: ATTAAG
+    reaction: CuAAC
+  - smiles: Cl.NC1(CCC1)C#C
+    codon: GAGTGT
+    reaction: CuAAC
+  - smiles: OC(=O)C1=CC2=C(C=C1)N(CC2)C(=O)C#C
+    codon: CCTAAC
+    reaction: CuAAC
+  - smiles: NNC(=O)CCC#C
+    codon: TCTGGC
+    reaction: CuAAC
+  - smiles: CN1CCN(CCC#C)CC1
+    codon: CTATCA
+    reaction: CuAAC
+  - smiles: Cl.C#CC1CNC1
+    codon: GCGGCG
+    reaction: CuAAC
+  - smiles: CN(C)CCC#C
+    codon: CGATAA
+    reaction: CuAAC
+  - smiles: C#CCCNC1COC1
+    codon: GCAGAT
+    reaction: CuAAC
+  - smiles: OC1=CC=C(C(O)=C1)C2=CSC(NC(CCCC#C)=O)=N2
+    codon: GTGCAG
+    reaction: CuAAC
+  - smiles: OC1=C(O)C=CC(C(CN2C=C(C(NCC#C)=O)C=N2)=O)=C1
+    codon: CCAAGA
+    reaction: CuAAC
+  - smiles: OC1=C(O)C=CC(C(CN2C(C=C(C(NCC#C)=O)C=C3)=C3N=C2)=O)=C1
+    codon: TGTCAC
+    reaction: CuAAC
+  experiment:
+  - variable: name
+    value: test
+  - variable: fastq_path
+    value: /Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/fastq_files/368061_1-241105_AG_BZ_NC_pool1_NF_S3_R1_001.fastq.gz
+  - variable: save_dir
+    value: /Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/
+  - variable: num_cores
+    value: 10

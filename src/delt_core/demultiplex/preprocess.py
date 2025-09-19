@@ -1,12 +1,12 @@
 import multiprocessing
 import os
-from pathlib import Path
 import stat
 import textwrap
+from pathlib import Path
 
 import pandas as pd
 
-from .utils import read_yaml
+from ..utils import read_yaml
 from .validation import validate, Region, SelectionFile
 
 
@@ -25,60 +25,60 @@ def get_selections(
     return selections[(selections['FASTQFile'] == fastq_file) & (selections['Library'] == library)]
 
 
-def get_regions(
-        structure: dict,
-) -> list[Region]:
-    regions = []
-    for key, value in structure.items():
-        with open(value['Path'], 'r') as f:
-            codons = f.read().split('\n')
-            codons = filter(len, codons)
-        region = Region(
-            name=key,
-            codons=codons,
-            max_error_rate=value['MaxErrorRate'],
-            indels=value['Indels']
-        )
-        regions.append(region)
-    return regions
+def get_codons(name: str, whitelist: dict) -> list[str]:
+    return [item['codon'] for item in whitelist[name]]
 
 
-def write_fastq_files(
-        regions: list[Region],
-        path: str,
-) -> None:
+def get_regions(structure: list[dict], whitelists: dict) -> list[Region]:
+    return [Region(
+        name=item['name'],
+        index=i,
+        codons=get_codons(item['name'], whitelists),
+        max_error_rate=item['max_error_rate'],
+        indels=item['indels']
+    )
+        for i, item in enumerate(structure)]
+
+
+def write_fastq_files(regions: list[Region], save_path: Path) -> None:
     for i, region in enumerate(regions):
-        region.position_in_construct = i
-        fastq = [f'>{region.region_id}.{index}\n{codon}'
+        fastq = [f'>{region.id}.{index}\n{codon}'
                  for index, codon in enumerate(region.codons)]
         fastq = '\n'.join(fastq)
-        with open(path / f'{region.region_id}.fastq', 'w') as f:
+        with open(save_path / f'{region.id}.fastq', 'w') as f:
             f.write(fastq)
 
 
 def generate_input_files(
-        config_file: Path,
-        structure: dict,
-        root_dir: Path,
-        path_input_fastq: Path,
-        write_json_file: bool,
-        write_info_file: bool,
+        config_path: Path,
+        write_json_file: bool = True,
+        write_info_file: bool = False,
         fast_dev_run: bool = False,
 ) -> None:
-    config = read_yaml(config_file)
-    experiment_name = config['Experiment']['Name']
-    cutadapt_input_files_dir = root_dir / 'experiments' / experiment_name / 'cutadapt_input_files'
-    cutadapt_output_files_dir = root_dir / 'experiments' / experiment_name / 'cutadapt_output_files'
+    config = read_yaml(config_path)
+
+    save_dir = Path(config['experiment']['save_dir'])
+    path_input_fastq = config['experiment']['fastq_path']
+
+    num_cores = config['experiment']['num_cores']
+    num_cores = multiprocessing.cpu_count() if pd.isna(num_cores) else num_cores
+
+    structure = config['structure']
+    whitelists = config['whitelists']
+
+    experiment_name = config['experiment']['name']
+    cutadapt_input_files_dir = save_dir / experiment_name / 'cutadapt_input_files'
+    cutadapt_output_files_dir = save_dir / experiment_name / 'cutadapt_output_files'
 
     cutadapt_input_files_dir.mkdir(parents=True, exist_ok=True)
     path_demultiplex_exec = cutadapt_input_files_dir / 'demultiplex.sh'
 
     path_final_reads = cutadapt_output_files_dir / 'reads_with_adapters.gz'
     path_output_fastq = cutadapt_output_files_dir / 'out.fastq.gz'
-    path_counts = root_dir / 'evaluations'
+    path_counts = save_dir / 'selections'
 
-    regions = get_regions(structure)
-    write_fastq_files(regions, cutadapt_input_files_dir)
+    regions = get_regions(structure=structure, whitelists=whitelists)
+    write_fastq_files(regions, save_path=cutadapt_input_files_dir)
 
     with open(path_demultiplex_exec, 'w') as f:
         f.write('#!/bin/bash\n')
@@ -103,18 +103,17 @@ def generate_input_files(
             f.write(cmd)
 
     rename_command = '{id} {comment}?{adapter_name}'
-    n_cores = multiprocessing.cpu_count()
 
     for region in regions:
         error_rate = region.max_error_rate
         indels = f' --no-indels' if not int(region.indels) else ''
-        path_adapters = cutadapt_input_files_dir / f'{region.region_id}.fastq'
+        path_adapters = cutadapt_input_files_dir / f'{region.id}.fastq'
         # NOTE: from now on we use the output of the previous step as input
         path_input_fastq = cutadapt_output_files_dir / 'input.fastq.gz'
 
-        report_file_name = cutadapt_output_files_dir / f'{region.region_id}.cutadapt.json'
-        stdout_file_name = cutadapt_output_files_dir / f'{region.region_id}.cutadapt.log'
-        info_file_name = cutadapt_output_files_dir / f'{region.region_id}.cutadapt.info.gz'
+        report_file_name = cutadapt_output_files_dir / f'{region.id}.cutadapt.json'
+        stdout_file_name = cutadapt_output_files_dir / f'{region.id}.cutadapt.log'
+        info_file_name = cutadapt_output_files_dir / f'{region.id}.cutadapt.info.gz'
 
         with open(path_demultiplex_exec, 'a') as f:
             cmd = f"""
@@ -135,13 +134,15 @@ def generate_input_files(
             if write_info_file:
                 cmd += f'--info-file="{info_file_name}" \\\n'
 
-            cmd += f'--cores={n_cores} 2>&1 | tee "{stdout_file_name}"\n'
+            cmd += f'--cores={num_cores} 2>&1 | tee "{stdout_file_name}"\n'
 
             f.write(cmd)
 
     with open(path_demultiplex_exec, 'a') as f:
-        f.write(f'zgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
-        f.write(f'delt-cli demultiplex compute-counts "{config_file}" "{path_final_reads}" "{path_counts}"\n')
+        f.write(f'\nzgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
+        f.write(f'delt-cli demultiplex process --config_path="{config_path}"\n')
         f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
+
+    return path_demultiplex_exec

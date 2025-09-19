@@ -32,7 +32,7 @@ def merge(**kwargs):
 
 @compute.command()
 @click.argument(
-    'input_file',
+    'input_path',
     nargs=1,
     required=True,
     type=click.Path(exists=True),
@@ -43,7 +43,7 @@ def properties(**kwargs):
 
 @compute.command()
 @click.argument(
-    'input_file',
+    'input_path',
     nargs=1,
     required=True,
     type=click.Path(exists=True),

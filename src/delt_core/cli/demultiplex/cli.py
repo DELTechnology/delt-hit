@@ -116,7 +116,7 @@ def create_cutadapt_input(**kwargs):
     type=click.Path(exists=True),
 )
 @click.argument(
-    'input_file',
+    'input_path',
     nargs=1,
     required=True,
     type=click.Path(exists=True),

@@ -4,7 +4,7 @@ import subprocess
 
 from ... import compute as c
 from ... import demultiplex as d
-from delt_core.demultiplex.utils import is_gz_file
+from ...utils import is_gz_file
 from delt_core.demultiplex.validation import init_config, Config
 
 
@@ -153,7 +153,7 @@ def create_cutadapt_input(
 
 
 def compute_counts(
-        config_file: Path,
+        config_path: Path,
         input_file: Path,
         output_dir: Path,
 ) -> None:
@@ -161,13 +161,13 @@ def compute_counts(
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     input_dir = input_file.parent
-    config = Config.from_yaml(config_file).model_dump()
+    config = Config.from_yaml(config_path).model_dump()
     num_reads = json.load(open(
         sorted(input_dir.glob('*.cutadapt.json'))[-1]
     ))['read_counts']['output']
     d.compute_counts(
         config=config,
-        input_file=input_file,
+        input_path=input_file,
         num_reads=num_reads,
         output_dir=output_dir,
     )
@@ -175,18 +175,18 @@ def compute_counts(
 
 def run(
         *,
-        config_file: Path,
+        config_path: Path,
         write_json_file: bool = True,
         write_info_file: bool = False,
         fast_dev_run: bool = False,
 ) -> None:
     create_cutadapt_input(
-        config_file=config_file,
+        config_path=config_path,
         write_json_file=write_json_file,
         write_info_file=write_info_file,
         fast_dev_run=fast_dev_run,
     )
-    config = Config.from_yaml(config_file).model_dump()
+    config = Config.from_yaml(config_path).model_dump()
     root = config['Root']
     experiment_name = config['Experiment']['Name']
     input_file = root / 'experiments' / experiment_name / 'cutadapt_input_files' / 'demultiplex.sh'

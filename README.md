@@ -19,6 +19,7 @@ Navigate to the root folder of the package and run the following command:
 
 ```bash
 pip install -e ".[dev,test]"
+# make sure you installed pigz with `brew install pigz` to enable parallel processing
 ```
 
 Create a `.env` file to store environment configurations, keys and secrets.
