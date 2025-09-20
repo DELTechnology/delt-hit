@@ -28,6 +28,7 @@ dependencies = [
     "pyaml",
     "jsonargparse",
     "networkx",
+    "loguru"
 ]
 version = "0.0.1"
 classifiers = [

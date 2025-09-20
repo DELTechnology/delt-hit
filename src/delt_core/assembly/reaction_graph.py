@@ -40,9 +40,6 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
 
     pos = nx.nx_agraph.graphviz_layout(G, prog="dot")
 
-    # Draw edges
-    nx.draw_networkx_edges(G, pos, ax=ax, arrows=True)
-
     # Draw compounds (blue circles)
     nx.draw_networkx_nodes(
         G, pos,
@@ -64,6 +61,7 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
     )
 
     nx.draw_networkx_labels(G, pos, ax=ax, font_size=8)
+    nx.draw_networkx_edges(G, pos, ax=ax, arrows=True)
 
     fig.show()
     return ax

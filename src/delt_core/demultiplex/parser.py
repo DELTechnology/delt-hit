@@ -47,10 +47,14 @@ def whitelists_from_excel(path: Path):
 
     for sheet in bbs_sheets:
         df = pd.read_excel(path, sheet_name=sheet)
+        df.index.name = 'index'
+        df = df.reset_index()
         whitelists[sheet] = df.to_dict('records')
 
     for sheet in selections_sheets:
         df = pd.read_excel(path, sheet_name=sheet)
+        df.index.name = 'index'
+        df = df.reset_index()
         whitelists[sheet] = df.to_dict('records')
 
     return whitelists
