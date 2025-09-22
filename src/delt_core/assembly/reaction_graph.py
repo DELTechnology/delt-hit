@@ -2,7 +2,7 @@ import networkx as nx
 from matplotlib import pyplot as plt
 import yaml
 
-config = yaml.safe_load(open("/Users/adrianomartinelli/projects/delt/delt-core/scribble/test-1/config.yaml"))
+config = yaml.safe_load(open("/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config.yaml"))
 
 
 def get_reaction_graph(config: dict) -> nx.DiGraph:
@@ -37,6 +37,7 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
 
     compounds = [n for n, d in G.nodes(data=True) if d.get("type") == "compound"]
     reactions = [n for n, d in G.nodes(data=True) if d.get("type") == "reaction"]
+    products = [n for n, d in G.nodes(data=True) if d.get("type") == "product"]
 
     pos = nx.nx_agraph.graphviz_layout(G, prog="dot")
 
@@ -45,6 +46,16 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
         G, pos,
         nodelist=compounds,
         node_color="lightblue",
+        node_shape="o",  # circle
+        node_size=500,
+        ax=ax
+    )
+
+    # Draw compounds (blue circles)
+    nx.draw_networkx_nodes(
+        G, pos,
+        nodelist=products,
+        node_color="salmon",
         node_shape="o",  # circle
         node_size=500,
         ax=ax
