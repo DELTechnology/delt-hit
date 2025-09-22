@@ -29,10 +29,19 @@ def get_codons(name: str, whitelists: dict) -> list[str]:
 
 
 def get_regions(structure: list[dict], whitelists: dict) -> list[Region]:
+    def unique_codons(codons: list[str]) -> list[str]:
+        seen = set()
+        unique = []
+        for codon in codons:
+            if codon not in seen:
+                unique.append(codon)
+                seen.add(codon)
+        return unique
+
     return [Region(
         name=item['name'],
         index=i,
-        codons=get_codons(item['name'], whitelists),
+        codons=unique_codons(get_codons(item['name'], whitelists)),
         max_error_rate=item['max_error_rate'],
         indels=item['indels']
     )
@@ -88,7 +97,7 @@ def generate_input_files(
         f.write(f'ln -sf "{path_input_fastq}" "{path_output_fastq}"\n')
 
         if fast_dev_run:
-            n_reads_for_fast_dev_run = 1000
+            n_reads_for_fast_dev_run = 10000
             n_lines = 4 * n_reads_for_fast_dev_run
             f.write(f'# fast-dev-run enabled\n')
 
@@ -138,8 +147,8 @@ def generate_input_files(
             f.write(cmd)
 
     with open(path_demultiplex_exec, 'a') as f:
-        f.write(f'\nzgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}"\n')
-        f.write(f'delt-cli demultiplex process --config_path="{config_path}"\n')
+        f.write(f'\nzgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}" || exit\n')
+        f.write(f'delt-cli demultiplex process --config_path="{config_path}" || exit\n')
         f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
 
     os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)

@@ -23,7 +23,9 @@ def structure_from_excel(path: Path):
 def selections_from_excel(path: Path):
     selections = pd.read_excel(path, sheet_name='selection')
     selections['date'] = pd.to_datetime(selections['date']).dt.strftime('%Y-%m-%d')
+    selection_ids_to_name = get_selection_name_to_ids(path)
     assert selections.name.is_unique
+    selections['ids'] = selections['name'].map(selection_ids_to_name)
     return selections.set_index('name').to_dict('index')
 
 def whitelists_from_excel(path: Path):
@@ -72,3 +74,17 @@ def catalog_from_excel(path: Path):
     }
 
     return catalog
+
+def get_selection_name_to_ids(path: Path)-> dict:
+    df = pd.read_excel(path, sheet_name='selection')
+    selection_col_names = list(filter(lambda x: x.startswith('S'), df.columns))
+
+    df = df[['name', *selection_col_names]]
+
+    for col_name in selection_col_names:
+        mapping = df[[col_name]].drop_duplicates().reset_index().set_index(col_name)['index'].to_dict()
+        df[col_name] = df[col_name].map(mapping)
+
+    id_to_name = df.set_index(selection_col_names).name.to_dict()
+    name_to_id = {v:k for k,v in id_to_name.items()}
+    return name_to_id

@@ -40,8 +40,9 @@ class Demultiplex:
 
         counts = get_counts(input_path=input_path, num_reads=num_reads)
 
+        ids_to_name = {item['ids']: k for k, item in config['selections'].items()}
         output_dir = save_dir / name / 'selections'
-        save_counts(counts, output_dir=output_dir)
+        save_counts(counts, output_dir=output_dir, ids_to_name=ids_to_name)
 
     def report(self, *, config_path: Path):
         from delt_core.quality_control.report import print_report
