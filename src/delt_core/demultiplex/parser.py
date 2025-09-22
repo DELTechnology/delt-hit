@@ -5,35 +5,35 @@ import pandas as pd
 
 def config_from_excel(path: Path):
     config = {}
-    config['project'] = project_from_excel(path)
     config['experiment'] = experiment_from_excel(path)
     config['structure'] = structure_from_excel(path)
+    config['selections'] = selections_from_excel(path)
     config['catalog'] = catalog_from_excel(path)
     config['whitelists'] = whitelists_from_excel(path)
     return config
-
-
-def project_from_excel(path: Path):
-    project = pd.read_excel(path, sheet_name='project')
-    return project.set_index('variable')['value'].to_dict()
-
 
 def experiment_from_excel(path: Path):
     experiment = pd.read_excel(path, sheet_name='experiment')
     return experiment.set_index('variable')['value'].to_dict()
 
-
 def structure_from_excel(path: Path):
     structure = pd.read_excel(path, sheet_name='structure')
     return structure.to_dict('records')
 
+def selections_from_excel(path: Path):
+    selections = pd.read_excel(path, sheet_name='selection')
+    selections['date'] = pd.to_datetime(selections['date']).dt.strftime('%Y-%m-%d')
+    assert selections.name.is_unique
+    return selections.set_index('name').to_dict('index')
 
 def whitelists_from_excel(path: Path):
     xf = pd.ExcelFile(path)
     sheets = set(xf.sheet_names)
 
     bbs_sheets = sorted(filter(lambda x: x.startswith('B'), sheets))
-    selections_sheets = sorted(filter(lambda x: x.startswith('S'), sheets))
+
+    selections = pd.read_excel(path, sheet_name='selection')
+    selection_col_names = list(filter(lambda x: x.startswith('S'), selections.columns))
 
     constants = pd.read_excel(path, sheet_name='constant')
 
@@ -51,11 +51,9 @@ def whitelists_from_excel(path: Path):
         df = df.reset_index()
         whitelists[sheet] = df.to_dict('records')
 
-    for sheet in selections_sheets:
-        df = pd.read_excel(path, sheet_name=sheet)
-        df.index.name = 'index'
-        df = df.reset_index()
-        whitelists[sheet] = df.to_dict('records')
+    for col_name in selection_col_names:
+        df = selections[['name', col_name]].rename(columns={col_name: 'codon'})
+        whitelists[col_name] = df.to_dict('records')
 
     return whitelists
 

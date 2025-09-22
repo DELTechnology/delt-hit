@@ -6,9 +6,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from ..utils import read_yaml
-from .validation import validate, Region, SelectionFile
-
+from delt_core.utils import read_yaml
+from delt_core.demultiplex.validation import SelectionFile, Region, validate
 
 def get_selections(
         config: dict,
@@ -25,8 +24,8 @@ def get_selections(
     return selections[(selections['FASTQFile'] == fastq_file) & (selections['Library'] == library)]
 
 
-def get_codons(name: str, whitelist: dict) -> list[str]:
-    return [item['codon'] for item in whitelist[name]]
+def get_codons(name: str, whitelists: dict) -> list[str]:
+    return [item['codon'] for item in whitelists[name]]
 
 
 def get_regions(structure: list[dict], whitelists: dict) -> list[Region]:
@@ -57,8 +56,8 @@ def generate_input_files(
 ) -> None:
     config = read_yaml(config_path)
 
-    save_dir = Path(config['experiment']['save_dir'])
-    path_input_fastq = config['experiment']['fastq_path']
+    save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
+    path_input_fastq = Path(config['experiment']['fastq_path']).expanduser().resolve()
 
     num_cores = config['experiment']['num_cores']
     num_cores = multiprocessing.cpu_count() if pd.isna(num_cores) else num_cores
