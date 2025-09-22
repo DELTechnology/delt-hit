@@ -25,7 +25,7 @@ def selections_from_excel(path: Path):
     selections['date'] = pd.to_datetime(selections['date']).dt.strftime('%Y-%m-%d')
     selection_ids_to_name = get_selection_name_to_ids(path)
     assert selections.name.is_unique
-    selections['ids'] = selections['name'].map(selection_ids_to_name)
+    selections['ids'] = list(map(list, selections['name'].map(selection_ids_to_name).tolist()))
     return selections.set_index('name').to_dict('index')
 
 def whitelists_from_excel(path: Path):
