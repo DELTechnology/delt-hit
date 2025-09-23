@@ -3,32 +3,42 @@ from textwrap import dedent
 
 import pandas as pd
 
-from delt_core.utils import read_yaml
+from delt_core.utils import read_yaml, write_yaml
 
 
-class Analyze:
+config_path = Path(
+    '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config.yaml')
+cfg = read_yaml(config_path)
 
-    def prepare(self, config_path: Path):
-        config_path = Path(
-            '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config.yaml')
-        config = read_yaml(config_path)
-        name = config['experiment']['name']
-        exp_dir = Path(config['experiment']['save_dir']).expanduser().resolve() / name
+class Analyse:
+
+    def add(self, *, config_path: Path, name: str, selections: list[str]) -> None:
+        cfg = read_yaml(config_path)
+
+        analyses = cfg.get("analyses", {})
+        analyses[name] = dict(selections=selections)
+
+        cfg['analyses'] = analyses
+
+        write_yaml(cfg, config_path)
+
+    def prepare(self, config_path: Path, name: str):
+        cfg = read_yaml(config_path)
+        exp_dir = Path(cfg['experiment']['save_dir']).expanduser().resolve() / cfg['experiment']['name']
         selections_dir = exp_dir / 'selections'
 
-        analysis_name = 'test'
-        analysis_dir = exp_dir / 'analysis' / analysis_name
+        analysis_dir = exp_dir / 'analyses' / name
 
         data_path = analysis_dir / 'data.csv'
         samples_path = analysis_dir / 'samples.csv'
 
-        prepare_data(config=config, selections_dir=selections_dir,
+        prepare_data(cfg=cfg, name=name, selections_dir=selections_dir,
                      data_path=data_path, samples_path=samples_path)
 
         return data_path, samples_path, analysis_dir
 
-    def enrichment(self, *, method: str = 'counts', config_path: Path = Path()):
-        data_path, samples_path, analysis_dir = self.prepare(config_path=config_path)
+    def enrichment(self, *, config_path: Path, name: str, method: str = 'counts'):
+        data_path, samples_path, analysis_dir = self.prepare(config_path=config_path, name=name)
 
         match method:
             case 'counts':
@@ -224,10 +234,6 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
 
 
 def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
-    # save_dir = analysis_dir / analysis_name / 'counts'
-    # save_dir.mkdir(parents=True, exist_ok=True)
-    # cpm = False
-
     r_cpm_flag = "TRUE" if cpm else "FALSE"
 
     r_script = dedent(f"""
@@ -324,15 +330,12 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
     r_path.write_text(r_script)
 
 
-def prepare_data(config, selections_dir: Path, data_path: Path, samples_path: Path):
-    selections = ["AG24_1", "AG24_2", "AG24_3",
-                  "AG24_10", "AG24_11", "AG24_12",
-                  "AG24_19", "AG24_20", "AG24_21"]
-
+def prepare_data(cfg, name: str, selections_dir: Path, data_path: Path, samples_path: Path):
+    selections = cfg['analyses'][name]['selections']
     samples = []
     data = []
     for sel in selections:
-        meta = config['selections'][sel]
+        meta = cfg['selections'][sel]
         meta['name'] = sel
         samples.append(meta)
         counts = pd.read_csv(selections_dir / sel / "counts.txt", delimiter='\t')
