@@ -21,26 +21,20 @@ from tqdm import tqdm
 
 class Represent:
 
-    def init(self):
-        pass
+    def run(self, *, config_path: Path, method: str = 'morgan'):
+        cfg = read_yaml(config_path)
 
-    def run(self, config_path: Path):
-        pass
+        exp_dir = Path(cfg['experiment']['save_dir']).expanduser().resolve() / cfg['experiment']['name']
+        save_dir = exp_dir / 'representations'
+        save_dir.mkdir(parents=True, exist_ok=True)
 
-    def morgan(self, *, path: Path, save_path: Path):
+        lib_path = exp_dir / 'library.parquet'
+        df = pd.read_parquet(lib_path)
+        smiles = df.smiles
 
-        df = pd.read_parquet(path)
-
-        fps = []
-        for smiles in tqdm(df.smiles):
-            fp = get_morgan_fp(smiles)
-            fps.append(fp)
-
-        fps = sparse.vstack(fps, format="csr")
-        save_path.parent.mkdir(parents=True, exist_ok=True)
-        sparse.save_npz(save_path, fps)
-
-        logger.info(f"Fingerprints saved to {save_path}")
+        match method:
+            case 'morgan':
+                run_morgan(smiles, save_path =save_dir / 'morgan_fps.npz')
 
     def deep(self, *, model_name: str, path: Path, save_path: Path, device='cuda'):
 
@@ -77,6 +71,19 @@ def get_bert_fp(smiles: list[str], device='cuda'):
         bert_fp.append(predictions.pooler_output.cpu().numpy())
 
     return bert_fp
+
+
+def run_morgan(smiles: list[str], save_path: Path):
+    fps = []
+    for smiles in tqdm(smiles):
+        fp = get_morgan_fp(smiles)
+        fps.append(fp)
+
+    fps = sparse.vstack(fps, format="csr")
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+    sparse.save_npz(save_path, fps)
+
+    logger.info(f"Fingerprints saved to {save_path}")
 
 def get_morgan_fp(smiles, radius=2, n_bits=2048) -> sparse.csr_array:
 

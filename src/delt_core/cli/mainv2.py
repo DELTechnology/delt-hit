@@ -1,6 +1,7 @@
 from jsonargparse import CLI
 
 from delt_core.cli.analyse.api import Analyse
+from delt_core.cli.represent.api import Represent
 from delt_core.cli.properties.api import Properties
 from delt_core.cli.demultiplex.api import Demultiplex
 from delt_core.cli.assembly.api import Assembly  # add/remove as your modules land
@@ -20,6 +21,7 @@ def cli() -> None:
             "assembly": Assembly,
             "analyse": Analyse,
             "properties": Properties,
+            "represent": Represent,
         },
         prog="delt-core",
         description="DEL-T core toolkit",
