@@ -17,8 +17,7 @@ from rdkit.Chem import Descriptors, Crippen, Lipinski, rdMolDescriptors as RD, Q
 
 
 # ---------- 1) Create & save a dummy dataset of 50 diverse SMILES ----------
-def write_dummy_smiles_csv(out_path: Path) -> Path:
-    out_path.parent.mkdir(parents=True, exist_ok=True)
+def write_dummy_smiles_csv() -> pd.DataFrame:
     smiles = [
         # aromatics / simple rings
         "c1ccccc1", "Cc1ccccc1", "Oc1ccccc1", "Nc1ccccc1", "c1ccncc1",
@@ -49,9 +48,11 @@ def write_dummy_smiles_csv(out_path: Path) -> Path:
         "COC(=O)C(O)C(O)CO"  # sugar-like ester
     ]
     # Give them simple names
-    df = pd.DataFrame({"name": [f"S{i + 1}" for i in range(len(smiles))], "smiles": smiles})
-    df.to_parquet(out_path)
-    return out_path
+    df = pd.DataFrame({
+        'coda_1': range(len(smiles)),
+        'coda_2': range(len(smiles)),
+        'smiles': smiles})
+    return df
 
 
 def get_smiles_from_mol(mol):

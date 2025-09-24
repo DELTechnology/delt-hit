@@ -47,8 +47,8 @@ def plot_hits(output_dir: Path, save_dir: Path) -> None:
         fig, axs = plt.subplots(1, 2, figsize=(10, 5))
         fig.suptitle(f'{grp_name}, {_out:.3E} / {_in:.3E} ({_out/_in:.2%})\n{error_stats}')
 
-        pdat.plot(kind='bar', stacked=True, ax=axs[0])
-        pdat.plot(kind='bar', stacked=True, ax=axs[1])
+        pdat.plot_property(kind='bar', stacked=True, ax=axs[0])
+        pdat.plot_property(kind='bar', stacked=True, ax=axs[1])
 
         axs[0].set_ylabel('counts')
         _max = max(axs[1].get_ylim())
