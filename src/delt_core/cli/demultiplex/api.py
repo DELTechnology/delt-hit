@@ -31,7 +31,7 @@ class Demultiplex:
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
         name = config['experiment']['name']
 
-        output_dir = save_dir / name / 'cutadapt_output_files'
+        output_dir = save_dir / name / 'demultiplex' / 'cutadapt_output_files'
         input_path = output_dir / 'reads_with_adapters.gz'
 
         num_reads = json.load(open(

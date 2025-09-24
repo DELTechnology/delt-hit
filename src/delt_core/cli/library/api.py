@@ -8,8 +8,10 @@ import pandas as pd
 import seaborn as sns
 from loguru import logger
 from rdkit import Chem
+from rdkit.Chem import Draw
 from rdkit.Chem import AllChem
 from rdkit.Chem import Descriptors, Crippen, Lipinski, rdMolDescriptors as RD, QED
+from rdkit.Chem import rdChemReactions
 from scipy import sparse
 from tqdm import tqdm
 
@@ -34,18 +36,25 @@ class Library:
             logger.info(f'Library {lib_path} exists')
             return
 
-        config_path = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config_with_steps.yaml')
+        config_path = Path(
+            '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config_with_steps.yaml')
         cfg = read_yaml(config_path)
 
         steps = cfg['library']['steps']
         catalog = cfg['catalog']
         reactions = catalog['reactions']
         compounds = catalog['compounds']
-        products = {k: dict(smiles=None) for k in cfg['library']['products']}
+        products = {k: dict(smiles=None) for k in cfg['library']['products']['names']}
+        terminal = cfg['library']['products']['terminal']
 
         G = get_reaction_graph(steps=steps, reactions=reactions, compounds=compounds, products=products)
         ax = visualize_reaction_graph(G)
         ax.figure.savefig(lib_path.parent / 'reaction_graph.png', dpi=300)
+
+        G = complete_reaction_graph(G)
+        product = G.nodes[terminal]['smiles']
+        ax = visualize_smiles([product])
+        ax.figure.savefig(lib_path.parent / 'products.png', dpi=300)
 
         df = get_dummy_library()
         df.to_parquet(lib_path, index=False)
@@ -64,6 +73,7 @@ class Library:
         for name in prop_names:
             ax = self.plot_property(data=df, name=name)
             ax.figure.savefig(save_dir / f"{name}.png")
+            plt.close(ax.figure)
 
     def compute_properties(self, data: pd.DataFrame) -> pd.DataFrame:
         mols = [Chem.MolFromSmiles(s) for s in data['smiles'].tolist()]
@@ -113,7 +123,6 @@ class Library:
 
 
 def run_bert(*, model_name: str, path: Path, save_path: Path, device='cuda'):
-
     df = pd.read_parquet(path)
     smiles = df.smiles.tolist()
 
@@ -169,6 +178,7 @@ def get_morgan_fp(smiles, radius=2, n_bits=2048) -> sparse.csr_array:
     fp = mfpgen.GetFingerprint(mol)
     fp = sparse.csr_array(fp, dtype=np.uint8)
     return fp
+
 
 def get_dummy_library() -> pd.DataFrame:
     smiles = [
@@ -270,3 +280,65 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
     fig.show()
     return ax
 
+
+def find_next_reaction(G: nx.DiGraph):
+    reaction_nodes = [n for n, d in G.nodes(data=True) if d.get("type") == "reaction"]
+    for node in reaction_nodes:
+        preds = sorted(G.predecessors(node))
+        succ, = sorted(G.successors(node))  # note: currently only one product per reaction
+
+        if G.nodes[succ]['smiles'] is None and all([G.nodes[i]['smiles'] is not None for i in preds]):
+            return {'reactants': preds, 'reaction': node, 'product': succ}
+
+    return None
+
+
+def perform_reaction(smirks: str, reactants: list[str]) -> list[str]:
+    mols = [Chem.MolFromSmiles(i) for i in reactants]
+    rxn = rdChemReactions.ReactionFromSmarts(smirks, useSmiles=True)
+
+    # note: order matters
+    product_sets = rxn.RunReactants([*mols])
+
+    products = set()
+    for tup in product_sets:
+        for pmol in tup:
+            Chem.SanitizeMol(pmol)
+            products.add(Chem.MolToSmiles(pmol, canonical=True, kekuleSmiles=False, isomericSmiles=False))
+
+    return sorted(products)
+
+
+def complete_reaction_graph(G: nx.DiGraph) -> nx.DiGraph:
+    while True:
+
+        try:
+            next_reaction = find_next_reaction(G)
+            if next_reaction is None:
+                break
+
+            smirks = G.nodes[next_reaction['reaction']]['smirks']
+            reactants = [G.nodes[i]['smiles'] for i in next_reaction['reactants']]
+            products = perform_reaction(smirks, reactants)
+
+            # Take the first product if multiple are formed
+            product = {next_reaction['product']: dict(smiles=products[0])}
+            nx.set_node_attributes(G, product)
+            print(f"Reaction {next_reaction['reaction']}: {reactants} -> {products[0]}")
+        except Exception as e:
+            print(f"Error processing reaction {next_reaction}: {e}")
+            break
+
+    return G
+
+def visualize_smiles(smiles: list[str], nrow: int = 25):
+    mols = [Chem.MolFromSmiles(s) for s in smiles]
+    # could provide legends=product_names
+    nrow = min(nrow, len(mols))
+    img = Draw.MolsToGridImage(mols, molsPerRow=nrow, subImgSize=(200, 200))
+    plt.figure(figsize=(10, 6))
+    ax = plt.imshow(img)
+    ax.axes.set_axis_off()
+    ax.axes.set_title('Product Structures')
+    ax.figure.tight_layout()
+    return ax
