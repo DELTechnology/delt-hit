@@ -3,6 +3,8 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+import yaml
+
 
 def get_experiment_name(
         experiment_name: str = None,
