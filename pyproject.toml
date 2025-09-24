@@ -38,7 +38,7 @@ classifiers = [
 ]
 
 [project.scripts]
-delt-cli = "delt_core.cli.mainv2:cli"
+delt-cli = "delt_core.cli.main:cli"
 
 [project.urls]
 repository = "https://github.com/DELTechnology/delt-core"
