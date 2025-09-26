@@ -1,7 +1,8 @@
 from jsonargparse import CLI
 
-from delt_core.cli.analyse.api import Analyse
+from delt_core.cli.init import init
 from delt_core.cli.demultiplex.api import Demultiplex
+from delt_core.cli.analyse.api import Analyse
 from delt_core.cli.library.api import Library
 from delt_core.cli.dashboard.api import dashboard
 
@@ -16,6 +17,7 @@ def cli() -> None:
     """
     CLI(
         {
+            "init": init,
             "library": Library,
             "demultiplex": Demultiplex,
             "analyse": Analyse,
