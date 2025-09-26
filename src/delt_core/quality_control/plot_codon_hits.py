@@ -33,6 +33,10 @@ def plot_hits(output_dir: Path, save_dir: Path) -> None:
 
     for grp_name, grp_dat in df.groupby('region_id'):
         pdat = pd.concat(grp_dat['error_counts'].tolist())
+
+        pdat = pdat.convert_dtypes()
+        pdat.to_parquet(save_dir / f'hits_{grp_name}.parquet', engine='pyarrow')
+
         pdat = pdat[['index', 'number_of_errors', 'error_counts']] \
             .groupby(['index', 'number_of_errors']) \
             .agg('sum') \
@@ -47,8 +51,8 @@ def plot_hits(output_dir: Path, save_dir: Path) -> None:
         fig, axs = plt.subplots(1, 2, figsize=(10, 5))
         fig.suptitle(f'{grp_name}, {_out:.3E} / {_in:.3E} ({_out/_in:.2%})\n{error_stats}')
 
-        pdat.plot_property(kind='bar', stacked=True, ax=axs[0])
-        pdat.plot_property(kind='bar', stacked=True, ax=axs[1])
+        pdat.plot(kind='bar', stacked=True, ax=axs[0])
+        pdat.plot(kind='bar', stacked=True, ax=axs[1])
 
         axs[0].set_ylabel('counts')
         _max = max(axs[1].get_ylim())

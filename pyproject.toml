@@ -28,7 +28,9 @@ dependencies = [
     "pyaml",
     "jsonargparse",
     "networkx",
-    "loguru"
+    "loguru",
+    "rich",
+    "pyarrow"
 ]
 version = "0.0.1"
 classifiers = [

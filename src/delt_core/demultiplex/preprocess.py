@@ -75,8 +75,8 @@ def generate_input_files(
     whitelists = config['whitelists']
 
     experiment_name = config['experiment']['name']
-    cutadapt_input_files_dir = save_dir / experiment_name / 'cutadapt_input_files'
-    cutadapt_output_files_dir = save_dir / experiment_name / 'cutadapt_output_files'
+    cutadapt_input_files_dir = save_dir / experiment_name / 'demultiplex' / 'cutadapt_input_files'
+    cutadapt_output_files_dir = save_dir / experiment_name / 'demultiplex' / 'cutadapt_output_files'
 
     cutadapt_input_files_dir.mkdir(parents=True, exist_ok=True)
     path_demultiplex_exec = cutadapt_input_files_dir / 'demultiplex.sh'

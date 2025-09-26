@@ -13,18 +13,9 @@ class Demultiplex:
     def __init__(self):
         pass
 
-    def init(self, *, excel_path: Path):
-        config = config_from_excel(excel_path)
-        save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
-        name = config['experiment']['name']
-
-        save_path = save_dir / name / 'config.yaml'
-        save_path.parent.mkdir(parents=True, exist_ok=True)
-        write_yaml(config, save_path)
-        logger.info(f'Configuration created at {save_path}')
-
     def prepare(self, *, config_path: Path, fast_dev_run: bool = False):
         exec_path = generate_input_files(config_path=config_path, fast_dev_run=fast_dev_run)
+        logger.info(f"Executable created at {exec_path}")
 
     def process(self, *, config_path: Path):
         config = read_yaml(config_path)
@@ -40,7 +31,7 @@ class Demultiplex:
 
         counts = get_counts(input_path=input_path, num_reads=num_reads)
 
-        ids_to_name = {item['ids']: k for k, item in config['selections'].items()}
+        ids_to_name = {tuple(item['ids']): k for k, item in config['selections'].items()}
         output_dir = save_dir / name / 'selections'
         save_counts(counts, output_dir=output_dir, ids_to_name=ids_to_name)
 
@@ -50,8 +41,9 @@ class Demultiplex:
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
         name = config['experiment']['name']
 
-        output_dir = save_dir / name / 'cutadapt_output_files'
+        output_dir = save_dir / name / 'demultiplex' / 'cutadapt_output_files'
         save_path = save_dir / name / 'qc' / 'report.txt'
+        save_path.parent.mkdir(parents=True, exist_ok=True)
         print_report(output_dir=output_dir, save_path=save_path)
 
     def qc(self, *, config_path: Path):
@@ -61,7 +53,7 @@ class Demultiplex:
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
         name = config['experiment']['name']
 
-        output_dir = save_dir / name / 'cutadapt_output_files'
+        output_dir = save_dir / name / 'demultiplex' / 'cutadapt_output_files'
         save_dir = save_dir / name / 'qc'
         save_dir.mkdir(parents=True, exist_ok=True)
         plot_hits(output_dir=output_dir, save_dir=save_dir)
