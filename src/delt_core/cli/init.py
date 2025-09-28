@@ -5,6 +5,7 @@ from loguru import logger
 from delt_core.demultiplex.parser import config_from_excel
 from delt_core.utils import write_yaml
 
+excel_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
 
 def init(*, excel_path: Path):
     config = config_from_excel(excel_path)

@@ -1,6 +1,6 @@
 from itertools import batched
 from pathlib import Path
-
+from itertools import product
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
@@ -17,6 +17,7 @@ from tqdm import tqdm
 
 from delt_core.utils import read_yaml
 
+config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-1/config.yaml')
 
 class Library:
 
@@ -36,27 +37,59 @@ class Library:
             logger.info(f'Library {lib_path} exists')
             return
 
-        config_path = Path(
-            '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config_with_steps.yaml')
         cfg = read_yaml(config_path)
 
         steps = cfg['library']['steps']
         catalog = cfg['catalog']
         reactions = catalog['reactions']
         compounds = catalog['compounds']
-        products = {k: dict(smiles=None) for k in cfg['library']['products']['names']}
-        terminal = cfg['library']['products']['terminal']
+        building_blocks = {k: dict(smiles=None) for k in cfg['library']['building_blocks']}
+        products = {k: dict(smiles=None) for k in cfg['library']['products']}
 
-        G = get_reaction_graph(steps=steps, reactions=reactions, compounds=compounds, products=products)
+        G = get_reaction_graph(steps=steps,
+                               reactions=reactions,
+                               building_blocks=building_blocks,
+                               compounds=compounds,
+                               products=products)
         ax = visualize_reaction_graph(G)
         ax.figure.savefig(lib_path.parent / 'reaction_graph.png', dpi=300)
 
-        G = complete_reaction_graph(G)
-        product = G.nodes[terminal]['smiles']
-        ax = visualize_smiles([product])
-        ax.figure.savefig(lib_path.parent / 'products.png', dpi=300)
+        sinks = [n for n, d in G.out_degree() if d == 0]
+        assert len(sinks) == 1, f"Expected exactly one sink node, found {len(sinks)}"
+        terminal = sinks[0]
 
-        df = get_dummy_library()
+        building_block_names = sorted(building_blocks)
+        lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
+        combs = product(*lists)
+        library = []
+        for comb in tqdm(combs):
+
+            reactions = set(c['reaction'] for c in comb)
+            reactions = {r: cfg['catalog']['reactions'][r] for r in reactions}
+
+            products = set([c['product'] for c in comb])
+            products = {p: dict(smiles=None) for p in products}
+
+            compounds = set(c['reactant'] for c in comb) - set(products)
+            compounds = {c: cfg['catalog']['compounds'][c] for c in compounds}
+
+            building_blocks = {bbn: bb for bbn, bb in zip(building_block_names, comb)}
+
+            nodes = {**reactions, **compounds, **products, **building_blocks}
+            g = G.subgraph(nodes).copy()
+            nx.set_node_attributes(g, nodes)
+            # ax = visualize_reaction_graph(g)
+            # ax.figure.show()
+
+            g = complete_reaction_graph(g)
+            smiles = g.nodes[terminal]['smiles']
+            record = {f'code_{i}': c['index'] for i, c in enumerate(comb)}
+            record['smiles'] = smiles
+            library.append(record)
+
+        df = pd.DataFrame(library)
+        df = df[df.smiles.notna()]
+        # df = get_dummy_library()
         df.to_parquet(lib_path, index=False)
 
     def properties(self, *, config_path: Path):
@@ -120,6 +153,9 @@ class Library:
                 run_morgan(smiles, save_path=save_dir / 'morgan.npz')
             case 'bert':
                 run_morgan(smiles, save_path=save_dir / 'bert.npz')
+
+
+self = Library()
 
 
 def run_bert(*, model_name: str, path: Path, save_path: Path, device='cuda'):
@@ -218,7 +254,11 @@ def get_dummy_library() -> pd.DataFrame:
     return df
 
 
-def get_reaction_graph(steps: list, reactions: dict, compounds: dict, products: dict) -> nx.DiGraph:
+def get_reaction_graph(steps: list,
+                       reactions: dict,
+                       compounds: dict,
+                       products: dict,
+                       building_blocks: dict = None) -> nx.DiGraph:
     G = nx.DiGraph()
 
     G.add_edges_from(steps)
@@ -232,6 +272,10 @@ def get_reaction_graph(steps: list, reactions: dict, compounds: dict, products: 
     attrs = {k: {**v, 'type': 'product'} for k, v in products.items()}
     nx.set_node_attributes(G, attrs)
 
+    if building_blocks is not None:
+        attrs = {k: {**v, 'type': 'building_block'} for k, v in building_blocks.items()}
+        nx.set_node_attributes(G, attrs)
+
     return G
 
 
@@ -241,10 +285,11 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
     compounds = [n for n, d in G.nodes(data=True) if d.get("type") == "compound"]
     reactions = [n for n, d in G.nodes(data=True) if d.get("type") == "reaction"]
     products = [n for n, d in G.nodes(data=True) if d.get("type") == "product"]
+    building_blocks = [n for n, d in G.nodes(data=True) if d.get("type") == "building_block"]
 
     pos = nx.nx_agraph.graphviz_layout(G, prog="dot")
 
-    # Draw compounds (blue circles)
+    # Draw compounds
     nx.draw_networkx_nodes(
         G, pos,
         nodelist=compounds,
@@ -254,7 +299,17 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
         ax=ax
     )
 
-    # Draw compounds (blue circles)
+    # Draw building blocks
+    nx.draw_networkx_nodes(
+        G, pos,
+        nodelist=building_blocks,
+        node_color="mediumorchid",
+        node_shape="o",  # circle
+        node_size=500,
+        ax=ax
+    )
+
+    # Draw compounds
     nx.draw_networkx_nodes(
         G, pos,
         nodelist=products,
@@ -264,7 +319,7 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
         ax=ax
     )
 
-    # Draw reactions (green squares)
+    # Draw reactions
     nx.draw_networkx_nodes(
         G, pos,
         nodelist=reactions,
@@ -293,9 +348,9 @@ def find_next_reaction(G: nx.DiGraph):
     return None
 
 
-def perform_reaction(smirks: str, reactants: list[str]) -> list[str]:
+def perform_reaction(smirks: str, reactants: list[str], use_smiles: bool = False) -> list[str]:
     mols = [Chem.MolFromSmiles(i) for i in reactants]
-    rxn = rdChemReactions.ReactionFromSmarts(smirks, useSmiles=True)
+    rxn = rdChemReactions.ReactionFromSmarts(smirks, useSmiles=use_smiles)
 
     # note: order matters
     product_sets = rxn.RunReactants([*mols])
@@ -321,10 +376,13 @@ def complete_reaction_graph(G: nx.DiGraph) -> nx.DiGraph:
             reactants = [G.nodes[i]['smiles'] for i in next_reaction['reactants']]
             products = perform_reaction(smirks, reactants)
 
-            # Take the first product if multiple are formed
+            if len(products) == 0:
+                products = perform_reaction(smirks, reactants[::-1])
+
+            assert len(products) == 1
             product = {next_reaction['product']: dict(smiles=products[0])}
             nx.set_node_attributes(G, product)
-            print(f"Reaction {next_reaction['reaction']}: {reactants} -> {products[0]}")
+            # print(f"Reaction {next_reaction['reaction']}: {reactants} -> {products[0]}")
         except Exception as e:
             print(f"Error processing reaction {next_reaction}: {e}")
             break

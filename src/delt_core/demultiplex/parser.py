@@ -6,11 +6,37 @@ import pandas as pd
 def config_from_excel(path: Path):
     config = {}
     config['experiment'] = experiment_from_excel(path)
+    config['library'] = library_from_excel(path)
     config['structure'] = structure_from_excel(path)
     config['selections'] = selections_from_excel(path)
     config['catalog'] = catalog_from_excel(path)
     config['whitelists'] = whitelists_from_excel(path)
     return config
+
+def library_from_excel(path: Path):
+    # path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
+    xf = pd.ExcelFile(path)
+    sheets = set(xf.sheet_names)
+
+    products = set()
+    reactants = set()
+    reactions = set()
+    steps = set()
+
+    bbs_sheets = sorted(filter(lambda x: x.startswith('B'), sheets))
+    for sheet in bbs_sheets:
+        df = pd.read_excel(path, sheet_name=sheet)
+
+        steps.update([(sheet, r) for r in df.reaction])
+        steps.update([(i, r) for i, r in zip(df.reactant, df.reaction)])
+        steps.update([(r, p) for r,p in zip(df.reaction, df['product'])])
+
+        products.update(df['product'].tolist())
+        reactants.update(df['reactant'].tolist())
+        reactions.update(df['reaction'].tolist())
+
+    steps = [list(i) for i in sorted(steps)]
+    return dict(products=sorted(products), steps=sorted(steps), building_blocks=sorted(bbs_sheets))
 
 def experiment_from_excel(path: Path):
     experiment = pd.read_excel(path, sheet_name='experiment')
@@ -59,17 +85,16 @@ def whitelists_from_excel(path: Path):
 
     return whitelists
 
-
 def catalog_from_excel(path: Path):
     xf = pd.ExcelFile(path)
     sheets = set(xf.sheet_names)
 
-    scaffolds = pd.read_excel(path, sheet_name='scaffolds')
+    compounds = pd.read_excel(path, sheet_name='compounds')
     reactions = pd.read_excel(path, sheet_name='reactions')
 
     # %%
     catalog = {
-        'scaffolds': scaffolds.set_index('name').to_dict('index'),
+        'compounds': compounds.set_index('name').to_dict('index'),
         'reactions': reactions.set_index('name').to_dict('index'),
     }
 
