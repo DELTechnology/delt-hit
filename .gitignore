@@ -301,3 +301,7 @@ _version.py
 paper/experiment-1/*.parquet
 paper/experiment-1/selections
 paper/experiment-1/representations
+*.csv
+*.parquet
+*.fastq
+*.fasta
