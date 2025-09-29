@@ -9,7 +9,7 @@ def config_from_excel(path: Path):
     config['library'] = library_from_excel(path)
     config['structure'] = structure_from_excel(path)
     config['selections'] = selections_from_excel(path)
-    config['analyses'] = analyses_from_excel(path)
+    # config['analyses'] = analyses_from_excel(path)
     config['catalog'] = catalog_from_excel(path)
     config['whitelists'] = whitelists_from_excel(path)
     return config
@@ -28,7 +28,8 @@ def library_from_excel(path: Path):
     for sheet in bbs_sheets:
         df = pd.read_excel(path, sheet_name=sheet)
 
-        steps.update([(sheet, r) for r in df.reaction])
+        filter_ = df.smiles.notna()
+        steps.update([(sheet, r) for r in df.reaction[filter_]])
         steps.update([(i, r) for i, r in zip(df.reactant, df.reaction)])
         steps.update([(r, p) for r,p in zip(df.reaction, df['product'])])
 

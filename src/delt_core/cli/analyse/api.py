@@ -6,21 +6,10 @@ import pandas as pd
 from delt_core.utils import read_yaml, write_yaml
 
 
-config_path = Path(
-    '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config.yaml')
+config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/config.yaml')
 cfg = read_yaml(config_path)
 
 class Analyse:
-
-    def add(self, *, config_path: Path, name: str, selections: list[str]) -> None:
-        cfg = read_yaml(config_path)
-
-        analyses = cfg.get("analyses", {})
-        analyses[name] = dict(selections=selections)
-
-        cfg['analyses'] = analyses
-
-        write_yaml(cfg, config_path)
 
     def prepare(self, config_path: Path, name: str):
         cfg = read_yaml(config_path)
@@ -115,7 +104,7 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
             stringsAsFactors = FALSE
           )
           groups <- factor(sapply(data.col$name, get_group_from_name))
-          groups <- relevel(groups, "naive")
+          groups <- relevel(groups, "no_protein")
           data.col$group <- groups
 
           data.counts <- as.matrix(data.wide %>% select(-code_1, -code_2))
@@ -140,23 +129,25 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
 
           cm <- makeContrasts(
             enrichment = protein - no_protein,
-            sticky     = no_protein - naive,
+            # sticky     = no_protein - naive,
             levels = design
           )
           lrt.enrichment <- glmLRT(fit, contrast = cm[, 1])
-          lrt.sticky     <- glmLRT(fit, contrast = cm[, 2])
+          # lrt.sticky     <- glmLRT(fit, contrast = cm[, 2])
 
           stats.enrichment <- bind_cols(data.row, lrt.enrichment$table) %>%
             mutate(FDR = p.adjust(PValue, method = "BH"))
-          stats.sticky <- bind_cols(data.row, lrt.sticky$table) %>%
-            mutate(FDR = p.adjust(PValue, method = "BH"))
-
+          # stats.sticky <- bind_cols(data.row, lrt.sticky$table) %>%
+          #   mutate(FDR = p.adjust(PValue, method = "BH"))
+          stats.sticky = NULL
+          
           hits.enrichment <- stats.enrichment %>%
             filter(FDR < 0.05, logFC > 0) %>%
             arrange(desc(logFC), FDR)
-          hits.sticky <- stats.sticky %>%
-            filter(FDR < 0.05, logFC > 0) %>%
-            arrange(desc(logFC), FDR)
+          # hits.sticky <- stats.sticky %>%
+          #   filter(FDR < 0.05, logFC > 0) %>%
+          #   arrange(desc(logFC), FDR)
+          hits.sticky = NULL
 
           # Export CPMs (optionally log-transformed)
           counts <- bind_cols(data.row, cpm(y, normalized.lib.sizes = TRUE, log = log, prior.count = 0.5))
@@ -189,6 +180,7 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
         for (i in seq_along(result.edgeR$stats)) {{
           name  <- names(result.edgeR$stats)[i]
           stats <- result.edgeR$stats[[i]]
+          if(is.null(stats)) next
           save.path <- file.path(args$save_dir, paste0(name, "_stats.csv"))
           write_csv(stats, file = save.path)
         }}
@@ -197,6 +189,7 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
         for (i in seq_along(result.edgeR$hits)) {{
           name <- names(result.edgeR$hits)[i]
           hits <- result.edgeR$hits[[i]]
+          if(is.null(hits)) next
           save.path <- file.path(args$save_dir, paste0(name, "_hits.csv"))
           write_csv(hits, file = save.path)
         }}
@@ -292,8 +285,8 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
         stats <- data_avg |>
           tidyr::pivot_wider(names_from = group, values_from = mean, values_fill = 0) |>
           dplyr::mutate(
-            enrichment = protein - no_protein,
-            sticky     = no_protein - naive
+            enrichment = protein - no_protein
+            # sticky     = no_protein - naive
           )
 
         # ---- Save outputs ----
@@ -304,10 +297,10 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
           dplyr::slice(1:100) |>
           readr::write_csv(file.path(args$save_dir, "hits.csv"))
 
-        stats |>
-          dplyr::arrange(dplyr::desc(sticky)) |>
-          dplyr::slice(1:100) |>
-          readr::write_csv(file.path(args$save_dir, "sticky.csv"))
+        # stats |>
+        #   dplyr::arrange(dplyr::desc(sticky)) |>
+        #   dplyr::slice(1:100) |>
+        #   readr::write_csv(file.path(args$save_dir, "sticky.csv"))
 
         # Per-group exports (only those columns present)
         present_groups <- intersect(c("protein","no_protein","naive"), colnames(stats))

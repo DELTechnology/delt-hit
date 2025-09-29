@@ -17,7 +17,9 @@ from tqdm import tqdm
 
 from delt_core.utils import read_yaml
 
-config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-1/config.yaml')
+# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-1/config.yaml')
+# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-2/config.yaml')
+config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/config.yaml')
 
 class Library:
 
@@ -67,15 +69,17 @@ class Library:
             reactions = set(c['reaction'] for c in comb)
             reactions = {r: cfg['catalog']['reactions'][r] for r in reactions}
 
-            products = set([c['product'] for c in comb])
-            products = {p: dict(smiles=None) for p in products}
+            prods = set([c['product'] for c in comb])
+            prods = {p: dict(smiles=None) for p in prods}
 
             compounds = set(c['reactant'] for c in comb) - set(products)
             compounds = {c: cfg['catalog']['compounds'][c] for c in compounds}
 
-            building_blocks = {bbn: bb for bbn, bb in zip(building_block_names, comb)}
+            building_blocks = {bbn: bb
+                               for bbn, bb in zip(building_block_names, comb)
+                               if not pd.isna(bb['smiles'])}
 
-            nodes = {**reactions, **compounds, **products, **building_blocks}
+            nodes = {**reactions, **compounds, **prods, **building_blocks}
             g = G.subgraph(nodes).copy()
             nx.set_node_attributes(g, nodes)
             # ax = visualize_reaction_graph(g)
@@ -109,6 +113,7 @@ class Library:
             plt.close(ax.figure)
 
     def compute_properties(self, data: pd.DataFrame) -> pd.DataFrame:
+
         records = []
         for smiles in tqdm(data['smiles']):
             record = {}
@@ -128,9 +133,10 @@ class Library:
             record["prop_fractionCsp3"] = RD.CalcFractionCSP3(m)
             record["prop_QED"] = QED.qed(m)
             records.append(record)
-        props = pd.DataFrame(records)
 
-        return data
+        props = pd.DataFrame(records)
+        props = pd.concat([data, props], axis=1)
+        return props
 
     def plot_property(self, data: pd.DataFrame, name: str) -> plt.Axes:
         if name not in data.columns:

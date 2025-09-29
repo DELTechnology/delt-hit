@@ -40,7 +40,7 @@ classifiers = [
 ]
 
 [project.scripts]
-delt-cli = "delt_core.cli.main:cli"
+delt-hit = "delt_core.cli.main:cli"
 
 [project.urls]
 repository = "https://github.com/DELTechnology/delt-core"

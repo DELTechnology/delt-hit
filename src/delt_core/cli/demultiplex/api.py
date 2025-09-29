@@ -10,9 +10,6 @@ from loguru import logger
 
 class Demultiplex:
 
-    def __init__(self):
-        pass
-
     def prepare(self, *, config_path: Path, fast_dev_run: bool = False):
         exec_path = generate_input_files(config_path=config_path, fast_dev_run=fast_dev_run)
         logger.info(f"Executable created at {exec_path}")
