@@ -109,21 +109,27 @@ class Library:
             plt.close(ax.figure)
 
     def compute_properties(self, data: pd.DataFrame) -> pd.DataFrame:
-        mols = [Chem.MolFromSmiles(s) for s in data['smiles'].tolist()]
-        data["prop_mw"] = [Descriptors.MolWt(m) for m in mols]
-        data["prop_logP"] = [Crippen.MolLogP(m) for m in mols]
-        data["prop_HBD"] = [Lipinski.NumHDonors(m) for m in mols]
-        data["prop_HBA"] = [Lipinski.NumHAcceptors(m) for m in mols]
-        data["prop_rotB"] = [Lipinski.NumRotatableBonds(m) for m in mols]
-        data["prop_TPSA"] = [RD.CalcTPSA(m) for m in mols]
-        data["prop_RBonds"] = [RD.CalcNumRotatableBonds(m) for m in mols]
-        data["prop_ARings"] = [RD.CalcNumAromaticRings(m) for m in mols]
-        data["prop_rings"] = [RD.CalcNumRings(m) for m in mols]
-        data["prop_heavyAtoms"] = [Descriptors.HeavyAtomCount(m) for m in mols]
-        data["prop_formalCharge"] = [Chem.GetFormalCharge(m) for m in mols]
-        data["prop_heteroAtoms"] = [Descriptors.NumHeteroatoms(m) for m in mols]
-        data["prop_fractionCsp3"] = [RD.CalcFractionCSP3(m) for m in mols]
-        data["prop_QED"] = [QED.qed(m) for m in mols]
+        records = []
+        for smiles in tqdm(data['smiles']):
+            record = {}
+            m = Chem.MolFromSmiles(smiles)
+            record["prop_mw"] = Descriptors.MolWt(m)
+            record["prop_logP"] = Crippen.MolLogP(m)
+            record["prop_HBD"] = Lipinski.NumHDonors(m)
+            record["prop_HBA"] = Lipinski.NumHAcceptors(m)
+            record["prop_rotB"] = Lipinski.NumRotatableBonds(m)
+            record["prop_TPSA"] = RD.CalcTPSA(m)
+            record["prop_RBonds"] = RD.CalcNumRotatableBonds(m)
+            record["prop_ARings"] = RD.CalcNumAromaticRings(m)
+            record["prop_rings"] = RD.CalcNumRings(m)
+            record["prop_heavyAtoms"] = Descriptors.HeavyAtomCount(m)
+            record["prop_formalCharge"] = Chem.GetFormalCharge(m)
+            record["prop_heteroAtoms"] = Descriptors.NumHeteroatoms(m)
+            record["prop_fractionCsp3"] = RD.CalcFractionCSP3(m)
+            record["prop_QED"] = QED.qed(m)
+            records.append(record)
+        props = pd.DataFrame(records)
+
         return data
 
     def plot_property(self, data: pd.DataFrame, name: str) -> plt.Axes:

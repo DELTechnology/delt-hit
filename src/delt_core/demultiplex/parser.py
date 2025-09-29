@@ -1,7 +1,7 @@
 from pathlib import Path
-
 import pandas as pd
 
+path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
 
 def config_from_excel(path: Path):
     config = {}
@@ -9,6 +9,7 @@ def config_from_excel(path: Path):
     config['library'] = library_from_excel(path)
     config['structure'] = structure_from_excel(path)
     config['selections'] = selections_from_excel(path)
+    config['analyses'] = analyses_from_excel(path)
     config['catalog'] = catalog_from_excel(path)
     config['whitelists'] = whitelists_from_excel(path)
     return config
@@ -53,6 +54,13 @@ def selections_from_excel(path: Path):
     assert selections.name.is_unique
     selections['ids'] = list(map(list, selections['name'].map(selection_ids_to_name).tolist()))
     return selections.set_index('name').to_dict('index')
+
+def analyses_from_excel(path: Path):
+    selections = pd.read_excel(path, sheet_name='selection')
+    analyses = {}
+    for grp, data in selections.groupby('analysis'):
+        analyses[grp] = data.name.tolist()
+    return analyses
 
 def whitelists_from_excel(path: Path):
     xf = pd.ExcelFile(path)

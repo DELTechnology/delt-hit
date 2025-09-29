@@ -298,3 +298,6 @@ _version.py
 
 # sequencing files
 *.gz
+paper/experiment-1/*.parquet
+paper/experiment-1/selections
+paper/experiment-1/representations
