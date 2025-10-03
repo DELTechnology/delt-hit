@@ -1,7 +1,7 @@
 from pathlib import Path
 import pandas as pd
 
-path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
+# path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
 
 def config_from_excel(path: Path):
     config = {}

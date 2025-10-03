@@ -9,11 +9,10 @@ import yaml
 import re
 from delt_core.utils import read_yaml
 
-
-config_path = Path(
-    '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config.yaml')
-cfg = read_yaml(config_path)
-counts_path = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/selections/AG24_1/counts.txt')
+# config_path = Path(
+#     '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config.yaml')
+# cfg = read_yaml(config_path)
+# counts_path = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/selections/AG24_1/counts.txt')
 
 def load_config(config_path):
     try:

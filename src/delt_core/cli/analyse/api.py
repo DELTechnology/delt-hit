@@ -6,8 +6,8 @@ import pandas as pd
 from delt_core.utils import read_yaml, write_yaml
 
 
-config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/config.yaml')
-cfg = read_yaml(config_path)
+# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/config.yaml')
+# cfg = read_yaml(config_path)
 
 class Analyse:
 

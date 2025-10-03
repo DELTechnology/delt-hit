@@ -19,7 +19,7 @@ from delt_core.utils import read_yaml
 
 # config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-1/config.yaml')
 # config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-2/config.yaml')
-config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/config.yaml')
+# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/config.yaml')
 
 class Library:
 
