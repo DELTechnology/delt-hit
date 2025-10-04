@@ -94,29 +94,34 @@ Here is a typical workflow for using `delt-core`:
 1.  **Initialize Configuration:**
     Create a `config.yaml` file from an Excel library file. This file defines the experiment, selections, and library information.
     ```bash
-    delt-cli demultiplex init --excel_path /path/to/library.xlsx
+    delt-cli init --excel_path /path/to/library.xlsx
     ```
 
 2.  **Run Demultiplexing:**
-    Run the entire demultiplexing pipeline based on your configuration.
+    Run the entire demultiplexing pipeline based on your configuration. This includes preparing scripts, running `cutadapt`, and processing the results.
     ```bash
     delt-cli demultiplex run --config_path /path/to/config.yaml
     ```
 
 3.  **Define Analysis Groups:**
-    After demultiplexing, group selections for analysis.
-    ```bash
-    delt-cli analyse add \
-    --config_path /path/to/config.yaml \
-    --name=test-1 \
-    --selections='["SEL1", "SEL2", "SEL3"]'
+    After demultiplexing, define analysis groups by editing your `config.yaml` file. Add an `analyses` section to group selections for comparison. For example:
+    ```yaml
+    analyses:
+      analysis-1:
+        selections:
+          - SEL1 # Typically a protein selection
+          - SEL2 # Another protein selection (replicate)
+          - SEL3 # A no-protein control selection
     ```
 
 4.  **Calculate Enrichment:**
-    Calculate enrichment for the defined groups using different methods.
+    Calculate enrichment for the defined groups using different methods. The `--name` argument must correspond to a group you defined in your `config.yaml`.
     ```bash
-    delt-cli analyse enrichment --config_path /path/to/config.yaml --name=test-1 --method=counts
-    delt-cli analyse enrichment --config_path /path/to/config.yaml --name=test-1 --method=edgeR
+    # Using simple counts
+    delt-cli analyse enrichment --config_path /path/to/config.yaml --name=analysis-1 --method=counts
+
+    # Using edgeR for more sensitive statistical analysis
+    delt-cli analyse enrichment --config_path /path/to/config.yaml --name=analysis-1 --method=edgeR
     ```
 
 5.  **Work with the Library:**
@@ -128,7 +133,7 @@ Here is a typical workflow for using `delt-core`:
     # Compute chemical properties
     delt-cli library properties --config_path /path/to/config.yaml
 
-    # Generate molecular fingerprints
+    # Generate molecular fingerprints (e.g., Morgan)
     delt-cli library represent --method=morgan --config_path /path/to/config.yaml
     ```
 
@@ -142,7 +147,13 @@ Here is a typical workflow for using `delt-core`:
 
 ## 💻 CLI Reference
 
-### 📚 Library
+### `init`
+Initializes a project by creating a `config.yaml` from a standardized Excel file.
+```bash
+delt-cli init --excel_path <path/to/library.xlsx>
+```
+
+### `library`
 Commands for library enumeration, and chemical property and representation calculation.
 
 - **`enumerate`**: Generates the full library of molecules from the reaction steps defined in the configuration file.
@@ -159,34 +170,43 @@ Commands for library enumeration, and chemical property and representation calcu
   ```
   - `<METHOD>` can be `morgan` or `bert`.
 
-### ✂️ Demultiplexing
+### `demultiplex`
 Commands for demultiplexing FASTQ files and obtaining read counts.
 
-- **`init`**: Creates a `config.yaml` file from a library Excel file.
-  ```bash
-  delt-cli demultiplex init --excel_path <path/to/library.xlsx>
-  ```
 - **`run`**: Runs the entire demultiplexing workflow, including running Cutadapt and computing counts.
   ```bash
   delt-cli demultiplex run --config_path <path/to/config.yaml>
   ```
-- Other steps (`prepare`, `process`, `report`, `qc`) can be run individually for debugging or custom workflows.
+- **`prepare`**: Prepares the `cutadapt` input files and executable script without running them.
+  ```bash
+  delt-cli demultiplex prepare --config_path <path/to/config.yaml>
+  ```
+- **`process`**: Computes counts from the output of a `cutadapt` run.
+  ```bash
+  delt-cli demultiplex process --config_path <path/to/config.yaml>
+  ```
+- **`report`**: Generates a text report summarizing demultiplexing statistics.
+  ```bash
+  delt-cli demultiplex report --config_path <path/to/config.yaml>
+  ```
+- **`qc`**: Generates quality control plots from the demultiplexing results.
+  ```bash
+  delt-cli demultiplex qc --config_path <path/to/config.yaml>
+  ```
 
-### 📊 Analysis
+### `analyse`
 Commands for analyzing demultiplexed data, such as performing enrichment analysis.
 
-- **`add`**: Defines a named group of selections for downstream analysis.
-  ```bash
-  delt-cli analyse add --config_path <path/to/config.yaml> --name <group_name> --selections '["SEL1", "SEL2", ...]' 
-  ```
-- **`enrichment`**: Performs enrichment analysis on a defined analysis group.
+- **`enrichment`**: Performs enrichment analysis on an analysis group defined in the configuration file.
   ```bash
   delt-cli analyse enrichment --config_path <path/to/config.yaml> --name <group_name> --method <METHOD>
   ```
-  - `<METHOD>` can be `counts`, `edgeR`, or `DESeq2`.
+  - Analysis groups must be defined under the `analyses` key in your `config.yaml`.
+  - `<group_name>` refers to a key under the `analyses` section.
+  - `<METHOD>` can be `counts` or `edgeR`.
 
-### 📈 Dashboard
-Launch an interactive dashboard for data visualization.
+### `dashboard`
+Launches an interactive dashboard for data visualization.
 
 - **`dashboard`**: Starts a web-based dashboard to interactively explore counts data for a given selection.
   ```bash
