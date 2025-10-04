@@ -30,7 +30,9 @@ dependencies = [
     "networkx",
     "loguru",
     "rich",
-    "pyarrow"
+    "pyarrow",
+    "scipy",
+    "dash"
 ]
 version = "0.0.1"
 classifiers = [
