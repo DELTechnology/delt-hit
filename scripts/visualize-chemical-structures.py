@@ -7,10 +7,24 @@ from matplotlib import pyplot as plt
 save_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/analyses/analysis-1')
 hits_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/analyses/analysis-1/counts/hits.csv')
 enrichment_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/analyses/analysis-1/edgeR/enrichment_hits.csv')
-library = pd.read_parquet('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/library.parquet')
+library = pd.read_parquet('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-merged/library.parquet')
 library.rename(columns = dict(code_0='code_1', code_1='code_2'), inplace=True)
 
 def plot_chemical_structures(path: Path, library, num: int = 100):
+    """
+    Plots a grid of chemical structures for the top N hits from a CSV file, merging with a compound library.
+
+    Args:
+        path (Path): Path to the CSV file containing hit compounds with 'code_1' and 'code_2' columns.
+        library (pd.DataFrame): DataFrame containing the compound library with 'code_1', 'code_2', and 'smiles' columns.
+        num (int, optional): Number of top compounds to plot. Defaults to 100.
+
+    Returns:
+        PIL.Image.Image: The generated grid image of chemical structures.
+
+    Side Effects:
+        Saves the generated image as a PNG file in the same directory as the input CSV, with the same name but a .png extension.
+    """
     hits = pd.read_csv(path)
 
     data = pd.merge(hits, library, on=['code_1', 'code_2'], how='inner')
@@ -28,20 +42,20 @@ plt.imshow(img).figure.show()
 img = plot_chemical_structures(path=enrichment_path, library=library, num=100)
 plt.imshow(img).figure.show()
 
-
 # %% COMPARISON BETWEEN HITS AND ENRICHMENT
 
 hits = pd.read_csv(hits_path)
 enrichment = pd.read_csv(enrichment_path)
+topK = 100
 
 hit_compounds = set([tuple(i.values()) for i in hits[['code_1', 'code_2']].to_dict('records')])
 enrichment_compounds = set([tuple(i.values()) for i in enrichment[['code_1', 'code_2']].to_dict('records')])
 intx = hit_compounds.intersection(enrichment_compounds)
 
 enrichment = enrichment[:len(hits)]
-enrichment_compounds_top100 = set([tuple(i.values()) for i in enrichment[['code_1', 'code_2']].to_dict('records')])
+enrichment_compounds_topK = set([tuple(i.values()) for i in enrichment[['code_1', 'code_2']].to_dict('records')])
 
-intx_top100 = hit_compounds.intersection(enrichment_compounds_top100)
+intx_top100 = hit_compounds.intersection(enrichment_compounds_topK)
 
 pdat = pd.DataFrame()
 
