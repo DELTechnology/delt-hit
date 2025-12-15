@@ -36,7 +36,7 @@ This is the recommended way for most users.
 
 1.  **Create and activate a Conda environment:**
     ```bash
-    conda create -n del python=3.11 -y
+    conda create -n del python=3.12 -y
     conda activate del
     ```
     > 💡 Always activate this environment (`conda activate del`) before using `delt-hit`.
@@ -70,7 +70,7 @@ If you want to contribute to the development of `delt-hit`, follow these steps.
 
 3.  **Create and activate the Conda environment:**
     ```bash
-    conda create -n del-dev python=3.11 -y
+    conda create -n del-dev python=3.12 -y
     conda activate del-dev
     ```
 
