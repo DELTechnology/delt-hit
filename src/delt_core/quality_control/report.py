@@ -86,4 +86,4 @@ def print_report(output_dir: Path, save_path: Path) -> None:
     )
 
     # Save report as plain text (without ANSI codes)
-    save_path.write_text(console.export_text())
+    save_path.write_text(console.export_text(), encoding='utf-8')
