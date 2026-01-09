@@ -33,7 +33,9 @@ class Library:
         lib_path = exp_dir / 'library.parquet'
         return lib_path
 
-    def enumerate(self, *, config_path: Path):
+    def enumerate(self, *, config_path: Path, debug: str | None):
+        debug = debug or 'False'
+
         lib_path = self.get_library_path(config_path=config_path)
         if lib_path.exists():
             logger.info(f'Library {lib_path} exists')
@@ -56,35 +58,55 @@ class Library:
         ax = visualize_reaction_graph(G)
         ax.figure.savefig(lib_path.parent / 'reaction_graph.png', dpi=300)
 
-        sinks = [n for n, d in G.out_degree() if d == 0]
-        assert len(sinks) == 1, f"Expected exactly one sink node, found {len(sinks)}"
-        terminal = sinks[0]
-
         building_block_names = sorted(building_blocks)
         lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
         combs = product(*lists)
         library = []
-        for comb in tqdm(combs):
+        for i, comb in tqdm(enumerate(combs)):
 
-            reactions = set(c['reaction'] for c in comb)
-            reactions = {r: cfg['catalog']['reactions'][r] for r in reactions}
-
+            rnx = set(c['reaction'] for c in comb)
             prods = set([c['product'] for c in comb])
+
+            reacts = set([c['reactant'] for c in comb]) - set(prods) - set(reactions)
+            ancs = set(reacts)
+            for r in reacts:
+                ancs.update(nx.ancestors(G, r))
+
+            rnx = rnx | ancs & set(reactions)
+            prods = prods | ancs & set(products)
+            comps = ancs & set(compounds)
+
+            bbs = {bbn: bb
+                   for bbn, bb in zip(building_block_names, comb)
+                   if not pd.isna(bb['smiles'])}
+
+            rnx = {r: cfg['catalog']['reactions'][r] for r in rnx}
             prods = {p: dict(smiles=None) for p in prods}
+            comps = {c: cfg['catalog']['compounds'][c] for c in comps}
 
-            compounds = set(c['reactant'] for c in comb) - set(products)
-            compounds = {c: cfg['catalog']['compounds'][c] for c in compounds}
-
-            building_blocks = {bbn: bb
-                               for bbn, bb in zip(building_block_names, comb)
-                               if not pd.isna(bb['smiles'])}
-
-            nodes = {**reactions, **compounds, **prods, **building_blocks}
+            nodes = {**comps, **prods, **bbs, **rnx}
             g = G.subgraph(nodes).copy()
-            nx.set_node_attributes(g, nodes)
-            # ax = visualize_reaction_graph(g)
-            # ax.figure.show()
 
+            sinks = [n for n, d in g.out_degree() if d == 0]
+            is_valid = len(sinks) == 1
+
+            if (debug == 'all') or (debug == 'valid') and is_valid:
+                ax = visualize_reaction_graph(g)
+                ax.figure.savefig(lib_path / f'reaction_graph_{"_".join(str(c["index"]) for c in comb)}.png', dpi=300)
+                plt.close('all')
+                ax.figure.show()
+
+            if is_valid:
+                assert len(sinks) == 1, f"Expected exactly one sink node, found {len(sinks)}"
+                terminal = sinks[0]
+            else:
+                logger.warning(f'More than one sink node for combination: {i}')
+                # NOTE: this means the combination is invalid,
+                #   the participating reactions and compounds are not linearly connected. This happens for example if a
+                #   certain product_1 is only used in a subset of subsequent reactions.
+                continue
+
+            nx.set_node_attributes(g, nodes)
             g = complete_reaction_graph(g)
             smiles = g.nodes[terminal]['smiles']
             record = {f'code_{i}': c['index'] for i, c in enumerate(comb)}
@@ -344,7 +366,7 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
     nx.draw_networkx_labels(G, pos, ax=ax, font_size=8)
     nx.draw_networkx_edges(G, pos, ax=ax, arrows=True)
 
-    fig.show()
+    # fig.show()
     return ax
 
 
@@ -384,9 +406,14 @@ def complete_reaction_graph(G: nx.DiGraph) -> nx.DiGraph:
             if next_reaction is None:
                 break
 
-            smirks = G.nodes[next_reaction['reaction']]['smirks']
             reactants = [G.nodes[i]['smiles'] for i in next_reaction['reactants']]
-            products = perform_reaction(smirks, reactants)
+            smirks = G.nodes[next_reaction['reaction']]['smirks']
+
+            if pd.isna(smirks):
+                assert len(reactants) == 1, "PASS reaction should have exactly one reactant"
+                products = reactants
+            else:
+                products = perform_reaction(smirks, reactants)
 
             if len(products) == 0:
                 products = perform_reaction(smirks, reactants[::-1])

@@ -6,27 +6,37 @@ import pandas as pd
 def config_from_excel(path: Path):
     config = {}
     config['experiment'] = experiment_from_excel(path)
-    config['library'] = library_from_excel(path)
+
+    library, catalog = library_and_catalog_from_excel(path)
+    config['library'] = library
+    config['catalog'] = catalog
+
     config['structure'] = structure_from_excel(path)
     config['selections'] = selections_from_excel(path)
     # config['analyses'] = analyses_from_excel(path)
-    config['catalog'] = catalog_from_excel(path)
     config['whitelists'] = whitelists_from_excel(path)
     return config
 
-def library_from_excel(path: Path):
+def steps_from_excel(path: Path) -> set:
+    steps = pd.read_excel(path, sheet_name='steps')
+    return set(steps.to_records(index=False).tolist())
+
+def library_and_catalog_from_excel(path: Path):
     # path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
     xf = pd.ExcelFile(path)
     sheets = set(xf.sheet_names)
 
+    catalog = catalog_from_excel(path)
+
     products = set()
-    reactants = set()
-    reactions = set()
-    steps = set()
+    reactants = set(catalog['compounds'])
+    reactions = set(catalog['reactions'])
+    steps = steps_from_excel(path)
 
     bbs_sheets = sorted(filter(lambda x: x.startswith('B'), sheets))
     for sheet in bbs_sheets:
         df = pd.read_excel(path, sheet_name=sheet)
+        df = df.astype(str)
 
         filter_ = df.smiles.notna()
         steps.update([(sheet, r) for r in df.reaction[filter_]])
@@ -37,8 +47,13 @@ def library_from_excel(path: Path):
         reactants.update(df['reactant'].tolist())
         reactions.update(df['reaction'].tolist())
 
+    # NOTE: these are the products introduced in the `steps` sheet
+    prods_from_steps = set([i for step in steps for i in step]) - products - reactions - set(bbs_sheets) - set(catalog['compounds'])
+    products = prods_from_steps | products
+
     steps = [list(i) for i in sorted(steps)]
-    return dict(products=sorted(products), steps=sorted(steps), building_blocks=sorted(bbs_sheets))
+
+    return dict(products=sorted(products), steps=sorted(steps), building_blocks=sorted(bbs_sheets)), catalog
 
 def experiment_from_excel(path: Path):
     experiment = pd.read_excel(path, sheet_name='experiment')
