@@ -1,0 +1,602 @@
+{
+  "tag": "Cutadapt report",
+  "schema_version": [0, 3],
+  "cutadapt_version": "5.1",
+  "python_version": "3.12.9",
+  "command_line_arguments": [
+    "/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/experiment-GB/demultiplex/cutadapt_output_files/input.fastq.gz",
+    "-o",
+    "/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/experiment-GB/demultiplex/cutadapt_output_files/out.fastq.gz",
+    "-e",
+    "0.0",
+    "--no-indels",
+    "-g",
+    "^file:/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/experiment-GB/demultiplex/cutadapt_input_files/0-S0.fastq",
+    "--rename",
+    "{id} {comment}?{adapter_name}",
+    "--discard-untrimmed",
+    "--json=/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/experiment-GB/demultiplex/cutadapt_output_files/0-S0.cutadapt.json",
+    "--cores=11"
+  ],
+  "cores": 11,
+  "input": {
+    "path1": "/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/experiment-GB/demultiplex/cutadapt_output_files/input.fastq.gz",
+    "path2": null,
+    "paired": false
+  },
+  "read_counts": {
+    "input": 190703154,
+    "filtered": {
+      "too_short": null,
+      "too_long": null,
+      "too_many_n": null,
+      "too_many_expected_errors": null,
+      "casava_filtered": null,
+      "discard_trimmed": null,
+      "discard_untrimmed": 18202672
+    },
+    "output": 172500482,
+    "reverse_complemented": null,
+    "read1_with_adapter": 172500482,
+    "read2_with_adapter": null
+  },
+  "basepair_counts": {
+    "input": 28796176254,
+    "input_read1": 28796176254,
+    "input_read2": null,
+    "quality_trimmed": null,
+    "quality_trimmed_read1": null,
+    "quality_trimmed_read2": null,
+    "poly_a_trimmed": null,
+    "poly_a_trimmed_read1": null,
+    "poly_a_trimmed_read2": null,
+    "output": 25012569890,
+    "output_read1": 25012569890,
+    "output_read2": null
+  },
+  "adapters_read1": [
+    {
+      "name": "0-S0.0",
+      "total_matches": 7306266,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "ACACAC",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 7306266,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [7306266]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.1",
+      "total_matches": 5706048,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "ACAGCA",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 5706048,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [5706048]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.2",
+      "total_matches": 5968878,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "ACATGT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 5968878,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [5968878]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.3",
+      "total_matches": 6542425,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "ACGACG",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6542425,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6542425]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.4",
+      "total_matches": 6168888,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "ACGCGA",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6168888,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6168888]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.5",
+      "total_matches": 5675386,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "ACTAGC",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 5675386,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [5675386]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.6",
+      "total_matches": 6199344,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "ACTCTG",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6199344,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6199344]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.7",
+      "total_matches": 6790277,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "ACTGAT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6790277,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6790277]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.8",
+      "total_matches": 6427514,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "AGACTA",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6427514,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6427514]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.9",
+      "total_matches": 6006942,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "AGAGAG",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6006942,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6006942]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.10",
+      "total_matches": 6408430,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TAGATG",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6408430,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6408430]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.11",
+      "total_matches": 5596757,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TAGTGT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 5596757,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [5596757]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.12",
+      "total_matches": 6689956,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TATCAC",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6689956,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6689956]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.13",
+      "total_matches": 6368070,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TCATAG",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6368070,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6368070]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.14",
+      "total_matches": 6564069,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TCGTCA",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6564069,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6564069]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.15",
+      "total_matches": 6122690,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TCTACT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6122690,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6122690]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.16",
+      "total_matches": 6868945,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TCTGTA",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6868945,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6868945]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.17",
+      "total_matches": 6865110,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TGACAT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6865110,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6865110]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.18",
+      "total_matches": 5641803,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TGCAGC",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 5641803,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [5641803]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.19",
+      "total_matches": 4977446,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "TGCGCG",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 4977446,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [4977446]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.20",
+      "total_matches": 6404843,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "GCTACT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6404843,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6404843]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.21",
+      "total_matches": 7338348,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "GCACAT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 7338348,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [7338348]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.22",
+      "total_matches": 6861776,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "GAGTGT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6861776,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6861776]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.23",
+      "total_matches": 6462031,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "GTGCGA",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6462031,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6462031]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.24",
+      "total_matches": 6737674,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "GCCGCT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6737674,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6737674]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.25",
+      "total_matches": 7069510,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "GAAGAT",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 7069510,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [7069510]}
+        ]
+      },
+      "three_prime_end": null
+    },
+    {
+      "name": "0-S0.26",
+      "total_matches": 6731056,
+      "on_reverse_complement": null,
+      "linked": false,
+      "five_prime_end": {
+        "type": "anchored_five_prime",
+        "sequence": "GTTCAG",
+        "error_rate": 0.0,
+        "indels": false,
+        "error_lengths": null,
+        "matches": 6731056,
+        "adjacent_bases": null,
+        "dominant_adjacent_base": null,
+        "trimmed_lengths": [
+          {"len": 6, "expect": 46558.4, "counts": [6731056]}
+        ]
+      },
+      "three_prime_end": null
+    }
+  ],
+  "adapters_read2": null,
+  "poly_a_trimmed_read1": null,
+  "poly_a_trimmed_read2": null
+}

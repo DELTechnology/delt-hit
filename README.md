@@ -220,9 +220,9 @@ Launches an interactive dashboard for data visualization.
 - Jörg: FASTQ for DP, MK
 
 - S0 and S1 need to be used as pairs in the process step
-- educt, reaction, product
+- [done] educt, reaction, product
 - check for v1 that it prunes correctly
-- update excel sheet setup, send to MK and JS to try out
+- [done] update excel sheet setup, send to MK and JS to try out
 - intro JS
-- rename files instead of folder structure selection_name/counts -> selection_name.txt
-- sort counts by counts
+- [done] rename files instead of folder structure selection_name/counts -> selection_name.txt
+- [done] sort counts by counts
