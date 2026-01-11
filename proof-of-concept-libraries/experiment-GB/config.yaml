@@ -1,0 +1,5906 @@
+experiment:
+  name: experiment-GB
+  fastq_path: /Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/368061_2-241105_AG_BZ_NC_pool2_GB_S1_R1_001.fastq.gz
+  save_dir: /Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/
+  num_cores: 11
+selections:
+  AG24_4:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: No Protein
+    group: no_protein
+    S0: ACACAC
+    S1: CGCTCGATA
+    ids:
+    - 0
+    - 0
+  AG24_5:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: No Protein
+    group: no_protein
+    S0: ACAGCA
+    S1: CGCTCGATA
+    ids:
+    - 1
+    - 0
+  AG24_6:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: No Protein
+    group: no_protein
+    S0: ACATGT
+    S1: CGCTCGATA
+    ids:
+    - 2
+    - 0
+  AG24_13:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: hCAII-Avi-His (biot)
+    group: protein
+    S0: ACGACG
+    S1: CGCTCGATA
+    ids:
+    - 3
+    - 0
+  AG24_14:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: hCAII-Avi-His (biot)
+    group: protein
+    S0: ACGCGA
+    S1: CGCTCGATA
+    ids:
+    - 4
+    - 0
+  AG24_15:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: hCAII-Avi-His (biot)
+    group: protein
+    S0: ACTAGC
+    S1: CGCTCGATA
+    ids:
+    - 5
+    - 0
+  AG24_22:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: USP-13 (biot.)
+    group: protein
+    S0: ACTCTG
+    S1: CGCTCGATA
+    ids:
+    - 6
+    - 0
+  AG24_23:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: USP-13 (biot.)
+    group: protein
+    S0: ACTGAT
+    S1: CGCTCGATA
+    ids:
+    - 7
+    - 0
+  AG24_24:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: USP-13 (biot.)
+    group: protein
+    S0: AGACTA
+    S1: CGCTCGATA
+    ids:
+    - 8
+    - 0
+  AG24_31:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: No Protein
+    group: no_protein
+    S0: AGAGAG
+    S1: CGCTCGATA
+    ids:
+    - 9
+    - 0
+  AG24_32:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: No Protein
+    group: no_protein
+    S0: TAGATG
+    S1: CGCTCGATA
+    ids:
+    - 10
+    - 0
+  AG24_33:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: No Protein
+    group: no_protein
+    S0: TAGTGT
+    S1: CGCTCGATA
+    ids:
+    - 11
+    - 0
+  AG24_40:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: USP-10 (biot.)
+    group: protein
+    S0: TATCAC
+    S1: CGCTCGATA
+    ids:
+    - 12
+    - 0
+  AG24_41:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: USP-10 (biot.)
+    group: protein
+    S0: TCATAG
+    S1: CGCTCGATA
+    ids:
+    - 13
+    - 0
+  AG24_42:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: USP-10 (biot.)
+    group: protein
+    S0: TCGTCA
+    S1: CGCTCGATA
+    ids:
+    - 14
+    - 0
+  AG24_49:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: PTEN (biot.)
+    group: protein
+    S0: TCTACT
+    S1: CGCTCGATA
+    ids:
+    - 15
+    - 0
+  AG24_50:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: PTEN (biot.)
+    group: protein
+    S0: TCTGTA
+    S1: CGCTCGATA
+    ids:
+    - 16
+    - 0
+  AG24_51:
+    operator: A. Gloger
+    date: '2024-09-26'
+    target: PTEN (biot.)
+    group: protein
+    S0: TGACAT
+    S1: CGCTCGATA
+    ids:
+    - 17
+    - 0
+  AG24_58:
+    operator: A. Gloger
+    date: '2024-10-17'
+    target: No Protein
+    group: no_protein
+    S0: TGCAGC
+    S1: CGCTCGATA
+    ids:
+    - 18
+    - 0
+  AG24_59:
+    operator: A. Gloger
+    date: '2024-10-17'
+    target: No Protein
+    group: no_protein
+    S0: TGCGCG
+    S1: CGCTCGATA
+    ids:
+    - 19
+    - 0
+  AG24_60:
+    operator: A. Gloger
+    date: '2024-10-17'
+    target: No Protein
+    group: no_protein
+    S0: GCTACT
+    S1: CGCTCGATA
+    ids:
+    - 20
+    - 0
+  AG24_67:
+    operator: A. Gloger
+    date: '2024-10-17'
+    target: GYS:GYG1 (TwinStrept)
+    group: protein
+    S0: GCACAT
+    S1: CGCTCGATA
+    ids:
+    - 21
+    - 0
+  AG24_68:
+    operator: A. Gloger
+    date: '2024-10-17'
+    target: GYS:GYG1 (TwinStrept)
+    group: protein
+    S0: GAGTGT
+    S1: CGCTCGATA
+    ids:
+    - 22
+    - 0
+  AG24_69:
+    operator: A. Gloger
+    date: '2024-10-17'
+    target: GYS:GYG1 (TwinStrept)
+    group: protein
+    S0: GTGCGA
+    S1: CGCTCGATA
+    ids:
+    - 23
+    - 0
+  AG24_76:
+    operator: A. Gloger
+    date: '2024-10-17'
+    target: GYS:GYG1 (TwinStrept)
+    group: protein
+    S0: GCCGCT
+    S1: CGCTCGATA
+    ids:
+    - 24
+    - 0
+  AG24_77:
+    operator: A. Gloger
+    date: '2024-10-17'
+    target: GYS:GYG1 (TwinStrept)
+    group: protein
+    S0: GAAGAT
+    S1: CGCTCGATA
+    ids:
+    - 25
+    - 0
+  AG24_78:
+    operator: A. Gloger
+    date: '2024-10-17'
+    target: GYS:GYG1 (TwinStrept)
+    group: protein
+    S0: GTTCAG
+    S1: CGCTCGATA
+    ids:
+    - 26
+    - 0
+library:
+  products:
+  - nan
+  steps:
+  - - B0
+    - nan
+  - - B1
+    - nan
+  - - nan
+    - nan
+  building_blocks:
+  - B0
+  - B1
+catalog:
+  compounds: {}
+  reactions: {}
+structure:
+- name: S0
+  type: selection
+  max_error_rate: 0.0
+  indels: false
+- name: C0
+  type: constant
+  max_error_rate: 1.01
+  indels: false
+- name: B0
+  type: building_block
+  max_error_rate: 0.0
+  indels: false
+- name: C1
+  type: constant
+  max_error_rate: 1.01
+  indels: false
+- name: B1
+  type: building_block
+  max_error_rate: 0.0
+  indels: false
+- name: C2
+  type: constant
+  max_error_rate: 1.01
+  indels: false
+- name: S1
+  type: selection
+  max_error_rate: 0.0
+  indels: false
+whitelists:
+  C0:
+  - codon: GGAGCTTCTGAATTCTGTGTGCTG
+  C1:
+  - codon: CGAGCGTCAGGCAGCCTGTGTGCTG
+  C2:
+  - codon: CGAGTCCCATGGCGC
+  B0:
+  - index: 0
+    codon: ATCTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 1
+    codon: AGAATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 2
+    codon: TCATTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 3
+    codon: TTGACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 4
+    codon: CGCTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 5
+    codon: TGCAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 6
+    codon: GCCGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 7
+    codon: ATAGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 8
+    codon: CACGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 9
+    codon: TACCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 10
+    codon: TGGTTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 11
+    codon: ACCACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 12
+    codon: TGGTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 13
+    codon: AAGTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 14
+    codon: AGCCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 15
+    codon: ATCAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 16
+    codon: TCCTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 17
+    codon: ACTATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 18
+    codon: CCTAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 19
+    codon: AGTAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 20
+    codon: CTAAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 21
+    codon: GAAGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 22
+    codon: GTTCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 23
+    codon: ACTGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 24
+    codon: GAATGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 25
+    codon: AATTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 26
+    codon: GATGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 27
+    codon: CGTGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 28
+    codon: TCACTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 29
+    codon: GTCACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 30
+    codon: GTCTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 31
+    codon: AATCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 32
+    codon: TCTTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 33
+    codon: CTTGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 34
+    codon: CCATAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 35
+    codon: GAGACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 36
+    codon: GTGATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 37
+    codon: CGGCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 38
+    codon: GCACGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 39
+    codon: ACGTTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 40
+    codon: TCAGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 41
+    codon: CTCGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 42
+    codon: CAGACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 43
+    codon: TACTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 44
+    codon: TAGCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 45
+    codon: ACACGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 46
+    codon: AGTTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 47
+    codon: GCGCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 48
+    codon: TCGATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 49
+    codon: CTCCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 50
+    codon: TGAGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 51
+    codon: TGCCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 52
+    codon: GAGAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 53
+    codon: CATCTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 54
+    codon: GTAGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 55
+    codon: GTTAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 56
+    codon: TATATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 57
+    codon: CTGTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 58
+    codon: ATGTTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 59
+    codon: GCTCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 60
+    codon: TCTCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 61
+    codon: TTAATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 62
+    codon: CCAATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 63
+    codon: TTGCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 64
+    codon: TTGTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 65
+    codon: TGAGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 66
+    codon: AACATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 67
+    codon: GATCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 68
+    codon: GCCTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 69
+    codon: TAGAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 70
+    codon: TATGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 71
+    codon: TAATGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 72
+    codon: CCTCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 73
+    codon: GTCATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 74
+    codon: TCTTGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 75
+    codon: CTATAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 76
+    codon: ATGAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 77
+    codon: GTAACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 78
+    codon: TAAGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 79
+    codon: ATTCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 80
+    codon: CGTATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 81
+    codon: GACAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 82
+    codon: TGAACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 83
+    codon: CACGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 84
+    codon: GTGAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 85
+    codon: ACTGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 86
+    codon: ATTAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 87
+    codon: TGGCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 88
+    codon: CAGCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 89
+    codon: TTCTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 90
+    codon: TTCACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 91
+    codon: AATGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 92
+    codon: CTACAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 93
+    codon: CTCAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 94
+    codon: GACGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 95
+    codon: CTCCTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 96
+    codon: AATCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 97
+    codon: GTCCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 98
+    codon: CGCTTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 99
+    codon: CTATCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 100
+    codon: CCACCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 101
+    codon: AGTGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 102
+    codon: AAGAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 103
+    codon: TCAACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 104
+    codon: AGATAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 105
+    codon: AGAGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 106
+    codon: TGTCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 107
+    codon: ACGGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 108
+    codon: CAGGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 109
+    codon: CCAAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 110
+    codon: GAGCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 111
+    codon: GAACTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 112
+    codon: AAGGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 113
+    codon: ATTCAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 114
+    codon: GTGGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 115
+    codon: TGCGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 116
+    codon: GTACAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 117
+    codon: GAAGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 118
+    codon: TAGATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 119
+    codon: CACCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 120
+    codon: CCTCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 121
+    codon: AGGTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 122
+    codon: TCCAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 123
+    codon: GATCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 124
+    codon: CCAGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 125
+    codon: CACGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 126
+    codon: ACGATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 127
+    codon: GCGCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 128
+    codon: AGATGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 129
+    codon: CCAGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 130
+    codon: GTGTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 131
+    codon: TCACAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 132
+    codon: ATGCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 133
+    codon: GCTATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 134
+    codon: CGCCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 135
+    codon: GATAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 136
+    codon: AGCGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 137
+    codon: TGTTGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 138
+    codon: GTGTTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 139
+    codon: TGCAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 140
+    codon: TACAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 141
+    codon: TCGAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 142
+    codon: CCACTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 143
+    codon: TTGCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 144
+    codon: TCGGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 145
+    codon: GCGTTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 146
+    codon: TTACTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 147
+    codon: CTAGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 148
+    codon: CGATGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 149
+    codon: CCTTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 150
+    codon: CCGATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 151
+    codon: TCTGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 152
+    codon: CCTGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 153
+    codon: TTCGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 154
+    codon: TTCCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 155
+    codon: CACTCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 156
+    codon: TCCGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 157
+    codon: TGTCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 158
+    codon: CAGTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 159
+    codon: CGAGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 160
+    codon: GCGGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 161
+    codon: ATAACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 162
+    codon: CACATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 163
+    codon: TCGCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 164
+    codon: ATAGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 165
+    codon: ATTATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 166
+    codon: TTCATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 167
+    codon: ATCGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 168
+    codon: ACCTGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 169
+    codon: GCATGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 170
+    codon: TCCATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 171
+    codon: GCCAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 172
+    codon: GCTCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 173
+    codon: CATGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 174
+    codon: TTGAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 175
+    codon: GCCTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 176
+    codon: CATAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 177
+    codon: ATCGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 178
+    codon: TACCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 179
+    codon: TAGTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 180
+    codon: TGTATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 181
+    codon: TACTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 182
+    codon: TGACAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 183
+    codon: TGAATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 184
+    codon: ATAGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 185
+    codon: GTGCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 186
+    codon: TGTGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 187
+    codon: AAGCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 188
+    codon: GCGGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 189
+    codon: CAGAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 190
+    codon: AGGCAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 191
+    codon: TAGTTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 192
+    codon: ACGACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 193
+    codon: CGGATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 194
+    codon: AGCACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 195
+    codon: TATCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 196
+    codon: CGCACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 197
+    codon: CCATGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 198
+    codon: AACAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 199
+    codon: CATTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 200
+    codon: GTTCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 201
+    codon: AGCATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 202
+    codon: TCGCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 203
+    codon: GAATCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 204
+    codon: TGATCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 205
+    codon: AACTTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 206
+    codon: TCGGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 207
+    codon: ATAGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 208
+    codon: CGCGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 209
+    codon: AACTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 210
+    codon: AGCGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 211
+    codon: CAGTTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 212
+    codon: TCTCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 213
+    codon: CCAGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 214
+    codon: GAGCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 215
+    codon: CAGTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 216
+    codon: TGGTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 217
+    codon: CGCGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 218
+    codon: AAGACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 219
+    codon: CCTTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 220
+    codon: ATGGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 221
+    codon: ATATTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 222
+    codon: TGATGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 223
+    codon: TGGAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 224
+    codon: GCGAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 225
+    codon: CCTGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 226
+    codon: CTTCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 227
+    codon: TCGCAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 228
+    codon: AGTAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 229
+    codon: CTGACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 230
+    codon: CGTTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 231
+    codon: AAGTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 232
+    codon: CATCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 233
+    codon: ACCAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 234
+    codon: CTACTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 235
+    codon: GATGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 236
+    codon: AGGAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 237
+    codon: CTGCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 238
+    codon: GCAGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 239
+    codon: GCTACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 240
+    codon: TGTACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 241
+    codon: AGTCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 242
+    codon: GAGTGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 243
+    codon: CGTAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 244
+    codon: TATCAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 245
+    codon: CTGGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 246
+    codon: TGTGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 247
+    codon: ACCGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 248
+    codon: ACCAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 249
+    codon: GTTGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 250
+    codon: ATGTGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 251
+    codon: CCGCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 252
+    codon: GATACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 253
+    codon: CTCTTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 254
+    codon: CGACAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 255
+    codon: GCTGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 256
+    codon: GCGTGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 257
+    codon: CTCCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 258
+    codon: GATTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 259
+    codon: GCTAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 260
+    codon: CGATTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 261
+    codon: TTATCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 262
+    codon: CGTGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 263
+    codon: ACACTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 264
+    codon: ATGCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 265
+    codon: GAGCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 266
+    codon: AGGAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 267
+    codon: CCGACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 268
+    codon: GATATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 269
+    codon: ACTCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 270
+    codon: AGCTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 271
+    codon: CTTATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 272
+    codon: ACAGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 273
+    codon: TTAAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 274
+    codon: CGGTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 275
+    codon: GACTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 276
+    codon: GAACAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 277
+    codon: CCTGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 278
+    codon: CTGAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 279
+    codon: CGGCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 280
+    codon: GAGGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 281
+    codon: CACTGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 282
+    codon: ATCCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 283
+    codon: CGACGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 284
+    codon: TATAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 285
+    codon: AGTTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 286
+    codon: ACTAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 287
+    codon: TTGGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 288
+    codon: CGCTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 289
+    codon: GTTAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 290
+    codon: ACGAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 291
+    codon: ATAATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 292
+    codon: ATTGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 293
+    codon: GTAGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 294
+    codon: GTTCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 295
+    codon: CGCAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 296
+    codon: ATTAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 297
+    codon: TACGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 298
+    codon: ACTTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 299
+    codon: ATCAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  B1:
+  - index: 0
+    codon: GCCTCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 1
+    codon: TCCGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 2
+    codon: CAAGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 3
+    codon: GTCCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 4
+    codon: GACGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 5
+    codon: TTATAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 6
+    codon: CCGAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 7
+    codon: GAACCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 8
+    codon: AGAGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 9
+    codon: CATGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 10
+    codon: ACATTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 11
+    codon: GGAATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 12
+    codon: GCCAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 13
+    codon: GTGGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 14
+    codon: ATAATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 15
+    codon: CGTAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 16
+    codon: TCTTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 17
+    codon: ATTCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 18
+    codon: GGAAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 19
+    codon: ATGGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 20
+    codon: TAATAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 21
+    codon: TTAACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 22
+    codon: AATACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 23
+    codon: AAGCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 24
+    codon: CGCTTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 25
+    codon: TGCTGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 26
+    codon: TGCACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 27
+    codon: CTTGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 28
+    codon: TTAGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 29
+    codon: TGATGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 30
+    codon: GATATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 31
+    codon: ACGGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 32
+    codon: AGGTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 33
+    codon: GCCTGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 34
+    codon: GCTCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 35
+    codon: GATAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 36
+    codon: GGCGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 37
+    codon: GCGGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 38
+    codon: GACAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 39
+    codon: CTTCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 40
+    codon: CGTGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 41
+    codon: ACCTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 42
+    codon: TTCGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 43
+    codon: CTCCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 44
+    codon: AGAGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 45
+    codon: CGTGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 46
+    codon: TCTCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 47
+    codon: TCGGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 48
+    codon: ACACTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 49
+    codon: GTGGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 50
+    codon: GGACTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 51
+    codon: GTACTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 52
+    codon: AGCTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 53
+    codon: TAAGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 54
+    codon: CAGCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 55
+    codon: CACGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 56
+    codon: TATTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 57
+    codon: ATGTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 58
+    codon: CTAGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 59
+    codon: CGGTGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 60
+    codon: GGCAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 61
+    codon: AACCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 62
+    codon: TGGTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 63
+    codon: GAACGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 64
+    codon: CAGAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 65
+    codon: AAGACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 66
+    codon: ATATAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 67
+    codon: AGAATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 68
+    codon: GCCAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 69
+    codon: GCGTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 70
+    codon: GCGTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 71
+    codon: ACTGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 72
+    codon: GCTGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 73
+    codon: AGTGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 74
+    codon: CAGGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 75
+    codon: CAGGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 76
+    codon: CTCTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 77
+    codon: AACTTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 78
+    codon: TAGGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 79
+    codon: TACTTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 80
+    codon: ACCTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 81
+    codon: GTGAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 82
+    codon: AACCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 83
+    codon: TAGAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 84
+    codon: CGGAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 85
+    codon: TATCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 86
+    codon: TTGCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 87
+    codon: TATTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 88
+    codon: ACCTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 89
+    codon: CGACTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 90
+    codon: GTCGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 91
+    codon: CGCCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 92
+    codon: TAGTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 93
+    codon: TATCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 94
+    codon: ACGAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 95
+    codon: ACTCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 96
+    codon: ATCTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 97
+    codon: CACAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 98
+    codon: TGAGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 99
+    codon: AACGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 100
+    codon: AGGCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 101
+    codon: CAAGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 102
+    codon: ATACGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 103
+    codon: CACTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 104
+    codon: GAGACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 105
+    codon: TAGTCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 106
+    codon: AGCAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 107
+    codon: CCGGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 108
+    codon: CGCCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 109
+    codon: TGTTGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 110
+    codon: GTGTGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 111
+    codon: TAACGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 112
+    codon: GCGACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 113
+    codon: GTTGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 114
+    codon: TGGAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 115
+    codon: CGCTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 116
+    codon: TGTTCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 117
+    codon: CTCATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 118
+    codon: CTCCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 119
+    codon: CTGGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 120
+    codon: TGCGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 121
+    codon: CTCAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 122
+    codon: CCGTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 123
+    codon: CGTCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 124
+    codon: TGGTTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 125
+    codon: CAAGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 126
+    codon: GAACAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 127
+    codon: GGATAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 128
+    codon: ACTCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 129
+    codon: CTAGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 130
+    codon: AGTGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 131
+    codon: AAGGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 132
+    codon: AGAAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 133
+    codon: CGGCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 134
+    codon: ATAGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 135
+    codon: CGTCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 136
+    codon: TGCGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 137
+    codon: TGGTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 138
+    codon: GCACAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 139
+    codon: TCAAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 140
+    codon: TTGGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 141
+    codon: AATGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 142
+    codon: GGCTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 143
+    codon: CAACAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 144
+    codon: AATCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 145
+    codon: TCCACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 146
+    codon: GGCCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 147
+    codon: CATTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 148
+    codon: GCTAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 149
+    codon: ATAAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 150
+    codon: TGTGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 151
+    codon: CGTTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 152
+    codon: GACGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 153
+    codon: AGATAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 154
+    codon: ATTACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 155
+    codon: TTCGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 156
+    codon: CAGTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 157
+    codon: AGCGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 158
+    codon: CGTGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 159
+    codon: GGACAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 160
+    codon: ACCAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 161
+    codon: ACTCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 162
+    codon: CCAACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 163
+    codon: TGAACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 164
+    codon: TCCGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 165
+    codon: TCCAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 166
+    codon: TAGCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 167
+    codon: TACTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 168
+    codon: CACGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 169
+    codon: CGGCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 170
+    codon: GCGCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 171
+    codon: CCACGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 172
+    codon: AACTCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 173
+    codon: GAGTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 174
+    codon: CTTACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 175
+    codon: AAGTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 176
+    codon: TCCAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 177
+    codon: CAACGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 178
+    codon: CTCGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 179
+    codon: ACTTCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 180
+    codon: TATCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 181
+    codon: ATCCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 182
+    codon: TGCGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 183
+    codon: GTCCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 184
+    codon: GGTCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 185
+    codon: GAGCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 186
+    codon: CGGTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 187
+    codon: GAAGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 188
+    codon: TTAGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 189
+    codon: TTCTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 190
+    codon: AATCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 191
+    codon: AGTCTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 192
+    codon: ACCAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 193
+    codon: TGTAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 194
+    codon: ATACCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 195
+    codon: CACCTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 196
+    codon: ACTTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 197
+    codon: TTGATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 198
+    codon: CGATGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 199
+    codon: ATGCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 200
+    codon: GCGCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 201
+    codon: CTAACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 202
+    codon: AATCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 203
+    codon: GGATCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 204
+    codon: GCAGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 205
+    codon: TATAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 206
+    codon: AGGCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 207
+    codon: CACTGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 208
+    codon: TCACAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 209
+    codon: TCTGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 210
+    codon: CGAGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 211
+    codon: TGGCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 212
+    codon: GCGATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 213
+    codon: CAATCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 214
+    codon: CATCAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 215
+    codon: CATCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 216
+    codon: GTCGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 217
+    codon: GTACGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 218
+    codon: TGCATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 219
+    codon: GCACCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 220
+    codon: AAGTTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 221
+    codon: AATATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 222
+    codon: GAGCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 223
+    codon: TCTGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 224
+    codon: GTTGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 225
+    codon: TGTCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 226
+    codon: GGTCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 227
+    codon: GCGCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 228
+    codon: AGTTGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 229
+    codon: AGCGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 230
+    codon: ACTGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 231
+    codon: TCATAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 232
+    codon: GGAGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 233
+    codon: AACACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 234
+    codon: TCCTCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 235
+    codon: AGTCAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 236
+    codon: CTACTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 237
+    codon: TCCATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 238
+    codon: TTGCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 239
+    codon: GACATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 240
+    codon: TTGTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 241
+    codon: TACTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 242
+    codon: GCAAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 243
+    codon: ATGGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 244
+    codon: GATTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 245
+    codon: TACATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 246
+    codon: CAGCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 247
+    codon: CGGTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 248
+    codon: GATCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 249
+    codon: TATACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 250
+    codon: GTAACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 251
+    codon: ACGGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 252
+    codon: GATGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 253
+    codon: CGCAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 254
+    codon: CTAATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 255
+    codon: TGATCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 256
+    codon: ATAGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 257
+    codon: CCTCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 258
+    codon: CGGAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 259
+    codon: GGTGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 260
+    codon: TGGACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 261
+    codon: GCCGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 262
+    codon: TGCCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 263
+    codon: AACGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 264
+    codon: ATATTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 265
+    codon: GACCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 266
+    codon: CATGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 267
+    codon: CGAATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 268
+    codon: ACATAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 269
+    codon: CCAGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 270
+    codon: CGCACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 271
+    codon: CCGCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 272
+    codon: GGCGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 273
+    codon: TTATTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 274
+    codon: ATCACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 275
+    codon: GACGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 276
+    codon: CGGACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 277
+    codon: GCTCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 278
+    codon: GCCGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 279
+    codon: AGTAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 280
+    codon: AAGGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 281
+    codon: AACAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 282
+    codon: AGTTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 283
+    codon: CCTCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 284
+    codon: AGCGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 285
+    codon: ACCGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 286
+    codon: AAGCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 287
+    codon: CGAGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 288
+    codon: TCAACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 289
+    codon: AGCATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 290
+    codon: GAATGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 291
+    codon: CCACAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 292
+    codon: CAGACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 293
+    codon: TCGTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 294
+    codon: GGTACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 295
+    codon: ACCGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 296
+    codon: ACGCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 297
+    codon: GCTAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 298
+    codon: AGCTCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 299
+    codon: GATACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 300
+    codon: CCTAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 301
+    codon: CAATGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 302
+    codon: CTTGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 303
+    codon: TAGATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 304
+    codon: GTATGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 305
+    codon: ATGGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 306
+    codon: TTCAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 307
+    codon: CTTCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 308
+    codon: TGAATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 309
+    codon: ATTATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 310
+    codon: ACGATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 311
+    codon: TAGGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 312
+    codon: GGTTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 313
+    codon: CCAATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 314
+    codon: ACACGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 315
+    codon: CACACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 316
+    codon: GGCACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 317
+    codon: GCCTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 318
+    codon: GTGCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 319
+    codon: AGCCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 320
+    codon: GACGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 321
+    codon: TAACCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 322
+    codon: AGGACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 323
+    codon: CTGGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 324
+    codon: ACTACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 325
+    codon: TCCTGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 326
+    codon: CCTATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 327
+    codon: ACGAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 328
+    codon: AGGCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 329
+    codon: TGACTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 330
+    codon: AGTAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 331
+    codon: CCAGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 332
+    codon: AACAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 333
+    codon: AAGAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 334
+    codon: TTAAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 335
+    codon: CTCGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 336
+    codon: CTGCGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 337
+    codon: TCACTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 338
+    codon: AATTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 339
+    codon: ACATCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 340
+    codon: AAGCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 341
+    codon: TTGGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 342
+    codon: TGAAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 343
+    codon: AGTGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 344
+    codon: CGAAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 345
+    codon: TTGTTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 346
+    codon: GTCCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 347
+    codon: GTGTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 348
+    codon: TCTTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 349
+    codon: TAGCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 350
+    codon: CACGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 351
+    codon: CTACAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 352
+    codon: GTCAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 353
+    codon: ACGTTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 354
+    codon: ATTCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 355
+    codon: CACCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 356
+    codon: TCAGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 357
+    codon: GGTGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 358
+    codon: CAACTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 359
+    codon: ATATGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 360
+    codon: GCATGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 361
+    codon: GGAACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 362
+    codon: ATCATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 363
+    codon: AGTATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 364
+    codon: GCGAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 365
+    codon: TATGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 366
+    codon: CTTCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 367
+    codon: GGAGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 368
+    codon: GGCGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 369
+    codon: CGGCCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 370
+    codon: TTATGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 371
+    codon: TCTGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 372
+    codon: CTGTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 373
+    codon: ACCGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 374
+    codon: CCTTCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 375
+    codon: GCCGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 376
+    codon: GCTGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 377
+    codon: TTGCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 378
+    codon: GAATTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 379
+    codon: CCATTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 380
+    codon: GCACGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 381
+    codon: TTACCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 382
+    codon: ACGTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 383
+    codon: CCAGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 384
+    codon: TCAGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 385
+    codon: AGACAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 386
+    codon: GGTCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 387
+    codon: AGAACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 388
+    codon: ATGAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 389
+    codon: ACTTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 390
+    codon: AGGAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 391
+    codon: TCGTCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 392
+    codon: GCTTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 393
+    codon: TCAGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 394
+    codon: CGAACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 395
+    codon: CGCGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 396
+    codon: CCTCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 397
+    codon: GGCCTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 398
+    codon: TCGACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 399
+    codon: CATATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 400
+    codon: AGGATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 401
+    codon: AAGGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 402
+    codon: CTCGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 403
+    codon: GTTACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 404
+    codon: TGCTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 405
+    codon: TCGGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 406
+    codon: GCTTGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 407
+    codon: CCGCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 408
+    codon: CGATCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 409
+    codon: ATGAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 410
+    codon: CATACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 411
+    codon: CGACAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 412
+    codon: GAAGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 413
+    codon: GGTTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 414
+    codon: ACGCCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 415
+    codon: AATGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 416
+    codon: ACAAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 417
+    codon: GACTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 418
+    codon: ACGGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 419
+    codon: ATCTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 420
+    codon: CTCTCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 421
+    codon: AACGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 422
+    codon: CAGGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 423
+    codon: GATCTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 424
+    codon: GCATAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 425
+    codon: AGCACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 426
+    codon: ACCGAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 427
+    codon: AACCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 428
+    codon: GCTGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 429
+    codon: CAGTCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 430
+    codon: CACGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 431
+    codon: TCACGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 432
+    codon: AAGCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 433
+    codon: CTCACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 434
+    codon: GCCTTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 435
+    codon: CGCGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 436
+    codon: GCCATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 437
+    codon: CCGTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 438
+    codon: ACTATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 439
+    codon: ACAACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 440
+    codon: TGAGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 441
+    codon: CTCAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 442
+    codon: CGCCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 443
+    codon: GTAGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 444
+    codon: GACACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 445
+    codon: TCATTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 446
+    codon: GACCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 447
+    codon: ATAACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 448
+    codon: ATAGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 449
+    codon: CTCTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 450
+    codon: CCTGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 451
+    codon: ACAGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 452
+    codon: CCTCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 453
+    codon: GCAGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 454
+    codon: GGCGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 455
+    codon: AATCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 456
+    codon: ATACAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 457
+    codon: CTGAGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 458
+    codon: CGCGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 459
+    codon: CGCAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 460
+    codon: CATCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 461
+    codon: TATGTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 462
+    codon: CAGCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 463
+    codon: TAAGTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 464
+    codon: GGACGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 465
+    codon: ACTGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 466
+    codon: GACAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 467
+    codon: GTTATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 468
+    codon: GAGGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 469
+    codon: AATTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 470
+    codon: CTCCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 471
+    codon: GCAACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 472
+    codon: GATAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 473
+    codon: TACCAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 474
+    codon: GTCTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 475
+    codon: CCGAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 476
+    codon: GAGATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 477
+    codon: CCGGTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 478
+    codon: GGAGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 479
+    codon: TATCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 480
+    codon: ATGCGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 481
+    codon: CAATAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 482
+    codon: TAGGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 483
+    codon: CTGTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 484
+    codon: TCGTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 485
+    codon: GCGCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 486
+    codon: GGCCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 487
+    codon: GATTCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 488
+    codon: CACTTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 489
+    codon: TAACTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 490
+    codon: ACAGCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 491
+    codon: TAATGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 492
+    codon: AATGGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 493
+    codon: CCGCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 494
+    codon: TAAGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 495
+    codon: AAGTGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 496
+    codon: TCAATC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 497
+    codon: CACCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 498
+    codon: CGTATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 499
+    codon: ATCCTA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 500
+    codon: GTGTCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 501
+    codon: TTGAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 502
+    codon: TCCGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 503
+    codon: GGTGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 504
+    codon: ATGTGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 505
+    codon: GCAATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 506
+    codon: TACACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 507
+    codon: ACAGGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 508
+    codon: ACCACC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 509
+    codon: GATTAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 510
+    codon: CCTACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 511
+    codon: ATGATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 512
+    codon: ACAATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 513
+    codon: AGCCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 514
+    codon: TTAGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 515
+    codon: GTAATG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 516
+    codon: TTCTTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 517
+    codon: AAGAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 518
+    codon: CTATAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 519
+    codon: CAAGAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 520
+    codon: ACGACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 521
+    codon: TCGATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 522
+    codon: CCACCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 523
+    codon: TTCAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 524
+    codon: CCATAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 525
+    codon: CCGACT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 526
+    codon: TAAGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 527
+    codon: GTGATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 528
+    codon: AATGCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 529
+    codon: ATTCAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 530
+    codon: AGTTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 531
+    codon: AATAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 532
+    codon: GTAGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 533
+    codon: AGACGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 534
+    codon: TTAATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 535
+    codon: AACATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 536
+    codon: AGCAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 537
+    codon: GTCTAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 538
+    codon: TAACAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 539
+    codon: AGCGTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 540
+    codon: CGAGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 541
+    codon: CTGATA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 542
+    codon: GTGAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 543
+    codon: GAGCCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 544
+    codon: GGTAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 545
+    codon: AATAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 546
+    codon: TAGACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 547
+    codon: CCTTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 548
+    codon: TATAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 549
+    codon: CGACCT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 550
+    codon: AGCCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 551
+    codon: CTTAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 552
+    codon: GCCACA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 553
+    codon: TGTATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 554
+    codon: ATCCGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 555
+    codon: AGGTGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 556
+    codon: GTAAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 557
+    codon: ACACCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 558
+    codon: AGACCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 559
+    codon: TTACAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 560
+    codon: GACTCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 561
+    codon: TGGCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 562
+    codon: CTAGAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 563
+    codon: ACTAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 564
+    codon: TAGAGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 565
+    codon: TTCGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 566
+    codon: GTATCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 567
+    codon: GACTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 568
+    codon: CTAAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 569
+    codon: GTGCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 570
+    codon: GTTCAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 571
+    codon: ACGCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 572
+    codon: AGAGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 573
+    codon: GATGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 574
+    codon: GACCGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 575
+    codon: GGCAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 576
+    codon: GAATAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 577
+    codon: GAAGCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 578
+    codon: ACACAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 579
+    codon: CGGCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 580
+    codon: CAGATT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 581
+    codon: TCATCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 582
+    codon: TTCCTT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 583
+    codon: CAGAGG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 584
+    codon: CAACCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 585
+    codon: CAGCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 586
+    codon: TGTCAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 587
+    codon: AACTAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 588
+    codon: CTGCTG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 589
+    codon: TCCTAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 590
+    codon: GAGTCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 591
+    codon: CTGACG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 592
+    codon: TCGCTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 593
+    codon: AGATTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 594
+    codon: GATGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 595
+    codon: AATTCC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 596
+    codon: GGCTTC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 597
+    codon: GAATCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 598
+    codon: CGACGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 599
+    codon: GGACCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 600
+    codon: GCGAAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 601
+    codon: ATTAAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 602
+    codon: GAGTGT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 603
+    codon: CCTAAC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 604
+    codon: TCTGGC
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 605
+    codon: CTATCA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 606
+    codon: GCGGCG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 607
+    codon: CGATAA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 608
+    codon: GCAGAT
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 609
+    codon: GTGCAG
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  - index: 610
+    codon: CCAAGA
+    smiles: .nan
+    reaction: .nan
+    reactant: .nan
+    product: .nan
+  S0:
+  - name: AG24_4
+    codon: ACACAC
+  - name: AG24_5
+    codon: ACAGCA
+  - name: AG24_6
+    codon: ACATGT
+  - name: AG24_13
+    codon: ACGACG
+  - name: AG24_14
+    codon: ACGCGA
+  - name: AG24_15
+    codon: ACTAGC
+  - name: AG24_22
+    codon: ACTCTG
+  - name: AG24_23
+    codon: ACTGAT
+  - name: AG24_24
+    codon: AGACTA
+  - name: AG24_31
+    codon: AGAGAG
+  - name: AG24_32
+    codon: TAGATG
+  - name: AG24_33
+    codon: TAGTGT
+  - name: AG24_40
+    codon: TATCAC
+  - name: AG24_41
+    codon: TCATAG
+  - name: AG24_42
+    codon: TCGTCA
+  - name: AG24_49
+    codon: TCTACT
+  - name: AG24_50
+    codon: TCTGTA
+  - name: AG24_51
+    codon: TGACAT
+  - name: AG24_58
+    codon: TGCAGC
+  - name: AG24_59
+    codon: TGCGCG
+  - name: AG24_60
+    codon: GCTACT
+  - name: AG24_67
+    codon: GCACAT
+  - name: AG24_68
+    codon: GAGTGT
+  - name: AG24_69
+    codon: GTGCGA
+  - name: AG24_76
+    codon: GCCGCT
+  - name: AG24_77
+    codon: GAAGAT
+  - name: AG24_78
+    codon: GTTCAG
+  S1:
+  - name: AG24_4
+    codon: CGCTCGATA
+  - name: AG24_5
+    codon: CGCTCGATA
+  - name: AG24_6
+    codon: CGCTCGATA
+  - name: AG24_13
+    codon: CGCTCGATA
+  - name: AG24_14
+    codon: CGCTCGATA
+  - name: AG24_15
+    codon: CGCTCGATA
+  - name: AG24_22
+    codon: CGCTCGATA
+  - name: AG24_23
+    codon: CGCTCGATA
+  - name: AG24_24
+    codon: CGCTCGATA
+  - name: AG24_31
+    codon: CGCTCGATA
+  - name: AG24_32
+    codon: CGCTCGATA
+  - name: AG24_33
+    codon: CGCTCGATA
+  - name: AG24_40
+    codon: CGCTCGATA
+  - name: AG24_41
+    codon: CGCTCGATA
+  - name: AG24_42
+    codon: CGCTCGATA
+  - name: AG24_49
+    codon: CGCTCGATA
+  - name: AG24_50
+    codon: CGCTCGATA
+  - name: AG24_51
+    codon: CGCTCGATA
+  - name: AG24_58
+    codon: CGCTCGATA
+  - name: AG24_59
+    codon: CGCTCGATA
+  - name: AG24_60
+    codon: CGCTCGATA
+  - name: AG24_67
+    codon: CGCTCGATA
+  - name: AG24_68
+    codon: CGCTCGATA
+  - name: AG24_69
+    codon: CGCTCGATA
+  - name: AG24_76
+    codon: CGCTCGATA
+  - name: AG24_77
+    codon: CGCTCGATA
+  - name: AG24_78
+    codon: CGCTCGATA

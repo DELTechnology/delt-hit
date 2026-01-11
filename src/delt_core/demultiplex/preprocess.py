@@ -62,6 +62,7 @@ def generate_input_files(
         write_json_file: bool = True,
         write_info_file: bool = False,
         fast_dev_run: bool = False,
+        with_processing: bool = False,
 ) -> None:
     config = read_yaml(config_path)
 
@@ -146,11 +147,16 @@ def generate_input_files(
 
             f.write(cmd)
 
-    with open(path_demultiplex_exec, 'a') as f:
-        f.write(f'\nzgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}" || exit\n')
-        f.write(f'delt-hit demultiplex process --config_path="{config_path}" || exit\n')
-        f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
+    if with_processing:
+        with open(path_demultiplex_exec, 'a') as f:
+            f.write(f'\nzgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}" || exit\n')
+            f.write(f'delt-hit demultiplex process --config_path="{config_path}" || exit\n')
+            f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
+        os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
+    else:
+        with open(path_demultiplex_exec, 'a') as f:
+            f.write(f'\nzgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}" || exit\n')
+        os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 
-    os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 
     return path_demultiplex_exec
