@@ -33,7 +33,7 @@ class Library:
         lib_path = exp_dir / 'library.parquet'
         return lib_path
 
-    def enumerate(self, *, config_path: Path, debug: str | None):
+    def enumerate(self, *, config_path: Path, debug: str | None, overwrite: bool = False):
         debug = debug or 'False'
 
         lib_path = self.get_library_path(config_path=config_path)
@@ -92,7 +92,8 @@ class Library:
 
             if (debug == 'all') or (debug == 'valid') and is_valid:
                 ax = visualize_reaction_graph(g)
-                ax.figure.savefig(lib_path / f'reaction_graph_{"_".join(str(c["index"]) for c in comb)}.png', dpi=300)
+                ax.figure.savefig(lib_path.parent / f'reaction_graph_{"_".join(str(c["index"]) for c in comb)}.png',
+                                  dpi=300)
                 plt.close('all')
                 ax.figure.show()
 
@@ -439,3 +440,7 @@ def visualize_smiles(smiles: list[str], nrow: int = 25):
     ax.axes.set_title('Product Structures')
     ax.figure.tight_layout()
     return ax
+
+lib = pd.read_parquet('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-rechecked-enum/library.parquet')
+ax = visualize_smiles(lib.smiles.tolist(), nrow=5)
+ax.figure.show()
