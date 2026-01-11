@@ -46,7 +46,7 @@ def extract_ids(line: str):
     return {'selection_ids': selection_ids, 'barcodes': barcodes}
 
 
-def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None) -> None:
+def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None, as_files: bool = True) -> None:
 
     num_codes = len(list(list(counts.values())[0].keys())[0])
     columns = [f'code_{i}' for i in range(1, num_codes + 1)] + ['count']
@@ -62,10 +62,15 @@ def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None) -> Non
             name = '-'.join(map(str, selection_ids))
         else:
             name = ids_to_name[selection_ids]
-        selection_dir = output_dir / name
-        selection_dir.mkdir(parents=True, exist_ok=True)
-        output_file = selection_dir / f'counts.txt'
-        df.to_csv(output_file, index=False, sep='\t')
+
+        if as_files:
+            output_file = output_dir / f'{name}_counts.txt'
+            df.to_csv(output_file, index=False, sep='\t')
+        else:
+            selection_dir = output_dir / name
+            selection_dir.mkdir(parents=True, exist_ok=True)
+            output_file = selection_dir / f'counts.txt'
+            df.to_csv(output_file, index=False, sep='\t')
 
 
 def get_counts(*, input_path: Path, num_reads: int) -> dict:

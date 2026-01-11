@@ -1,7 +1,7 @@
 from pathlib import Path
 import pandas as pd
 
-# path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
+# path = Path('/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/template.xlsx')
 
 def config_from_excel(path: Path):
     config = {}
@@ -17,8 +17,8 @@ def config_from_excel(path: Path):
     config['whitelists'] = whitelists_from_excel(path)
     return config
 
-def steps_from_excel(path: Path) -> set:
-    steps = pd.read_excel(path, sheet_name='steps')
+def rection_graph_steps_from_excel(path: Path) -> set:
+    steps = pd.read_excel(path, sheet_name='reaction_graph')
     return set(steps.to_records(index=False).tolist())
 
 def library_and_catalog_from_excel(path: Path):
@@ -31,7 +31,7 @@ def library_and_catalog_from_excel(path: Path):
     products = set()
     reactants = set(catalog['compounds'])
     reactions = set(catalog['reactions'])
-    steps = steps_from_excel(path)
+    steps = rection_graph_steps_from_excel(path)
 
     bbs_sheets = sorted(filter(lambda x: x.startswith('B'), sheets))
     for sheet in bbs_sheets:
@@ -61,6 +61,8 @@ def experiment_from_excel(path: Path):
 
 def structure_from_excel(path: Path):
     structure = pd.read_excel(path, sheet_name='structure')
+    assert structure.name.str.match(r'^[SCB]').all(), "Structure `name` must start with 'S', 'B', or 'C' depending on type"
+    assert structure.type.isin(['selection', 'building_block', 'constant']).all(), "Structure `type` must be one of 'selection', 'building_block', or 'constant'"
     return structure.to_dict('records')
 
 def selections_from_excel(path: Path):
@@ -100,6 +102,8 @@ def whitelists_from_excel(path: Path):
 
     for sheet in bbs_sheets:
         df = pd.read_excel(path, sheet_name=sheet)
+        assert df.codon.nunique() == len(df), f"Codons for building blocks {sheet} must be unique"
+
         df.index.name = 'index'
         df = df.reset_index()
         whitelists[sheet] = df.to_dict('records')
@@ -129,7 +133,7 @@ def get_selection_name_to_ids(path: Path)-> dict:
     df = pd.read_excel(path, sheet_name='selection')
     selection_col_names = list(filter(lambda x: x.startswith('S'), df.columns))
 
-    assert df[selection_col_names].nunique() == len(df), "S0, S1 combinations must be unique"
+    assert len(df[selection_col_names].drop_duplicates()) == len(df), "S0, S1 combinations must be unique"
 
     df = df[['name', *selection_col_names]]
 
