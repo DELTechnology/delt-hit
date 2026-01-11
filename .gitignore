@@ -305,3 +305,4 @@ paper/experiment-1/representations
 *.parquet
 *.fastq
 *.fasta
+*.png

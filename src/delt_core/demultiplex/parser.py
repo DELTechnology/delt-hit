@@ -6,13 +6,13 @@ import pandas as pd
 def config_from_excel(path: Path):
     config = {}
     config['experiment'] = experiment_from_excel(path)
+    config['selections'] = selections_from_excel(path)
 
     library, catalog = library_and_catalog_from_excel(path)
     config['library'] = library
     config['catalog'] = catalog
 
     config['structure'] = structure_from_excel(path)
-    config['selections'] = selections_from_excel(path)
     # config['analyses'] = analyses_from_excel(path)
     config['whitelists'] = whitelists_from_excel(path)
     return config
@@ -65,9 +65,10 @@ def structure_from_excel(path: Path):
 
 def selections_from_excel(path: Path):
     selections = pd.read_excel(path, sheet_name='selection')
-    selections['date'] = pd.to_datetime(selections['date']).dt.strftime('%Y-%m-%d')
+    if 'date' in selections.columns:
+        selections['date'] = pd.to_datetime(selections['date']).dt.strftime('%Y-%m-%d')
     selection_ids_to_name = get_selection_name_to_ids(path)
-    assert selections.name.is_unique
+    assert selections.name.is_unique, "Selection `names` must be unique"
     selections['ids'] = list(map(list, selections['name'].map(selection_ids_to_name).tolist()))
     return selections.set_index('name').to_dict('index')
 
@@ -127,6 +128,8 @@ def catalog_from_excel(path: Path):
 def get_selection_name_to_ids(path: Path)-> dict:
     df = pd.read_excel(path, sheet_name='selection')
     selection_col_names = list(filter(lambda x: x.startswith('S'), df.columns))
+
+    assert df[selection_col_names].nunique() == len(df), "S0, S1 combinations must be unique"
 
     df = df[['name', *selection_col_names]]
 
