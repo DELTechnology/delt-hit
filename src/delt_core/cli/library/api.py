@@ -18,11 +18,6 @@ from tqdm import tqdm
 
 from delt_core.utils import read_yaml
 
-
-# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-1/config.yaml')
-# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-2/config.yaml')
-# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/config.yaml')
-
 class Library:
 
     def get_experiment_dir(self, *, config_path: Path) -> Path:
@@ -35,7 +30,8 @@ class Library:
         lib_path = exp_dir / 'library.parquet'
         return lib_path
 
-    def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False):
+    def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
+                  graph_only: bool = False, errors: str = 'raise'):
 
         lib_path = self.get_library_path(config_path=config_path)
         if lib_path.exists():
@@ -61,7 +57,7 @@ class Library:
                                   products=products)
 
         ax = visualize_reaction_graph(bb_G)
-        ax.figure.show()
+        # ax.figure.show()
         ax.figure.savefig(lib_path.parent / 'building_block_reactions_graph.png', dpi=300)
 
         add_G = get_reaction_graph(steps=other_edges,
@@ -70,7 +66,7 @@ class Library:
                                    compounds=compounds,
                                    products=products)
         ax = visualize_reaction_graph(add_G)
-        ax.figure.show()
+        # ax.figure.show()
         ax.figure.savefig(lib_path.parent / 'additional_reactions_graph.png', dpi=300)
 
         G = get_reaction_graph(steps=steps,
@@ -82,6 +78,9 @@ class Library:
         ax.figure.savefig(lib_path.parent / 'reaction_graph.png', dpi=300)
 
         logger.info(f'Saved reaction graph visualizations to {lib_path.parent}')
+
+        if graph_only:
+            return
 
         building_block_names = sorted(building_blocks)
         lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
@@ -133,7 +132,7 @@ class Library:
             if (debug == 'all') or (debug == 'valid') and is_valid:
                 ax = visualize_reaction_graph(g)
                 ax.figure.savefig(
-                    lib_path / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
+                    lib_path.parent / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
                     dpi=300)
                 plt.close('all')
                 ax.figure.show()
@@ -151,7 +150,7 @@ class Library:
                 continue
 
             nx.set_node_attributes(g, nodes)
-            g = complete_reaction_graph(g)
+            g = complete_reaction_graph(g, errors=errors)
             smiles = g.nodes[terminal]['smiles']
             record = {f'code_{i}': c['index'] for i, c in enumerate(comb)}
             record['smiles'] = smiles
@@ -443,7 +442,7 @@ def perform_reaction(smirks: str, reactants: list[str], use_smiles: bool = False
     return sorted(products)
 
 
-def complete_reaction_graph(G: nx.DiGraph) -> nx.DiGraph:
+def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
     while True:
 
         try:
@@ -468,8 +467,15 @@ def complete_reaction_graph(G: nx.DiGraph) -> nx.DiGraph:
             nx.set_node_attributes(G, product)
             # print(f"Reaction {next_reaction['reaction']}: {reactants} -> {products[0]}")
         except Exception as e:
-            print(f"Error processing reaction {next_reaction}: {e}")
-            break
+
+            logger.error(f"Error processing reaction {next_reaction}: {e}")
+            logger.error(f"Current products: {products}")
+            logger.error(f'Reaction graph at  error: {G.nodes(data=True)}')
+
+            if errors == 'raise':
+                raise e
+            elif errors == 'ignore':
+                break
 
     return G
 
@@ -485,9 +491,3 @@ def visualize_smiles(smiles: list[str], nrow: int = 25):
     ax.axes.set_title('Product Structures')
     ax.figure.tight_layout()
     return ax
-
-
-lib = pd.read_parquet(
-    '/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-rechecked-enum/library.parquet')
-ax = visualize_smiles(lib.smiles.tolist(), nrow=5)
-ax.figure.show()
