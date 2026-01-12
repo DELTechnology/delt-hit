@@ -23,8 +23,8 @@ def cli() -> None:
             "analyse": Analyse,
             "dashboard": dashboard,
         },
-        prog="delt-core",
-        description="DEL-T core toolkit",
+        prog="delt-hit",
+        description="DELT Hit toolkit",
     )
 
 if __name__ == "__main__":
