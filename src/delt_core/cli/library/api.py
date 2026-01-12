@@ -27,7 +27,7 @@ class Library:
 
     def get_library_path(self, *, config_path: Path) -> Path:
         exp_dir = self.get_experiment_dir(config_path=config_path)
-        lib_path = exp_dir / 'library.parquet'
+        lib_path = exp_dir / 'library' / 'library.parquet'
         return lib_path
 
     def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
