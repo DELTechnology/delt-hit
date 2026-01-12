@@ -2,58 +2,65 @@ from pathlib import Path
 import pandas as pd
 
 # path = Path('/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/template.xlsx')
+# path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/251021_NF2_library_rechecked_enumerate_v1.xlsx')
 
 def config_from_excel(path: Path):
     config = {}
     config['experiment'] = experiment_from_excel(path)
     config['selections'] = selections_from_excel(path)
 
-    library, catalog = library_and_catalog_from_excel(path)
-    config['library'] = library
-    config['catalog'] = catalog
+    config['library'] = library_from_excel(path)
+    config['catalog'] = catalog_from_excel(path)
 
     config['structure'] = structure_from_excel(path)
     # config['analyses'] = analyses_from_excel(path)
     config['whitelists'] = whitelists_from_excel(path)
     return config
 
-def rection_graph_steps_from_excel(path: Path) -> set:
-    steps = pd.read_excel(path, sheet_name='reaction_graph')
-    return set(steps.to_records(index=False).tolist())
+def library_from_excel(path: Path) -> dict:
+    rnx_g = pd.read_excel(path, sheet_name='reaction_graph')
+    assert not rnx_g.educt_1.isna().any(), "All `educt_1` in `reaction_graph` must be filled"
+    assert not rnx_g['product'].isna().any(), "All `product` in `reaction_graph` must be filled"
+    assert not rnx_g.reaction.isna().any(), "All `reaction` in `reaction_graph` must be filled"
 
-def library_and_catalog_from_excel(path: Path):
-    # path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
+    educts = set()
+    reactions = set()
+    products = set()
+
+    edges = [(i, j) for i, j in zip(rnx_g.educt_1, rnx_g.reaction)]
+    edges += [(i, j) for i, j in zip(rnx_g.reaction, rnx_g['product'])]
+    educts.update(rnx_g.educt_1)
+    reactions.update(rnx_g.reaction)
+    products.update(rnx_g['product'])
+
+    rnx_g = rnx_g.dropna(subset=['educt_2'])
+    edges += [(i, j) for i, j in zip(rnx_g.educt_2, rnx_g.reaction)]
+    edges += [(i, j) for i, j in zip(rnx_g.reaction, rnx_g['product'])]
+    educts.update(rnx_g.educt_2)
+
     xf = pd.ExcelFile(path)
     sheets = set(xf.sheet_names)
-
-    catalog = catalog_from_excel(path)
-
-    products = set()
-    reactants = set(catalog['compounds'])
-    reactions = set(catalog['reactions'])
-    steps = rection_graph_steps_from_excel(path)
-
     bbs_sheets = sorted(filter(lambda x: x.startswith('B'), sheets))
+    bb_edges = set()
     for sheet in bbs_sheets:
         df = pd.read_excel(path, sheet_name=sheet)
         df = df.astype(str)
 
         filter_ = df.smiles.notna()
-        steps.update([(sheet, r) for r in df.reaction[filter_]])
-        steps.update([(i, r) for i, r in zip(df.reactant, df.reaction)])
-        steps.update([(r, p) for r,p in zip(df.reaction, df['product'])])
+        bb_edges.update([(sheet, r) for r in df.reaction[filter_]])
+        bb_edges.update([(i, r) for i, r in zip(df.educt, df.reaction)])
+        bb_edges.update([(r, p) for r,p in zip(df.reaction, df['product'])])
 
-        products.update(df['product'].tolist())
-        reactants.update(df['reactant'].tolist())
-        reactions.update(df['reaction'].tolist())
+        products.update(df['product'])
+        educts.update(df['educt'])
+        reactions.update(df['reaction'])
 
-    # NOTE: these are the products introduced in the `steps` sheet
-    prods_from_steps = set([i for step in steps for i in step]) - products - reactions - set(bbs_sheets) - set(catalog['compounds'])
-    products = prods_from_steps | products
+    edges = [list(i) for i in edges]
+    bb_edges = [list(i) for i in bb_edges]
 
-    steps = [list(i) for i in sorted(steps)]
+    return dict(products=sorted(list(products)), educts=sorted(list(educts)), reactions=sorted(list(reactions)),
+                bb_edges=sorted(list(bb_edges)), other_edges=sorted(list(edges)), building_blocks=sorted(list(bbs_sheets)))
 
-    return dict(products=sorted(products), steps=sorted(steps), building_blocks=sorted(bbs_sheets)), catalog
 
 def experiment_from_excel(path: Path):
     experiment = pd.read_excel(path, sheet_name='experiment')
