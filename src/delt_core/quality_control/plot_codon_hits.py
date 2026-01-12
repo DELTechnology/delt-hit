@@ -27,6 +27,7 @@ def get_stats(experiment_path: Path) -> list:
 def plot_hits(output_dir: Path, save_dir: Path) -> None:
     stats = []
     report_paths = sorted(output_dir.glob('*.cutadapt.json'))
+    report_paths = sorted(filter(lambda f: not f.stem.startswith('._'), report_paths))
     for report_path in report_paths:
         stats += [*get_stats(report_path)]
     df = pd.DataFrame(stats)

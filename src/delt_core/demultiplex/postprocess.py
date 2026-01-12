@@ -59,7 +59,7 @@ def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None,
         count = [(*k, v) for k, v in count.items()]
         df = pd.DataFrame.from_records(count, columns=columns)
         df = df.astype(int)
-        df.sort_values(sort_by_cols, inplace=True)
+        df.sort_values(sort_by_cols, ascending=False, inplace=True)
 
         if ids_to_name is None:
             name = '-'.join(map(str, selection_ids))
@@ -68,6 +68,7 @@ def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None,
 
         if as_files:
             output_file = output_dir / f'{name}_counts.txt'
+            output_file.parent.mkdir(parents=True, exist_ok=True)
             df.to_csv(output_file, index=False, sep='\t')
         else:
             selection_dir = output_dir / name

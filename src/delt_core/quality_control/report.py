@@ -10,8 +10,9 @@ from rich.table import Table
 def print_report(output_dir: Path, save_path: Path) -> None:
     """Pretty, aligned cutadapt pipeline report using Rich."""
     report_files = sorted(output_dir.glob("*.cutadapt.json"))
+    report_files = sorted(filter(lambda f: not f.stem.startswith('._'), report_files))
     reports = {
-        p.stem.replace(".cutadapt", ""): json.load(p.open("r"))
+        p.stem.replace(".cutadapt", ""): json.loads(p.read_text())
         for p in report_files
     }
 
