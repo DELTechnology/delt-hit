@@ -5,41 +5,40 @@ import pandas as pd
 
 from delt_core.utils import read_yaml, write_yaml
 
-
-# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-3/config.yaml')
+name = 'protein_vs_no_protein'
+config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/analysis.yaml')
 # cfg = read_yaml(config_path)
 
 class Analyse:
 
     def prepare(self, config_path: Path, name: str):
         cfg = read_yaml(config_path)
-        exp_dir = Path(cfg['experiment']['save_dir']).expanduser().resolve() / cfg['experiment']['name']
-        selections_dir = exp_dir / 'selections'
+        assert name in list(map(lambda x: x['name'], cfg['experiments'])), f'Experiment {name} not found in config.'
 
-        analysis_dir = exp_dir / 'analyses' / name
+        exp, = list(filter(lambda x: x['name'] == name, cfg['experiments']))
+        save_dir = Path(exp['save_dir']).expanduser().resolve() / exp['name']
 
-        data_path = analysis_dir / 'data.csv'
-        samples_path = analysis_dir / 'samples.csv'
+        data_path = save_dir / 'data.csv'
+        samples_path = save_dir / 'samples.csv'
 
-        prepare_data(cfg=cfg, name=name, selections_dir=selections_dir,
-                     data_path=data_path, samples_path=samples_path)
+        prepare_data(exp=exp, data_path=data_path, samples_path=samples_path)
 
-        return data_path, samples_path, analysis_dir
+        return data_path, samples_path, save_dir
 
     def enrichment(self, *, config_path: Path, name: str, method: str = 'counts'):
-        data_path, samples_path, analysis_dir = self.prepare(config_path=config_path, name=name)
+        data_path, samples_path, save_dir = self.prepare(config_path=config_path, name=name)
 
         match method:
             case 'counts':
                 counts_rscript(data_path=data_path,
                                samples_path=samples_path,
                                cpm=False,
-                               save_dir=analysis_dir / 'counts')
+                               save_dir=save_dir / 'counts')
             case 'edgeR':
                 edgeR_rscript(data_path=data_path,
                               samples_path=samples_path,
                               log=False,
-                              save_dir=analysis_dir / 'edgeR')
+                              save_dir=save_dir / 'edgeR')
             case 'DESeq2':
                 pass
 
@@ -323,19 +322,18 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
     r_path.write_text(r_script)
 
 
-def prepare_data(cfg, name: str, selections_dir: Path, data_path: Path, samples_path: Path):
-    selections = cfg['analyses'][name]['selections']
-    samples = []
+def prepare_data(exp: dict, data_path: Path, samples_path: Path):
+    selections = exp['selections']
     data = []
     for sel in selections:
-        meta = cfg['selections'][sel]
-        meta['name'] = sel
-        samples.append(meta)
-        counts = pd.read_csv(selections_dir / sel / "counts.txt", delimiter='\t')
-        counts['name'] = sel
+        counts_path = Path(sel['counts_path']).expanduser().resolve()
+        assert counts_path.exists(), f"Counts file for selection {sel} not found at {counts_path}"
+
+        counts = pd.read_csv(counts_path, delimiter='\t')
+        counts['name'] = sel['name']
         data.append(counts)
 
-    samples = pd.DataFrame(samples)[['name', 'group']]
+    samples = pd.DataFrame(selections)[['name', 'group']]
     samples_path.parent.mkdir(parents=True, exist_ok=True)
     samples.to_csv(samples_path, index=False)
 
