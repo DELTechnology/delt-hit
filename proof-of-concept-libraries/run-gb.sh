@@ -8,11 +8,18 @@ delt-hit demultiplex process --config_path=/Volumes/T7/experiments/experiment-GB
 delt-hit demultiplex process --config_path=/Volumes/T7/experiments/experiment-GB/config.yaml --as_files=False --sort_by_counts=False
 
 delt-hit demultiplex report --config_path=/Volumes/T7/experiments/experiment-GB/config.yaml
-delt-hit demultiplex qc --config=/Volumes/T7/experiments/experiment-GB/config.yaml
+delt-hit demultiplex qc --config_path=/Volumes/T7/experiments/experiment-GB/config.yaml
 
-delt-hit library enumerate --config=/Volumes/T7/experiments/experiment-GB/config.yaml
+delt-hit library enumerate --config_path=/Volumes/T7/experiments/experiment-GB/config.yaml
 
 delt-hit analyse enrichment \
   --config_path=/Volumes/T7/experiments/experiment-GB/analysis.yaml \
   --name=analysis-1 \
   --method=counts
+Rscript --vanilla /Volumes/T7/experiments/experiment-GB/analysis/analysis-1/counts/enrichment_counts.R
+
+delt-hit analyse enrichment \
+  --config_path=/Volumes/T7/experiments/experiment-GB/analysis.yaml \
+  --name=analysis-1 \
+  --method=edgeR
+Rscript --vanilla /Volumes/T7/experiments/experiment-GB/analysis/analysis-1/edgeR/enrichment_edgeR.R
