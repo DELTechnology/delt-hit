@@ -8,28 +8,37 @@ from delt_core.utils import read_yaml
 
 lib_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/tests')
 config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-rechecked-enum/config.yaml')
+config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/experiment-rechecked-enum-v1/config.yaml')
 cfg = read_yaml(config_path)
 
-steps = cfg['library']['steps']
-catalog = cfg['catalog']
-reactions = catalog['reactions']
-compounds = catalog['compounds']
+building_block_edges = cfg['library']['bb_edges']
+other_edges = cfg['library']['other_edges']
+steps = building_block_edges + other_edges
 building_blocks = {k: dict(smiles=None) for k in cfg['library']['building_blocks']}
 products = {k: dict(smiles=None) for k in cfg['library']['products']}
 
-# steps = [
-#     ('A', 'R1'),
-#     ('B', 'R1'),
-#     ('R1', 'P1'),
-#     ('P1', 'R2'),
-#     ('C', 'R2'),
-#     ('Precursor', 'R3'),
-#     ('R3', 'C'),
-# ]
-#
-# reactions = {'R1': dict(smirks='[A].[B]>>[P1]')}
-# compounds = {i: dict(smiles=None) for i in ['A', 'B']}
-# products = {'P1': dict(smiles=None)}
+catalog = cfg['catalog']
+reactions = catalog['reactions']
+compounds = catalog['compounds']
+
+G = get_reaction_graph(steps=building_block_edges,
+                       reactions=reactions,
+                       building_blocks=building_blocks,
+                       compounds=compounds,
+                       products=products)
+
+ax = visualize_reaction_graph(G)
+ax.figure.show()
+ax.figure.savefig(lib_path.parent / 'building_block_reactions_graph.png', dpi=300)
+
+add_G = get_reaction_graph(steps=other_edges,
+                           reactions=reactions,
+                           building_blocks=building_blocks,
+                           compounds=compounds,
+                           products=products)
+ax = visualize_reaction_graph(add_G)
+ax.figure.show()
+ax.figure.savefig(lib_path.parent / 'additional_reactions_graph.png', dpi=300)
 
 G = get_reaction_graph(steps=steps,
                        reactions=reactions,
@@ -40,46 +49,73 @@ G = get_reaction_graph(steps=steps,
 ax = visualize_reaction_graph(G)
 ax.figure.show()
 ax.figure.savefig(lib_path.parent / 'reaction_graph.png', dpi=300)
+
+
+
 # %%
 import pandas as pd
 import matplotlib.pyplot as plt
 debug = 'valid'
+debug = 'all'
 building_block_names = sorted(building_blocks)
 lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
 combs = list(product(*lists))
 library = []
 # for comb in tqdm(combs[-1:]):
+comb = combs[-1]
 for i, comb in tqdm(enumerate(combs)):
     # break
-    rnx = set(c['reaction'] for c in comb)
-    prods = set([c['product'] for c in comb])
+    bb_edges = [(bb, c['reaction']) for bb, c in zip(building_block_names, comb)]
+    bb_edges += [(c['reaction'], c['product']) for c in comb]
+    bb_edges += [(c['educt'], c['reaction']) for c in comb]
+    bb_nodes = set([n for e in bb_edges for n in e])
 
-    reacts = set([c['reactant'] for c in comb]) - set(prods) - set(reactions)
-    ancs = set(reacts)
-    for r in reacts:
-        ancs.update(nx.ancestors(G, r))
+    # NOTE: we add all subgraphs from the additional reaction if a component in the building block
+    #   reaction graph is a sink (out_degree == 0) in the subgraph. This means the additional reactions
+    #   contain instructions on how to synthesize that component.
+    additional_edges = set()
+    subgraphs = list(nx.weakly_connected_components(add_G))
+    for n in bb_nodes:
+        for sgn in subgraphs:
+            sg = add_G.subgraph(sgn).copy()
+            if n in sg and sg.out_degree(n) == 0:
+                additional_edges.update(sg.edges)
 
-    rnx = rnx | ancs & set(reactions)
-    prods = prods | ancs & set(products)
-    comps = ancs & set(compounds)
+    # additional_edges = list(filter(lambda step: set(step).intersection(bb_nodes), other_edges))
+    additional_edges = [tuple(e) for e in additional_edges]
+    additional_nodes = set([n for e in additional_edges for n in e])
 
-    bbs = {bbn: bb
-           for bbn, bb in zip(building_block_names, comb)
-           if not pd.isna(bb['smiles'])}
+    # NOTE: could be solved with nx.weakly_connected_components(add_G) as well
+    # ancs = set()
+    # for n in additional_nodes:
+    #     ancs.update(nx.ancestors(add_G, n))
+    # ancs_edges = list(filter(lambda e: ancs.intersection(e), other_edges))
+    # edges = bb_edges + additional_edges + ancs_edges
+
+    edges = bb_edges + additional_edges
+    edges = [tuple(e) for e in edges]
+    nodes = [n for e in edges for n in e]
+
+    rnx = set([n for n in nodes if n in reactions])
+    prods = set([n for n in nodes if n in products])
+    comps = set([n for n in nodes if n in compounds])
 
     rnx = {r: cfg['catalog']['reactions'][r] for r in rnx}
     prods = {p: dict(smiles=None) for p in prods}
     comps = {c: cfg['catalog']['compounds'][c] for c in comps}
+    bbs = {bbn: bb
+           for bbn, bb in zip(building_block_names, comb)
+           if not pd.isna(bb['smiles'])}
 
     nodes = {**comps, **prods, **bbs, **rnx}
-    g = G.subgraph(nodes).copy()
 
+    g = G.edge_subgraph(edges=edges).copy()
     sinks = [n for n, d in g.out_degree() if d == 0]
     is_valid = len(sinks) == 1
 
     if (debug == 'all') or (debug == 'valid') and is_valid:
         ax = visualize_reaction_graph(g)
-        ax.figure.savefig(lib_path / f'reaction_graph_{"_".join(str(c["index"]) for c in comb)}.png', dpi=300)
+        ax.figure.savefig(lib_path / f'reaction_graph_{i}_{"_".join(str(c["index"]) for c in comb)}.png', dpi=300)
         plt.close('all')
         ax.figure.show()
 
