@@ -11,3 +11,8 @@ delt-hit demultiplex report --config_path=/Volumes/T7/experiments/experiment-GB/
 delt-hit demultiplex qc --config=/Volumes/T7/experiments/experiment-GB/config.yaml
 
 delt-hit library enumerate --config=/Volumes/T7/experiments/experiment-GB/config.yaml
+
+delt-hit analyse enrichment \
+  --config_path=/Volumes/T7/experiments/experiment-GB/analysis.yaml \
+  --name=analysis-1 \
+  --method=counts

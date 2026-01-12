@@ -58,5 +58,3 @@ class Demultiplex:
         exec_path = generate_input_files(config_path=config_path, fast_dev_run=fast_dev_run)
         subprocess.run(['bash', exec_path])
 
-cli = Demultiplex()
-cli.process(config_path=Path('/Volumes/T7/experiments/experiment-GB-minimal/config.yaml'), as_files=True)
