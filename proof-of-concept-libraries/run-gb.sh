@@ -9,3 +9,5 @@ delt-hit demultiplex process --config_path=/Volumes/T7/experiments/experiment-GB
 
 delt-hit demultiplex report --config_path=/Volumes/T7/experiments/experiment-GB/config.yaml
 delt-hit demultiplex qc --config=/Volumes/T7/experiments/experiment-GB/config.yaml
+
+delt-hit library enumerate --config=/Volumes/T7/experiments/experiment-GB/config.yaml

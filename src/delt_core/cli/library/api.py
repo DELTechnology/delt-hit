@@ -81,11 +81,14 @@ class Library:
         ax = visualize_reaction_graph(G)
         ax.figure.savefig(lib_path.parent / 'reaction_graph.png', dpi=300)
 
+        logger.info(f'Saved reaction graph visualizations to {lib_path.parent}')
+
         building_block_names = sorted(building_blocks)
         lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
-        combs = product(*lists)
+        combs = list(product(*lists))
 
         library = []
+        logger.info(f'Starting enumeration of library...')
         for i, comb in tqdm(enumerate(combs)):
 
             bb_edges = [(bb, c['reaction']) for bb, c in zip(building_block_names, comb)]
@@ -170,6 +173,7 @@ class Library:
         df.to_parquet(save_dir / 'properties.parquet', index=False)
 
         prop_names = [col for col in df.columns if col.startswith('prop_')]
+        plt.close('all')
         for name in prop_names:
             ax = self.plot_property(data=df, name=name)
             ax.figure.savefig(save_dir / f"{name}.png")

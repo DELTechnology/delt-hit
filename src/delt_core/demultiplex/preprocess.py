@@ -84,7 +84,6 @@ def generate_input_files(
 
     path_final_reads = cutadapt_output_files_dir / 'reads_with_adapters.gz'
     path_output_fastq = cutadapt_output_files_dir / 'out.fastq.gz'
-    path_counts = save_dir / 'selections'
 
     regions = get_regions(structure=structure, whitelists=whitelists)
     write_fastq_files(regions, save_path=cutadapt_input_files_dir)
@@ -93,7 +92,7 @@ def generate_input_files(
         f.write('#!/bin/bash\n')
         f.write('# make sure you installed pigz with `brew install pigz` to enable parallel processing\n\n')
         f.write(f'mkdir "{cutadapt_output_files_dir}"\n')
-        f.write(f'mkdir "{path_counts}"\n')
+
         # NOTE: we symlink the fastq file we want to demultiplex
         f.write(f'ln -sf "{path_input_fastq}" "{path_output_fastq}"\n')
 
