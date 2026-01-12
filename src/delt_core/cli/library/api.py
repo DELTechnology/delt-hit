@@ -465,7 +465,7 @@ def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
             assert len(products) == 1
             product = {next_reaction['product']: dict(smiles=products[0])}
             nx.set_node_attributes(G, product)
-            # print(f"Reaction {next_reaction['reaction']}: {reactants} -> {products[0]}")
+
         except Exception as e:
 
             logger.error(f"Error processing reaction {next_reaction}: {e}")
