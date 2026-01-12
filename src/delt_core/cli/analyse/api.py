@@ -1,12 +1,12 @@
 from pathlib import Path
 from textwrap import dedent
-
+from loguru import logger
 import pandas as pd
 
 from delt_core.utils import read_yaml, write_yaml
 
-name = 'protein_vs_no_protein'
-config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/analysis.yaml')
+# name = 'protein_vs_no_protein'
+# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/analysis.yaml')
 # cfg = read_yaml(config_path)
 
 class Analyse:
@@ -22,7 +22,7 @@ class Analyse:
         samples_path = save_dir / 'samples.csv'
 
         prepare_data(exp=exp, data_path=data_path, samples_path=samples_path)
-
+        logger.info(f'Prepared data at {data_path} and samples at {samples_path}')
         return data_path, samples_path, save_dir
 
     def enrichment(self, *, config_path: Path, name: str, method: str = 'counts'):
@@ -223,6 +223,7 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
     r_path = save_dir / "enrichment_edgeR.R"
     r_path.parent.mkdir(parents=True, exist_ok=True)
     r_path.write_text(r_script)
+    logger.info(f'Created R script at {r_path}')
 
 
 def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
@@ -320,6 +321,7 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
     r_path = save_dir / "enrichment_counts.R"
     r_path.parent.mkdir(parents=True, exist_ok=True)
     r_path.write_text(r_script)
+    logger.info(f'Created R script at {r_path}')
 
 
 def prepare_data(exp: dict, data_path: Path, samples_path: Path):
