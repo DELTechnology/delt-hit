@@ -137,12 +137,6 @@ class Library:
                     dpi=300)
                 plt.close('all')
                 # ax.figure.show()
-            elif debug == 'invalid':
-                ax = visualize_reaction_graph(g)
-                ax.figure.savefig(
-                    lib_path.parent / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
-                    dpi=300)
-                plt.close('all')
 
             if is_valid:
                 assert len(sinks) == 1, f"Expected exactly one sink node, found {len(sinks)}"
@@ -157,7 +151,22 @@ class Library:
                 continue
 
             nx.set_node_attributes(g, nodes)
-            g = complete_reaction_graph(g, errors=errors)
+
+            try:
+                g = complete_reaction_graph(g, errors=errors)
+            except Exception as e:
+                if debug == 'invalid':
+                    ax = visualize_reaction_graph(g)
+                    ax.figure.savefig(
+                        lib_path.parent / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
+                        dpi=300)
+                    plt.close('all')
+
+                if errors == 'raise':
+                    raise e
+                elif errors == 'ignore':
+                    continue
+
             smiles = g.nodes[terminal]['smiles']
             record = {f'code_{i}': c['index'] for i, c in enumerate(comb)}
             record['smiles'] = smiles
@@ -469,18 +478,33 @@ def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
             if len(products) == 0:
                 products = perform_reaction(smirks, reactants[::-1])
 
-            assert len(products) == 1
+            assert len(products) == 1, f"Expected exactly one product, found {len(products)} for reaction {next_reaction}"
             product = {next_reaction['product']: dict(smiles=products[0])}
             nx.set_node_attributes(G, product)
 
         except Exception as e:
 
-            logger.error(f"Error processing reaction {next_reaction}: {e}")
-            logger.error(f"Current products: {products}")
-            logger.error(f'Reaction graph at  error: {G.nodes(data=True)}')
+            logger.error(f"Error processing reaction {next_reaction}: {e}\n")
+            logger.error(f"Current products: {products}\n")
+            logger.error(f'Reaction graph at  error: {G.nodes(data=True)}\n')
+            data = G.nodes(data=True)
+
+            data = [i for i in G.nodes(data=True) if i[0] == 'B0']
+            print(data)
+            data = [i for i in G.nodes(data=True) if i[0] == 'product_1B']
+            print(data)
+            data = [i for i in G.nodes(data=True) if i[0] == 'B1']
+            print(data)
+
+            # idx = [i[0] for i in data]
+            # data = [i[1] for i in data]
+            # df = pd.DataFrame(data, index=idx)
+            # print(df.to_markdown())
+            # nodes = [n[1]['smiles'] for n in G.nodes(data=True) if n[0] == 'B1']
+            # logger.error(f'SMILES: {nodes}')
 
             if errors == 'raise':
-                raise e
+                exit()
             elif errors == 'ignore':
                 break
 
