@@ -34,7 +34,7 @@ class Library:
                   graph_only: bool = False, errors: str = 'raise'):
 
         lib_path = self.get_library_path(config_path=config_path)
-        if lib_path.exists():
+        if lib_path.exists() and not overwrite:
             logger.info(f'Library {lib_path} exists')
             return
 
@@ -58,6 +58,7 @@ class Library:
 
         ax = visualize_reaction_graph(bb_G)
         # ax.figure.show()
+        lib_path.parent.mkdir(parents=True, exist_ok=True)
         ax.figure.savefig(lib_path.parent / 'building_block_reactions_graph.png', dpi=300)
 
         add_G = get_reaction_graph(steps=other_edges,
@@ -135,7 +136,13 @@ class Library:
                     lib_path.parent / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
                     dpi=300)
                 plt.close('all')
-                ax.figure.show()
+                # ax.figure.show()
+            elif debug == 'invalid':
+                ax = visualize_reaction_graph(g)
+                ax.figure.savefig(
+                    lib_path.parent / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
+                    dpi=300)
+                plt.close('all')
 
             if is_valid:
                 assert len(sinks) == 1, f"Expected exactly one sink node, found {len(sinks)}"
