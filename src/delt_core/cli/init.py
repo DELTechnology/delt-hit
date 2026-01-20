@@ -6,11 +6,11 @@ from delt_core.demultiplex.parser import config_from_excel
 from delt_core.utils import write_yaml
 
 # excel_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
-excel_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/251021_NF2_library_rechecked.xlsx')
-excel_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/251021_NF2_library_rechecked_no_empty_reactions.xlsx')
+# excel_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/251021_NF2_library_rechecked.xlsx')
+# excel_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/251021_NF2_library_rechecked_no_empty_reactions.xlsx')
 
 def init(*, excel_path: Path):
-    config = config_from_excel(excel_path)
+    config = config_from_excel(excel_path.expanduser().resolve())
     save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
     name = config['experiment']['name']
 
