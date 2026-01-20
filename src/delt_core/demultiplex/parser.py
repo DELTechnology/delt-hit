@@ -4,6 +4,9 @@ import pandas as pd
 # path = Path('/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/template.xlsx')
 # path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/251021_NF2_library_rechecked_enumerate_v1.xlsx')
 
+def validate_config(config: dict):
+    assert set(config['catalog']['reactions']) >= set(config['library']['reactions']), f'All reactions in library must be present in the `reactions` sheet'
+
 def config_from_excel(path: Path):
     config = {}
     config['experiment'] = experiment_from_excel(path)
@@ -15,6 +18,8 @@ def config_from_excel(path: Path):
     config['structure'] = structure_from_excel(path)
     # config['analyses'] = analyses_from_excel(path)
     config['whitelists'] = whitelists_from_excel(path)
+
+    validate_config(config)
     return config
 
 def library_from_excel(path: Path) -> dict:
@@ -98,6 +103,7 @@ def whitelists_from_excel(path: Path):
     selection_col_names = list(filter(lambda x: x.startswith('S'), selections.columns))
 
     constants = pd.read_excel(path, sheet_name='constant')
+    assert constants.notna().any().any(), "`constant` cannot have empty cells"
 
     # %%
     whitelists = {}
@@ -110,13 +116,16 @@ def whitelists_from_excel(path: Path):
     for sheet in bbs_sheets:
         df = pd.read_excel(path, sheet_name=sheet)
         assert df.codon.nunique() == len(df), f"Codons for building blocks {sheet} must be unique"
+        assert df.codon.notna().all(), f"Codons for building blocks {sheet} cannot be empty"
 
         df.index.name = 'index'
         df = df.reset_index()
         whitelists[sheet] = df.to_dict('records')
 
+    assert len(set(selections[selection_col_names].to_records(index=False).tolist())) == len(selections), "Selection primers `S0` and `S1` must form unique combinations for each selection"
     for col_name in selection_col_names:
         df = selections[['name', col_name]].rename(columns={col_name: 'codon'})
+        assert df.codon.notna().all(), f"Codons for selection primer {col_name} in `selection` cannot be empty"
         whitelists[col_name] = df.to_dict('records')
 
     return whitelists
