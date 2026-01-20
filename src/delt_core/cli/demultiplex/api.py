@@ -13,7 +13,7 @@ class Demultiplex:
         exec_path = generate_input_files(config_path=config_path, fast_dev_run=fast_dev_run)
         logger.info(f"Executable created at {exec_path}")
 
-    def process(self, *, config_path: Path, as_files: bool = False):
+    def process(self, *, config_path: Path, as_files: bool = False, sort_by_counts: bool = True):
         config = read_yaml(config_path)
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
         name = config['experiment']['name']
@@ -29,7 +29,8 @@ class Demultiplex:
 
         ids_to_name = {tuple(item['ids']): k for k, item in config['selections'].items()}
         output_dir = save_dir / name / 'selections'
-        save_counts(counts, output_dir=output_dir, ids_to_name=ids_to_name, as_files=as_files)
+        save_counts(counts, output_dir=output_dir, ids_to_name=ids_to_name,
+                    as_files=as_files, sort_by_counts=sort_by_counts)
 
     def report(self, *, config_path: Path):
         from delt_core.quality_control.report import print_report

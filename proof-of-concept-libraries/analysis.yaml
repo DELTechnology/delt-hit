@@ -1,6 +1,6 @@
 experiments:
   - name: protein_vs_no_protein
-    save_dir: /Volumes/T7/experiments/experiment-GB/analysis
+    save_dir: /Volumes/T7/experiments/template/analysis
     contrast:
       groups:
         - protein

@@ -138,13 +138,13 @@ def create_config_cards(config):
     return cards
 
 
-def dashboard(*, config_path: Path, counts_path: Path):
+def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | None = None):
 
     # Load data
     config = read_yaml(config_path)
     counts_df = pd.read_csv(counts_path, sep='\t')
 
-    selection_name = counts_path.parent.name if counts_path.is_dir() else counts_path.stem.replace('_counts', '')
+    selection_name = selection_name or counts_path.parent.name
     (_, selection), = list(filter(lambda x: x[0] == selection_name, config['selections'].items()))
     config['selections'] = {selection_name: selection}
 
