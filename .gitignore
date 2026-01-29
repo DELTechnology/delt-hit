@@ -306,3 +306,5 @@ paper/experiment-1/representations
 *.fastq
 *.fasta
 *.png
+*.txt
+*.json

@@ -1,6 +1,6 @@
 experiments:
   - name: protein_vs_no_protein
-    save_dir: template/analysis
+    save_dir: experiments/template/analysis
     selections:
       - name: AG24_4
         counts_path: experiments/template/selections/AG24_4/counts.txt
