@@ -99,14 +99,14 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
             select(code_1, code_2)
 
           data.col <- data.frame(
-            name = data.wide %>% select(-code_1, -code_2) %>% colnames(),
+            name = data.wide %>% select(-code_1, -code_2, -id) %>% colnames(),
             stringsAsFactors = FALSE
           )
           groups <- factor(sapply(data.col$name, get_group_from_name))
           groups <- relevel(groups, "no_protein")
           data.col$group <- groups
 
-          data.counts <- as.matrix(data.wide %>% select(-code_1, -code_2))
+          data.counts <- as.matrix(data.wide %>% select(-code_1, -code_2, -id))
           rownames(data.counts) <- seq.int(nrow(data.wide))
 
           y <- DGEList(
