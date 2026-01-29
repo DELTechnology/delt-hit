@@ -31,7 +31,7 @@ class Library:
         return lib_path
 
     def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
-                  graph_only: bool = False, errors: str = 'raise'):
+                  graph_only: bool = False, errors: str = 'raise', building_block_ids: list[str] | None = None):
 
         lib_path = self.get_library_path(config_path=config_path)
         if lib_path.exists() and not overwrite:
@@ -84,6 +84,8 @@ class Library:
             return
 
         building_block_names = sorted(building_blocks)
+        if building_block_ids:
+            building_block_names = list(filter(lambda x: x in building_block_ids, building_block_names))
         lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
         combs = list(product(*lists))
 
@@ -177,8 +179,8 @@ class Library:
         # df = get_dummy_library()
         df.to_parquet(lib_path, index=False)
 
-    def properties(self, *, config_path: Path):
-        lib_path = self.get_library_path(config_path=config_path)
+    def properties(self, *, config_path: Path, library_path: Path | None = None):
+        lib_path = library_path or self.get_library_path(config_path=config_path)
 
         save_dir = lib_path.parent / 'properties'
         save_dir.mkdir(parents=True, exist_ok=True)
@@ -232,13 +234,13 @@ class Library:
         ax.figure.tight_layout()
         return ax
 
-    def represent(self, *, config_path: Path, method: str = 'morgan'):
+    def represent(self, *, config_path: Path, method: str = 'morgan', library_path: Path | None = None):
         exp_dir = self.get_experiment_dir(config_path=config_path)
 
         save_dir = exp_dir / 'representations'
         save_dir.mkdir(parents=True, exist_ok=True)
 
-        lib_path = exp_dir / 'library.parquet'
+        lib_path = library_path or self.get_library_path(config_path=config_path)
         df = pd.read_parquet(lib_path)
         smiles = df.smiles
 
@@ -249,7 +251,7 @@ class Library:
                 run_morgan(smiles, save_path=save_dir / 'bert.npz')
 
 
-self = Library()
+# self = Library()
 
 
 def run_bert(*, model_name: str, path: Path, save_path: Path, device='cuda'):
