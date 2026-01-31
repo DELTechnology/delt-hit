@@ -47,7 +47,7 @@ This is the recommended way for most users.
    conda create -n delt-hit python=3.12 -y
    conda activate delt-hit
    ```
-   > 💡 Always activate this environment (`conda activate del`) before using `delt-hit`.
+   > 💡 Always activate this environment (`conda activate delt-hit`) before using `delt-hit`.
 
 2. **Install `delt-hit`:**
    Install the package directly from GitHub using `pip`:
