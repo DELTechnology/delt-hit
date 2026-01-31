@@ -145,7 +145,17 @@ Here is a typical workflow for using `delt-hit`:
     --counts_path /path/to/selections/SELECTION_NAME/counts.txt
     ```
 
+## 📚 Documentation
+
+For a codebase overview and a detailed CLI reference, see:
+- [Codebase overview](documentation/overview.md)
+- [CLI guide](documentation/cli.md)
+
+The original protocol description lives in `protocols.pdf`.
+
 ## 💻 CLI Reference
+
+For the most up-to-date CLI details and output locations, use the [CLI guide](documentation/cli.md).
 
 ### `init`
 Initializes a project by creating a `config.yaml` from a standardized Excel file.
