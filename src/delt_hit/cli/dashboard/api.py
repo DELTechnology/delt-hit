@@ -56,6 +56,7 @@ def get_available_codes(df):
 
 
 def marginalize_counts(df, selected_codes):
+
     if not selected_codes:
         return df
     codes_to_use = selected_codes[:3] if len(selected_codes) > 3 else selected_codes
@@ -256,23 +257,11 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                             "Code Ranges (e.g. '1-3;2-5,8-10;3-5')",
                             html.Span(
                                 " ⓘ",
-                                title=(
-                                    "How to enter code filters:\n"
-                                    "• Separate indices with commas: 1,2,7\n"
-                                    "• Define a range with a dash: 3-10\n"
-                                    "• Combine ranges and indices: 1-3,8,10-12\n"
-                                    "• Separate different code columns with semicolons: code_1;code_2;code_3\n"
-                                    "Example: 1-3;2-5,8-10;3-5\n"
-                                    "Leave a segment empty to not filter that code."
-                                ),
+                                title="Separate indices with commas (1,2,7), use dashes for ranges (3-10), combine them (1-3,8,10-12), and use semicolons between code columns. Example: 1-3;2-5,8-10;3-5",
                                 style={
                                     "cursor": "help",
                                     "marginLeft": "6px",
                                     "color": "#2563eb",
-                                    "pointerEvents": "auto",
-                                    "display": "inline-block",
-                                    "padding": "0 4px",
-                                    "borderRadius": "4px",
                                 },
                             ),
                         ],

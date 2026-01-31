@@ -212,17 +212,3 @@ Launches an interactive dashboard for data visualization.
   ```bash
   delt-hit dashboard --config_path <path/to/config.yaml> --counts_path <path/to/counts.txt>
   ```
-
-# TODO:
-- Dual Display
-- Fix demultiplex API
-- introduce ID human readable combination id code1_code_2...
-- Jörg: FASTQ for DP, MK
-
-- S0 and S1 need to be used as pairs in the process step. [UPDATE] don't see the problem as combs are matched to names
-- [done] educt, reaction, product
-- [done] check for v1 that it prunes correctly
-- [done] update excel sheet setup, send to MK and JS to try out
-- intro JS
-- [done] rename files instead of folder structure selection_name/counts -> selection_name.txt
-- [done] sort counts by counts
