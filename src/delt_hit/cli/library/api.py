@@ -16,7 +16,7 @@ from rdkit.Chem import rdChemReactions
 from scipy import sparse
 from tqdm import tqdm
 
-from delt_core.utils import read_yaml
+from delt_hit.utils import read_yaml
 
 class Library:
 

@@ -3,8 +3,8 @@ import yaml
 
 from delt_core.demultiplex import experiment_from_excel, whitelists_from_excel, catalog_from_excel, config_from_excel, structure_from_excel
 
-path = Path('/Users/adrianomartinelli/projects/delt/delt-core/templates/library.xlsx')
-save_config = config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/templates/config.yaml')
+path = Path('templates/library.xlsx')
+save_config = config_path = Path('templates/config.yaml')
 
 experiment_from_excel(path)
 catalog_from_excel(path)

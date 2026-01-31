@@ -2,12 +2,8 @@ from pathlib import Path
 
 from loguru import logger
 
-from delt_core.demultiplex.parser import config_from_excel
-from delt_core.utils import write_yaml
-
-# excel_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/NF.xlsx')
-# excel_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/251021_NF2_library_rechecked.xlsx')
-# excel_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/251021_NF2_library_rechecked_no_empty_reactions.xlsx')
+from delt_hit.demultiplex.parser import config_from_excel
+from delt_hit.utils import write_yaml
 
 def init(*, excel_path: Path):
     config = config_from_excel(excel_path.expanduser().resolve())

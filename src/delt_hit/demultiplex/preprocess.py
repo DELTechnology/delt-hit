@@ -6,22 +6,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from delt_core.utils import read_yaml
-from delt_core.demultiplex.validation import SelectionFile, Region, validate
-
-def get_selections(
-        config: dict,
-        selection_id: int = None,
-) -> pd.DataFrame:
-    root = config['Root']
-    config_selection = config['Selection']
-    selection_file = root / config_selection['SelectionFile']
-    fastq_file = str(Path(config_selection['FASTQFile']).name)
-    library = str(Path(config_selection['Library']).name)
-    selections = validate(pd.read_excel(selection_file), SelectionFile)
-    if selection_id:
-        selections = selections[selections['SelectionID'] == selection_id]
-    return selections[(selections['FASTQFile'] == fastq_file) & (selections['Library'] == library)]
+from delt_hit.utils import read_yaml
+from delt_hit.demultiplex.validation import Region
 
 
 def get_codons(name: str, whitelists: dict) -> list[str]:

@@ -1,9 +1,6 @@
 from pathlib import Path
 import pandas as pd
 
-# path = Path('/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/template.xlsx')
-# path = Path('/Users/adrianomartinelli/projects/delt/delt-core/paper/251021_NF2_library_rechecked_enumerate_v1.xlsx')
-
 def validate_config(config: dict):
     assert set(config['catalog']['reactions']) >= set(config['library']['reactions']), f'All reactions in library must be present in the `reactions` sheet'
 

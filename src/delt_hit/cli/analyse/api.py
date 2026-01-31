@@ -3,11 +3,7 @@ from textwrap import dedent
 from loguru import logger
 import pandas as pd
 
-from delt_core.utils import read_yaml, write_yaml
-
-# name = 'protein_vs_no_protein'
-# config_path = Path('/Users/adrianomartinelli/projects/delt/delt-core/proof-of-concept-libraries/analysis.yaml')
-# cfg = read_yaml(config_path)
+from delt_hit.utils import read_yaml
 
 class Analyse:
 

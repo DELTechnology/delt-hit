@@ -1,18 +1,15 @@
+import re
 from pathlib import Path
-import pandas as pd
+
 import dash
-from dash import dcc, html, Input, Output, State
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import pandas as pd
 import yaml
-import re
-from delt_core.utils import read_yaml
+from dash import dcc, html, Input, Output, State
 
-# config_path = Path(
-#     '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/config.yaml')
-# cfg = read_yaml(config_path)
-# counts_path = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/DECLT-DB/experiments/test-1/selections/AG24_1/counts.txt')
+from delt_hit.utils import read_yaml
+
 
 def load_config(config_path):
     try:
@@ -42,6 +39,7 @@ def load_config(config_path):
             }
         }
 
+
 def load_counts(counts_path):
     try:
         return pd.read_csv(counts_path, sep='\t')
@@ -49,11 +47,13 @@ def load_counts(counts_path):
         return pd.DataFrame({
             'code_1': [1, 1, 1, 6, 7, 8, 9, 10, 11, 12, 14, 16, 17, 20],
             'code_2': [1, 3, 4, 6, 7, 8, 9, 10, 11, 12, 14, 16, 17, 20],
-            'count':  [6, 3, 14, 15, 6, 6, 4, 15, 3, 2, 4, 8, 6, 3]
+            'count': [6, 3, 14, 15, 6, 6, 4, 15, 3, 2, 4, 8, 6, 3]
         })
+
 
 def get_available_codes(df):
     return [col for col in df.columns if col.startswith('code_')]
+
 
 def marginalize_counts(df, selected_codes):
     if not selected_codes:
@@ -61,6 +61,7 @@ def marginalize_counts(df, selected_codes):
     codes_to_use = selected_codes[:3] if len(selected_codes) > 3 else selected_codes
     grouped = df.groupby(codes_to_use, dropna=False)['count'].sum().reset_index()
     return grouped
+
 
 def parse_code_ranges(range_str: str, code_cols: list[str]) -> dict:
     """
@@ -100,6 +101,7 @@ def parse_code_ranges(range_str: str, code_cols: list[str]) -> dict:
             filters[code_cols[idx]] = allowed
     return filters
 
+
 def apply_code_filters(df: pd.DataFrame, filters: dict) -> pd.DataFrame:
     """Keep rows where each filtered code column is in the allowed set."""
     if not filters:
@@ -109,6 +111,7 @@ def apply_code_filters(df: pd.DataFrame, filters: dict) -> pd.DataFrame:
         if col in df.columns:
             mask &= df[col].isin(allowed)
     return df.loc[mask]
+
 
 def create_config_cards(config):
     cards = []
@@ -139,7 +142,6 @@ def create_config_cards(config):
 
 
 def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | None = None):
-
     # Load data
     config = read_yaml(config_path)
     counts_df = pd.read_csv(counts_path, sep='\t')

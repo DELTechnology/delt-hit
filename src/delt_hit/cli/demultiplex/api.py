@@ -2,9 +2,9 @@ import json
 import subprocess
 from pathlib import Path
 
-from delt_core.demultiplex.postprocess import get_counts, save_counts
-from delt_core.demultiplex.preprocess import generate_input_files
-from delt_core.utils import read_yaml
+from delt_hit.demultiplex.postprocess import get_counts, save_counts
+from delt_hit.demultiplex.preprocess import generate_input_files
+from delt_hit.utils import read_yaml
 from loguru import logger
 
 class Demultiplex:
@@ -33,7 +33,7 @@ class Demultiplex:
                     as_files=as_files, sort_by_counts=sort_by_counts)
 
     def report(self, *, config_path: Path):
-        from delt_core.quality_control.report import print_report
+        from delt_hit.quality_control.report import print_report
         config = read_yaml(config_path)
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
         name = config['experiment']['name']
@@ -44,7 +44,7 @@ class Demultiplex:
         print_report(output_dir=output_dir, save_path=save_path)
 
     def qc(self, *, config_path: Path):
-        from delt_core.quality_control.plot_codon_hits import plot_hits
+        from delt_hit.quality_control.plot_codon_hits import plot_hits
 
         config = read_yaml(config_path)
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
