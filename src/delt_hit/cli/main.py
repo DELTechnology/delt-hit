@@ -21,6 +21,7 @@ def cli() -> None:
         },
         prog="delt-hit",
         description="DELT Hit toolkit",
+        default_config_files=None,
     )
 
 if __name__ == "__main__":
