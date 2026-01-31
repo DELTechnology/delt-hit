@@ -10,10 +10,23 @@ from loguru import logger
 class Demultiplex:
 
     def prepare(self, *, config_path: Path, fast_dev_run: bool = False):
+        """Create demultiplex input files and scripts.
+
+        Args:
+            config_path: Path to the YAML config file.
+            fast_dev_run: Whether to use a small read subset.
+        """
         exec_path = generate_input_files(config_path=config_path, fast_dev_run=fast_dev_run)
         logger.info(f"Executable created at {exec_path}")
 
     def process(self, *, config_path: Path, as_files: bool = False, sort_by_counts: bool = True):
+        """Count reads per selection and write output tables.
+
+        Args:
+            config_path: Path to the YAML config file.
+            as_files: Whether to store counts as flat files.
+            sort_by_counts: Whether to sort counts descending.
+        """
         config = read_yaml(config_path)
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
         name = config['experiment']['name']
@@ -33,6 +46,11 @@ class Demultiplex:
                     as_files=as_files, sort_by_counts=sort_by_counts)
 
     def report(self, *, config_path: Path):
+        """Write a cutadapt summary report.
+
+        Args:
+            config_path: Path to the YAML config file.
+        """
         from delt_hit.quality_control.report import print_report
         config = read_yaml(config_path)
         save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
@@ -44,6 +62,11 @@ class Demultiplex:
         print_report(output_dir=output_dir, save_path=save_path)
 
     def qc(self, *, config_path: Path):
+        """Generate QC plots from cutadapt output.
+
+        Args:
+            config_path: Path to the YAML config file.
+        """
         from delt_hit.quality_control.plot_codon_hits import plot_hits
 
         config = read_yaml(config_path)
@@ -56,6 +79,11 @@ class Demultiplex:
         plot_hits(output_dir=output_dir, save_dir=save_dir)
 
     def run(self, *, config_path: Path, fast_dev_run: bool = False):
+        """Run the full demultiplex pipeline.
+
+        Args:
+            config_path: Path to the YAML config file.
+            fast_dev_run: Whether to use a small read subset.
+        """
         exec_path = generate_input_files(config_path=config_path, fast_dev_run=fast_dev_run)
         subprocess.run(['bash', exec_path])
-
