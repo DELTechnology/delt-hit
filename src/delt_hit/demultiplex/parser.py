@@ -2,9 +2,25 @@ from pathlib import Path
 import pandas as pd
 
 def validate_config(config: dict):
+    """Validate that the config is internally consistent.
+
+    Args:
+        config: Parsed configuration dictionary.
+
+    Raises:
+        AssertionError: If the library reactions are not all present in the catalog.
+    """
     assert set(config['catalog']['reactions']) >= set(config['library']['reactions']), f'All reactions in library must be present in the `reactions` sheet'
 
 def config_from_excel(path: Path):
+    """Load a full configuration from an Excel workbook.
+
+    Args:
+        path: Path to the Excel configuration workbook.
+
+    Returns:
+        The assembled configuration dictionary.
+    """
     config = {}
     config['experiment'] = experiment_from_excel(path)
     config['selections'] = selections_from_excel(path)
@@ -20,6 +36,17 @@ def config_from_excel(path: Path):
     return config
 
 def library_from_excel(path: Path) -> dict:
+    """Parse library topology metadata from an Excel workbook.
+
+    Args:
+        path: Path to the Excel configuration workbook.
+
+    Returns:
+        A dictionary with library edges, nodes, and building block sheets.
+
+    Raises:
+        AssertionError: If required columns are missing values.
+    """
     rnx_g = pd.read_excel(path, sheet_name='reaction_graph')
     assert not rnx_g.educt_1.isna().any(), "All `educt_1` in `reaction_graph` must be filled"
     assert not rnx_g['product'].isna().any(), "All `product` in `reaction_graph` must be filled"
@@ -65,16 +92,46 @@ def library_from_excel(path: Path) -> dict:
 
 
 def experiment_from_excel(path: Path):
+    """Parse experiment metadata from an Excel workbook.
+
+    Args:
+        path: Path to the Excel configuration workbook.
+
+    Returns:
+        A dict of experiment settings keyed by variable name.
+    """
     experiment = pd.read_excel(path, sheet_name='experiment')
     return experiment.set_index('variable')['value'].to_dict()
 
 def structure_from_excel(path: Path):
+    """Parse structure metadata from an Excel workbook.
+
+    Args:
+        path: Path to the Excel configuration workbook.
+
+    Returns:
+        A list of structure entries as dictionaries.
+
+    Raises:
+        AssertionError: If structure names or types are invalid.
+    """
     structure = pd.read_excel(path, sheet_name='structure')
     assert structure.name.str.match(r'^[SCB]').all(), "Structure `name` must start with 'S', 'B', or 'C' depending on type"
     assert structure.type.isin(['selection', 'building_block', 'constant']).all(), "Structure `type` must be one of 'selection', 'building_block', or 'constant'"
     return structure.to_dict('records')
 
 def selections_from_excel(path: Path):
+    """Parse selections metadata from an Excel workbook.
+
+    Args:
+        path: Path to the Excel configuration workbook.
+
+    Returns:
+        A dict keyed by selection name with selection metadata.
+
+    Raises:
+        AssertionError: If selection names or primer combinations are invalid.
+    """
     selections = pd.read_excel(path, sheet_name='selection')
     if 'date' in selections.columns:
         selections['date'] = pd.to_datetime(selections['date']).dt.strftime('%Y-%m-%d')
@@ -84,6 +141,14 @@ def selections_from_excel(path: Path):
     return selections.set_index('name').to_dict('index')
 
 def analyses_from_excel(path: Path):
+    """Group selections by analysis name from an Excel workbook.
+
+    Args:
+        path: Path to the Excel configuration workbook.
+
+    Returns:
+        A dict mapping analysis name to selection names.
+    """
     selections = pd.read_excel(path, sheet_name='selection')
     analyses = {}
     for grp, data in selections.groupby('analysis'):
@@ -91,6 +156,17 @@ def analyses_from_excel(path: Path):
     return analyses
 
 def whitelists_from_excel(path: Path):
+    """Parse codon whitelist sheets from an Excel workbook.
+
+    Args:
+        path: Path to the Excel configuration workbook.
+
+    Returns:
+        A dict mapping whitelist names to codon records.
+
+    Raises:
+        AssertionError: If codons are missing or duplicated.
+    """
     xf = pd.ExcelFile(path)
     sheets = set(xf.sheet_names)
 
@@ -128,6 +204,14 @@ def whitelists_from_excel(path: Path):
     return whitelists
 
 def catalog_from_excel(path: Path):
+    """Parse the catalog of compounds and reactions from Excel.
+
+    Args:
+        path: Path to the Excel configuration workbook.
+
+    Returns:
+        A dict containing compound and reaction catalogs.
+    """
     xf = pd.ExcelFile(path)
     sheets = set(xf.sheet_names)
 
@@ -143,6 +227,17 @@ def catalog_from_excel(path: Path):
     return catalog
 
 def get_selection_name_to_ids(path: Path)-> dict:
+    """Build a selection name to primer ID mapping.
+
+    Args:
+        path: Path to the Excel configuration workbook.
+
+    Returns:
+        A mapping of selection names to primer ID tuples.
+
+    Raises:
+        AssertionError: If primer combinations are not unique.
+    """
     df = pd.read_excel(path, sheet_name='selection')
     selection_col_names = list(filter(lambda x: x.startswith('S'), df.columns))
 

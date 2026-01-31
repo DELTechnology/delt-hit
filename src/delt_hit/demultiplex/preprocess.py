@@ -11,11 +11,37 @@ from delt_hit.demultiplex.validation import Region
 
 
 def get_codons(name: str, whitelists: dict) -> list[str]:
+    """Return codon strings for a named whitelist.
+
+    Args:
+        name: Whitelist key to look up.
+        whitelists: Mapping of whitelist names to codon records.
+
+    Returns:
+        A list of codon strings.
+    """
     return [item['codon'] for item in whitelists[name]]
 
 
 def get_regions(structure: list[dict], whitelists: dict) -> list[Region]:
+    """Build Region objects from structure metadata.
+
+    Args:
+        structure: List of structure records.
+        whitelists: Mapping of whitelist names to codon records.
+
+    Returns:
+        A list of Region objects.
+    """
     def unique_codons(codons: list[str]) -> list[str]:
+        """Preserve order while removing duplicate codons.
+
+        Args:
+            codons: Input codon list.
+
+        Returns:
+            Deduplicated codon list.
+        """
         seen = set()
         unique = []
         for codon in codons:
@@ -35,6 +61,12 @@ def get_regions(structure: list[dict], whitelists: dict) -> list[Region]:
 
 
 def write_fastq_files(regions: list[Region], save_path: Path) -> None:
+    """Write per-region FASTQ adapter files.
+
+    Args:
+        regions: Regions to serialize into FASTQ files.
+        save_path: Directory to write the FASTQ files.
+    """
     for i, region in enumerate(regions):
         fastq = [f'>{region.id}.{index}\n{codon}'
                  for index, codon in enumerate(region.codons)]
@@ -50,6 +82,18 @@ def generate_input_files(
         fast_dev_run: bool = False,
         with_processing: bool = False,
 ) -> None:
+    """Create cutadapt input files and a demultiplex shell script.
+
+    Args:
+        config_path: Path to the YAML config file.
+        write_json_file: Whether to request cutadapt JSON output files.
+        write_info_file: Whether to request cutadapt info output files.
+        fast_dev_run: Whether to restrict to a small read subset.
+        with_processing: Whether to append post-processing commands.
+
+    Returns:
+        Path to the generated shell script.
+    """
     config = read_yaml(config_path)
 
     save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()

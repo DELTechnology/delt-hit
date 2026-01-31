@@ -6,6 +6,11 @@ from delt_hit.demultiplex.parser import config_from_excel
 from delt_hit.utils import write_yaml
 
 def init(*, excel_path: Path):
+    """Create a YAML config from an Excel workbook.
+
+    Args:
+        excel_path: Path to the Excel configuration file.
+    """
     config = config_from_excel(excel_path.expanduser().resolve())
     save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
     name = config['experiment']['name']

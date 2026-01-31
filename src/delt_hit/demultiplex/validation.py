@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
 class Region(BaseModel):
+    """Validated region definition for demultiplexing."""
     name: str
     index: int
     codons: list[str]
@@ -9,4 +10,5 @@ class Region(BaseModel):
 
     @property
     def id(self):
+        """Return a stable region identifier."""
         return f'{self.index}-{self.name}'
