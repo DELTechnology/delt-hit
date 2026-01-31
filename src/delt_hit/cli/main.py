@@ -7,13 +7,9 @@ from delt_hit.cli.library.api import Library
 from delt_hit.cli.dashboard.api import dashboard
 
 def cli() -> None:
-    """
-    Entry point for the delt-hit CLI.
+    """Run the delt-hit CLI entrypoint.
 
-    This creates a two-level command tree:
-      delt-hit <group> <method> [--args]
-    where <group> is one of the keys below (demultiplex, assembly),
-    and <method> is any public method on that class (init, run, ...).
+    The command tree is: ``delt-hit <group> <method> [--args]``.
     """
     CLI(
         {

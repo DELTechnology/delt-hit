@@ -21,17 +21,43 @@ from delt_hit.utils import read_yaml
 class Library:
 
     def get_experiment_dir(self, *, config_path: Path) -> Path:
+        """Resolve the experiment output directory.
+
+        Args:
+            config_path: Path to the YAML config file.
+
+        Returns:
+            Experiment directory path.
+        """
         cfg = read_yaml(config_path)
         exp_dir = Path(cfg['experiment']['save_dir']).expanduser().resolve() / cfg['experiment']['name']
         return exp_dir
 
     def get_library_path(self, *, config_path: Path) -> Path:
+        """Resolve the default library parquet path.
+
+        Args:
+            config_path: Path to the YAML config file.
+
+        Returns:
+            Path to the library parquet file.
+        """
         exp_dir = self.get_experiment_dir(config_path=config_path)
         lib_path = exp_dir / 'library' / 'library.parquet'
         return lib_path
 
     def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
                   graph_only: bool = False, errors: str = 'raise', building_block_ids: list[str] | None = None):
+        """Enumerate the combinatorial library from a config.
+
+        Args:
+            config_path: Path to the YAML config file.
+            debug: Debug mode ('False', 'all', 'valid', 'invalid').
+            overwrite: Whether to overwrite an existing library file.
+            graph_only: Whether to stop after writing reaction graphs.
+            errors: Error handling mode ('raise' or 'ignore').
+            building_block_ids: Optional list of building block IDs to keep.
+        """
 
         lib_path = self.get_library_path(config_path=config_path)
         if lib_path.exists() and not overwrite:
@@ -180,6 +206,12 @@ class Library:
         df.to_parquet(lib_path, index=False)
 
     def properties(self, *, config_path: Path, library_path: Path | None = None):
+        """Compute molecular properties for a library and plot histograms.
+
+        Args:
+            config_path: Path to the YAML config file.
+            library_path: Optional library parquet override.
+        """
         lib_path = library_path or self.get_library_path(config_path=config_path)
 
         save_dir = lib_path.parent / 'properties'
@@ -197,6 +229,14 @@ class Library:
             plt.close(ax.figure)
 
     def compute_properties(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Compute RDKit property columns for each SMILES entry.
+
+        Args:
+            data: DataFrame with a ``smiles`` column.
+
+        Returns:
+            DataFrame with appended ``prop_*`` columns.
+        """
 
         records = []
         for smiles in tqdm(data['smiles']):
@@ -223,6 +263,18 @@ class Library:
         return props
 
     def plot_property(self, data: pd.DataFrame, name: str) -> plt.Axes:
+        """Plot a histogram for a single property column.
+
+        Args:
+            data: DataFrame with property columns.
+            name: Property column name to plot.
+
+        Returns:
+            Matplotlib Axes with the plot.
+
+        Raises:
+            ValueError: If the property column is missing.
+        """
         if name not in data.columns:
             raise ValueError(f"Column {name} not found in dataframe")
 
@@ -235,6 +287,13 @@ class Library:
         return ax
 
     def represent(self, *, config_path: Path, method: str = 'morgan', library_path: Path | None = None):
+        """Generate molecular representations for the library.
+
+        Args:
+            config_path: Path to the YAML config file.
+            method: Representation type ('morgan' or 'bert').
+            library_path: Optional library parquet override.
+        """
         exp_dir = self.get_experiment_dir(config_path=config_path)
 
         save_dir = exp_dir / 'representations'
@@ -255,6 +314,17 @@ class Library:
 
 
 def run_bert(*, model_name: str, path: Path, save_path: Path, device='cuda'):
+    """Compute BERT representations for a SMILES library.
+
+    Args:
+        model_name: Name of the model to use.
+        path: Path to a parquet file with a ``smiles`` column.
+        save_path: Path to write the numpy array.
+        device: Torch device name.
+
+    Raises:
+        ValueError: If the model name is unknown.
+    """
     df = pd.read_parquet(path)
     smiles = df.smiles.tolist()
 
@@ -271,6 +341,15 @@ def run_bert(*, model_name: str, path: Path, save_path: Path, device='cuda'):
 
 
 def get_bert_fp(smiles: list[str], device='cuda'):
+    """Generate pooled BERT embeddings for SMILES strings.
+
+    Args:
+        smiles: List of SMILES strings.
+        device: Torch device name.
+
+    Returns:
+        A list of numpy arrays with pooled embeddings.
+    """
     from transformers import BertTokenizerFast, BertModel
     import torch
 
@@ -292,6 +371,12 @@ def get_bert_fp(smiles: list[str], device='cuda'):
 
 
 def run_morgan(smiles: list[str], save_path: Path):
+    """Compute Morgan fingerprints and save them.
+
+    Args:
+        smiles: List of SMILES strings.
+        save_path: Path to write the sparse matrix.
+    """
     fps = []
     for smiles in tqdm(smiles):
         fp = get_morgan_fp(smiles)
@@ -305,6 +390,16 @@ def run_morgan(smiles: list[str], save_path: Path):
 
 
 def get_morgan_fp(smiles, radius=2, n_bits=2048) -> sparse.csr_array:
+    """Create a Morgan fingerprint for a SMILES string.
+
+    Args:
+        smiles: SMILES string to featurize.
+        radius: Morgan radius.
+        n_bits: Number of fingerprint bits.
+
+    Returns:
+        A sparse CSR fingerprint vector.
+    """
     mol = Chem.MolFromSmiles(smiles)
     mfpgen = AllChem.GetMorganGenerator(radius=radius, fpSize=n_bits)
     fp = mfpgen.GetFingerprint(mol)
@@ -313,6 +408,11 @@ def get_morgan_fp(smiles, radius=2, n_bits=2048) -> sparse.csr_array:
 
 
 def get_dummy_library() -> pd.DataFrame:
+    """Return a small demo library of SMILES strings.
+
+    Returns:
+        DataFrame with demo ``smiles`` values.
+    """
     smiles = [
         # aromatics / simple rings
         "c1ccccc1", "Cc1ccccc1", "Oc1ccccc1", "Nc1ccccc1", "c1ccncc1",
@@ -355,6 +455,18 @@ def get_reaction_graph(steps: list,
                        compounds: dict,
                        products: dict,
                        building_blocks: dict = None) -> nx.DiGraph:
+    """Build a directed reaction graph from inputs.
+
+    Args:
+        steps: Edge list of the reaction graph.
+        reactions: Reaction metadata keyed by name.
+        compounds: Compound metadata keyed by name.
+        products: Product metadata keyed by name.
+        building_blocks: Optional building block metadata.
+
+    Returns:
+        A populated ``networkx`` directed graph.
+    """
     G = nx.DiGraph()
 
     G.add_edges_from(steps)
@@ -376,6 +488,14 @@ def get_reaction_graph(steps: list,
 
 
 def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
+    """Render a reaction graph with typed node coloring.
+
+    Args:
+        G: Reaction graph.
+
+    Returns:
+        Matplotlib Axes with the graph visualization.
+    """
     fig, ax = plt.subplots(1, 1, figsize=(12, 8))
 
     compounds = [n for n, d in G.nodes(data=True) if d.get("type") == "compound"]
@@ -433,6 +553,14 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
 
 
 def find_next_reaction(G: nx.DiGraph):
+    """Find the next reaction with all inputs defined.
+
+    Args:
+        G: Reaction graph with ``smiles`` node attributes.
+
+    Returns:
+        A dict describing the next reaction step, or None.
+    """
     reaction_nodes = [n for n, d in G.nodes(data=True) if d.get("type") == "reaction"]
     for node in reaction_nodes:
         preds = sorted(G.predecessors(node))
@@ -445,6 +573,16 @@ def find_next_reaction(G: nx.DiGraph):
 
 
 def perform_reaction(smirks: str, reactants: list[str], use_smiles: bool = False) -> list[str]:
+    """Run an RDKit reaction and return unique products.
+
+    Args:
+        smirks: Reaction SMARTS/SMIRKS string.
+        reactants: List of reactant SMILES.
+        use_smiles: Whether to treat the reaction as SMILES.
+
+    Returns:
+        A sorted list of product SMILES.
+    """
     mols = [Chem.MolFromSmiles(i) for i in reactants]
     rxn = rdChemReactions.ReactionFromSmarts(smirks, useSmiles=use_smiles)
 
@@ -461,6 +599,15 @@ def perform_reaction(smirks: str, reactants: list[str], use_smiles: bool = False
 
 
 def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
+    """Iteratively fill in missing product SMILES in a graph.
+
+    Args:
+        G: Reaction graph with ``smiles`` node attributes.
+        errors: Error handling mode ('raise' or 'ignore').
+
+    Returns:
+        The updated reaction graph.
+    """
     while True:
 
         try:
@@ -514,6 +661,15 @@ def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
 
 
 def visualize_smiles(smiles: list[str], nrow: int = 25):
+    """Create a grid image of molecules.
+
+    Args:
+        smiles: List of SMILES strings.
+        nrow: Maximum number of molecules per row.
+
+    Returns:
+        Matplotlib Axes containing the image.
+    """
     mols = [Chem.MolFromSmiles(s) for s in smiles]
     # could provide legends=product_names
     nrow = min(nrow, len(mols))
