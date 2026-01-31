@@ -8,6 +8,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: no_protein
+    target: .nan
     S0: ACACAC
     S1: TCGATA
     ids:
@@ -17,6 +18,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: no_protein
+    target: .nan
     S0: ACAGCA
     S1: TCGATA
     ids:
@@ -26,6 +28,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: no_protein
+    target: .nan
     S0: ACATGT
     S1: TCGATA
     ids:
@@ -35,6 +38,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: A
     S0: ACGACG
     S1: TCGATA
     ids:
@@ -44,6 +48,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: A
     S0: ACGCGA
     S1: TCGATA
     ids:
@@ -53,6 +58,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: A
     S0: ACTAGC
     S1: TCGATA
     ids:
@@ -62,6 +68,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: B
     S0: ACTCTG
     S1: TCGATA
     ids:
@@ -71,6 +78,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: B
     S0: ACTGAT
     S1: TCGATA
     ids:
@@ -80,6 +88,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: B
     S0: AGACTA
     S1: TCGATA
     ids:
@@ -89,6 +98,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: no_protein
+    target: .nan
     S0: AGAGAG
     S1: TCGATA
     ids:
@@ -98,6 +108,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: no_protein
+    target: .nan
     S0: TAGATG
     S1: TCGATA
     ids:
@@ -107,6 +118,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: no_protein
+    target: .nan
     S0: TAGTGT
     S1: TCGATA
     ids:
@@ -116,6 +128,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: C
     S0: TATCAC
     S1: TCGATA
     ids:
@@ -125,6 +138,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: C
     S0: TCATAG
     S1: TCGATA
     ids:
@@ -134,6 +148,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: C
     S0: TCGTCA
     S1: TCGATA
     ids:
@@ -143,6 +158,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: D
     S0: TCTACT
     S1: TCGATA
     ids:
@@ -152,6 +168,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: D
     S0: TCTGTA
     S1: TCGATA
     ids:
@@ -161,6 +178,7 @@ selections:
     operator: A. Smith
     date: '2024-09-26'
     group: protein
+    target: D
     S0: TGACAT
     S1: TCGATA
     ids:
@@ -170,6 +188,7 @@ selections:
     operator: A. Smith
     date: '2024-10-17'
     group: no_protein
+    target: .nan
     S0: TGCAGC
     S1: TCGATA
     ids:
@@ -179,6 +198,7 @@ selections:
     operator: A. Smith
     date: '2024-10-17'
     group: no_protein
+    target: .nan
     S0: TGCGCG
     S1: TCGATA
     ids:
@@ -188,6 +208,7 @@ selections:
     operator: A. Smith
     date: '2024-10-17'
     group: no_protein
+    target: .nan
     S0: GCTACT
     S1: TCGATA
     ids:
@@ -197,6 +218,7 @@ selections:
     operator: A. Smith
     date: '2024-10-17'
     group: protein
+    target: E
     S0: GCACAT
     S1: TCGATA
     ids:
@@ -206,6 +228,7 @@ selections:
     operator: A. Smith
     date: '2024-10-17'
     group: protein
+    target: E
     S0: GAGTGT
     S1: TCGATA
     ids:
@@ -215,6 +238,7 @@ selections:
     operator: A. Smith
     date: '2024-10-17'
     group: protein
+    target: E
     S0: GTGCGA
     S1: TCGATA
     ids:
@@ -224,6 +248,7 @@ selections:
     operator: A. Smith
     date: '2024-10-17'
     group: protein
+    target: E
     S0: GCCGCT
     S1: TCGATA
     ids:
@@ -233,6 +258,7 @@ selections:
     operator: A. Smith
     date: '2024-10-17'
     group: protein
+    target: E
     S0: GAAGAT
     S1: TCGATA
     ids:
@@ -242,6 +268,7 @@ selections:
     operator: A. Smith
     date: '2024-10-17'
     group: protein
+    target: E
     S0: GTTCAG
     S1: TCGATA
     ids:

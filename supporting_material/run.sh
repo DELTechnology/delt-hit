@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd /Users/adrianomartinelli/projects/delt/delt-core/supporting_material
+cd /Users/adrianomartinelli/projects/delt/delt-hit/supporting_material
 delt-hit init --excel_path template.xlsx
 
 CONFIG_PATH=experiments/template/config.yaml

@@ -7,9 +7,9 @@ suppressPackageStartupMessages({
 })
 
 args <- list(
-  data_path    = "/Users/adrianomartinelli/projects/delt/delt-core/supporting_material/experiments/template/analysis/protein_vs_no_protein/data.csv",
-  samples_path = "/Users/adrianomartinelli/projects/delt/delt-core/supporting_material/experiments/template/analysis/protein_vs_no_protein/samples.csv",
-  save_dir     = "/Users/adrianomartinelli/projects/delt/delt-core/supporting_material/experiments/template/analysis/protein_vs_no_protein/edgeR",
+  data_path    = "/Users/adrianomartinelli/projects/delt/delt-hit/supporting_material/experiments/template/analysis/protein_vs_no_protein/data.csv",
+  samples_path = "/Users/adrianomartinelli/projects/delt/delt-hit/supporting_material/experiments/template/analysis/protein_vs_no_protein/samples.csv",
+  save_dir     = "/Users/adrianomartinelli/projects/delt/delt-hit/supporting_material/experiments/template/analysis/protein_vs_no_protein/edgeR",
   log          = FALSE
 )
 

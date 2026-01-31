@@ -36,15 +36,15 @@ This is the recommended way for most users.
 
 1.  **Create and activate a Conda environment:**
     ```bash
-    conda create -n del python=3.12 -y
-    conda activate del
+    conda create -n delt-hit python=3.12 -y
+    conda activate delt-hit
     ```
     > 💡 Always activate this environment (`conda activate del`) before using `delt-hit`.
 
 2.  **Install `delt-hit`:**
     Install the package directly from GitHub using `pip`:
     ```bash
-    pip install git+https://github.com/DELTechnology/delt-core.git
+    pip install git+https://github.com/DELTechnology/delt-hit.git
     ```
     > **Note:** The `delt-hit` package is under active development. To get the latest version of `cutadapt` required by this package, please run `pip install git+https://github.com/marcelm/cutadapt.git` (this command can be ignored once Cutadapt 4.10 is released).
 
@@ -64,14 +64,14 @@ If you want to contribute to the development of `delt-hit`, follow these steps.
 
 2.  **Clone the Repository:**
     ```bash
-    git clone git@github.com:DELTechnology/delt-core.git
-    cd delt-core
+    git clone git@github.com:DELTechnology/delt-hit.git
+    cd delt-hit
     ```
 
 3.  **Create and activate the Conda environment:**
     ```bash
-    conda create -n del-dev python=3.12 -y
-    conda activate del-dev
+    conda create -n delt-dev python=3.12 -y
+    conda activate delt-dev
     ```
 
 4.  **Install in Editable Mode:**
