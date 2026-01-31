@@ -1,0 +1,22 @@
+experiments:
+  - name: protein_vs_no_protein
+    save_dir: experiments/template/analysis
+    selections:
+      - name: AG24_4
+        counts_path: experiments/template/selections/AG24_4/counts.txt
+        group: no_protein
+      - name: AG24_5
+        counts_path: experiments/template/selections/AG24_5/counts.txt
+        group: no_protein
+      - name: AG24_6
+        counts_path: experiments/template/selections/AG24_6/counts.txt
+        group: no_protein
+      - name: AG24_13
+        counts_path: experiments/template/selections/AG24_13/counts.txt
+        group: protein
+      - name: AG24_14
+        counts_path: experiments/template/selections/AG24_14/counts.txt
+        group: protein
+      - name: AG24_15
+        counts_path: experiments/template/selections/AG24_15/counts.txt
+        group: protein
