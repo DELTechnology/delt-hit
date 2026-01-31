@@ -1,7 +1,7 @@
 from pathlib import Path
 import yaml
 
-from delt_core.demultiplex import experiment_from_excel, whitelists_from_excel, catalog_from_excel, config_from_excel, structure_from_excel
+from delt_hit.demultiplex import experiment_from_excel, whitelists_from_excel, catalog_from_excel, config_from_excel, structure_from_excel
 
 path = Path('templates/library.xlsx')
 save_config = config_path = Path('templates/config.yaml')

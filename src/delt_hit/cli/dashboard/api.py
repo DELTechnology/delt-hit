@@ -173,6 +173,15 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                    [{'label': c, 'value': c} for c in available_codes] + \
                    [{'label': 'count', 'value': 'count'}]
 
+    if len(available_codes) >= 2:
+        default_x = available_codes[0]
+        default_y = available_codes[1]
+        default_z = 'count'
+    else:
+        default_x = available_codes[0]
+        default_y = 'count'
+        default_z = 'None'
+
     app.layout = html.Div([
         html.Div([
             html.H1("DECL Experiment Dashboard",
@@ -193,7 +202,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                     dcc.Dropdown(
                         id='x-axis-selector',
                         options=axis_options,
-                        value=available_codes[0] if available_codes else 'None',
+                        value=default_x,
                         placeholder="Select X-axis variable..."
                     )
                 ], className="w-1/4 pr-2"),
@@ -203,7 +212,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                     dcc.Dropdown(
                         id='y-axis-selector',
                         options=axis_options,
-                        value='count',
+                        value=default_y,
                         placeholder="Select Y-axis variable..."
                     )
                 ], className="w-1/4 px-2"),
@@ -213,7 +222,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                     dcc.Dropdown(
                         id='z-axis-selector',
                         options=axis_options,
-                        value='None',
+                        value=default_z,
                         placeholder="Select Z-axis variable (select to enable 3D)..."
                     )
                 ], className="w-1/4 px-2"),
@@ -242,7 +251,33 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
             html.H2("Filters", className="text-2xl font-bold mb-4"),
             html.Div([
                 html.Div([
-                    html.Label("Code Ranges (e.g. '1-3;2-5,8-10;3-5')", className="font-semibold mb-2 block"),
+                    html.Label(
+                        [
+                            "Code Ranges (e.g. '1-3;2-5,8-10;3-5')",
+                            html.Span(
+                                " ⓘ",
+                                title=(
+                                    "How to enter code filters:\n"
+                                    "• Separate indices with commas: 1,2,7\n"
+                                    "• Define a range with a dash: 3-10\n"
+                                    "• Combine ranges and indices: 1-3,8,10-12\n"
+                                    "• Separate different code columns with semicolons: code_1;code_2;code_3\n"
+                                    "Example: 1-3;2-5,8-10;3-5\n"
+                                    "Leave a segment empty to not filter that code."
+                                ),
+                                style={
+                                    "cursor": "help",
+                                    "marginLeft": "6px",
+                                    "color": "#2563eb",
+                                    "pointerEvents": "auto",
+                                    "display": "inline-block",
+                                    "padding": "0 4px",
+                                    "borderRadius": "4px",
+                                },
+                            ),
+                        ],
+                        className="font-semibold mb-2 block",
+                    ),
                     # Code Ranges
                     dcc.Input(
                         id='filter-codes',
