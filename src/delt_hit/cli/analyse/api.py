@@ -8,6 +8,15 @@ from delt_hit.utils import read_yaml
 class Analyse:
 
     def prepare(self, config_path: Path, name: str):
+        """Prepare input data for enrichment analysis.
+
+        Args:
+            config_path: Path to the YAML config file.
+            name: Experiment name to prepare.
+
+        Returns:
+            Tuple of data path, samples path, and save directory.
+        """
         cfg = read_yaml(config_path)
         assert name in list(map(lambda x: x['name'], cfg['experiments'])), f'Experiment {name} not found in config.'
 
@@ -22,6 +31,13 @@ class Analyse:
         return data_path, samples_path, save_dir
 
     def enrichment(self, *, config_path: Path, name: str, method: str = 'counts'):
+        """Generate enrichment analysis scripts for an experiment.
+
+        Args:
+            config_path: Path to the YAML config file.
+            name: Experiment name to analyze.
+            method: Analysis method ('counts' or 'edgeR').
+        """
         data_path, samples_path, save_dir = self.prepare(config_path=config_path, name=name)
 
         match method:
@@ -39,14 +55,31 @@ class Analyse:
                 pass
 
     def run(self, config_path: Path):
+        """Run the analysis pipeline (placeholder)."""
         pass
 
 
 def correlation_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
+    """Create an R script for correlation plots (placeholder).
+
+    Args:
+        data_path: Path to the counts CSV.
+        samples_path: Path to the samples CSV.
+        cpm: Whether to use counts per million.
+        save_dir: Directory to save the script.
+    """
     pass
 
 
 def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, save_dir: Path):
+    """Generate an edgeR analysis R script.
+
+    Args:
+        data_path: Path to the counts CSV.
+        samples_path: Path to the samples CSV.
+        log: Whether to log-transform CPM values.
+        save_dir: Directory to write the script into.
+    """
     from textwrap import dedent
 
     log_flag = "TRUE" if log else "FALSE"
@@ -223,6 +256,14 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
 
 
 def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
+    """Generate a simple counts-based analysis R script.
+
+    Args:
+        data_path: Path to the counts CSV.
+        samples_path: Path to the samples CSV.
+        cpm: Whether to convert counts to CPM.
+        save_dir: Directory to write the script into.
+    """
     r_cpm_flag = "TRUE" if cpm else "FALSE"
 
     r_script = dedent(f"""
@@ -321,6 +362,13 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
 
 
 def prepare_data(exp: dict, data_path: Path, samples_path: Path):
+    """Compile counts and sample metadata for analysis.
+
+    Args:
+        exp: Experiment config dict with selections.
+        data_path: Path to write the merged counts CSV.
+        samples_path: Path to write the samples CSV.
+    """
     selections = exp['selections']
     data = []
     for sel in selections:

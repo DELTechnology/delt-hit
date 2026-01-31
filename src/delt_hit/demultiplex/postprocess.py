@@ -6,6 +6,14 @@ import pandas as pd
 from tqdm import tqdm
 
 def extract_ids(line: str):
+    """Extract selection and barcode IDs from a cutadapt info line.
+
+    Args:
+        line: A line from the cutadapt info file.
+
+    Returns:
+        A dict with selection ID tuples and barcode tuples.
+    """
     _, *adapters = line.strip().split('?')
     selection_ids = [i.split('.')[-1] for i in filter(lambda x: 'S' in x, adapters)]
     selection_ids = tuple(map(int, selection_ids))
@@ -15,6 +23,15 @@ def extract_ids(line: str):
 
 def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None,
                 as_files: bool = True, sort_by_counts: bool = True) -> None:
+    """Persist count tables to disk.
+
+    Args:
+        counts: Nested dict of selection IDs to barcode counts.
+        output_dir: Directory to write output files.
+        ids_to_name: Optional mapping from selection ID tuples to names.
+        as_files: Whether to store counts as flat files or nested dirs.
+        sort_by_counts: Whether to sort descending by count.
+    """
 
     num_codes = len(list(list(counts.values())[0].keys())[0])
     codon_cols = [f'code_{i}' for i in range(1, num_codes + 1)]
@@ -45,11 +62,19 @@ def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None,
 
 
 def get_counts(*, input_path: Path, num_reads: int) -> dict:
+    """Count barcode occurrences from a gzipped read file.
+
+    Args:
+        input_path: Path to the gzipped reads with adapter info.
+        num_reads: Expected number of reads for progress tracking.
+
+    Returns:
+        A nested dict of selection IDs to barcode counts.
+    """
     with gzip.open(input_path, 'rt') as f:
         counts = defaultdict(lambda: defaultdict(int))
         for line in tqdm(f, total=num_reads, ncols=100):
             ids = extract_ids(line)
             counts[ids['selection_ids']][ids['barcodes']] += 1
     return counts
-
 

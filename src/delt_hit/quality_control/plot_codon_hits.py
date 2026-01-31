@@ -6,6 +6,14 @@ import pandas as pd
 
 
 def get_stats(experiment_path: Path) -> list:
+    """Extract adapter trimming stats from a cutadapt report.
+
+    Args:
+        experiment_path: Path to a ``*.cutadapt.json`` report.
+
+    Returns:
+        A list of stats dictionaries for each region.
+    """
     items = []
     report = json.load(experiment_path.open('r'))
     stats = report['adapters_read1']
@@ -25,6 +33,12 @@ def get_stats(experiment_path: Path) -> list:
 
 
 def plot_hits(output_dir: Path, save_dir: Path) -> None:
+    """Plot codon hit summaries from cutadapt reports.
+
+    Args:
+        output_dir: Directory with ``*.cutadapt.json`` reports.
+        save_dir: Directory to write plots and parquet files.
+    """
     stats = []
     report_paths = sorted(output_dir.glob('*.cutadapt.json'))
     report_paths = sorted(filter(lambda f: not f.stem.startswith('._'), report_paths))
@@ -66,4 +80,3 @@ def plot_hits(output_dir: Path, save_dir: Path) -> None:
             ax.set_xticklabels([])
         fig.tight_layout()
         fig.savefig(save_dir / f'hits_{grp_name}.pdf')
-

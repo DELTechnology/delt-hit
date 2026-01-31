@@ -12,6 +12,14 @@ from delt_hit.utils import read_yaml
 
 
 def load_config(config_path):
+    """Load a dashboard config file, falling back to sample data.
+
+    Args:
+        config_path: Path to the YAML config file.
+
+    Returns:
+        A configuration dictionary.
+    """
     try:
         with open(config_path, 'r') as file:
             return yaml.safe_load(file)
@@ -41,6 +49,14 @@ def load_config(config_path):
 
 
 def load_counts(counts_path):
+    """Load a counts table, falling back to a small demo dataset.
+
+    Args:
+        counts_path: Path to a TSV counts file.
+
+    Returns:
+        A pandas DataFrame of counts.
+    """
     try:
         return pd.read_csv(counts_path, sep='\t')
     except FileNotFoundError:
@@ -52,10 +68,27 @@ def load_counts(counts_path):
 
 
 def get_available_codes(df):
+    """List code columns available in a counts table.
+
+    Args:
+        df: Counts DataFrame.
+
+    Returns:
+        A list of column names starting with ``code_``.
+    """
     return [col for col in df.columns if col.startswith('code_')]
 
 
 def marginalize_counts(df, selected_codes):
+    """Aggregate counts by selected code columns.
+
+    Args:
+        df: Counts DataFrame.
+        selected_codes: Columns to group by.
+
+    Returns:
+        Aggregated counts DataFrame.
+    """
     if not selected_codes:
         return df
     codes_to_use = selected_codes[:3] if len(selected_codes) > 3 else selected_codes
@@ -64,10 +97,17 @@ def marginalize_counts(df, selected_codes):
 
 
 def parse_code_ranges(range_str: str, code_cols: list[str]) -> dict:
-    """
-    Parse a string like '1-3;2-5,8-10;3-5' into a dict:
-    {'code_1': {1,2,3}, 'code_2': {2,3,4,5,8,9,10}, 'code_3': {3,4,5}}
-    Extra segments are ignored; missing segments mean 'no filtering' for that code.
+    """Parse a semicolon-delimited set of code filters.
+
+    Example input ``1-3;2-5,8-10;3-5`` yields:
+    ``{'code_1': {1,2,3}, 'code_2': {2,3,4,5,8,9,10}, 'code_3': {3,4,5}}``.
+
+    Args:
+        range_str: Filter string in ``code_1;code_2;...`` order.
+        code_cols: Code column names to map segments onto.
+
+    Returns:
+        A mapping of code columns to allowed integer values.
     """
     if not range_str or not isinstance(range_str, str):
         return {}
@@ -103,7 +143,15 @@ def parse_code_ranges(range_str: str, code_cols: list[str]) -> dict:
 
 
 def apply_code_filters(df: pd.DataFrame, filters: dict) -> pd.DataFrame:
-    """Keep rows where each filtered code column is in the allowed set."""
+    """Filter counts rows by allowed codes.
+
+    Args:
+        df: Counts DataFrame.
+        filters: Mapping of code columns to allowed integer values.
+
+    Returns:
+        The filtered DataFrame.
+    """
     if not filters:
         return df
     mask = pd.Series(True, index=df.index)
@@ -114,6 +162,14 @@ def apply_code_filters(df: pd.DataFrame, filters: dict) -> pd.DataFrame:
 
 
 def create_config_cards(config):
+    """Build dashboard cards for config sections.
+
+    Args:
+        config: Configuration dictionary.
+
+    Returns:
+        A list of Dash HTML components.
+    """
     cards = []
     exp_info = config.get('experiment', {})
     exp_items = [
@@ -142,6 +198,13 @@ def create_config_cards(config):
 
 
 def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | None = None):
+    """Start the interactive dashboard server.
+
+    Args:
+        config_path: Path to the YAML config file.
+        counts_path: Path to the TSV counts file.
+        selection_name: Optional selection name override for display.
+    """
     # Load data
     config = read_yaml(config_path)
     counts_df = pd.read_csv(counts_path, sep='\t')
@@ -154,6 +217,15 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
 
     # Defaults for filters
     def default_code_range_string(df, code_cols):
+        """Build a default filter string from min/max values.
+
+        Args:
+            df: Counts DataFrame.
+            code_cols: Code columns to include.
+
+        Returns:
+            Semicolon-delimited range string.
+        """
         segs = []
         for c in code_cols:
             if c in df and df[c].notna().any():
@@ -346,6 +418,14 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
         prevent_initial_call=True
     )
     def reset_filters(n_clicks):
+        """Restore default filter values for the UI.
+
+        Args:
+            n_clicks: Click count from the reset button.
+
+        Returns:
+            Tuple of default filter values.
+        """
         if not n_clicks:
             raise dash.exceptions.PreventUpdate
         return (
@@ -370,6 +450,22 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
     )
     def update_plot_and_stats(x_axis, y_axis, z_axis, color_by_count, size_by_count,
                               n_clicks_filter, range_str, min_count, max_count):
+        """Update the plot and stats panel based on UI inputs.
+
+        Args:
+            x_axis: Selected X-axis column.
+            y_axis: Selected Y-axis column.
+            z_axis: Selected Z-axis column (3D only).
+            color_by_count: Toggle to color by count.
+            size_by_count: Toggle to size by count.
+            n_clicks_filter: Click count from filter button.
+            range_str: Code range filter string.
+            min_count: Minimum count filter.
+            max_count: Maximum count filter.
+
+        Returns:
+            Plotly Figure and stats component.
+        """
         # Require at least one axis
         if (x_axis == 'None') and (y_axis == 'None') and (z_axis == 'None'):
             empty_fig = go.Figure()
@@ -427,6 +523,16 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
         use_3d = (z_axis != 'None')
 
         def labels_for(x=None, y=None, z=None):
+            """Build Plotly axis labels for selected dimensions.
+
+            Args:
+                x: X-axis column name.
+                y: Y-axis column name.
+                z: Z-axis column name.
+
+            Returns:
+                Label mapping for Plotly.
+            """
             lab = {}
             if x: lab[x] = x
             if y: lab[y] = y

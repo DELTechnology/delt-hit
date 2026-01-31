@@ -8,7 +8,12 @@ from rich.table import Table
 
 
 def print_report(output_dir: Path, save_path: Path) -> None:
-    """Pretty, aligned cutadapt pipeline report using Rich."""
+    """Render a cutadapt pipeline report using Rich.
+
+    Args:
+        output_dir: Directory containing ``*.cutadapt.json`` files.
+        save_path: Path to write the plain-text report.
+    """
     report_files = sorted(output_dir.glob("*.cutadapt.json"))
     report_files = sorted(filter(lambda f: not f.stem.startswith('._'), report_files))
     reports = {
@@ -47,9 +52,25 @@ def print_report(output_dir: Path, save_path: Path) -> None:
     overall_p_discarded = (1 - overall_p_with) if not math.isnan(overall_p_with) else float("nan")
 
     def fmt_int(x: int) -> str:
+        """Format an integer with thousands separators.
+
+        Args:
+            x: Integer to format.
+
+        Returns:
+            Formatted string.
+        """
         return f"{x:,}"
 
     def fmt_pct(x: float) -> str:
+        """Format a float as a percentage or N/A.
+
+        Args:
+            x: Value to format.
+
+        Returns:
+            Formatted percentage string.
+        """
         return "N/A" if (x is None or math.isnan(x)) else f"{x:.2%}"
 
     console = Console(record=True)  # record=True lets us export to text later

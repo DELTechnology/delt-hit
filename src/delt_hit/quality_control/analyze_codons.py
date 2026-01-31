@@ -10,6 +10,14 @@ import numpy as np
 def read_txt(
         path: Path,
 ) -> list:
+    """Read lines from a text file.
+
+    Args:
+        path: Path to the text file.
+
+    Returns:
+        A list of lines.
+    """
     with open(path, 'r') as f:
         return f.readlines()
 
@@ -18,7 +26,12 @@ def plot_edit_distances(
         codons: dict,
         output_dir: Path,
 ) -> None:
-    
+    """Plot intra- and inter-set edit distance histograms.
+
+    Args:
+        codons: Mapping of region names to codon lists.
+        output_dir: Directory to save plots into.
+    """
     keys = set(filter(lambda x: 'C' not in x, set(codons.keys())))
     for key in keys:
         other = keys - {key}
@@ -59,6 +72,16 @@ def plot_edit_distances(
 
 
 def compute_stats(item, a, b):
+    """Update overlap stats for one comparison.
+
+    Args:
+        item: Mutable stats dictionary.
+        a: First base.
+        b: Second base.
+
+    Returns:
+        The updated stats dictionary.
+    """
     item['number_of_comparisons'] += 1
     item['number_of_matches'] += a == b
     item['proportion_of_matches'] = item['number_of_matches'] / item['number_of_comparisons']
@@ -68,6 +91,14 @@ def compute_stats(item, a, b):
 def compute_overlap(
         codons: dict,
 ) -> dict:
+    """Compute overlap statistics between successive codon sets.
+
+    Args:
+        codons: Mapping of region names to codon lists.
+
+    Returns:
+        A mapping of region pairs to overlap stats.
+    """
     overlap = {}
     for a, b in pairwise(codons.keys()):
         last_base = [i.strip()[-1] for i in codons[a]]
@@ -81,6 +112,11 @@ def compute_overlap(
 def print_overlap(
         codons: dict,
 ) -> None:
+    """Print overlap statistics for successive codon sets.
+
+    Args:
+        codons: Mapping of region names to codon lists.
+    """
     # NOTE: as expected around 1/4 of the codons in the const region end with the same base as the next region starts
     # The overall probability that a codon is not completely removed is given by
     # p = prob_of_insert * prop_of_matching_pre_postfix
@@ -98,10 +134,15 @@ def analyze_codons(
         structure: dict,
         output_dir: Path,
 ) -> None:
+    """Analyze codon sets and emit plots plus overlap stats.
+
+    Args:
+        structure: Mapping of region names to metadata containing file paths.
+        output_dir: Directory to save plots into.
+    """
     codons = {}
     for key, value in structure.items():
         codons[key] = read_txt(value['Path'])
     
     plot_edit_distances(codons, output_dir)
     print_overlap(codons)
-
