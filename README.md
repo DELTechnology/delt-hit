@@ -1,6 +1,6 @@
-# 🧬 `delt-hit`
+# 🧬 `DELT-Hit`
 
-> Core functionalities to work with DNA-encoded chemical libraries.
+Welcome to `delt-hit`! An end-to-end computational framework for DNA-encoded chemical library analysis.
 
 ## 🚀 Installation
 
