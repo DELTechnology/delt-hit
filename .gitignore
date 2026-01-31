@@ -309,3 +309,4 @@ paper/experiment-1/representations
 *.txt
 *.json
 *.pdf
+*.npz
