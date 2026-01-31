@@ -1,4 +1,5 @@
 # 🧬 `delt-hit`
+
 > Core functionalities to work with DNA-encoded chemical libraries.
 
 ## 🚀 Installation
@@ -10,14 +11,21 @@ This guide provides instructions for setting up `delt-hit` for both regular user
 Before you begin, make sure you have the following installed:
 
 #### 1. Conda
-We recommend using the [Miniconda](https://docs.anaconda.com/miniconda) package manager to create an isolated environment for this project. This ensures that all dependencies are managed correctly.
-- [Download and install Miniconda](https://docs.anaconda.com/miniconda#latest-miniconda-installer-links) for your operating system.
+
+We recommend using the [Miniconda](https://docs.anaconda.com/miniconda) package manager to create an isolated
+environment for this project. This ensures that all dependencies are managed correctly.
+
+- [Download and install Miniconda](https://docs.anaconda.com/miniconda#latest-miniconda-installer-links) for your
+  operating system.
 - After installation, you should be able to use the `conda` command in your terminal.
 
 #### 2. R Environment
+
 Some analysis features in `delt-hit` (like enrichment analysis with `edgeR`) depend on R.
+
 - **Install R:** Download and install R from the [Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/).
-- **Install R Packages:** Once R is installed, open an R console and run the following commands to install the required packages:
+- **Install R Packages:** Once R is installed, open an R console and run the following commands to install the required
+  packages:
     ```R
     # Install tidyverse and GGally from CRAN
     install.packages(c("tidyverse", "GGally"))
@@ -34,120 +42,147 @@ Some analysis features in `delt-hit` (like enrichment analysis with `edgeR`) dep
 
 This is the recommended way for most users.
 
-1.  **Create and activate a Conda environment:**
-    ```bash
-    conda create -n delt-hit python=3.12 -y
-    conda activate delt-hit
-    ```
-    > 💡 Always activate this environment (`conda activate del`) before using `delt-hit`.
+1. **Create and activate a Conda environment:**
+   ```bash
+   conda create -n delt-hit python=3.12 -y
+   conda activate delt-hit
+   ```
+   > 💡 Always activate this environment (`conda activate del`) before using `delt-hit`.
 
-2.  **Install `delt-hit`:**
-    Install the package directly from GitHub using `pip`:
-    ```bash
-    pip install git+https://github.com/DELTechnology/delt-hit.git
-    ```
-    > **Note:** The `delt-hit` package is under active development. To get the latest version of `cutadapt` required by this package, please run `pip install git+https://github.com/marcelm/cutadapt.git` (this command can be ignored once Cutadapt 4.10 is released).
+2. **Install `delt-hit`:**
+   Install the package directly from GitHub using `pip`:
+   ```bash
+   conda install pygraphviz -y
+   pip install git+https://github.com/DELTechnology/delt-hit.git
+   ```
+   > **Note:** The `delt-hit` package is under active development. To get the latest version of `cutadapt` required by
+   this package, please run `pip install git+https://github.com/marcelm/cutadapt.git` (this command can be ignored once
+   Cutadapt 4.10 is released).
 
-3.  **Verify Installation:**
-    Check that the CLI is working:
-    ```bash
-    delt-hit --help
-    ```
-    You should see a list of available commands.
+3. **Verify Installation:**
+   Check that the CLI is working:
+   ```bash
+   delt-hit --help
+   ```
+   You should see a list of available commands.
 
 ### 👩‍💻 Developer Installation
 
 If you want to contribute to the development of `delt-hit`, follow these steps.
 
-1.  **Configure SSH for GitHub:**
-    Make sure you have an [SSH key added to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) to clone the repository.
+1. **Configure SSH for GitHub:**
+   Make sure you have
+   an [SSH key added to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+   to clone the repository.
 
-2.  **Clone the Repository:**
-    ```bash
-    git clone git@github.com:DELTechnology/delt-hit.git
-    cd delt-hit
-    ```
+2. **Clone the Repository:**
+   ```bash
+   git clone git@github.com:DELTechnology/delt-hit.git
+   cd delt-hit
+   ```
 
-3.  **Create and activate the Conda environment:**
-    ```bash
-    conda create -n delt-dev python=3.12 -y
-    conda activate delt-dev
-    ```
+3. **Create and activate the Conda environment:**
+   ```bash
+   conda create -n delt-dev python=3.12 -y
+   conda activate delt-dev
+   ```
 
-4.  **Install in Editable Mode:**
-    Install the package with all development and testing dependencies:
-    ```bash
-    pip install -e ".[dev,test]"
-    ```
-    > 🔧 This "editable" install means that any changes you make to the source code will be immediately reflected when you run the `delt-hit` command.
+4. **Install in Editable Mode:**
+   Install the package with all development and testing dependencies:
+   ```bash
+   pip install -e ".[dev,test]"
+   ```
+   > 🔧 This "editable" install means that any changes you make to the source code will be immediately reflected when you
+   run the `delt-hit` command.
 
-5.  **(Optional) Install `pigz` for parallel processing:**
-    For faster demultiplexing on macOS, install `pigz` using [Homebrew](https://brew.sh/):
-    ```bash
-    brew install pigz
-    ```
+5. **(Optional) Install `pigz` for parallel processing:**
+   For faster demultiplexing on macOS, install `pigz` using [Homebrew](https://brew.sh/):
+   ```bash
+   brew install pigz
+   ```
 
 ## 🧪 Example Workflow
 
 Here is a typical workflow for using `delt-hit`:
 
-1.  **Initialize Configuration:**
-    Create a `config.yaml` file from an Excel library file. This file defines the experiment, selections, and library information.
-    ```bash
-    delt-hit init --excel_path /path/to/library.xlsx
-    ```
+1. **Initialize Configuration:**
+   Create a `config.yaml` file from an Excel library file. This file defines the experiment, selections, and library
+   information.
+   ```bash
+   delt-hit init --excel_path /path/to/library.xlsx
+   ```
 
-2.  **Run Demultiplexing:**
-    Run the entire demultiplexing pipeline based on your configuration. This includes preparing scripts, running `cutadapt`, and processing the results.
-    ```bash
-    delt-hit demultiplex run --config_path /path/to/config.yaml
-    ```
+2. **Run Demultiplexing:**
+   Run the entire demultiplexing pipeline based on your configuration. This includes preparing scripts, running
+   `cutadapt`, and processing the results.
+   ```bash
+   delt-hit demultiplex run --config_path /path/to/config.yaml
+   ```
 
-3.  **Define Analysis Groups:**
-    After demultiplexing, define analysis groups by editing your `config.yaml` file. Add an `analyses` section to group selections for comparison. For example:
-    ```yaml
-    analyses:
-      analysis-1:
-        selections:
-          - SEL1 # Typically a protein selection
-          - SEL2 # Another protein selection (replicate)
-          - SEL3 # A no-protein control selection
-    ```
+3. **Define Analysis Groups:**
+   After demultiplexing, define analysis groups by editing your `config.yaml` file. Add an `analyses` section to group
+   selections for comparison. For example:
+   ```yaml
+   experiments:
+   - name: protein_vs_no_protein
+     save_dir: experiments/template/analysis
+     selections:
+       - name: AG24_4
+         counts_path: experiments/template/selections/AG24_4/counts.txt
+         group: no_protein
+       - name: AG24_5
+         counts_path: experiments/template/selections/AG24_5/counts.txt
+         group: no_protein
+       - name: AG24_6
+         counts_path: experiments/template/selections/AG24_6/counts.txt
+         group: no_protein
+       - name: AG24_13
+         counts_path: experiments/template/selections/AG24_13/counts.txt
+         group: protein
+       - name: AG24_14
+         counts_path: experiments/template/selections/AG24_14/counts.txt
+         group: protein
+       - name: AG24_15
+         counts_path: experiments/template/selections/AG24_15/counts.txt
+         group: protein
+     ```
 
-4.  **Calculate Enrichment:**
-    Calculate enrichment for the defined groups using different methods. The `--name` argument must correspond to a group you defined in your `config.yaml`.
-    ```bash
-    # Using simple counts
-    delt-hit analyse enrichment --config_path /path/to/config.yaml --name=analysis-1 --method=counts
+4. **Calculate Enrichment:**
+   Calculate enrichment for the defined groups using different methods. The `--name` argument must correspond to a group
+   you defined in your `config.yaml`.
+   ```bash
+   # Using simple counts
+   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=protein_vs_no_protein --method=counts
 
-    # Using edgeR for more sensitive statistical analysis
-    delt-hit analyse enrichment --config_path /path/to/config.yaml --name=analysis-1 --method=edgeR
-    ```
+   # Using edgeR for more sensitive statistical analysis
+   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=protein_vs_no_protein --method=edgeR
+   ```
 
-5.  **Work with the Library:**
-    Enumerate the library, compute properties, and generate representations.
-    ```bash
-    # Enumerate all molecules in the library
-    delt-hit library enumerate --config_path /path/to/config.yaml
+5. **Work with the Library:**
+   Enumerate the library, compute properties, and generate representations.
+   ```bash
+   # Enumerate all molecules in the library
+   delt-hit library enumerate --config_path /path/to/config.yaml
 
-    # Compute chemical properties
-    delt-hit library properties --config_path /path/to/config.yaml
+   # Compute chemical properties
+   delt-hit library properties --config_path /path/to/config.yaml
 
-    # Generate molecular fingerprints (e.g., Morgan)
-    delt-hit library represent --method=morgan --config_path /path/to/config.yaml
-    ```
+   # Generate molecular fingerprints (e.g., Morgan)
+   delt-hit library represent --method=morgan --config_path /path/to/config.yaml
+   ```
 
-6.  **Launch Dashboard:**
-    Explore the results interactively in a web-based dashboard.
-    ```bash
-    delt-hit dashboard \
-    --config_path /path/to/config.yaml \
-    --counts_path /path/to/selections/SELECTION_NAME/counts.txt
-    ```
+6. **Launch Dashboard:**
+   Explore the results interactively in a web-based dashboard.
+   ```bash
+   delt-hit dashboard \
+   --config_path /path/to/config.yaml \
+   --counts_path /path/to/selections/SELECTION_NAME/counts.txt
+   ```
 
 ## 📚 Documentation
 
 For a codebase overview and a detailed CLI reference, see:
+
 - [Codebase overview](documentation/overview.md)
 - [CLI guide](documentation/cli.md)
 
@@ -158,12 +193,15 @@ The original protocol description lives in `protocols.pdf`.
 For the most up-to-date CLI details and output locations, use the [CLI guide](documentation/cli.md).
 
 ### `init`
+
 Initializes a project by creating a `config.yaml` from a standardized Excel file.
+
 ```bash
 delt-hit init --excel_path <path/to/library.xlsx>
 ```
 
 ### `library`
+
 Commands for library enumeration, and chemical property and representation calculation.
 
 - **`enumerate`**: Generates the full library of molecules from the reaction steps defined in the configuration file.
@@ -178,9 +216,10 @@ Commands for library enumeration, and chemical property and representation calcu
   ```bash
   delt-hit library represent --config_path <path/to/config.yaml> --method <METHOD>
   ```
-  - `<METHOD>` can be `morgan` or `bert`.
+    - `<METHOD>` can be `morgan` or `bert`.
 
 ### `demultiplex`
+
 Commands for demultiplexing FASTQ files and obtaining read counts.
 
 - **`run`**: Runs the entire demultiplexing workflow, including running Cutadapt and computing counts.
@@ -205,17 +244,19 @@ Commands for demultiplexing FASTQ files and obtaining read counts.
   ```
 
 ### `analyse`
+
 Commands for analyzing demultiplexed data, such as performing enrichment analysis.
 
 - **`enrichment`**: Performs enrichment analysis on an analysis group defined in the configuration file.
   ```bash
   delt-hit analyse enrichment --config_path <path/to/config.yaml> --name <group_name> --method <METHOD>
   ```
-  - Analysis groups must be defined under the `analyses` key in your `config.yaml`.
-  - `<group_name>` refers to a key under the `analyses` section.
-  - `<METHOD>` can be `counts` or `edgeR`.
+    - Analysis groups must be defined under the `analyses` key in your `config.yaml`.
+    - `<group_name>` refers to a key under the `analyses` section.
+    - `<METHOD>` can be `counts` or `edgeR`.
 
 ### `dashboard`
+
 Launches an interactive dashboard for data visualization.
 
 - **`dashboard`**: Starts a web-based dashboard to interactively explore counts data for a given selection.
