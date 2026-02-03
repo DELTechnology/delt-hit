@@ -10,9 +10,7 @@ dash==2.18.2
 dash-core-components==2.0.0
 dash-html-components==2.0.0
 dash-table==5.0.0
-# Editable install with no version control (delt-core==0.0.1)
--e /Users/adrianomartinelli/projects/delt/delt-core
--e git+ssh://git@github.com/DELTechnology/delt-hit.git@528018c9e3cdf3994c995c0645de360c6370cc52#egg=delt_hit
+-e git+https://git@github.com/DELTechnology/delt-hit.git@528018c9e3cdf3994c995c0645de360c6370cc52#egg=delt_hit
 dnaio==1.2.3
 et_xmlfile==2.0.0
 filelock==3.19.1
