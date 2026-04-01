@@ -1,45 +1,62 @@
 [build-system]
-requires = ["setuptools >= 61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "delt-hit"
-description = "DEL Technology core functionalities"
+version = "0.0.1"
+description = "DNA-Encoded Library Technology Hit Identification"
+readme = "README.md"
+license = "MIT"
 authors = [
     { name = "Adriano Martinelli", email = "adrianom@student.ethz.ch" },
 ]
-readme = "README.md"
-# due to how PEP 440 defines version matching, prefer [incl, excl) definitions like below:
 requires-python = ">=3.12"
+# Core dependencies: required for all CLI commands
 dependencies = [
-    "click",
-    "cutadapt",
-    "levenshtein",
-    "matplotlib",
-    "numpy",
-    "openpyxl",
-    "pandas",
-    "pydantic",
-    "pydantic-settings",
-    "python-dotenv",
-    "rdkit",
-    "seaborn",
-    "tqdm",
-    "pyaml",
-    "jsonargparse",
-    "networkx",
-    "loguru",
-    "rich",
-    "pyarrow",
-    "scipy",
-    "dash==2.18.2"
+    "click>=8.0",
+    "cutadapt>=5.0",
+    "levenshtein>=0.25",
+    "matplotlib>=3.8",
+    "numpy>=1.24",
+    "openpyxl>=3.1",
+    "pandas>=2.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "python-dotenv>=1.0",
+    "rdkit>=2023.9",
+    "seaborn>=0.13",
+    "tqdm>=4.65",
+    "pyaml>=23.0",
+    "jsonargparse>=4.0",
+    "networkx>=3.0",
+    "loguru>=0.7",
+    "rich>=13.0",
+    "pyarrow>=14.0",
+    "scipy>=1.11",
+    # dashboard imports these at module level via cli/dashboard/api.py
+    "plotly>=5.18",
+    "dash==2.18.2",
 ]
-version = "0.0.1"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+
+[project.optional-dependencies]
+# ml: required for `library represent --method=bert`
+ml = [
+    "torch>=2.0",
+    "transformers>=4.40",
+    "huggingface-hub>=0.20",
 ]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.3",
+    "mypy>=1.8",
+    "pre-commit>=3.5",
+]
+workflow = [
+    "snakemake>=8.0",
+]
+all = ["delt-hit[ml,dev,workflow]"]
 
 [project.scripts]
 delt-hit = "delt_hit.cli.main:cli"
@@ -47,35 +64,35 @@ delt-hit = "delt_hit.cli.main:cli"
 [project.urls]
 repository = "https://github.com/DELTechnology/delt-core"
 
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-cov",
-]
-dev = [
-    "mypy",
-    "black",
-    "isort",
-    "flake8",
-    "pre-commit",
-]
+[tool.hatch.build.targets.wheel]
+packages = ["src/delt_hit"]
 
-[tool.black]
-line-length = 120
-skip-string-normalization = false
+[tool.ruff]
+line-length = 88
+target-version = "py312"
 
-[tool.isort]
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-ensure_newline_before_comments = true
-line_length = 120
-force_to_top = []
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
 
 [tool.mypy]
+python_version = "3.12"
 check_untyped_defs = true
+warn_return_any = true
+warn_unused_configs = true
 
 [[tool.mypy.overrides]]
-module = "pytest.*"
+module = [
+    "pytest.*",
+    "cutadapt.*",
+    "rdkit.*",
+    "dash.*",
+    "plotly.*",
+    "seaborn.*",
+    "jsonargparse.*",
+    "levenshtein.*",
+]
 ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"

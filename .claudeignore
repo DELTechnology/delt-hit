@@ -1,0 +1,30 @@
+# Large data files Claude Code should not read
+*.fastq
+*.fastq.gz
+*.bam
+*.sam
+*.parquet
+*.npz
+data/
+results/
+outputs/
+
+# Build artifacts
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+.venv/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Lock files (large, not useful for Claude)
+uv.lock
