@@ -1,0 +1,31 @@
+# Version control
+.git/
+
+# Python virtual environment and caches
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Large data and sequencing files
+*.fastq
+*.fastq.gz
+*.bam
+*.sam
+*.parquet
+*.npz
+data/
+results/
+outputs/
+
+# CI/CD
+.github/
+
+# Dev tooling (not needed in the image)
+.pre-commit-config.yaml
+ruff.toml
+.mypy_cache/
+
+# OS
+.DS_Store
+Thumbs.db
