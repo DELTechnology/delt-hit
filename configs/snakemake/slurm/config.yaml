@@ -1,0 +1,43 @@
+# Snakemake SLURM cluster profile
+# Usage: snakemake --profile configs/snakemake/slurm/
+#
+# Requires the snakemake-executor-plugin-slurm package:
+#   uv run --with snakemake-executor-plugin-slurm snakemake --profile configs/snakemake/slurm/
+# Or install it into the project:
+#   uv add --optional dev snakemake-executor-plugin-slurm
+
+executor: slurm
+
+# How many jobs Snakemake will submit simultaneously
+jobs: 50
+
+# Resubmit a job up to 2 times on failure before giving up
+retries: 2
+
+use-conda: false
+rerun-incomplete: true
+show-failed-logs: true
+printshellcmds: false   # shell commands are noisy in cluster logs
+
+# Default resource requests applied to every rule unless overridden.
+# Change `slurm_partition` to match your cluster's partition name.
+default-resources:
+  slurm_partition: "default"   # <-- CHANGE THIS to your cluster partition name
+  mem_mb: 16384                # 16 GB
+  runtime: 120                 # 2 hours (minutes)
+  cpus_per_task: 1
+
+# Per-rule resource overrides.
+# The demultiplex and properties rules declare threads= in the Snakefile;
+# those thread counts are forwarded to SLURM as cpus_per_task automatically.
+# Add memory/runtime overrides here for rules that need more than the defaults.
+set-resources:
+  demultiplex:
+    mem_mb: 32768      # 32 GB — cutadapt + gzip decompression of large FASTQs
+    runtime: 480       # 8 hours — large libraries can take time
+  enumerate:
+    mem_mb: 32768      # 32 GB — full combinatorial enumeration can be large
+    runtime: 240       # 4 hours
+  represent:
+    mem_mb: 32768      # 32 GB — Morgan fingerprint matrix for large libraries
+    runtime: 120

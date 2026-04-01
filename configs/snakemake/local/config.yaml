@@ -1,0 +1,8 @@
+# Snakemake local execution profile
+# Usage: snakemake --profile configs/snakemake/local/
+
+cores: 4
+use-conda: false    # dependencies are managed by uv, not conda
+printshellcmds: true
+show-failed-logs: true
+rerun-incomplete: true
