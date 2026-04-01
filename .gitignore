@@ -310,3 +310,20 @@ paper/experiment-1/representations
 *.json
 *.pdf
 *.npz
+
+# additional sequencing / alignment formats
+*.bam
+*.sam
+
+# IDE (VS Code user settings; workspace .vscode/ can be committed selectively)
+.vscode/settings.json
+
+# OS
+Thumbs.db
+
+# secrets
+*.key
+
+# results / outputs
+results/
+outputs/
