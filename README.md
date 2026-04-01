@@ -1,265 +1,134 @@
-# 🧬 `DELT-Hit`
+# DELT-Hit
 
-Welcome to `delt-hit`! An end-to-end computational framework for DNA-encoded chemical library analysis.
+DELT-Hit is an open-source Python CLI for end-to-end analysis of DNA-encoded chemical library (DEL) screening data. Starting from raw FASTQ reads and a library design spreadsheet, it demultiplexes sequencing data, enumerates combinatorial compound libraries, calculates enrichment statistics, and produces ranked hit lists with molecular properties and fingerprint representations. Developed at ETH Zurich and released under the MIT License.
 
-## 🚀 Installation
+## Quick Start
 
-This guide provides instructions for setting up `delt-hit` for both regular users and developers.
-
-### Prerequisites
-
-Before you begin, make sure you have the following installed:
-
-#### 1. Conda
-
-We recommend using the [Miniconda](https://docs.anaconda.com/miniconda) package manager to create an isolated
-environment for this project. This ensures that all dependencies are managed correctly.
-
-- [Download and install Miniconda](https://docs.anaconda.com/miniconda#latest-miniconda-installer-links) for your
-  operating system.
-- After installation, you should be able to use the `conda` command in your terminal.
-
-#### 2. R Environment
-
-Some analysis features in `delt-hit` (like enrichment analysis with `edgeR`) depend on R.
-
-- **Install R:** Download and install R from the [Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/).
-- **Install R Packages:** Once R is installed, open an R console and run the following commands to install the required
-  packages:
-    ```R
-    # Install tidyverse and GGally from CRAN
-    install.packages(c("tidyverse", "GGally"))
-
-    # Install BiocManager
-    if (!require("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-
-    # Install edgeR and limma from Bioconductor
-    BiocManager::install(c("edgeR", "limma"))
-    ```
-
-### 🧑‍🔬 User Installation
-
-This is the recommended way for most users.
-
-1. **Create and activate a Conda environment:**
-   ```bash
-   conda create -n delt-hit python=3.12 -y
-   conda activate delt-hit
-   ```
-   > 💡 Always activate this environment (`conda activate delt-hit`) before using `delt-hit`.
-
-2. **Install `delt-hit`:**
-   Install the package directly from GitHub using `pip`:
-   ```bash
-   conda install pygraphviz -y
-   pip install git+https://github.com/DELTechnology/delt-hit.git
-   ```
-   > **Note:** The `delt-hit` package is under active development. To get the latest version of `cutadapt` required by
-   this package, please run `pip install git+https://github.com/marcelm/cutadapt.git` (this command can be ignored once
-   Cutadapt 4.10 is released).
-
-3. **Verify Installation:**
-   Check that the CLI is working:
-   ```bash
-   delt-hit --help
-   ```
-   You should see a list of available commands.
-
-### 👩‍💻 Developer Installation
-
-If you want to contribute to the development of `delt-hit`, follow these steps.
-
-1. **Configure SSH for GitHub:**
-   Make sure you have
-   an [SSH key added to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
-   to clone the repository.
-
-2. **Clone the Repository:**
-   ```bash
-   git clone git@github.com:DELTechnology/delt-hit.git
-   cd delt-hit
-   ```
-
-3. **Create and activate the Conda environment:**
-   ```bash
-   conda create -n delt-dev python=3.12 -y
-   conda activate delt-dev
-   ```
-
-4. **Install in Editable Mode:**
-   Install the package with all development and testing dependencies:
-   ```bash
-   pip install -e ".[dev,test]"
-   ```
-   > 🔧 This "editable" install means that any changes you make to the source code will be immediately reflected when you
-   run the `delt-hit` command.
-
-5. **(Optional) Install `pigz` for parallel processing:**
-   For faster demultiplexing on macOS, install `pigz` using [Homebrew](https://brew.sh/):
-   ```bash
-   brew install pigz
-   ```
-
-## 🧪 Example Workflow
-
-Here is a typical workflow for using `delt-hit`:
-
-1. **Initialize Configuration:**
-   Create a `config.yaml` file from an Excel library file. This file defines the experiment, selections, and library
-   information.
-   ```bash
-   delt-hit init --excel_path /path/to/library.xlsx
-   ```
-
-2. **Run Demultiplexing:**
-   Run the entire demultiplexing pipeline based on your configuration. This includes preparing scripts, running
-   `cutadapt`, and processing the results.
-   ```bash
-   delt-hit demultiplex run --config_path /path/to/config.yaml
-   ```
-
-3. **Define Analysis Groups:**
-   After demultiplexing, define analysis groups by editing your `config.yaml` file. Add an `analyses` section to group
-   selections for comparison. For example:
-   ```yaml
-   experiments:
-   - name: protein_vs_no_protein
-     save_dir: experiments/template/analysis
-     selections:
-       - name: AG24_4
-         counts_path: experiments/template/selections/AG24_4/counts.txt
-         group: no_protein
-       - name: AG24_5
-         counts_path: experiments/template/selections/AG24_5/counts.txt
-         group: no_protein
-       - name: AG24_6
-         counts_path: experiments/template/selections/AG24_6/counts.txt
-         group: no_protein
-       - name: AG24_13
-         counts_path: experiments/template/selections/AG24_13/counts.txt
-         group: protein
-       - name: AG24_14
-         counts_path: experiments/template/selections/AG24_14/counts.txt
-         group: protein
-       - name: AG24_15
-         counts_path: experiments/template/selections/AG24_15/counts.txt
-         group: protein
-     ```
-
-4. **Calculate Enrichment:**
-   Calculate enrichment for the defined groups using different methods. The `--name` argument must correspond to a group
-   you defined in your `config.yaml`.
-   ```bash
-   # Using simple counts
-   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=protein_vs_no_protein --method=counts
-
-   # Using edgeR for more sensitive statistical analysis
-   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=protein_vs_no_protein --method=edgeR
-   ```
-
-5. **Work with the Library:**
-   Enumerate the library, compute properties, and generate representations.
-   ```bash
-   # Enumerate all molecules in the library
-   delt-hit library enumerate --config_path /path/to/config.yaml
-
-   # Compute chemical properties
-   delt-hit library properties --config_path /path/to/config.yaml
-
-   # Generate molecular fingerprints (e.g., Morgan)
-   delt-hit library represent --method=morgan --config_path /path/to/config.yaml
-   ```
-
-6. **Launch Dashboard:**
-   Explore the results interactively in a web-based dashboard.
-   ```bash
-   delt-hit dashboard \
-   --config_path /path/to/config.yaml \
-   --counts_path /path/to/selections/SELECTION_NAME/counts.txt
-   ```
-
-## 📚 Documentation
-
-For a codebase overview and a detailed CLI reference, see:
-
-- [Codebase overview](documentation/overview.md)
-- [CLI guide](documentation/cli.md)
-
-The original protocol description lives in `protocols.pdf`.
-
-## 💻 CLI Reference
-
-For the most up-to-date CLI details and output locations, use the [CLI guide](documentation/cli.md).
-
-### `init`
-
-Initializes a project by creating a `config.yaml` from a standardized Excel file.
-
+**Install from GitHub (users):**
 ```bash
-delt-hit init --excel_path <path/to/library.xlsx>
+pip install git+https://github.com/DELTechnology/delt-hit.git
 ```
 
-### `library`
+> RDKit requires Python 3.12+. If `pip install rdkit` fails on your platform, install it via conda first:
+> ```bash
+> conda install -c conda-forge rdkit
+> pip install git+https://github.com/DELTechnology/delt-hit.git --no-deps
+> ```
 
-Commands for library enumeration, and chemical property and representation calculation.
+**Development install:**
+```bash
+git clone git@github.com:DELTechnology/delt-hit.git
+cd delt-hit
+uv sync                       # installs all core dependencies into .venv/
+source .venv/bin/activate
+delt-hit --help
+```
 
-- **`enumerate`**: Generates the full library of molecules from the reaction steps defined in the configuration file.
-  ```bash
-  delt-hit library enumerate --config_path <path/to/config.yaml>
-  ```
-- **`properties`**: Calculates a set of chemical properties for the enumerated library.
-  ```bash
-  delt-hit library properties --config_path <path/to/config.yaml>
-  ```
-- **`represent`**: Generates molecular representations (fingerprints) for the library.
-  ```bash
-  delt-hit library represent --config_path <path/to/config.yaml> --method <METHOD>
-  ```
-    - `<METHOD>` can be `morgan` or `bert`.
+## Pipeline Overview
 
-### `demultiplex`
+The pipeline is organised into five modules that run in sequence:
 
-Commands for demultiplexing FASTQ files and obtaining read counts.
+| Module | Command | Description |
+|---|---|---|
+| **Init** | `delt-hit init` | Parse an Excel workbook and generate a `config.yaml` |
+| **Demultiplex** | `delt-hit demultiplex` | Run cutadapt to assign reads to selections; count barcodes per compound |
+| **Library** | `delt-hit library` | Enumerate SMILES via RDKit reactions; compute properties and fingerprints |
+| **Analyse** | `delt-hit analyse` | Generate enrichment R scripts (edgeR or simple counts); rank hits |
+| **Dashboard** | `delt-hit dashboard` | Launch an interactive Dash web app to explore counts |
 
-- **`run`**: Runs the entire demultiplexing workflow, including running Cutadapt and computing counts.
-  ```bash
-  delt-hit demultiplex run --config_path <path/to/config.yaml>
-  ```
-- **`prepare`**: Prepares the `cutadapt` input files and executable script without running them.
-  ```bash
-  delt-hit demultiplex prepare --config_path <path/to/config.yaml>
-  ```
-- **`process`**: Computes counts from the output of a `cutadapt` run.
-  ```bash
-  delt-hit demultiplex process --config_path <path/to/config.yaml>
-  ```
-- **`report`**: Generates a text report summarizing demultiplexing statistics.
-  ```bash
-  delt-hit demultiplex report --config_path <path/to/config.yaml>
-  ```
-- **`qc`**: Generates quality control plots from the demultiplexing results.
-  ```bash
-  delt-hit demultiplex qc --config_path <path/to/config.yaml>
-  ```
+For details on each command's flags, run `delt-hit <module> --help`.
 
-### `analyse`
+## Running the Full Pipeline
 
-Commands for analyzing demultiplexed data, such as performing enrichment analysis.
+### Manual (step by step)
 
-- **`enrichment`**: Performs enrichment analysis on an analysis group defined in the configuration file.
-  ```bash
-  delt-hit analyse enrichment --config_path <path/to/config.yaml> --name <group_name> --method <METHOD>
-  ```
-    - Analysis groups must be defined under the `analyses` key in your `config.yaml`.
-    - `<group_name>` refers to a key under the `analyses` section.
-    - `<METHOD>` can be `counts` or `edgeR`.
+```bash
+# 1. Generate config from Excel
+delt-hit init --excel_path templates/library.xlsx
 
-### `dashboard`
+# 2. Demultiplex FASTQ and compute counts
+delt-hit demultiplex run     --config_path experiments/EXPNAME/config.yaml
+delt-hit demultiplex process --config_path experiments/EXPNAME/config.yaml
+delt-hit demultiplex report  --config_path experiments/EXPNAME/config.yaml
+delt-hit demultiplex qc      --config_path experiments/EXPNAME/config.yaml
 
-Launches an interactive dashboard for data visualization.
+# 3. Enumerate library and compute properties (independent of demultiplex)
+delt-hit library enumerate   --config_path experiments/EXPNAME/config.yaml
+delt-hit library properties  --config_path experiments/EXPNAME/config.yaml
+delt-hit library represent   --config_path experiments/EXPNAME/config.yaml --method=morgan
 
-- **`dashboard`**: Starts a web-based dashboard to interactively explore counts data for a given selection.
-  ```bash
-  delt-hit dashboard --config_path <path/to/config.yaml> --counts_path <path/to/counts.txt>
-  ```
+# 4. Generate enrichment R script, then execute it
+delt-hit analyse enrichment  --config_path analysis.yaml --name=protein_vs_no_protein --method=counts
+Rscript experiments/EXPNAME/counts/enrichment_counts.R
+
+# 5. Explore results interactively
+delt-hit dashboard \
+  --config_path experiments/EXPNAME/config.yaml \
+  --counts_path experiments/EXPNAME/selections/SELECTION_NAME/counts.txt
+```
+
+### Snakemake (recommended)
+
+Snakemake resolves step dependencies automatically and runs independent branches in parallel.
+
+```bash
+uv sync --extra workflow          # install snakemake into the project venv
+snakemake -n                      # dry-run: show what would execute
+snakemake --cores 4               # run full pipeline locally
+snakemake --dag | dot -Tpng > dag.png   # visualise the DAG
+
+# On a SLURM cluster:
+snakemake --profile configs/snakemake/slurm/
+```
+
+Edit `configs/snakemake/slurm/config.yaml` to set your cluster partition before submitting.
+
+### Docker
+
+```bash
+docker build -t delt-hit:dev .
+docker run --rm \
+  -v $(pwd)/experiments:/workspace/experiments \
+  -v $(pwd)/config.yaml:/workspace/config.yaml \
+  delt-hit:dev demultiplex run --config_path=config.yaml
+```
+
+## Development
+
+**Set up the environment:**
+```bash
+uv sync --extra dev     # installs pytest, ruff, mypy, pre-commit
+source .venv/bin/activate
+pre-commit install      # wire git hooks
+```
+
+**Run tests:**
+```bash
+pytest tests/ -v
+```
+
+**Lint:**
+```bash
+ruff check src/
+ruff format src/        # auto-format
+```
+
+**Type check:**
+```bash
+mypy src/delt_hit/
+```
+
+**Run a single pipeline step during development:**
+```bash
+uv run delt-hit demultiplex prepare --config_path=config.yaml --fast_dev_run=true
+```
+
+## Documentation
+
+- [Pipeline architecture](docs/references/analysis_pipeline_architecture.md)
+- [CLI reference](documentation/cli.md)
+- [Codebase overview](documentation/overview.md)
+
+## License
+
+MIT — see [LICENSE](LICENSE).
