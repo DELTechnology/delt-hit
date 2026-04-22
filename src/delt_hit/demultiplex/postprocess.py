@@ -1,8 +1,9 @@
 from collections import defaultdict
-import gzip
+import multiprocessing
 from pathlib import Path
 
 import pandas as pd
+from isal import igzip
 from tqdm import tqdm
 
 def extract_ids(line: str):
@@ -61,20 +62,62 @@ def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None,
             df.to_csv(output_file, index=False, sep='\t')
 
 
-def get_counts(*, input_path: Path, num_reads: int) -> dict:
-    """Count barcode occurrences from a gzipped read file.
+def _count_batch(lines: list[str]) -> dict[tuple, dict[tuple, int]]:
+    counts: dict[tuple, dict[tuple, int]] = {}
+    for line in lines:
+        ids = extract_ids(line)
+        sel = ids['selection_ids']
+        bc = ids['barcodes']
+        if sel not in counts:
+            counts[sel] = {}
+        counts[sel][bc] = counts[sel].get(bc, 0) + 1
+    return counts
+
+
+def _merge(counts: defaultdict, partial: dict) -> None:
+    for sel, barcodes in partial.items():
+        inner = counts[sel]
+        for bc, n in barcodes.items():
+            inner[bc] = inner.get(bc, 0) + n
+
+
+def get_counts(*, input_path: Path, num_reads: int,
+               num_workers: int | None = None,
+               batch_size: int = 50_000) -> dict:
+    """Count barcode occurrences from a bgzipped read file in parallel.
 
     Args:
-        input_path: Path to the gzipped reads with adapter info.
+        input_path: Path to the bgzipped reads with adapter info.
         num_reads: Expected number of reads for progress tracking.
+        num_workers: Number of worker processes (defaults to CPU count).
+        batch_size: Lines per worker batch.
 
     Returns:
         A nested dict of selection IDs to barcode counts.
     """
-    with gzip.open(input_path, 'rt') as f:
-        counts = defaultdict(lambda: defaultdict(int))
-        for line in tqdm(f, total=num_reads, ncols=100):
-            ids = extract_ids(line)
-            counts[ids['selection_ids']][ids['barcodes']] += 1
+    if num_workers is None:
+        num_workers = multiprocessing.cpu_count()
+
+    counts: defaultdict = defaultdict(dict)
+
+    def _batches(f):
+        batch = []
+        for line in f:
+            batch.append(line)
+            if len(batch) == batch_size:
+                yield batch
+                batch = []
+        if batch:
+            yield batch
+
+    with igzip.open(input_path, 'rt') as f, \
+            multiprocessing.Pool(num_workers) as pool:
+        for partial in tqdm(
+            pool.imap(_count_batch, _batches(f)),
+            total=-(-num_reads // batch_size),
+            ncols=100,
+        ):
+            _merge(counts, partial)
+
     return counts
 

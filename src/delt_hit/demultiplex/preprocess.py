@@ -112,7 +112,7 @@ def generate_input_files(
     cutadapt_input_files_dir.mkdir(parents=True, exist_ok=True)
     path_demultiplex_exec = cutadapt_input_files_dir / 'demultiplex.sh'
 
-    path_final_reads = cutadapt_output_files_dir / 'reads_with_adapters.gz'
+    path_final_reads = cutadapt_output_files_dir / 'reads_with_adapters.bgz'
     path_output_fastq = cutadapt_output_files_dir / 'out.fastq.gz'
 
     regions = get_regions(structure=structure, whitelists=whitelists)
@@ -178,13 +178,13 @@ def generate_input_files(
 
     if with_processing:
         with open(path_demultiplex_exec, 'a') as f:
-            f.write(f'\nzgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}" || exit\n')
+            f.write(f'\nzgrep @ "{path_output_fastq}" | bgzip -@ {num_cores} > "{path_final_reads}" || exit\n')
             f.write(f'delt-hit demultiplex process --config_path="{config_path}" || exit\n')
             f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
         os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
     else:
         with open(path_demultiplex_exec, 'a') as f:
-            f.write(f'\nzgrep @ "{path_output_fastq}" | gzip -c > "{path_final_reads}" || exit\n')
+            f.write(f'\nzgrep @ "{path_output_fastq}" | bgzip -@ {num_cores} > "{path_final_reads}" || exit\n')
         os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 
 

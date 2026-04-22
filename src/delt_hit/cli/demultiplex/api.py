@@ -32,7 +32,7 @@ class Demultiplex:
         name = config['experiment']['name']
 
         output_dir = save_dir / name / 'demultiplex' / 'cutadapt_output_files'
-        input_path = output_dir / 'reads_with_adapters.gz'
+        input_path = output_dir / 'reads_with_adapters.bgz'
 
         num_reads = json.load(open(
             sorted(output_dir.glob('*.cutadapt.json'))[-1]
