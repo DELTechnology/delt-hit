@@ -310,3 +310,8 @@ paper/experiment-1/representations
 *.json
 *.pdf
 *.npz
+*.tsv
+*.ndjson
+
+# experiments
+experiments/synthetic_2cycle/
