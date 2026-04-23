@@ -1,0 +1,21 @@
+selection_id: synthetic_3cycle_selection
+target_id: synthetic_target
+selection_condition: synthetic_smoke_test
+additional_info: Every 3-barcode compound combination appears with 1 read.
+data_ran: '2026-04-20T00:00:00'
+sequence_files:
+- /Users/adrianomartinelli/projects/delt-hit/other_tools/DELi/synthetic_3cycle/input/synthetic_3cycle.fastq
+libraries:
+- /Users/adrianomartinelli/projects/delt-hit/other_tools/DELi/synthetic_3cycle/data/libraries/synthetic_3cycle_library.json
+decode_settings:
+  library_error_tolerance: 0.0
+  min_library_overlap: 10
+  alignment_algorithm: semi
+  bb_calling_approach: bio
+  revcomp: false
+  max_read_length: 128
+  min_read_length: 42
+  read_type: single
+  disable_error_correction: true
+  umi_clustering: false
+  umi_min_distance: 2
