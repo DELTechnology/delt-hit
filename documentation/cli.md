@@ -73,7 +73,7 @@ delt-hit demultiplex process --config_path <path/to/config.yaml>
 
 **Outputs**
 - `<save_dir>/<experiment_name>/selections/<SELECTION_NAME>/counts.txt`
-  - `code_1`, `code_2`, … columns plus `count`
+  - `code_0`, `code_1`, … columns plus `count`
 
 ### `report`
 Builds a text summary of Cutadapt statistics.
