@@ -1,9 +1,9 @@
 from collections import defaultdict
-import gzip
 import multiprocessing
 from pathlib import Path
 
 import pandas as pd
+from isal import igzip
 from tqdm import tqdm
 
 
@@ -45,7 +45,6 @@ def _count_bytes_chunk(chunk: bytes) -> dict:
 
 def _iter_byte_chunks(input_path: Path, chunk_size_bytes: int):
     """Yield raw byte chunks from a gzip file, always ending at a newline."""
-    from isal import igzip
     with igzip.open(input_path, 'rb') as f:
         while True:
             chunk = f.read(chunk_size_bytes)
@@ -110,7 +109,7 @@ def get_counts(*, input_path: Path, num_reads: int, num_workers: int = 1,
         A nested dict of selection IDs to barcode counts.
     """
     if num_workers == 1:
-        with gzip.open(input_path, 'rt') as f:
+        with igzip.open(input_path, 'rt') as f:
             counts = defaultdict(lambda: defaultdict(int))
             for line in tqdm(f, total=num_reads, ncols=100):
                 ids = extract_ids(line)
