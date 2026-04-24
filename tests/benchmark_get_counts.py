@@ -8,7 +8,6 @@ Run with:
   uv run python tests/benchmark_get_counts.py --n-reads 100000
 """
 import argparse
-import gzip
 import multiprocessing
 import random
 import tempfile
@@ -28,7 +27,7 @@ SEED = 42
 
 def generate_synthetic_file(path: Path, n_reads: int = DEFAULT_N_READS) -> None:
     rng = random.Random(SEED)
-    with gzip.open(path, 'wb', compresslevel=1) as f:
+    with igzip.open(path, 'wb', compresslevel=1) as f:
         for i in range(n_reads):
             s0 = rng.randint(0, N_S - 1)
             s1 = rng.randint(0, N_S - 1)
@@ -42,16 +41,6 @@ def generate_synthetic_file(path: Path, n_reads: int = DEFAULT_N_READS) -> None:
 def normalise(counts: dict) -> dict:
     """Convert nested defaultdicts / dicts to plain nested dicts for comparison."""
     return {k: dict(v) for k, v in counts.items()}
-
-
-def bench_gzip_decompress_only(path: Path) -> tuple[float, int]:
-    """Measure stdlib gzip decompression throughput without parsing."""
-    t0 = time.perf_counter()
-    n_lines = 0
-    with gzip.open(path, "rt") as handle:
-        for _ in handle:
-            n_lines += 1
-    return time.perf_counter() - t0, n_lines
 
 
 def bench_isal_decompress_only(path: Path) -> tuple[float, int]:
@@ -77,7 +66,7 @@ def bench_parse_only(lines: Iterable[str]) -> tuple[float, int]:
 def decompress_to_plain_text(src_path: Path, dst_path: Path) -> int:
     """Materialize the compressed benchmark input as plain text once."""
     n_lines = 0
-    with gzip.open(src_path, "rt") as src, open(dst_path, "wt") as dst:
+    with igzip.open(src_path, "rt") as src, open(dst_path, "wt") as dst:
         for line in src:
             dst.write(line)
             n_lines += 1
@@ -101,10 +90,6 @@ def main():
         generate_synthetic_file(path, n_reads)
         size_mb = path.stat().st_size / 1e6
         print(f"  done in {time.perf_counter() - t0:.1f}s  ({size_mb:.0f} MB compressed)\n")
-
-        print("Decompression only (gzip) …")
-        t_gzip_decompress, n_gzip_lines = bench_gzip_decompress_only(path)
-        print(f"  {t_gzip_decompress:.2f}s  ({n_gzip_lines / t_gzip_decompress / 1e6:.2f} M lines/s)\n")
 
         print("Decompression only (isal) …")
         t_isal_decompress, n_isal_lines = bench_isal_decompress_only(path)
@@ -149,7 +134,6 @@ def main():
         print(f"  ✓ identical  ({total_reads:,} reads across {len(n_serial)} selections)")
 
         print("\nTiming summary")
-        print(f"  gzip decompress only: {t_gzip_decompress:.2f}s")
         print(f"  isal decompress only: {t_isal_decompress:.2f}s")
         print(f"  parse only:           {t_parse_only:.2f}s")
         print(f"  serial get_counts:    {t_serial:.2f}s")
