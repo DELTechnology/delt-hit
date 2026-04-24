@@ -32,7 +32,8 @@ dependencies = [
     "rich",
     "pyarrow",
     "scipy",
-    "dash==2.18.2"
+    "dash==2.18.2",
+    "isal",
 ]
 version = "0.0.1"
 classifiers = [
