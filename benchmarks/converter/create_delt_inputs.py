@@ -1,48 +1,46 @@
 #!/usr/bin/env python3
-"""Convert neutral synthetic FASTQ artifacts into a DELT-Hit config.yaml.
-
-This converter targets demultiplex/count benchmarking only. It emits the
-whitelist/config structure DELT-Hit needs, but does not add chemical
-enumeration metadata.
-"""
+"""Convert a neutral synthetic dataset into a runnable DELT-Hit benchmark sandbox."""
 
 from __future__ import annotations
 
 import argparse
 import csv
 import json
+import os
+import subprocess
 from pathlib import Path
 
-from delt_hit.utils import write_yaml
+import yaml
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DATASET_DIR = PROJECT_ROOT / "benchmarks" / "data" / "synthetic_2cycle_1m"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "benchmarks" / "tools" / "delt"
+BENCHMARKS_ROOT = PROJECT_ROOT / "benchmarks"
+DATA_ROOT = BENCHMARKS_ROOT / "data"
+TOOLS_ROOT = BENCHMARKS_ROOT / "tools"
+TOOL_ROOT = TOOLS_ROOT / "delt"
+DEFAULT_DATASET_NAME = "synthetic_2cycle_1m"
+DELT_HIT_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
 
 
-def read_manifest(dataset_dir: Path) -> dict:
-    return json.loads((dataset_dir / "manifest.json").read_text())
+def read_manifest(dataset_name: str) -> dict:
+    return json.loads((DATA_ROOT / dataset_name / "manifest.json").read_text())
 
 
-def read_building_blocks(dataset_dir: Path) -> list[dict[str, str]]:
-    with (dataset_dir / "building_blocks.tsv").open() as handle:
+def read_building_blocks(dataset_name: str) -> list[dict[str, str]]:
+    with (DATA_ROOT / dataset_name / "building_blocks.tsv").open() as handle:
         return list(csv.DictReader(handle, delimiter="\t"))
+
+
+def run_command(cmd: list[str | Path], *, env: dict[str, str] | None = None) -> None:
+    subprocess.run([str(item) for item in cmd], cwd=PROJECT_ROOT, env=env, check=True)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--dataset-dir",
-        type=Path,
-        default=DEFAULT_DATASET_DIR,
-        help="Directory containing manifest.json, building_blocks.tsv, and the FASTQ file.",
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=None,
-        help="Directory where DELT-Hit inputs are written. Defaults to benchmarks/tools/delt/<dataset-name>.",
+        "--dataset-name",
+        default=DEFAULT_DATASET_NAME,
+        help="Dataset directory name under benchmarks/data/.",
     )
     parser.add_argument(
         "--num-cores",
@@ -52,19 +50,18 @@ def parse_args() -> argparse.Namespace:
     )
     return parser.parse_args()
 
-def main(
-    *,
-    dataset_dir: Path = DEFAULT_DATASET_DIR,
-    output_dir: Path | None = None,
-    num_cores: int = 1,
-) -> None:
-    dataset_dir = dataset_dir.expanduser().resolve()
-    manifest = read_manifest(dataset_dir)
-    building_blocks = read_building_blocks(dataset_dir)
+
+def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1) -> None:
+    dataset_dir = (DATA_ROOT / dataset_name).resolve()
+    if not dataset_dir.exists():
+        raise FileNotFoundError(f"Dataset directory not found: {dataset_dir}")
+
+    manifest = read_manifest(dataset_name)
+    building_blocks = read_building_blocks(dataset_name)
     experiment_name = manifest["experiment_name"]
     num_cycles = manifest["num_cycles"]
 
-    output_dir = (output_dir or (DEFAULT_OUTPUT_DIR / dataset_dir.name)).expanduser().resolve()
+    output_dir = (TOOL_ROOT / dataset_name).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     fastq_path = Path(manifest["files"]["fastq"]).resolve()
 
@@ -128,16 +125,20 @@ def main(
     }
 
     config_path = output_dir / "config.yaml"
-    write_yaml(config, config_path)
+    with config_path.open("w") as handle:
+        yaml.safe_dump(config, handle, sort_keys=False)
+
+    env = os.environ.copy()
+    env["PATH"] = f"{PROJECT_ROOT / '.venv' / 'bin'}:{env['PATH']}"
+    run_command(
+        [DELT_HIT_PYTHON, "-m", "delt_hit.cli.main", "demultiplex", "prepare", "--config_path", config_path],
+        env=env,
+    )
 
     print(f"Wrote DELT-Hit config to {config_path}")
-    print(f"Referenced FASTQ at {fastq_path}")
+    print(f"Prepared demultiplex inputs under {output_dir / experiment_name / 'demultiplex'}")
 
 
 if __name__ == "__main__":
     cli_args = parse_args()
-    main(
-        dataset_dir=cli_args.dataset_dir,
-        output_dir=cli_args.output_dir,
-        num_cores=cli_args.num_cores,
-    )
+    main(dataset_name=cli_args.dataset_name, num_cores=cli_args.num_cores)

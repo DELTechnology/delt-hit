@@ -1,0 +1,22 @@
+selection_id: synthetic_3cycle_50m_selection
+target_id: synthetic_target
+selection_condition: synthetic_benchmark
+additional_info: Synthetic neutral dataset with 50000000 reads across 1000000 encoded
+  compounds.
+data_ran: '2026-04-24T00:00:00'
+sequence_files:
+- /Users/adrianomartinelli/projects/delt-hit/benchmarks/data/synthetic_3cycle_50m/synthetic_3cycle_50m.fastq.gz
+libraries:
+- /Users/adrianomartinelli/projects/delt-hit/benchmarks/tools/deli/synthetic_3cycle_50m/data/libraries/synthetic_3cycle_50m_library.json
+decode_settings:
+  library_error_tolerance: 0.0
+  min_library_overlap: 10
+  alignment_algorithm: semi
+  bb_calling_approach: bio
+  revcomp: false
+  max_read_length: 128
+  min_read_length: 42
+  read_type: single
+  disable_error_correction: true
+  umi_clustering: false
+  umi_min_distance: 2
