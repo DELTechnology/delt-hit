@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gzip
 import json
 from itertools import product
 from pathlib import Path
@@ -21,6 +22,7 @@ DEFAULT_EXPERIMENT_NAME = "synthetic"
 DEFAULT_NUM_CYCLES = 2
 DEFAULT_BUILDING_BLOCKS_PER_CYCLE = 10
 DEFAULT_NUM_READS_PER_COMPOUND = 1
+DEFAULT_COMPRESSED = True
 
 LIBRARY_TAG = "ACGTACGTAC"
 CLOSING_TAG = "TTGGAACC"
@@ -125,10 +127,13 @@ def write_fastq(
     *,
     num_reads_per_compound: int,
     experiment_name: str,
+    compressed: bool,
 ) -> int:
     path.parent.mkdir(parents=True, exist_ok=True)
     read_count = 0
-    with path.open("w") as handle:
+    open_func = gzip.open if compressed else open
+    mode = "wt"
+    with open_func(path, mode) as handle:
         for compound_idx, compound in enumerate(product(*building_blocks_by_cycle), start=1):
             tags = "".join(str(block["tag"]) for block in compound)
             ids = "_".join(str(block["building_block_id"]) for block in compound)
@@ -182,6 +187,7 @@ def write_manifest(
             "expected_counts": str(expected_counts_path.resolve()),
             "building_blocks": str(building_blocks_path.resolve()),
         },
+        "compressed_fastq": fastq_path.suffix == ".gz",
     }
     path.write_text(json.dumps(manifest, indent=2) + "\n")
 
@@ -217,6 +223,12 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_EXPERIMENT_NAME,
         help="Name used for the experiment folder and FASTQ read identifiers.",
     )
+    parser.add_argument(
+        "--compressed",
+        default=str(DEFAULT_COMPRESSED).lower(),
+        choices=("true", "false"),
+        help="Whether to write the FASTQ as gzip compressed output.",
+    )
     args = parser.parse_args()
     if args.num_cycles < 1:
         parser.error("num_cycles must be at least 1")
@@ -224,6 +236,7 @@ def parse_args() -> argparse.Namespace:
         parser.error("building_blocks_per_cycle must be at least 1")
     if args.num_reads_per_compound < 1:
         parser.error("num_reads_per_compound must be at least 1")
+    args.compressed = args.compressed == "true"
     return args
 
 
@@ -234,6 +247,7 @@ def main(
     num_reads_per_compound: int = DEFAULT_NUM_READS_PER_COMPOUND,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     experiment_name: str = DEFAULT_EXPERIMENT_NAME,
+    compressed: bool = DEFAULT_COMPRESSED,
 ) -> None:
     if num_cycles < 1:
         raise ValueError("num_cycles must be at least 1")
@@ -245,7 +259,8 @@ def main(
     experiment_dir = output_dir / experiment_name
     experiment_dir.mkdir(parents=True, exist_ok=True)
 
-    fastq_path = experiment_dir / f"{experiment_name}.fastq"
+    fastq_suffix = ".fastq.gz" if compressed else ".fastq"
+    fastq_path = experiment_dir / f"{experiment_name}{fastq_suffix}"
     expected_counts_path = experiment_dir / "expected_counts.tsv"
     building_blocks_path = experiment_dir / "building_blocks.tsv"
     manifest_path = experiment_dir / "manifest.json"
@@ -265,6 +280,7 @@ def main(
         building_blocks_by_cycle,
         num_reads_per_compound=num_reads_per_compound,
         experiment_name=experiment_name,
+        compressed=compressed,
     )
     write_manifest(
         manifest_path,
@@ -292,4 +308,5 @@ if __name__ == "__main__":
         num_reads_per_compound=cli_args.num_reads_per_compound,
         output_dir=cli_args.output_dir,
         experiment_name=cli_args.experiment_name,
+        compressed=cli_args.compressed,
     )
