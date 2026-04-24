@@ -19,7 +19,7 @@ def extract_ids(line: str):
     _, *adapters = line.strip().split('?')
     selection_ids = [i.split('.')[-1] for i in filter(lambda x: 'S' in x, adapters)]
     selection_ids = tuple(map(int, selection_ids))
-    barcodes = tuple(int(i.split('.')[-1]) + 1 for i in filter(lambda x: 'B' in x, adapters))
+    barcodes = tuple(int(i.split('.')[-1]) for i in filter(lambda x: 'B' in x, adapters))
     return {'selection_ids': selection_ids, 'barcodes': barcodes}
 
 
@@ -34,7 +34,7 @@ def _count_bytes_chunk(chunk: bytes) -> dict:
             continue
         _, *adapters = line.split(b'?')
         selection_ids = tuple(int(a.split(b'.')[-1]) for a in adapters if b'S' in a)
-        barcodes = tuple(int(a.split(b'.')[-1]) + 1 for a in adapters if b'B' in a)
+        barcodes = tuple(int(a.split(b'.')[-1]) for a in adapters if b'B' in a)
         if selection_ids not in counts:
             counts[selection_ids] = {barcodes: 1}
         else:
@@ -69,7 +69,7 @@ def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None,
     """
 
     num_codes = len(list(list(counts.values())[0].keys())[0])
-    codon_cols = [f'code_{i}' for i in range(1, num_codes + 1)]
+    codon_cols = [f'code_{i}' for i in range(num_codes)]
     columns = codon_cols + ['count']
 
     sort_by_cols = 'count' if sort_by_counts else codon_cols
