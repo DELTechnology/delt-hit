@@ -61,8 +61,8 @@ def load_counts(counts_path):
         return pd.read_csv(counts_path, sep='\t')
     except FileNotFoundError:
         return pd.DataFrame({
-            'code_1': [1, 1, 1, 6, 7, 8, 9, 10, 11, 12, 14, 16, 17, 20],
-            'code_2': [1, 3, 4, 6, 7, 8, 9, 10, 11, 12, 14, 16, 17, 20],
+            'code_0': [0, 0, 0, 5, 6, 7, 8, 9, 10, 11, 13, 15, 16, 19],
+            'code_1': [0, 2, 3, 5, 6, 7, 8, 9, 10, 11, 13, 15, 16, 19],
             'count': [6, 3, 14, 15, 6, 6, 4, 15, 3, 2, 4, 8, 6, 3]
         })
 
@@ -100,10 +100,10 @@ def parse_code_ranges(range_str: str, code_cols: list[str]) -> dict:
     """Parse a semicolon-delimited set of code filters.
 
     Example input ``1-3;2-5,8-10;3-5`` yields:
-    ``{'code_1': {1,2,3}, 'code_2': {2,3,4,5,8,9,10}, 'code_3': {3,4,5}}``.
+    ``{'code_0': {0,1,2}, 'code_1': {1,2,3,4,7,8,9}, 'code_2': {2,3,4}}``.
 
     Args:
-        range_str: Filter string in ``code_1;code_2;...`` order.
+        range_str: Filter string in ``code_0;code_1;...`` order.
         code_cols: Code column names to map segments onto.
 
     Returns:
@@ -328,7 +328,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                             "Code Ranges (e.g. '1-3;2-5,8-10;3-5')",
                             html.Span(
                                 " ⓘ",
-                                title="Separate indices with commas (1,2,7), use dashes for ranges (3-10), combine them (1-3,8,10-12), and use semicolons between code columns. Example: 1-3;2-5,8-10;3-5",
+                                title="Separate indices with commas (0,1,6), use dashes for ranges (2-9), combine them (0-2,7,9-11), and use semicolons between code columns. Example: 0-2;1-4,7-9;2-4",
                                 style={
                                     "cursor": "help",
                                     "marginLeft": "6px",

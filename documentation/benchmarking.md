@@ -2,6 +2,34 @@
 
 This branch now includes a reproducible synthetic benchmark workflow for DELi and DELT-Hit.
 
+The canonical configurable FASTQ generator now lives in
+[`scripts/generate_synthetic_fastq.py`](/Users/adrianomartinelli/projects/delt-hit/scripts/generate_synthetic_fastq.py).
+It writes a FASTQ plus machine-readable truth artifacts (`manifest.json`,
+`expected_counts.tsv`, and `building_blocks.tsv`) that downstream DELi and
+DELT-Hit outputs can be matched against.
+
+Example:
+
+```bash
+./.venv/bin/python scripts/generate_synthetic_fastq.py \
+  --num-cycles 3 \
+  --building-blocks-per-cycle 4 \
+  --num-reads-per-compound 2 \
+  --output-dir target/synthetic \
+  --experiment-name synthetic_3cycle
+```
+
+For this generator, total reads are:
+
+```text
+building_blocks_per_cycle ** num_cycles * num_reads_per_compound
+```
+
+The truth-table comparison contract is:
+
+- DELT-Hit: compare `code_1..code_n` plus `count`
+- DELi: normalize `bb_ids` into `code_1..code_n`, then compare against `expected_counts.tsv`
+
 The benchmark runner does three things:
 
 1. Regenerates synthetic DELi fixtures for 2-, 3-, and 4-cycle decoding.
