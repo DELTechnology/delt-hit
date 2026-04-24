@@ -15,11 +15,11 @@ args <- list(
 get_corr_plot <- function(data, condition) {
   pdat <- data %>%
     dplyr::filter(group == condition) %>%
-    dplyr::select(code_1, code_2, name, count) %>%
+    dplyr::select(code_0, code_1, name, count) %>%
     tidyr::pivot_wider(names_from = name, values_from = count, values_fill = 0)
 
   g <- pdat %>%
-    dplyr::select(-code_1, -code_2) %>%
+    dplyr::select(-code_0, -code_1) %>%
     GGally::ggpairs(
       upper = list(continuous = GGally::wrap("smooth", alpha = 0.3, size = 0.2)),
       lower = list(continuous = GGally::wrap("cor", size = 3))
@@ -46,7 +46,7 @@ if (isTRUE(args$cpm)) {
 
 # ---- Average across replicates ----
 data_avg <- data |>
-  dplyr::group_by(code_1, code_2, group) |>
+  dplyr::group_by(code_0, code_1, group) |>
   dplyr::summarise(mean = mean(count), .groups = "drop")
 
 # ---- Pivot and compute contrasts ----
@@ -74,7 +74,7 @@ stats |>
 present_groups <- intersect(c("protein","no_protein","naive"), colnames(stats))
 for (g in present_groups) {
   stats |>
-    dplyr::select(code_1, code_2, dplyr::all_of(g)) |>
+    dplyr::select(code_0, code_1, dplyr::all_of(g)) |>
     dplyr::rename(count = !!rlang::sym(g)) |>
     readr::write_csv(file.path(args$save_dir, paste0(g, ".csv")))
 }

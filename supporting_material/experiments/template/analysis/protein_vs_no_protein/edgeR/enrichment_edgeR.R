@@ -17,11 +17,11 @@ args <- list(
 get_corr_plot <- function(data, condition) {
   pdat <- data %>%
     dplyr::filter(group == condition) %>%
-    dplyr::select(code_1, code_2, name, count) %>%
+    dplyr::select(code_0, code_1, name, count) %>%
     tidyr::pivot_wider(names_from = name, values_from = count, values_fill = 0)
 
   g <- pdat %>%
-    dplyr::select(-code_1, -code_2) %>%
+    dplyr::select(-code_0, -code_1) %>%
     GGally::ggpairs(
       upper = list(continuous = GGally::wrap("smooth", alpha = 0.3, size = 0.2)),
       lower = list(continuous = GGally::wrap("cor", size = 3))
@@ -38,17 +38,17 @@ get_hits.edgeR <- function(data, log = FALSE) {
     pivot_wider(names_from = name, values_from = count, values_fill = 0)
 
   data.row <- data.wide %>%
-    select(code_1, code_2)
+    select(code_0, code_1)
 
   data.col <- data.frame(
-    name = data.wide %>% select(-code_1, -code_2, -id) %>% colnames(),
+    name = data.wide %>% select(-code_0, -code_1, -id) %>% colnames(),
     stringsAsFactors = FALSE
   )
   groups <- factor(sapply(data.col$name, get_group_from_name))
   groups <- relevel(groups, "no_protein")
   data.col$group <- groups
 
-  data.counts <- as.matrix(data.wide %>% select(-code_1, -code_2, -id))
+  data.counts <- as.matrix(data.wide %>% select(-code_0, -code_1, -id))
   rownames(data.counts) <- seq.int(nrow(data.wide))
 
   y <- DGEList(
@@ -136,14 +136,14 @@ for (i in seq_along(result.edgeR$hits)) {
 }
 
 # derive selections from result table columns and export per-selection counts
-selections <- setdiff(colnames(result.edgeR$counts), c("code_1", "code_2"))
+selections <- setdiff(colnames(result.edgeR$counts), c("code_0", "code_1"))
 
 # save normalized counts (CPMs; log scale depends on args$log)
 for (selection in selections) {
   fname <- paste0(selection, ".csv")
   save.path <- file.path(args$save_dir, fname)
   result.edgeR$counts %>%
-    select(code_1, code_2, all_of(selection)) %>%
+    select(code_0, code_1, all_of(selection)) %>%
     mutate(count = .data[[selection]]) %>%
     select(-all_of(selection)) %>%
     write_csv(file = save.path)
@@ -151,7 +151,7 @@ for (selection in selections) {
 
 counts.norm <- result.edgeR$counts %>%
   pivot_longer(
-    cols = -c(code_1, code_2),
+    cols = -c(code_0, code_1),
     names_to = "name",
     values_to = "count"
   )
