@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Convert neutral synthetic FASTQ artifacts into DELi decode inputs.
-
-This converter targets decode/count benchmarking only. It does not add
-chemical enumeration metadata such as SMILES or reaction definitions.
-"""
+"""Convert a neutral synthetic dataset into a runnable DELi benchmark sandbox."""
 
 from __future__ import annotations
 
@@ -16,16 +12,19 @@ import yaml
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_DATASET_DIR = PROJECT_ROOT / "benchmarks" / "data" / "synthetic_2cycle_1m"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "benchmarks" / "tools" / "deli"
+BENCHMARKS_ROOT = PROJECT_ROOT / "benchmarks"
+DATA_ROOT = BENCHMARKS_ROOT / "data"
+TOOLS_ROOT = BENCHMARKS_ROOT / "tools"
+TOOL_ROOT = TOOLS_ROOT / "deli"
+DEFAULT_DATASET_NAME = "synthetic_2cycle_1m"
 
 
-def read_manifest(dataset_dir: Path) -> dict:
-    return json.loads((dataset_dir / "manifest.json").read_text())
+def read_manifest(dataset_name: str) -> dict:
+    return json.loads((DATA_ROOT / dataset_name / "manifest.json").read_text())
 
 
-def read_building_blocks(dataset_dir: Path) -> list[dict[str, str]]:
-    with (dataset_dir / "building_blocks.tsv").open() as handle:
+def read_building_blocks(dataset_name: str) -> list[dict[str, str]]:
+    with (DATA_ROOT / dataset_name / "building_blocks.tsv").open() as handle:
         return list(csv.DictReader(handle, delimiter="\t"))
 
 
@@ -68,28 +67,24 @@ def write_deli_config(path: Path, data_dir: Path) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--dataset-dir",
-        type=Path,
-        default=DEFAULT_DATASET_DIR,
-        help="Directory containing manifest.json, building_blocks.tsv, and the FASTQ file.",
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=None,
-        help="Directory where DELi inputs are written. Defaults to benchmarks/tools/deli/<dataset-name>.",
+        "--dataset-name",
+        default=DEFAULT_DATASET_NAME,
+        help="Dataset directory name under benchmarks/data/.",
     )
     return parser.parse_args()
 
 
-def main(*, dataset_dir: Path = DEFAULT_DATASET_DIR, output_dir: Path | None = None) -> None:
-    dataset_dir = dataset_dir.expanduser().resolve()
-    manifest = read_manifest(dataset_dir)
-    building_blocks = read_building_blocks(dataset_dir)
+def main(*, dataset_name: str = DEFAULT_DATASET_NAME) -> None:
+    dataset_dir = (DATA_ROOT / dataset_name).resolve()
+    if not dataset_dir.exists():
+        raise FileNotFoundError(f"Dataset directory not found: {dataset_dir}")
+
+    manifest = read_manifest(dataset_name)
+    building_blocks = read_building_blocks(dataset_name)
     experiment_name = manifest["experiment_name"]
     num_cycles = manifest["num_cycles"]
 
-    output_dir = (output_dir or (DEFAULT_OUTPUT_DIR / dataset_dir.name)).expanduser().resolve()
+    output_dir = (TOOL_ROOT / dataset_name).resolve()
     data_dir = output_dir / "data"
     bb_dir = data_dir / "building_blocks"
     lib_dir = data_dir / "libraries"
@@ -190,10 +185,9 @@ def main(*, dataset_dir: Path = DEFAULT_DATASET_DIR, output_dir: Path | None = N
     print(f"Wrote DELi selection file to {selection_yaml}")
     print(f"Wrote DELi decode settings to {decode_settings_path}")
     print(f"Wrote DELi config to {deli_config}")
-    print(f"Wrote DELi building blocks under {bb_dir}")
     print(f"Wrote DELi library JSON to {library_json}")
 
 
 if __name__ == "__main__":
     cli_args = parse_args()
-    main(dataset_dir=cli_args.dataset_dir, output_dir=cli_args.output_dir)
+    main(dataset_name=cli_args.dataset_name)
