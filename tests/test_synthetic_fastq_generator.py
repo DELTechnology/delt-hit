@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import gzip
 import importlib.util
 import json
 from pathlib import Path
@@ -17,7 +18,8 @@ def load_generator_module():
 
 
 def count_fastq_reads(path: Path) -> int:
-    with path.open() as handle:
+    open_func = gzip.open if path.suffix == ".gz" else open
+    with open_func(path, "rt") as handle:
         return sum(1 for _ in handle) // 4
 
 
@@ -43,7 +45,8 @@ def test_small_smoke_case(tmp_path):
 
     assert manifest["expected_compounds"] == 9
     assert manifest["expected_reads"] == 18
-    assert count_fastq_reads(experiment_dir / "smoke.fastq") == 18
+    assert manifest["compressed_fastq"] is True
+    assert count_fastq_reads(experiment_dir / "smoke.fastq.gz") == 18
     assert len(expected_counts) == 9
     assert {int(row["count"]) for row in expected_counts} == {2}
     assert {int(row["code_1"]) for row in expected_counts} == {1, 2, 3}
@@ -70,7 +73,8 @@ def test_higher_cycle_schema_and_building_blocks(tmp_path):
     assert manifest["building_blocks_per_cycle"] == 2
     assert manifest["expected_compounds"] == 16
     assert manifest["expected_reads"] == 16
-    assert count_fastq_reads(experiment_dir / "shape.fastq") == 16
+    assert manifest["compressed_fastq"] is True
+    assert count_fastq_reads(experiment_dir / "shape.fastq.gz") == 16
     assert len(expected_counts) == 16
     assert len(building_blocks) == 8
     assert set(expected_counts[0]) == {
