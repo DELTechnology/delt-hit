@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import gzip
 import shutil
 from pathlib import Path
@@ -11,18 +12,15 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPERIMENT_DIR = ROOT / "experiments"
-LONG_CSV = EXPERIMENT_DIR / "synthetic_2cycle.csv"
-WORKBOOK = EXPERIMENT_DIR / "synthetic_2cycle.xlsx"
-FASTQ_IN = EXPERIMENT_DIR / "synthetic_2cycle.fastq"
-FASTQ_GZ = EXPERIMENT_DIR / "synthetic_2cycle.fastq.gz"
-
+DEFAULT_OUTPUT_DIR = ROOT / "experiments"
+EXPERIMENT_NAME = "synthetic_2cycle"
 LIBRARY_TAG = "ACGTACGTAC"
 UMI_PLUS_CLOSING = "NNNNNNNNTTGGAACC"
 BB1_COUNT = 100
 BB2_COUNT = 10
 TAG_LENGTH = 8
 QUALITY_CHAR = "I"
+DEFAULT_NUM_READS_PER_COMPOUND = 1
 
 AMIDE_SMIRKS = (
     "[CX3:1](=[O:2])[OX2;H1]."
@@ -64,16 +62,17 @@ def alkyl_amine(index: int) -> str:
     return motifs[index % len(motifs)]
 
 
-def build_sheets() -> dict[str, pd.DataFrame]:
+def build_sheets(*, output_dir: Path) -> dict[str, pd.DataFrame]:
     bb1_tags = make_tags(BB1_COUNT, offset=0)
     bb2_tags = make_tags(BB2_COUNT, offset=10_000)
+    fastq_gz = output_dir / f"{EXPERIMENT_NAME}.fastq.gz"
 
     sheets: dict[str, pd.DataFrame] = {
         "experiment": pd.DataFrame(
             [
-                ("name", "synthetic_2cycle"),
-                ("fastq_path", str(FASTQ_GZ)),
-                ("save_dir", str(EXPERIMENT_DIR)),
+                ("name", EXPERIMENT_NAME),
+                ("fastq_path", str(fastq_gz)),
+                ("save_dir", str(output_dir)),
                 ("num_cores", 1),
             ],
             columns=["variable", "value"],
@@ -138,7 +137,7 @@ def build_sheets() -> dict[str, pd.DataFrame]:
     return sheets
 
 
-def write_long_csv(sheets: dict[str, pd.DataFrame]) -> None:
+def write_long_csv(sheets: dict[str, pd.DataFrame], *, path: Path) -> None:
     rows = []
     for sheet_name, frame in sheets.items():
         for row_index, row in frame.reset_index(drop=True).iterrows():
@@ -152,48 +151,88 @@ def write_long_csv(sheets: dict[str, pd.DataFrame]) -> None:
                             "value": value,
                         }
                     )
-    pd.DataFrame(rows).to_csv(LONG_CSV, index=False)
+    pd.DataFrame(rows).to_csv(path, index=False)
 
 
-def write_workbook(sheets: dict[str, pd.DataFrame]) -> None:
-    with pd.ExcelWriter(WORKBOOK, engine="openpyxl") as writer:
+def write_workbook(sheets: dict[str, pd.DataFrame], *, path: Path) -> None:
+    with pd.ExcelWriter(path, engine="openpyxl") as writer:
         for sheet_name, frame in sheets.items():
             frame.to_excel(writer, sheet_name=sheet_name, index=False)
 
 
-def write_gzipped_fastq() -> None:
+def write_gzipped_fastq(
+    *,
+    fastq_path: Path,
+    fastq_gz_path: Path,
+    num_reads_per_compound: int,
+) -> None:
     bb1_tags = make_tags(BB1_COUNT, offset=0)
     bb2_tags = make_tags(BB2_COUNT, offset=10_000)
-    with FASTQ_IN.open("w") as handle:
+    with fastq_path.open("w") as handle:
         read_idx = 1
         for bb1_idx, bb1_tag in enumerate(bb1_tags, start=1):
             for bb2_idx, bb2_tag in enumerate(bb2_tags, start=1):
-                umi = int_to_dna(20_000 + read_idx, TAG_LENGTH)
-                sequence = f"{LIBRARY_TAG}{bb1_tag}{bb2_tag}{umi}TTGGAACC"
-                quality = QUALITY_CHAR * len(sequence)
-                handle.write(
-                    f"@synthetic_combo_{read_idx:04d}_BB1_{bb1_idx:03d}_BB2_{bb2_idx:03d}\n"
-                    f"{sequence}\n"
-                    "+\n"
-                    f"{quality}\n"
-                )
-                read_idx += 1
+                for replicate_idx in range(1, num_reads_per_compound + 1):
+                    umi = int_to_dna(20_000 + read_idx, TAG_LENGTH)
+                    sequence = f"{LIBRARY_TAG}{bb1_tag}{bb2_tag}{umi}TTGGAACC"
+                    quality = QUALITY_CHAR * len(sequence)
+                    handle.write(
+                        f"@synthetic_combo_{read_idx:04d}_read_{replicate_idx:03d}_"
+                        f"BB1_{bb1_idx:03d}_BB2_{bb2_idx:03d}\n"
+                        f"{sequence}\n"
+                        "+\n"
+                        f"{quality}\n"
+                    )
+                    read_idx += 1
 
-    with FASTQ_IN.open("rb") as src, gzip.open(FASTQ_GZ, "wb") as dst:
+    with fastq_path.open("rb") as src, gzip.open(fastq_gz_path, "wb") as dst:
         shutil.copyfileobj(src, dst)
 
 
-def main() -> None:
-    EXPERIMENT_DIR.mkdir(parents=True, exist_ok=True)
-    sheets = build_sheets()
-    write_long_csv(sheets)
-    write_workbook(sheets)
-    write_gzipped_fastq()
-    print(f"Wrote long-form CSV source to {LONG_CSV}")
-    print(f"Wrote DELT-Hit workbook to {WORKBOOK}")
-    print(f"Wrote FASTQ to {FASTQ_IN}")
-    print(f"Wrote gzipped FASTQ copy to {FASTQ_GZ}")
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DEFAULT_OUTPUT_DIR,
+        help="Directory where the workbook, FASTQ, and long-form CSV are written.",
+    )
+    parser.add_argument(
+        "--num-reads-per-compound",
+        type=int,
+        default=DEFAULT_NUM_READS_PER_COMPOUND,
+        help="FASTQ reads to emit for each BB1/BB2 combination.",
+    )
+    args = parser.parse_args()
+    if args.num_reads_per_compound < 1:
+        parser.error("num_reads_per_compound must be at least 1")
+    return args
+
+
+def main(*, output_dir: Path = DEFAULT_OUTPUT_DIR, num_reads_per_compound: int = DEFAULT_NUM_READS_PER_COMPOUND) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    long_csv = output_dir / f"{EXPERIMENT_NAME}.csv"
+    workbook = output_dir / f"{EXPERIMENT_NAME}.xlsx"
+    fastq_path = output_dir / f"{EXPERIMENT_NAME}.fastq"
+    fastq_gz_path = output_dir / f"{EXPERIMENT_NAME}.fastq.gz"
+
+    sheets = build_sheets(output_dir=output_dir)
+    write_long_csv(sheets, path=long_csv)
+    write_workbook(sheets, path=workbook)
+    write_gzipped_fastq(
+        fastq_path=fastq_path,
+        fastq_gz_path=fastq_gz_path,
+        num_reads_per_compound=num_reads_per_compound,
+    )
+    print(f"Wrote long-form CSV source to {long_csv}")
+    print(f"Wrote DELT-Hit workbook to {workbook}")
+    print(f"Wrote FASTQ to {fastq_path}")
+    print(f"Wrote gzipped FASTQ copy to {fastq_gz_path}")
 
 
 if __name__ == "__main__":
-    main()
+    cli_args = parse_args()
+    main(
+        output_dir=cli_args.output_dir,
+        num_reads_per_compound=cli_args.num_reads_per_compound,
+    )
