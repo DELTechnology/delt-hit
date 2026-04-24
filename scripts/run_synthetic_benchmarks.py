@@ -329,26 +329,48 @@ def normalized_delt_hit_counts(path: Path) -> pd.DataFrame:
     )
 
 
-def compare_two_cycle_outputs(*, deli_counts_path: Path, delt_hit_counts_path: Path) -> dict[str, object]:
-    deli_df = normalized_deli_counts(deli_counts_path)
-    delt_hit_df = normalized_delt_hit_counts(delt_hit_counts_path)
-    equal = deli_df.equals(delt_hit_df)
+def normalized_expected_counts(path: Path) -> pd.DataFrame:
+    return (
+        pd.read_csv(path, sep="\t")[["code_1", "code_2", "count"]]
+        .astype(int)
+        .sort_values(["code_1", "code_2"])
+        .reset_index(drop=True)
+    )
+
+
+def compare_normalized_counts(
+    *,
+    left_df: pd.DataFrame,
+    right_df: pd.DataFrame,
+    left_name: str,
+    right_name: str,
+) -> dict[str, object]:
+    equal = left_df.equals(right_df)
     result = {
         "matched": bool(equal),
-        "row_count_deli": int(len(deli_df)),
-        "row_count_delt_hit": int(len(delt_hit_df)),
+        f"row_count_{left_name}": int(len(left_df)),
+        f"row_count_{right_name}": int(len(right_df)),
     }
     if not equal:
-        merged = deli_df.merge(
-            delt_hit_df,
+        merged = left_df.merge(
+            right_df,
             on=["code_1", "code_2"],
             how="outer",
-            suffixes=("_deli", "_delt_hit"),
+            suffixes=(f"_{left_name}", f"_{right_name}"),
         ).fillna(0)
-        mismatches = merged[merged["count_deli"] != merged["count_delt_hit"]]
+        mismatches = merged[merged[f"count_{left_name}"] != merged[f"count_{right_name}"]]
         result["mismatch_examples"] = mismatches.head(10).to_dict("records")
         result["mismatch_count"] = int(len(mismatches))
     return result
+
+
+def compare_two_cycle_outputs(*, deli_counts_path: Path, delt_hit_counts_path: Path) -> dict[str, object]:
+    return compare_normalized_counts(
+        left_df=normalized_deli_counts(deli_counts_path),
+        right_df=normalized_delt_hit_counts(delt_hit_counts_path),
+        left_name="deli",
+        right_name="delt_hit",
+    )
 
 
 def main() -> int:

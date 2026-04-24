@@ -1,7 +1,9 @@
 import json
+import multiprocessing
 import subprocess
 from pathlib import Path
 
+import pandas as pd
 from delt_hit.demultiplex.postprocess import get_counts, save_counts
 from delt_hit.demultiplex.preprocess import generate_input_files
 from delt_hit.utils import read_yaml
@@ -38,7 +40,13 @@ class Demultiplex:
             sorted(output_dir.glob('*.cutadapt.json'))[-1]
         ))['read_counts']['output']
 
-        counts = get_counts(input_path=input_path, num_reads=num_reads)
+        raw_cores = config['experiment'].get('num_cores')
+        num_workers = (
+            multiprocessing.cpu_count()
+            if raw_cores is None or pd.isna(raw_cores)
+            else int(raw_cores)
+        )
+        counts = get_counts(input_path=input_path, num_reads=num_reads, num_workers=num_workers)
 
         ids_to_name = {tuple(item['ids']): k for k, item in config['selections'].items()}
         output_dir = save_dir / name / 'selections'
