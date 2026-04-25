@@ -74,7 +74,7 @@ Generate all 12 datasets:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -112,7 +112,7 @@ Submit one `4h` Slurm job per dataset for generation with `64` GB and `12` CPUs:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -165,7 +165,7 @@ Prepare DELi inputs for all 12 datasets:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -183,7 +183,7 @@ Submit one `4h` Slurm job per dataset for DELi preparation:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -217,7 +217,7 @@ Prepare DELT-Hit inputs for all 12 datasets:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -236,7 +236,7 @@ Submit one `4h` Slurm job per dataset for DELT-Hit preparation:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -285,7 +285,7 @@ Run DELi across all 12 datasets:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -304,7 +304,7 @@ Submit one `18h` Slurm job per dataset for DELi benchmarking:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -333,7 +333,7 @@ Run DELT-Hit across all 12 datasets:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -352,7 +352,7 @@ Submit one `18h` Slurm job per dataset for DELT-Hit benchmarking:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -381,7 +381,7 @@ Run both tools across all 12 datasets:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -400,7 +400,7 @@ Submit one `18h` Slurm job per dataset for combined benchmarking:
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -438,7 +438,7 @@ If you want to run the prepared inputs manually instead of using `run_split_timi
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/adrianomartinelli/projects/delt-hit"
+ROOT="/users/amarti51/projects/delt-hit"
 DATASET="synthetic_4cycle_100m"
 
 DELI_DIR="$ROOT/benchmarks/tools/deli/$DATASET"
