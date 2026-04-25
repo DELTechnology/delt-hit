@@ -132,7 +132,7 @@ for cycles in 2 3 4; do
       4:1000m) reads_per_compound=100000 ;;
     esac
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="gen_${dataset}" --wrap "
+    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="gen_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 ./.venv/bin/python scripts/generate_synthetic_fastq.py \
   --num-cycles $cycles \
@@ -189,7 +189,7 @@ cd "$ROOT"
 for cycles in 2 3 4; do
   for depth in 1m 10m 100m 1000m; do
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="prep_deli_${dataset}" --wrap "
+    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="prep_deli_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 ./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
   --dataset-name $dataset"
@@ -242,7 +242,7 @@ cd "$ROOT"
 for cycles in 2 3 4; do
   for depth in 1m 10m 100m 1000m; do
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="prep_delt_${dataset}" --wrap "
+    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="prep_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 ./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
   --dataset-name $dataset \
@@ -310,7 +310,7 @@ cd "$ROOT"
 for cycles in 2 3 4; do
   for depth in 1m 10m 100m 1000m; do
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_deli_${dataset}" --wrap "
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_deli_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 ./.venv/bin/python benchmarks/run_split_timing.py \
   --dataset-name $dataset \
@@ -358,7 +358,7 @@ cd "$ROOT"
 for cycles in 2 3 4; do
   for depth in 1m 10m 100m 1000m; do
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --wrap "
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 ./.venv/bin/python benchmarks/run_split_timing.py \
   --dataset-name $dataset \
@@ -406,7 +406,7 @@ cd "$ROOT"
 for cycles in 2 3 4; do
   for depth in 1m 10m 100m 1000m; do
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_both_${dataset}" --wrap "
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_both_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 ./.venv/bin/python benchmarks/run_split_timing.py \
   --dataset-name $dataset \
