@@ -106,42 +106,18 @@ for cycles in 2 3 4; do
 done
 ```
 
-Submit one `4h` Slurm job per dataset for generation with `64` GB and `12` CPUs:
+If you only want to generate data on a compute node, use `$TMPDIR` as the scratch root:
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
 ROOT="/users/amarti51/projects/delt-hit"
-cd "$ROOT"
+DATA_DIR="$TMPDIR/benchmarks/synthetic_4cycle_100m"
 
-for cycles in 2 3 4; do
-  for depth in 1m 10m 100m 1000m; do
-    case "${cycles}:${depth}" in
-      2:1m) reads_per_compound=10000 ;;
-      2:10m) reads_per_compound=100000 ;;
-      2:100m) reads_per_compound=1000000 ;;
-      2:1000m) reads_per_compound=10000000 ;;
-      3:1m) reads_per_compound=1000 ;;
-      3:10m) reads_per_compound=10000 ;;
-      3:100m) reads_per_compound=100000 ;;
-      3:1000m) reads_per_compound=1000000 ;;
-      4:1m) reads_per_compound=100 ;;
-      4:10m) reads_per_compound=1000 ;;
-      4:100m) reads_per_compound=10000 ;;
-      4:1000m) reads_per_compound=100000 ;;
-    esac
-    dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="gen_${dataset}" --output="$HOME/logs/%j.out" --wrap "
-cd $ROOT &&
 ./.venv/bin/python scripts/generate_synthetic_fastq.py \
-  --num-cycles $cycles \
+  --num-cycles 4 \
   --building-blocks-per-cycle 10 \
-  --num-reads-per-compound $reads_per_compound \
-  --output-dir benchmarks/data \
-  --experiment-name $dataset"
-  done
-done
+  --num-reads-per-compound 10000 \
+  --output-dir "$DATA_DIR/data" \
+  --experiment-name synthetic_4cycle_100m
 ```
 
 ## 2. Prepare DELi And DELT-Hit Inputs
@@ -157,9 +133,12 @@ Example:
   --dataset-name synthetic_4cycle_100m
 ```
 
-Prepared inputs are written to `benchmarks/tools/deli/<dataset>/`.
+Prepared inputs are written to:
 
-Prepare DELi inputs for all 12 datasets:
+- repo-local `benchmarks/tools/deli/<dataset>/timing.json` for final reports
+- scratch-local `$DATA_DIR/tools/deli/<dataset>/` for generated DELi inputs during node execution
+
+Prepare DELi inputs for all 12 datasets in-place:
 
 ```bash
 #!/usr/bin/env bash
@@ -187,11 +166,14 @@ Example:
   --num-cores 11
 ```
 
-Prepared inputs are written to `benchmarks/tools/delt/<dataset>/`.
+Prepared inputs are written to:
+
+- repo-local `benchmarks/tools/delt/<dataset>/timing.json` for final reports
+- scratch-local `$DATA_DIR/tools/delt/<dataset>/` for generated DELT-Hit inputs during node execution
 
 Use `--num-cores 11` when preparing DELT-Hit inputs inside a Slurm job with `12` CPUs so one core remains outside the tool's configured worker count.
 
-Prepare DELT-Hit inputs for all 12 datasets:
+Prepare DELT-Hit inputs for all 12 datasets in-place:
 
 ```bash
 #!/usr/bin/env bash
@@ -220,10 +202,10 @@ The runner supports:
 - `--tool delt`
 - `--tool both`
 
-It writes runtime logs and intermediate artifacts to:
+With `--data-dir "$DATA_DIR"`, it writes runtime logs and intermediate artifacts to:
 
-- `target/benchmarks/<dataset>/split_timing/deli`
-- `target/benchmarks/<dataset>/split_timing/delt`
+- `$DATA_DIR/runtime/<dataset>/deli`
+- `$DATA_DIR/runtime/<dataset>/delt`
 
 It writes the canonical machine-readable report to:
 
@@ -238,7 +220,7 @@ It writes the canonical machine-readable report to:
   --tool deli
 ```
 
-Run DELi across all 12 datasets:
+Run DELi across all 12 datasets in-place:
 
 ```bash
 #!/usr/bin/env bash
@@ -257,7 +239,7 @@ for cycles in 2 3 4; do
 done
 ```
 
-Submit one `18h` Slurm job per dataset for DELi benchmarking:
+Submit one `18h` Slurm job per dataset for end-to-end DELi benchmarking on `$TMPDIR`:
 
 ```bash
 #!/usr/bin/env bash
@@ -268,11 +250,36 @@ cd "$ROOT"
 
 for cycles in 2 3 4; do
   for depth in 1m 10m 100m 1000m; do
+    case "${cycles}:${depth}" in
+      2:1m) reads_per_compound=10000 ;;
+      2:10m) reads_per_compound=100000 ;;
+      2:100m) reads_per_compound=1000000 ;;
+      2:1000m) reads_per_compound=10000000 ;;
+      3:1m) reads_per_compound=1000 ;;
+      3:10m) reads_per_compound=10000 ;;
+      3:100m) reads_per_compound=100000 ;;
+      3:1000m) reads_per_compound=1000000 ;;
+      4:1m) reads_per_compound=100 ;;
+      4:10m) reads_per_compound=1000 ;;
+      4:100m) reads_per_compound=10000 ;;
+      4:1000m) reads_per_compound=100000 ;;
+    esac
     dataset="synthetic_${cycles}cycle_${depth}"
     sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_deli_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
+DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
+./.venv/bin/python scripts/generate_synthetic_fastq.py \
+  --num-cycles $cycles \
+  --building-blocks-per-cycle 10 \
+  --num-reads-per-compound $reads_per_compound \
+  --output-dir \$DATA_DIR/data \
+  --experiment-name $dataset &&
+./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
+  --dataset-name $dataset \
+  --data-dir \$DATA_DIR &&
 ./.venv/bin/python benchmarks/run_split_timing.py \
   --dataset-name $dataset \
+  --data-dir \$DATA_DIR \
   --tool deli"
   done
 done
@@ -286,7 +293,7 @@ done
   --tool delt
 ```
 
-Run DELT-Hit across all 12 datasets:
+Run DELT-Hit across all 12 datasets in-place:
 
 ```bash
 #!/usr/bin/env bash
@@ -304,7 +311,7 @@ for depth in 1m 10m 100m 1000m; do
 done
 ```
 
-Submit one `18h` Slurm job per dataset for DELT-Hit benchmarking:
+Submit one `18h` Slurm job per dataset for end-to-end DELT-Hit benchmarking on `$TMPDIR`:
 
 ```bash
 #!/usr/bin/env bash
@@ -313,62 +320,40 @@ set -euo pipefail
 ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
-for depth in 1m 10m 100m 1000m; do
-  for cycles in 2 3 4; do
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    case "${cycles}:${depth}" in
+      2:1m) reads_per_compound=10000 ;;
+      2:10m) reads_per_compound=100000 ;;
+      2:100m) reads_per_compound=1000000 ;;
+      2:1000m) reads_per_compound=10000000 ;;
+      3:1m) reads_per_compound=1000 ;;
+      3:10m) reads_per_compound=10000 ;;
+      3:100m) reads_per_compound=100000 ;;
+      3:1000m) reads_per_compound=1000000 ;;
+      4:1m) reads_per_compound=100 ;;
+      4:10m) reads_per_compound=1000 ;;
+      4:100m) reads_per_compound=10000 ;;
+      4:1000m) reads_per_compound=100000 ;;
+    esac
     dataset="synthetic_${cycles}cycle_${depth}"
     sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
+DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
+./.venv/bin/python scripts/generate_synthetic_fastq.py \
+  --num-cycles $cycles \
+  --building-blocks-per-cycle 10 \
+  --num-reads-per-compound $reads_per_compound \
+  --output-dir \$DATA_DIR/data \
+  --experiment-name $dataset &&
+./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
+  --dataset-name $dataset \
+  --data-dir \$DATA_DIR \
+  --num-cores 11 &&
 ./.venv/bin/python benchmarks/run_split_timing.py \
   --dataset-name $dataset \
+  --data-dir \$DATA_DIR \
   --tool delt"
-  done
-done
-```
-
-### Both Tools
-
-```bash
-./.venv/bin/python benchmarks/run_split_timing.py \
-  --dataset-name synthetic_4cycle_100m \
-  --tool both
-```
-
-Run both tools across all 12 datasets:
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-ROOT="/users/amarti51/projects/delt-hit"
-cd "$ROOT"
-
-for cycles in 2 3 4; do
-  for depth in 1m 10m 100m 1000m; do
-    dataset="synthetic_${cycles}cycle_${depth}"
-    ./.venv/bin/python benchmarks/run_split_timing.py \
-      --dataset-name "$dataset" \
-      --tool both
-  done
-done
-```
-
-Submit one `18h` Slurm job per dataset for combined benchmarking:
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-ROOT="/users/amarti51/projects/delt-hit"
-cd "$ROOT"
-
-for cycles in 2 3 4; do
-  for depth in 1m 10m 100m 1000m; do
-    dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_both_${dataset}" --output="$HOME/logs/%j.out" --wrap "
-cd $ROOT &&
-./.venv/bin/python benchmarks/run_split_timing.py \
-  --dataset-name $dataset \
-  --tool both"
   done
 done
 ```
