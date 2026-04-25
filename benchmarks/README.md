@@ -76,7 +76,7 @@ For DELT-Hit:
 
 ```bash
 ./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
-  --dataset-name synthetic_4cycle_100m
+  --dataset-name synthetic_4cycle_100m --num-cores 11
 ```
 
 This writes prepared inputs under:
