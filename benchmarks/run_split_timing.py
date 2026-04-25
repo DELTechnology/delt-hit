@@ -29,10 +29,16 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset-name", required=True, help="Dataset name under benchmarks/data and benchmarks/tools.")
     parser.add_argument(
+        "--tool",
+        choices=("deli", "delt", "both"),
+        default="both",
+        help="Run DELi, DELT-Hit, or both prepared benchmarks.",
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=None,
-        help="Optional output directory for logs and summary. Defaults to target/benchmarks/<dataset>/split_timing.",
+        help="Optional output directory for logs and runtime artifacts. Defaults to target/benchmarks/<dataset>/split_timing.",
     )
     return parser.parse_args()
 
@@ -218,11 +224,14 @@ def run_delt(dataset_name: str, output_dir: Path, expected: dict[tuple[int, ...]
     }
 
 
-def print_summary(dataset_name: str, manifest: dict, deli: dict[str, object], delt: dict[str, object]) -> None:
+def print_dataset_header(dataset_name: str, manifest: dict) -> None:
     print(f"Dataset: {dataset_name}")
     print(f"Expected compounds: {manifest['expected_compounds']}")
     print(f"Expected reads: {manifest['expected_reads']}")
     print("")
+
+
+def print_deli_summary(deli: dict[str, object]) -> None:
     print("DELi")
     print(f"  decode run:      {deli['timings']['decode_run_s']:.3f}s")
     print(f"  decode collect:  {deli['timings']['decode_collect_s']:.3f}s")
@@ -230,6 +239,9 @@ def print_summary(dataset_name: str, manifest: dict, deli: dict[str, object], de
     print(f"  total:           {deli['timings']['total_s']:.3f}s")
     print(f"  counts match:    {deli['counts_match']}")
     print("")
+
+
+def print_delt_summary(delt: dict[str, object]) -> None:
     print("DELT-Hit")
     print(f"  demultiplex:     {delt['timings']['demultiplex_s']:.3f}s")
     print(f"  aggregation:     {delt['timings']['count_aggregation_s']:.3f}s")
@@ -237,33 +249,69 @@ def print_summary(dataset_name: str, manifest: dict, deli: dict[str, object], de
     print(f"  counts match:    {delt['counts_match']}")
 
 
-def main(*, dataset_name: str, output_dir: Path | None = None) -> None:
+def write_tool_report(
+    *,
+    dataset_name: str,
+    dataset_dir: Path,
+    manifest: dict[str, object],
+    tool_result: dict[str, object],
+) -> Path:
+    report_path = require_path(TOOLS_ROOT / str(tool_result["tool"]) / dataset_name, "tool directory") / "timing.json"
+    report = {
+        "dataset_name": dataset_name,
+        "dataset_dir": str(dataset_dir),
+        "expected_compounds": manifest["expected_compounds"],
+        "expected_reads": manifest["expected_reads"],
+        **tool_result,
+    }
+    report_path.write_text(json.dumps(report, indent=2) + "\n")
+    return report_path
+
+
+def main(*, dataset_name: str, tool: str, output_dir: Path | None = None) -> None:
     dataset_dir = require_path(DATA_ROOT / dataset_name, "dataset directory")
-    require_path(TOOLS_ROOT / "deli" / dataset_name, "DELi prepared tool directory")
-    require_path(TOOLS_ROOT / "delt" / dataset_name, "DELT-Hit prepared tool directory")
+    if tool in {"deli", "both"}:
+        require_path(TOOLS_ROOT / "deli" / dataset_name, "DELi prepared tool directory")
+    if tool in {"delt", "both"}:
+        require_path(TOOLS_ROOT / "delt" / dataset_name, "DELT-Hit prepared tool directory")
 
     output_dir = (output_dir or (DEFAULT_OUTPUT_ROOT / dataset_name / "split_timing")).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
     manifest = read_manifest(dataset_name)
     expected = read_expected_counts(require_path(dataset_dir / "expected_counts.tsv", "expected counts table"))
-    deli_result = run_deli(dataset_name, output_dir, expected)
-    delt_result = run_delt(dataset_name, output_dir, expected)
+    report_paths: list[Path] = []
 
-    summary = {
-        "dataset_name": dataset_name,
-        "dataset_dir": str(dataset_dir),
-        "expected_compounds": manifest["expected_compounds"],
-        "expected_reads": manifest["expected_reads"],
-        "deli": deli_result,
-        "delt_hit": delt_result,
-    }
-    summary_path = output_dir / "summary.json"
-    summary_path.write_text(json.dumps(summary, indent=2) + "\n")
-    print_summary(dataset_name, manifest, deli_result, delt_result)
-    print(f"\nWrote summary to {summary_path}")
+    print_dataset_header(dataset_name, manifest)
+
+    if tool in {"deli", "both"}:
+        deli_result = run_deli(dataset_name, output_dir, expected)
+        report_paths.append(
+            write_tool_report(
+                dataset_name=dataset_name,
+                dataset_dir=dataset_dir,
+                manifest=manifest,
+                tool_result=deli_result,
+            )
+        )
+        print_deli_summary(deli_result)
+
+    if tool in {"delt", "both"}:
+        delt_result = run_delt(dataset_name, output_dir, expected)
+        report_paths.append(
+            write_tool_report(
+                dataset_name=dataset_name,
+                dataset_dir=dataset_dir,
+                manifest=manifest,
+                tool_result=delt_result,
+            )
+        )
+        print_delt_summary(delt_result)
+
+    for report_path in report_paths:
+        print(f"Wrote report to {report_path}")
 
 
 if __name__ == "__main__":
     cli_args = parse_args()
-    main(dataset_name=cli_args.dataset_name, output_dir=cli_args.output_dir)
+    main(dataset_name=cli_args.dataset_name, tool=cli_args.tool, output_dir=cli_args.output_dir)
