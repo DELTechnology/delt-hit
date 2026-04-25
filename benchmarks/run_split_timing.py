@@ -35,6 +35,12 @@ def parse_args() -> argparse.Namespace:
         help="Run DELi, DELT-Hit, or both prepared benchmarks.",
     )
     parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=None,
+        help="Scratch workspace root for one dataset. Uses <data-dir>/data/<dataset>, <data-dir>/tools/<tool>/<dataset>, and defaults runtime artifacts to <data-dir>/runtime/<dataset>.",
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=None,
@@ -43,8 +49,8 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def read_manifest(dataset_name: str) -> dict:
-    return json.loads((DATA_ROOT / dataset_name / "manifest.json").read_text())
+def read_manifest(dataset_dir: Path) -> dict:
+    return json.loads((dataset_dir / "manifest.json").read_text())
 
 
 def require_path(path: Path, description: str) -> Path:
@@ -136,8 +142,14 @@ def clean_delt_outputs(config_path: Path) -> None:
             shutil.rmtree(target)
 
 
-def run_deli(dataset_name: str, output_dir: Path, expected: dict[tuple[int, ...], int]) -> dict[str, object]:
-    dataset_root = require_path(TOOLS_ROOT / "deli" / dataset_name, "DELi prepared dataset")
+def run_deli(
+    dataset_name: str,
+    output_dir: Path,
+    expected: dict[tuple[int, ...], int],
+    *,
+    deli_root: Path,
+) -> dict[str, object]:
+    dataset_root = require_path(deli_root / dataset_name, "DELi prepared dataset")
     deli_bin = require_path(DELI_BIN, "DELi CLI")
     selection_file = require_path(dataset_root / "decode_synthetic.yaml", "DELi selection file")
     decode_settings = require_path(dataset_root / "decode_settings_v02.yaml", "DELi decode settings")
@@ -181,8 +193,14 @@ def run_deli(dataset_name: str, output_dir: Path, expected: dict[tuple[int, ...]
     }
 
 
-def run_delt(dataset_name: str, output_dir: Path, expected: dict[tuple[int, ...], int]) -> dict[str, object]:
-    dataset_root = require_path(TOOLS_ROOT / "delt" / dataset_name, "DELT-Hit prepared dataset")
+def run_delt(
+    dataset_name: str,
+    output_dir: Path,
+    expected: dict[tuple[int, ...], int],
+    *,
+    delt_root: Path,
+) -> dict[str, object]:
+    dataset_root = require_path(delt_root / dataset_name, "DELT-Hit prepared dataset")
     tool_python = require_path(DELT_HIT_PYTHON, "DELT-Hit Python executable")
     config_path = require_path(dataset_root / "config.yaml", "DELT-Hit config")
 
@@ -256,7 +274,9 @@ def write_tool_report(
     manifest: dict[str, object],
     tool_result: dict[str, object],
 ) -> Path:
-    report_path = require_path(TOOLS_ROOT / str(tool_result["tool"]) / dataset_name, "tool directory") / "timing.json"
+    report_dir = TOOLS_ROOT / str(tool_result["tool"]) / dataset_name
+    report_dir.mkdir(parents=True, exist_ok=True)
+    report_path = report_dir / "timing.json"
     report = {
         "dataset_name": dataset_name,
         "dataset_dir": str(dataset_dir),
@@ -268,24 +288,34 @@ def write_tool_report(
     return report_path
 
 
-def main(*, dataset_name: str, tool: str, output_dir: Path | None = None) -> None:
-    dataset_dir = require_path(DATA_ROOT / dataset_name, "dataset directory")
-    if tool in {"deli", "both"}:
-        require_path(TOOLS_ROOT / "deli" / dataset_name, "DELi prepared tool directory")
-    if tool in {"delt", "both"}:
-        require_path(TOOLS_ROOT / "delt" / dataset_name, "DELT-Hit prepared tool directory")
+def main(*, dataset_name: str, tool: str, data_dir: Path | None = None, output_dir: Path | None = None) -> None:
+    if data_dir is None:
+        dataset_dir = require_path(DATA_ROOT / dataset_name, "dataset directory")
+        deli_root = TOOLS_ROOT / "deli"
+        delt_root = TOOLS_ROOT / "delt"
+        output_dir = (output_dir or (DEFAULT_OUTPUT_ROOT / dataset_name / "split_timing")).resolve()
+    else:
+        data_dir = data_dir.resolve()
+        dataset_dir = require_path(data_dir / "data" / dataset_name, "dataset directory")
+        deli_root = data_dir / "tools" / "deli"
+        delt_root = data_dir / "tools" / "delt"
+        output_dir = (output_dir or (data_dir / "runtime" / dataset_name)).resolve()
 
-    output_dir = (output_dir or (DEFAULT_OUTPUT_ROOT / dataset_name / "split_timing")).resolve()
+    if tool in {"deli", "both"}:
+        require_path(deli_root / dataset_name, "DELi prepared tool directory")
+    if tool in {"delt", "both"}:
+        require_path(delt_root / dataset_name, "DELT-Hit prepared tool directory")
+
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    manifest = read_manifest(dataset_name)
+    manifest = read_manifest(dataset_dir)
     expected = read_expected_counts(require_path(dataset_dir / "expected_counts.tsv", "expected counts table"))
     report_paths: list[Path] = []
 
     print_dataset_header(dataset_name, manifest)
 
     if tool in {"deli", "both"}:
-        deli_result = run_deli(dataset_name, output_dir, expected)
+        deli_result = run_deli(dataset_name, output_dir, expected, deli_root=deli_root)
         report_paths.append(
             write_tool_report(
                 dataset_name=dataset_name,
@@ -297,7 +327,7 @@ def main(*, dataset_name: str, tool: str, output_dir: Path | None = None) -> Non
         print_deli_summary(deli_result)
 
     if tool in {"delt", "both"}:
-        delt_result = run_delt(dataset_name, output_dir, expected)
+        delt_result = run_delt(dataset_name, output_dir, expected, delt_root=delt_root)
         report_paths.append(
             write_tool_report(
                 dataset_name=dataset_name,
@@ -314,4 +344,9 @@ def main(*, dataset_name: str, tool: str, output_dir: Path | None = None) -> Non
 
 if __name__ == "__main__":
     cli_args = parse_args()
-    main(dataset_name=cli_args.dataset_name, tool=cli_args.tool, output_dir=cli_args.output_dir)
+    main(
+        dataset_name=cli_args.dataset_name,
+        tool=cli_args.tool,
+        data_dir=cli_args.data_dir,
+        output_dir=cli_args.output_dir,
+    )

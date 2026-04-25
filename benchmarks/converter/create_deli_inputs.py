@@ -19,12 +19,12 @@ TOOL_ROOT = TOOLS_ROOT / "deli"
 DEFAULT_DATASET_NAME = "synthetic_2cycle_1m"
 
 
-def read_manifest(dataset_name: str) -> dict:
-    return json.loads((DATA_ROOT / dataset_name / "manifest.json").read_text())
+def read_manifest(dataset_dir: Path) -> dict:
+    return json.loads((dataset_dir / "manifest.json").read_text())
 
 
-def read_building_blocks(dataset_name: str) -> list[dict[str, str]]:
-    with (DATA_ROOT / dataset_name / "building_blocks.tsv").open() as handle:
+def read_building_blocks(dataset_dir: Path) -> list[dict[str, str]]:
+    with (dataset_dir / "building_blocks.tsv").open() as handle:
         return list(csv.DictReader(handle, delimiter="\t"))
 
 
@@ -71,20 +71,32 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_DATASET_NAME,
         help="Dataset directory name under benchmarks/data/.",
     )
+    parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=None,
+        help="Scratch workspace root for one dataset. Uses <data-dir>/data/<dataset> and writes tool inputs under <data-dir>/tools/deli/<dataset>.",
+    )
     return parser.parse_args()
 
 
-def main(*, dataset_name: str = DEFAULT_DATASET_NAME) -> None:
-    dataset_dir = (DATA_ROOT / dataset_name).resolve()
+def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = None) -> None:
+    if data_dir is None:
+        dataset_dir = (DATA_ROOT / dataset_name).resolve()
+        output_dir = (TOOL_ROOT / dataset_name).resolve()
+    else:
+        data_dir = data_dir.resolve()
+        dataset_dir = data_dir / "data" / dataset_name
+        output_dir = data_dir / "tools" / "deli" / dataset_name
+
     if not dataset_dir.exists():
         raise FileNotFoundError(f"Dataset directory not found: {dataset_dir}")
 
-    manifest = read_manifest(dataset_name)
-    building_blocks = read_building_blocks(dataset_name)
+    manifest = read_manifest(dataset_dir)
+    building_blocks = read_building_blocks(dataset_dir)
     experiment_name = manifest["experiment_name"]
     num_cycles = manifest["num_cycles"]
 
-    output_dir = (TOOL_ROOT / dataset_name).resolve()
     data_dir = output_dir / "data"
     bb_dir = data_dir / "building_blocks"
     lib_dir = data_dir / "libraries"
@@ -190,4 +202,4 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME) -> None:
 
 if __name__ == "__main__":
     cli_args = parse_args()
-    main(dataset_name=cli_args.dataset_name)
+    main(dataset_name=cli_args.dataset_name, data_dir=cli_args.data_dir)
