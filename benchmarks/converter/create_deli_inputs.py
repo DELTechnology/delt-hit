@@ -96,6 +96,9 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
     building_blocks = read_building_blocks(dataset_dir)
     experiment_name = manifest["experiment_name"]
     num_cycles = manifest["num_cycles"]
+    num_errors = int(manifest.get("num_errors", 0))
+    if num_errors not in {0, 1}:
+        raise ValueError(f"Unsupported num_errors={num_errors}; only 0 and 1 are supported")
 
     data_dir = output_dir / "data"
     bb_dir = data_dir / "building_blocks"
@@ -129,7 +132,13 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
         ],
         "barcode_schema": {
             "library": {"tag": manifest["library_tag"]},
-            **{f"bb{cycle}": {"tag": "N" * manifest["tag_length"]} for cycle in range(1, num_cycles + 1)},
+            **{
+                f"bb{cycle}": {
+                    "tag": "N" * manifest["tag_length"],
+                    **({"error_correction": "hamming_dist:1"} if num_errors == 1 else {}),
+                }
+                for cycle in range(1, num_cycles + 1)
+            },
             "umi": {"tag": "N" * manifest["umi_length"]},
             "closing": {"tag": manifest["closing_tag"]},
         },
@@ -149,7 +158,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
         "sequence_files": [str(Path(manifest["files"]["fastq"]).resolve())],
         "libraries": [str(library_json.resolve())],
         "decode_settings": {
-            "library_error_tolerance": 0.0,
+            "library_error_tolerance": (1 / len(manifest["library_tag"])) if num_errors == 1 else 0.0,
             "min_library_overlap": len(manifest["library_tag"]),
             "alignment_algorithm": "semi",
             "bb_calling_approach": "bio",
@@ -159,7 +168,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
                 len(manifest["library_tag"]) + num_cycles * manifest["tag_length"] + manifest["umi_length"]
             ),
             "read_type": "single",
-            "disable_error_correction": True,
+            "disable_error_correction": num_errors == 0,
             "umi_clustering": False,
             "umi_min_distance": 2,
         },
@@ -174,8 +183,8 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
                 "demultiplexer_algorithm": "regex",
                 "demultiplexer_mode": "library",
                 "realign": False,
-                "library_error_tolerance": 0,
-                "library_error_correction_mode_str": "disable",
+                "library_error_tolerance": (1 / len(manifest["library_tag"])) if num_errors == 1 else 0,
+                "library_error_correction_mode_str": "hamming_dist:1" if num_errors == 1 else "disable",
                 "min_library_overlap": len(manifest["library_tag"]),
                 "revcomp": False,
                 "library_wiggle": False,
@@ -185,7 +194,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
                 "min_read_length": (
                     len(manifest["library_tag"]) + num_cycles * manifest["tag_length"] + manifest["umi_length"]
                 ),
-                "default_error_correction_mode_str": "disable",
+                "default_error_correction_mode_str": "hamming_dist:1" if num_errors == 1 else "disable",
             },
             sort_keys=False,
         )
