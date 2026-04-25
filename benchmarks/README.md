@@ -265,7 +265,7 @@ for cycles in 2 3 4; do
       4:1000m) reads_per_compound=100000 ;;
     esac
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_deli_${dataset}" --output="$HOME/logs/%j.out" --wrap "
+    sbatch --time=04:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_deli_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
 ./.venv/bin/python scripts/generate_synthetic_fastq.py \
@@ -337,7 +337,7 @@ for cycles in 2 3 4; do
       4:1000m) reads_per_compound=100000 ;;
     esac
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
+    sbatch --time=04:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
 ./.venv/bin/python scripts/generate_synthetic_fastq.py \
