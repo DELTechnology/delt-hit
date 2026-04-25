@@ -1,8 +1,8 @@
 experiment:
   name: synthetic_4cycle_100m
-  fastq_path: /Users/adrianomartinelli/projects/delt-hit/benchmarks/data/synthetic_4cycle_100m/synthetic_4cycle_100m.fastq.gz
-  save_dir: /Users/adrianomartinelli/projects/delt-hit/benchmarks/tools/delt/synthetic_4cycle_100m
-  num_cores: 1
+  fastq_path: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/data/synthetic_4cycle_100m/synthetic_4cycle_100m.fastq.gz
+  save_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/delt/synthetic_4cycle_100m
+  num_cores: 11
 selections:
   synthetic_selection:
     operator: Codex
