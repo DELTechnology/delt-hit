@@ -1,7 +1,7 @@
 experiment:
-  name: synthetic_2cycle_1m
-  fastq_path: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/data/synthetic_2cycle_1m/synthetic_2cycle_1m.fastq.gz
-  save_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/delt/synthetic_2cycle_1m
+  name: synthetic_4cycle_1m
+  fastq_path: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/data/synthetic_4cycle_1m/synthetic_4cycle_1m.fastq.gz
+  save_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/delt/synthetic_4cycle_1m
   num_cores: 11
 selections:
   synthetic_selection:
@@ -24,6 +24,14 @@ structure:
   max_error_rate: 0
   indels: false
 - name: B1
+  type: building_block
+  max_error_rate: 0
+  indels: false
+- name: B2
+  type: building_block
+  max_error_rate: 0
+  indels: false
+- name: B3
   type: building_block
   max_error_rate: 0
   indels: false
@@ -102,6 +110,68 @@ whitelists:
   - index: 9
     codon: AGCTACGC
     building_block_id: BB2_010
+  B2:
+  - index: 0
+    codon: CATGAGAA
+    building_block_id: BB3_001
+  - index: 1
+    codon: CATGAGAC
+    building_block_id: BB3_002
+  - index: 2
+    codon: CATGAGAG
+    building_block_id: BB3_003
+  - index: 3
+    codon: CATGAGAT
+    building_block_id: BB3_004
+  - index: 4
+    codon: CATGAGCA
+    building_block_id: BB3_005
+  - index: 5
+    codon: CATGAGCC
+    building_block_id: BB3_006
+  - index: 6
+    codon: CATGAGCG
+    building_block_id: BB3_007
+  - index: 7
+    codon: CATGAGCT
+    building_block_id: BB3_008
+  - index: 8
+    codon: CATGAGGA
+    building_block_id: BB3_009
+  - index: 9
+    codon: CATGAGGC
+    building_block_id: BB3_010
+  B3:
+  - index: 0
+    codon: CTCCATAA
+    building_block_id: BB4_001
+  - index: 1
+    codon: CTCCATAC
+    building_block_id: BB4_002
+  - index: 2
+    codon: CTCCATAG
+    building_block_id: BB4_003
+  - index: 3
+    codon: CTCCATAT
+    building_block_id: BB4_004
+  - index: 4
+    codon: CTCCATCA
+    building_block_id: BB4_005
+  - index: 5
+    codon: CTCCATCC
+    building_block_id: BB4_006
+  - index: 6
+    codon: CTCCATCG
+    building_block_id: BB4_007
+  - index: 7
+    codon: CTCCATCT
+    building_block_id: BB4_008
+  - index: 8
+    codon: CTCCATGA
+    building_block_id: BB4_009
+  - index: 9
+    codon: CTCCATGC
+    building_block_id: BB4_010
 library:
   products: []
   educts: []
@@ -111,6 +181,8 @@ library:
   building_blocks:
   - B0
   - B1
+  - B2
+  - B3
 catalog:
   compounds: {}
   reactions: {}

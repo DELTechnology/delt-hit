@@ -1,7 +1,7 @@
 [DEFAULT]
 
 [deli.data]
-deli_data_dir = /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/deli/synthetic_2cycle_1m/data
+deli_data_dir = /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/deli/synthetic_3cycle_10m/data
 
 [deli.hamming]
 nuc_2_int = A:0,T:1,C:2,G:3

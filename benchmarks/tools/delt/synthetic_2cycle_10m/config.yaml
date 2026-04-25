@@ -1,7 +1,7 @@
 experiment:
-  name: synthetic_2cycle_1m
-  fastq_path: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/data/synthetic_2cycle_1m/synthetic_2cycle_1m.fastq.gz
-  save_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/delt/synthetic_2cycle_1m
+  name: synthetic_2cycle_10m
+  fastq_path: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/data/synthetic_2cycle_10m/synthetic_2cycle_10m.fastq.gz
+  save_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/delt/synthetic_2cycle_10m
   num_cores: 11
 selections:
   synthetic_selection:
