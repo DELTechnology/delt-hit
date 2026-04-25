@@ -22,6 +22,7 @@ DEFAULT_EXPERIMENT_NAME = "synthetic"
 DEFAULT_NUM_CYCLES = 2
 DEFAULT_BUILDING_BLOCKS_PER_CYCLE = 10
 DEFAULT_NUM_READS_PER_COMPOUND = 1
+DEFAULT_NUM_ERRORS = 0
 DEFAULT_COMPRESSED = True
 
 LIBRARY_TAG = "ACGTACGTAC"
@@ -29,6 +30,8 @@ CLOSING_TAG = "TTGGAACC"
 TAG_LENGTH = 8
 UMI_LENGTH = 8
 QUALITY_CHAR = "I"
+DNA_BASES = "ACGT"
+DEFAULT_BARCODE_MIN_HAMMING_DISTANCE = 3
 
 
 def int_to_dna(value: int, length: int = TAG_LENGTH) -> str:
@@ -39,6 +42,10 @@ def int_to_dna(value: int, length: int = TAG_LENGTH) -> str:
         bases.append(alphabet[value % 4])
         value //= 4
     return "".join(reversed(bases))
+
+
+def hamming_distance(left: str, right: str) -> int:
+    return sum(left_base != right_base for left_base, right_base in zip(left, right))
 
 
 def expected_compounds(*, num_cycles: int, building_blocks_per_cycle: int) -> int:
@@ -57,18 +64,31 @@ def expected_reads(
     ) * num_reads_per_compound
 
 
+def generate_distance_three_tags(*, count: int, length: int, offset: int = 0) -> list[str]:
+    candidates = [int_to_dna(value, length) for value in range(4**length)]
+    ordered_candidates = candidates[offset:] + candidates[:offset]
+    selected: list[str] = []
+    for candidate in ordered_candidates:
+        if all(hamming_distance(candidate, existing) >= DEFAULT_BARCODE_MIN_HAMMING_DISTANCE for existing in selected):
+            selected.append(candidate)
+            if len(selected) == count:
+                return selected
+    raise ValueError(f"Unable to generate {count} tags with minimum Hamming distance 3 and length {length}")
+
+
 def make_building_blocks(*, num_cycles: int, building_blocks_per_cycle: int) -> list[list[dict[str, object]]]:
     building_blocks_by_cycle: list[list[dict[str, object]]] = []
     for cycle in range(1, num_cycles + 1):
         cycle_rows: list[dict[str, object]] = []
         offset = (cycle - 1) * 10_000
-        for code in range(1, building_blocks_per_cycle + 1):
+        tags = generate_distance_three_tags(count=building_blocks_per_cycle, length=TAG_LENGTH, offset=offset % (4**TAG_LENGTH))
+        for code, tag in enumerate(tags, start=1):
             cycle_rows.append(
                 {
                     "cycle": cycle,
                     "code": code,
                     "building_block_id": f"BB{cycle}_{code:03d}",
-                    "tag": int_to_dna(offset + code - 1),
+                    "tag": tag,
                 }
             )
         building_blocks_by_cycle.append(cycle_rows)
@@ -128,19 +148,33 @@ def write_fastq(
     num_reads_per_compound: int,
     experiment_name: str,
     compressed: bool,
+    num_errors: int,
 ) -> int:
+    def mutate_one_base(sequence: str, *, seed: int) -> str:
+        position = seed % len(sequence)
+        original_base = sequence[position]
+        replacement_base = DNA_BASES[(DNA_BASES.index(original_base) + 1 + (seed // len(sequence)) % 3) % 4]
+        return sequence[:position] + replacement_base + sequence[position + 1 :]
+
     path.parent.mkdir(parents=True, exist_ok=True)
     read_count = 0
     open_func = gzip.open if compressed else open
     mode = "wt"
     with open_func(path, mode) as handle:
         for compound_idx, compound in enumerate(product(*building_blocks_by_cycle), start=1):
-            tags = "".join(str(block["tag"]) for block in compound)
+            barcode_regions = [LIBRARY_TAG, *(str(block["tag"]) for block in compound), CLOSING_TAG]
             ids = "_".join(str(block["building_block_id"]) for block in compound)
             for replicate_idx in range(1, num_reads_per_compound + 1):
                 read_count += 1
                 umi = int_to_dna(20_000 + read_count, UMI_LENGTH)
-                sequence = f"{LIBRARY_TAG}{tags}{umi}{CLOSING_TAG}"
+                if num_errors == 0:
+                    mutated_regions = barcode_regions
+                else:
+                    mutated_regions = [
+                        mutate_one_base(region, seed=read_count + region_idx)
+                        for region_idx, region in enumerate(barcode_regions)
+                    ]
+                sequence = f"{mutated_regions[0]}{''.join(mutated_regions[1:-1])}{umi}{mutated_regions[-1]}"
                 quality = QUALITY_CHAR * len(sequence)
                 handle.write(
                     f"@{experiment_name}_compound_{compound_idx:06d}_read_{replicate_idx:03d}_{ids}\n"
@@ -158,6 +192,7 @@ def write_manifest(
     num_cycles: int,
     building_blocks_per_cycle: int,
     num_reads_per_compound: int,
+    num_errors: int,
     output_dir: Path,
     fastq_path: Path,
     expected_counts_path: Path,
@@ -169,6 +204,8 @@ def write_manifest(
         "num_cycles": num_cycles,
         "building_blocks_per_cycle": building_blocks_per_cycle,
         "num_reads_per_compound": num_reads_per_compound,
+        "num_errors": num_errors,
+        "barcode_min_hamming_distance": DEFAULT_BARCODE_MIN_HAMMING_DISTANCE,
         "expected_compounds": expected_compounds(
             num_cycles=num_cycles,
             building_blocks_per_cycle=building_blocks_per_cycle,
@@ -213,6 +250,13 @@ def parse_args() -> argparse.Namespace:
         help="Replicate reads to emit for each combinatorial compound.",
     )
     parser.add_argument(
+        "--num-errors",
+        type=int,
+        default=DEFAULT_NUM_ERRORS,
+        choices=(0, 1),
+        help="Number of substitution errors to inject into each barcode region of each read.",
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=DEFAULT_OUTPUT_DIR,
@@ -236,6 +280,8 @@ def parse_args() -> argparse.Namespace:
         parser.error("building_blocks_per_cycle must be at least 1")
     if args.num_reads_per_compound < 1:
         parser.error("num_reads_per_compound must be at least 1")
+    if args.num_errors not in {0, 1}:
+        parser.error("num_errors must be 0 or 1")
     args.compressed = args.compressed == "true"
     return args
 
@@ -245,6 +291,7 @@ def main(
     num_cycles: int = DEFAULT_NUM_CYCLES,
     building_blocks_per_cycle: int = DEFAULT_BUILDING_BLOCKS_PER_CYCLE,
     num_reads_per_compound: int = DEFAULT_NUM_READS_PER_COMPOUND,
+    num_errors: int = DEFAULT_NUM_ERRORS,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     experiment_name: str = DEFAULT_EXPERIMENT_NAME,
     compressed: bool = DEFAULT_COMPRESSED,
@@ -255,6 +302,11 @@ def main(
         raise ValueError("building_blocks_per_cycle must be at least 1")
     if num_reads_per_compound < 1:
         raise ValueError("num_reads_per_compound must be at least 1")
+    if num_errors not in {0, 1}:
+        raise ValueError("num_errors must be 0 or 1")
+
+    if f"_err={num_errors}" not in experiment_name:
+        experiment_name = f"{experiment_name}_err={num_errors}"
 
     experiment_dir = output_dir / experiment_name
     experiment_dir.mkdir(parents=True, exist_ok=True)
@@ -281,6 +333,7 @@ def main(
         num_reads_per_compound=num_reads_per_compound,
         experiment_name=experiment_name,
         compressed=compressed,
+        num_errors=num_errors,
     )
     write_manifest(
         manifest_path,
@@ -288,6 +341,7 @@ def main(
         num_cycles=num_cycles,
         building_blocks_per_cycle=building_blocks_per_cycle,
         num_reads_per_compound=num_reads_per_compound,
+        num_errors=num_errors,
         output_dir=experiment_dir,
         fastq_path=fastq_path,
         expected_counts_path=expected_counts_path,
@@ -306,6 +360,7 @@ if __name__ == "__main__":
         num_cycles=cli_args.num_cycles,
         building_blocks_per_cycle=cli_args.building_blocks_per_cycle,
         num_reads_per_compound=cli_args.num_reads_per_compound,
+        num_errors=cli_args.num_errors,
         output_dir=cli_args.output_dir,
         experiment_name=cli_args.experiment_name,
         compressed=cli_args.compressed,

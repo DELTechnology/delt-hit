@@ -73,14 +73,20 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
     building_blocks = read_building_blocks(dataset_dir)
     experiment_name = manifest["experiment_name"]
     num_cycles = manifest["num_cycles"]
+    num_errors = int(manifest.get("num_errors", 0))
+    if num_errors not in {0, 1}:
+        raise ValueError(f"Unsupported num_errors={num_errors}; only 0 and 1 are supported")
 
     output_dir.mkdir(parents=True, exist_ok=True)
     fastq_path = Path(manifest["files"]["fastq"]).resolve()
+    library_error_rate = num_errors / len(manifest["library_tag"])
+    barcode_error_rate = num_errors / int(manifest["tag_length"])
+    closing_error_rate = num_errors / len(manifest["closing_tag"])
 
     whitelists = {
         "C0": [{"codon": manifest["closing_tag"]}],
         "S0": [{"name": "synthetic_selection", "codon": manifest["library_tag"]}],
-        "S1": [{"name": "synthetic_selection", "codon": "N" * manifest["umi_length"] + manifest["closing_tag"]}],
+        "U0": [{"codon": "N" * manifest["umi_length"]}],
     }
     for cycle in range(1, num_cycles + 1):
         sheet_name = f"B{cycle - 1}"
@@ -109,17 +115,17 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
                 "group": "synthetic",
                 "target": "synthetic_target",
                 "S0": manifest["library_tag"],
-                "S1": "N" * manifest["umi_length"] + manifest["closing_tag"],
-                "ids": [0, 0],
+                "ids": [0],
             }
         },
         "structure": [
-            {"name": "S0", "type": "selection", "max_error_rate": 0, "indels": False},
+            {"name": "S0", "type": "selection", "max_error_rate": library_error_rate, "indels": False},
             *[
-                {"name": f"B{cycle - 1}", "type": "building_block", "max_error_rate": 0, "indels": False}
+                {"name": f"B{cycle - 1}", "type": "building_block", "max_error_rate": barcode_error_rate, "indels": False}
                 for cycle in range(1, num_cycles + 1)
             ],
-            {"name": "S1", "type": "selection", "max_error_rate": 0, "indels": False},
+            {"name": "U0", "type": "constant", "max_error_rate": 0, "indels": False},
+            {"name": "C0", "type": "constant", "max_error_rate": closing_error_rate, "indels": False},
         ],
         "whitelists": whitelists,
         "library": {
