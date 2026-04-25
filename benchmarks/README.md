@@ -13,7 +13,7 @@ The workflow has three stages:
 The benchmark commands below assume these environments already exist:
 
 - DELT-Hit: `/Users/adrianomartinelli/projects/delt-hit/.venv`
-- DELi: `/Users/adrianomartinelli/projects/delt-hit/other_tools/DELi/.venv`
+- DELi: `/Users/adrianomartinelli/projects/delt-hit/benchmarks/tools/deli/.venv`
 
 ## 1. Generate A Synthetic Dataset
 
@@ -157,7 +157,7 @@ mkdir -p "$ROOT/.tmp/mpl" "$ROOT/.tmp/fontconfig"
 export MPLCONFIGDIR="$ROOT/.tmp/mpl"
 export XDG_CACHE_HOME="$ROOT/.tmp"
 export FC_CACHEDIR="$ROOT/.tmp/fontconfig"
-export PATH="$ROOT/.venv/bin:$ROOT/other_tools/DELi/.venv/bin:$PATH"
+export PATH="$ROOT/.venv/bin:$ROOT/benchmarks/tools/deli/.venv/bin:$PATH"
 
 deli \
   --config-file "$DELI_DIR/deli_config" \
