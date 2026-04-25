@@ -177,26 +177,6 @@ for cycles in 2 3 4; do
 done
 ```
 
-Submit one `4h` Slurm job per dataset for DELi preparation:
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-ROOT="/users/amarti51/projects/delt-hit"
-cd "$ROOT"
-
-for cycles in 2 3 4; do
-  for depth in 1m 10m 100m 1000m; do
-    dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="prep_deli_${dataset}" --output="$HOME/logs/%j.out" --wrap "
-cd $ROOT &&
-./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
-  --dataset-name $dataset"
-  done
-done
-```
-
 ### DELT-Hit
 
 Example:
@@ -226,27 +206,6 @@ for cycles in 2 3 4; do
     ./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
       --dataset-name "$dataset" \
       --num-cores 11
-  done
-done
-```
-
-Submit one `4h` Slurm job per dataset for DELT-Hit preparation:
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-ROOT="/users/amarti51/projects/delt-hit"
-cd "$ROOT"
-
-for cycles in 2 3 4; do
-  for depth in 1m 10m 100m 1000m; do
-    dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="prep_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
-cd $ROOT &&
-./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
-  --dataset-name $dataset \
-  --num-cores 11"
   done
 done
 ```
@@ -335,9 +294,8 @@ set -euo pipefail
 
 ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
-
-for cycles in 2 3 4; do
-  for depth in 1m 10m 100m 1000m; do
+for depth in 1m 10m 100m 1000m; do
+  for cycles in 2 3 4; do
     dataset="synthetic_${cycles}cycle_${depth}"
     ./.venv/bin/python benchmarks/run_split_timing.py \
       --dataset-name "$dataset" \
@@ -355,8 +313,8 @@ set -euo pipefail
 ROOT="/users/amarti51/projects/delt-hit"
 cd "$ROOT"
 
-for cycles in 2 3 4; do
-  for depth in 1m 10m 100m 1000m; do
+for depth in 1m 10m 100m 1000m; do
+  for cycles in 2 3 4; do
     dataset="synthetic_${cycles}cycle_${depth}"
     sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
