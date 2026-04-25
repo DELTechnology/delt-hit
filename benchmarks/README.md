@@ -6,33 +6,58 @@ The workflow has three stages:
 
 1. Generate a synthetic FASTQ dataset plus truth tables.
 2. Convert that dataset into prepared DELi and DELT-Hit inputs.
-3. Run both toolchains and collect split timing outputs.
+3. Run one tool or both tools and collect split timing outputs.
 
 ## Prerequisites
 
 The benchmark commands below assume these environments already exist:
 
-- DELT-Hit: `/Users/adrianomartinelli/projects/delt-hit/.venv`
-- DELi: `/Users/adrianomartinelli/projects/delt-hit/benchmarks/tools/deli/.venv`
+- DELT-Hit: [`.venv`](../.venv)
+- DELi: [`other_tools/DELi/.venv`](../other_tools/DELi/.venv)
 
-## 1. Generate A Synthetic Dataset
+## Dataset Matrix
 
-The canonical generator is [`scripts/generate_synthetic_fastq.py`](/Users/adrianomartinelli/projects/delt-hit/scripts/generate_synthetic_fastq.py).
+This benchmark runbook uses `10` building blocks per cycle for every dataset.
 
-It writes four files under `benchmarks/data/<dataset>/`:
+The canonical dataset names are:
+
+- `synthetic_2cycle_1m`
+- `synthetic_2cycle_10m`
+- `synthetic_2cycle_100m`
+- `synthetic_2cycle_1000m`
+- `synthetic_3cycle_1m`
+- `synthetic_3cycle_10m`
+- `synthetic_3cycle_100m`
+- `synthetic_3cycle_1000m`
+- `synthetic_4cycle_1m`
+- `synthetic_4cycle_10m`
+- `synthetic_4cycle_100m`
+- `synthetic_4cycle_1000m`
+
+With `10` building blocks per cycle, total reads are:
+
+```text
+10 ** num_cycles * num_reads_per_compound
+```
+
+The exact `--num-reads-per-compound` values for the target read depths are:
+
+- `2` cycles: `1m=10000`, `10m=100000`, `100m=1000000`, `1000m=10000000`
+- `3` cycles: `1m=1000`, `10m=10000`, `100m=100000`, `1000m=1000000`
+- `4` cycles: `1m=100`, `10m=1000`, `100m=10000`, `1000m=100000`
+
+## 1. Generate Synthetic Datasets
+
+The canonical generator is [`scripts/generate_synthetic_fastq.py`](../scripts/generate_synthetic_fastq.py).
+
+Each dataset is written under `benchmarks/data/<dataset>/` and includes:
 
 - `<dataset>.fastq.gz`
 - `building_blocks.tsv`
 - `expected_counts.tsv`
 - `manifest.json`
 
-The total reads are:
-
-```text
-building_blocks_per_cycle ** num_cycles * num_reads_per_compound
-```
-
-Example: generate the 4-cycle 100M-read dataset we created in this repo:
+Example: generate `synthetic_4cycle_100m`:
 
 ```bash
 ./.venv/bin/python scripts/generate_synthetic_fastq.py \
@@ -43,82 +68,352 @@ Example: generate the 4-cycle 100M-read dataset we created in this repo:
   --experiment-name synthetic_4cycle_100m
 ```
 
-This produces:
+Generate all 12 datasets:
 
-- `/Users/adrianomartinelli/projects/delt-hit/benchmarks/data/synthetic_4cycle_100m/synthetic_4cycle_100m.fastq.gz`
-- `/Users/adrianomartinelli/projects/delt-hit/benchmarks/data/synthetic_4cycle_100m/building_blocks.tsv`
-- `/Users/adrianomartinelli/projects/delt-hit/benchmarks/data/synthetic_4cycle_100m/expected_counts.tsv`
-- `/Users/adrianomartinelli/projects/delt-hit/benchmarks/data/synthetic_4cycle_100m/manifest.json`
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
+
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    case "${cycles}:${depth}" in
+      2:1m) reads_per_compound=10000 ;;
+      2:10m) reads_per_compound=100000 ;;
+      2:100m) reads_per_compound=1000000 ;;
+      2:1000m) reads_per_compound=10000000 ;;
+      3:1m) reads_per_compound=1000 ;;
+      3:10m) reads_per_compound=10000 ;;
+      3:100m) reads_per_compound=100000 ;;
+      3:1000m) reads_per_compound=1000000 ;;
+      4:1m) reads_per_compound=100 ;;
+      4:10m) reads_per_compound=1000 ;;
+      4:100m) reads_per_compound=10000 ;;
+      4:1000m) reads_per_compound=100000 ;;
+    esac
+
+    dataset="synthetic_${cycles}cycle_${depth}"
+
+    ./.venv/bin/python scripts/generate_synthetic_fastq.py \
+      --num-cycles "$cycles" \
+      --building-blocks-per-cycle 10 \
+      --num-reads-per-compound "$reads_per_compound" \
+      --output-dir benchmarks/data \
+      --experiment-name "$dataset"
+  done
+done
+```
+
+Submit one `4h` Slurm job per dataset for generation with `64` GB and `12` CPUs:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
+
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    case "${cycles}:${depth}" in
+      2:1m) reads_per_compound=10000 ;;
+      2:10m) reads_per_compound=100000 ;;
+      2:100m) reads_per_compound=1000000 ;;
+      2:1000m) reads_per_compound=10000000 ;;
+      3:1m) reads_per_compound=1000 ;;
+      3:10m) reads_per_compound=10000 ;;
+      3:100m) reads_per_compound=100000 ;;
+      3:1000m) reads_per_compound=1000000 ;;
+      4:1m) reads_per_compound=100 ;;
+      4:10m) reads_per_compound=1000 ;;
+      4:100m) reads_per_compound=10000 ;;
+      4:1000m) reads_per_compound=100000 ;;
+    esac
+    dataset="synthetic_${cycles}cycle_${depth}"
+    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="gen_${dataset}" --wrap "
+cd $ROOT &&
+./.venv/bin/python scripts/generate_synthetic_fastq.py \
+  --num-cycles $cycles \
+  --building-blocks-per-cycle 10 \
+  --num-reads-per-compound $reads_per_compound \
+  --output-dir benchmarks/data \
+  --experiment-name $dataset"
+  done
+done
+```
 
 ## 2. Prepare DELi And DELT-Hit Inputs
 
-Use the converter scripts in [`benchmarks/converter`](/Users/adrianomartinelli/projects/delt-hit/benchmarks/converter).
+Use the converter scripts in [`benchmarks/converter`](./converter).
 
-For DELi:
+### DELi
+
+Example:
 
 ```bash
 ./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
   --dataset-name synthetic_4cycle_100m
 ```
 
-This writes prepared inputs under:
+Prepared inputs are written to `benchmarks/tools/deli/<dataset>/`.
 
-- `/Users/adrianomartinelli/projects/delt-hit/benchmarks/tools/deli/synthetic_4cycle_100m`
+Prepare DELi inputs for all 12 datasets:
 
-Key files:
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-- `decode_synthetic.yaml`
-- `decode_settings_v02.yaml`
-- `deli_config`
-- `data/libraries/synthetic_4cycle_100m_library.json`
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
 
-For DELT-Hit:
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    ./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
+      --dataset-name "$dataset"
+  done
+done
+```
+
+Submit one `4h` Slurm job per dataset for DELi preparation:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
+
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="prep_deli_${dataset}" --wrap "
+cd $ROOT &&
+./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
+  --dataset-name $dataset"
+  done
+done
+```
+
+### DELT-Hit
+
+Example:
 
 ```bash
 ./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
-  --dataset-name synthetic_4cycle_100m --num-cores 11
+  --dataset-name synthetic_4cycle_100m \
+  --num-cores 11
 ```
 
-This writes prepared inputs under:
+Prepared inputs are written to `benchmarks/tools/delt/<dataset>/`.
 
-- `/Users/adrianomartinelli/projects/delt-hit/benchmarks/tools/delt/synthetic_4cycle_100m`
+Use `--num-cores 11` when preparing DELT-Hit inputs inside a Slurm job with `12` CPUs so one core remains outside the tool's configured worker count.
 
-Key files:
+Prepare DELT-Hit inputs for all 12 datasets:
 
-- `config.yaml`
-- `synthetic_4cycle_100m/demultiplex/cutadapt_input_files/demultiplex.sh`
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-`create_delt_inputs.py` also runs `delt_hit demultiplex prepare`, so the `demultiplex.sh` script is ready to execute immediately.
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
 
-## 3. Run The Benchmark
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    ./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
+      --dataset-name "$dataset" \
+      --num-cores 11
+  done
+done
+```
 
-To reproduce the same style of output as:
+Submit one `4h` Slurm job per dataset for DELT-Hit preparation:
 
-- `/Users/adrianomartinelli/projects/delt-hit/target/benchmarks/synthetic_3cycle_50m/split_timing`
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-run [`benchmarks/run_split_timing.py`](/Users/adrianomartinelli/projects/delt-hit/benchmarks/run_split_timing.py):
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
+
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    sbatch --time=4:00:00 --mem=64G --cpus-per-task=12 --job-name="prep_delt_${dataset}" --wrap "
+cd $ROOT &&
+./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
+  --dataset-name $dataset \
+  --num-cores 11"
+  done
+done
+```
+
+## 3. Run Split-Timing Benchmarks
+
+Run [`benchmarks/run_split_timing.py`](./run_split_timing.py) against one prepared dataset.
+
+The runner supports:
+
+- `--tool deli`
+- `--tool delt`
+- `--tool both`
+
+It writes runtime logs and intermediate artifacts to:
+
+- `target/benchmarks/<dataset>/split_timing/deli`
+- `target/benchmarks/<dataset>/split_timing/delt`
+
+It writes the canonical machine-readable report to:
+
+- `benchmarks/tools/deli/<dataset>/timing.json`
+- `benchmarks/tools/delt/<dataset>/timing.json`
+
+### DELi Only
 
 ```bash
 ./.venv/bin/python benchmarks/run_split_timing.py \
-  --dataset-name synthetic_4cycle_100m
+  --dataset-name synthetic_4cycle_100m \
+  --tool deli
 ```
 
-By default this writes to:
+Run DELi across all 12 datasets:
 
-- `/Users/adrianomartinelli/projects/delt-hit/target/benchmarks/synthetic_4cycle_100m/split_timing`
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-That output directory contains:
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
 
-- `deli/`
-- `delt/`
-- `summary.json`
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    ./.venv/bin/python benchmarks/run_split_timing.py \
+      --dataset-name "$dataset" \
+      --tool deli
+  done
+done
+```
 
-Within those tool-specific directories the runner stores:
+Submit one `18h` Slurm job per dataset for DELi benchmarking:
 
-- command logs
-- temporary cache directories
-- DELi decode/count outputs
-- DELT-Hit demultiplex and count outputs
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
+
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_deli_${dataset}" --wrap "
+cd $ROOT &&
+./.venv/bin/python benchmarks/run_split_timing.py \
+  --dataset-name $dataset \
+  --tool deli"
+  done
+done
+```
+
+### DELT-Hit Only
+
+```bash
+./.venv/bin/python benchmarks/run_split_timing.py \
+  --dataset-name synthetic_4cycle_100m \
+  --tool delt
+```
+
+Run DELT-Hit across all 12 datasets:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
+
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    ./.venv/bin/python benchmarks/run_split_timing.py \
+      --dataset-name "$dataset" \
+      --tool delt
+  done
+done
+```
+
+Submit one `18h` Slurm job per dataset for DELT-Hit benchmarking:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
+
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --wrap "
+cd $ROOT &&
+./.venv/bin/python benchmarks/run_split_timing.py \
+  --dataset-name $dataset \
+  --tool delt"
+  done
+done
+```
+
+### Both Tools
+
+```bash
+./.venv/bin/python benchmarks/run_split_timing.py \
+  --dataset-name synthetic_4cycle_100m \
+  --tool both
+```
+
+Run both tools across all 12 datasets:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
+
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    ./.venv/bin/python benchmarks/run_split_timing.py \
+      --dataset-name "$dataset" \
+      --tool both
+  done
+done
+```
+
+Submit one `18h` Slurm job per dataset for combined benchmarking:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/Users/adrianomartinelli/projects/delt-hit"
+cd "$ROOT"
+
+for cycles in 2 3 4; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_${cycles}cycle_${depth}"
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_both_${dataset}" --wrap "
+cd $ROOT &&
+./.venv/bin/python benchmarks/run_split_timing.py \
+  --dataset-name $dataset \
+  --tool both"
+  done
+done
+```
 
 ## What `run_split_timing.py` Measures
 
@@ -133,7 +428,7 @@ For DELT-Hit:
 - execution of the prepared `demultiplex.sh`
 - `delt_hit demultiplex process`
 
-The runner also compares both observed outputs against `expected_counts.tsv` and records whether counts match.
+Each run also compares the observed output against `expected_counts.tsv` and records whether counts match.
 
 ## Manual Command Sequence
 
@@ -148,7 +443,7 @@ DATASET="synthetic_4cycle_100m"
 
 DELI_DIR="$ROOT/benchmarks/tools/deli/$DATASET"
 DELT_DIR="$ROOT/benchmarks/tools/delt/$DATASET"
-DELI_OUT="$DELI_DIR/output_run"
+DELI_OUT="$ROOT/target/benchmarks/$DATASET/split_timing/deli"
 DELT_EXP_DIR="$DELT_DIR/$DATASET"
 
 mkdir -p "$DELI_OUT"
@@ -157,7 +452,7 @@ mkdir -p "$ROOT/.tmp/mpl" "$ROOT/.tmp/fontconfig"
 export MPLCONFIGDIR="$ROOT/.tmp/mpl"
 export XDG_CACHE_HOME="$ROOT/.tmp"
 export FC_CACHEDIR="$ROOT/.tmp/fontconfig"
-export PATH="$ROOT/.venv/bin:$ROOT/benchmarks/tools/deli/.venv/bin:$PATH"
+export PATH="$ROOT/.venv/bin:$ROOT/other_tools/DELi/.venv/bin:$PATH"
 
 deli \
   --config-file "$DELI_DIR/deli_config" \
@@ -188,5 +483,3 @@ python -m delt_hit.cli.main \
   demultiplex process \
   --config_path "$DELT_DIR/config.yaml"
 ```
-
-Use the Python runner when you want the standardized `split_timing` directory layout and `summary.json`.
