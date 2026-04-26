@@ -19,6 +19,12 @@ delt-hit demultiplex process --config_path=$CONFIG_PATH
 delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True
 delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True --sort_by_counts=False
 
+delt-hit library enumerate \
+  --config_path=$CONFIG_PATH \
+  --counts_path=experiments/template/selections/AG24_4/counts.txt \
+  --top_n=1000 \
+  --library_name=AG24_4_top_hits
+
 delt-hit demultiplex report --config_path=$CONFIG_PATH
 delt-hit demultiplex qc --config_path=$CONFIG_PATH
 
