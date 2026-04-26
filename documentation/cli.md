@@ -121,6 +121,10 @@ delt-hit library enumerate \
   --counts_path <save_dir>/<experiment_name>/selections/<SELECTION_NAME>/counts.txt \
   --top_n 1000 \
   --library_name observed_hits
+
+delt-hit library properties \
+  --config_path <path/to/config.yaml> \
+  --library_name observed_hits
 ```
 
 **Outputs**
@@ -135,8 +139,13 @@ Computes molecular properties (RDKit/chem-informatics descriptors) and plots the
 delt-hit library properties --config_path <path/to/config.yaml>
 ```
 
+Useful options:
+- `--library_name` to compute properties for a named library parquet such as filtered enumeration output
+- `--library_path` to compute properties from an explicit parquet path
+
 **Outputs**
 - `<save_dir>/<experiment_name>/library/properties/properties.parquet`
+- `<save_dir>/<experiment_name>/library/properties/<library_name>.parquet` for named-library mode
 - Histogram PNGs per property
 
 ### `visualize`
