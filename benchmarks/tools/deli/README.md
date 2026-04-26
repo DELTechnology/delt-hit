@@ -35,12 +35,21 @@ demultiplexing to recover reads with multiple INDELs. Increases runtime.
 Set to `false` for benchmarks.
 
 ### `library_error_tolerance`
-Fraction (or count) of allowed errors in static sections during demultiplexing.
-`0.1` = 10% of section length. Higher values recover more reads but increase
-false assignments.
+Allowed errors in static sections during demultiplexing. Accepts a **float** or
+an **integer** with different meanings:
+
+| Value type | Interpretation |
+|------------|----------------|
+| **float** `0 < v < 1` | Fraction of the static section length, e.g. `0.1` = 10%. Actual error budget = ⌊rate × length⌋, so the effective count varies with section length. |
+| **int** `≥ 1` | Absolute number of allowed errors, unambiguous regardless of section length. |
+
+> **Benchmarks use integers** — `0` for `err=0` datasets, `1` for `err=1`
+> datasets. Avoid floats unless you specifically want length-proportional
+> tolerance.
 
 ### `library_error_correction_mode_str`
 Error correction strategy for library tag matching. Format: `<metric>:<threshold>`.
+The threshold is always an **absolute integer** count of allowed errors.
 
 | Value | Description |
 |-------|-------------|
@@ -49,7 +58,8 @@ Error correction strategy for library tag matching. Format: `<metric>:<threshold
 | `levenshtein_dist:2,asymmetrical` | Levenshtein with asymmetric error weighting. |
 
 ### `default_error_correction_mode_str`
-Same format as above; applied to non-library barcode sections (building block tags).
+Same format as `library_error_correction_mode_str`; applied to building block
+tag sections.
 
 ### `min_library_overlap`
 Minimum base overlap between read and library sequence for a valid match.
@@ -81,3 +91,40 @@ Reads outside `[50, 128]` bp are discarded before decoding.
 Uses the settings above with `hamming_dist:1` error correction. The `err=1`
 suffix indicates the synthetic FASTQ was generated with a per-base error rate
 of 1%, exercising error correction under realistic sequencing noise.
+
+---
+
+## Known Issues
+
+### DELi fails to recover all reads when errors appear outside building block regions
+
+**Affected datasets:** any `err=1` dataset where errors are injected into all
+barcode regions (library tag, BB tags, closing tag).
+
+**Symptom:** `counts match: False` — DELi decodes fewer compounds than expected
+even with `library_error_tolerance: 1` and `default_error_correction_mode_str:
+hamming_dist:1` correctly configured.
+
+**Root cause (investigated 2026-04-26):** DELi uses a fuzzy regex
+(`{e<=N}`) to locate the library tag and derive the positions of all downstream
+BB sections by fixed offset arithmetic. When the library tag itself carries a
+substitution error, the fuzzy match can anchor at a shifted position, causing
+the inferred BB1 span to be off by one base. This leads to a failed barcode
+lookup for BB1 even though the BB tag itself is within hamming distance 1 of a
+known barcode. All 4 436 failures observed in the `err=1` run were at `bb1`
+(the first section after the library tag); bb2–bb4 never fail because the read
+is dropped as soon as bb1 fails.
+
+**Verification:** Re-generating the dataset with errors injected only into BB
+tags (`--errors-in-bb-only true`) leaves the library tag perfect, and DELi
+still does not decode 100 % of reads (99 610 / 100 000 in the `_bbonly` run).
+DELT-Hit returns correct counts for both datasets.
+
+**Conclusion:** DELi has at least two sources of count loss:
+1. Shifted section spans when the library tag is fuzzy-matched (errors in all
+   regions).
+2. A secondary loss of ~390 reads even when the library tag is error-free,
+   indicating an additional bug in the BB span or barcode-calling logic.
+
+DELi is not used for correctness-critical benchmarking until these issues are
+resolved upstream.

@@ -33,10 +33,6 @@ structure:
   type: building_block
   max_error_rate: 0.125
   indels: false
-- name: U0
-  type: constant
-  max_error_rate: 0
-  indels: false
 - name: C0
   type: constant
   max_error_rate: 0.125
@@ -46,9 +42,7 @@ whitelists:
   - codon: TTGGAACC
   S0:
   - name: synthetic_selection
-    codon: ACGTACGTAC
-  U0:
-  - codon: NNNNNNNN
+    codon: NNNNNNNNACGTACGTAC
   B0:
   - index: 0
     codon: AAAAAAAA

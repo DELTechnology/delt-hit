@@ -131,6 +131,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
             for cycle in range(1, num_cycles + 1)
         ],
         "barcode_schema": {
+            "umi": {"tag": "N" * manifest["umi_length"]},
             "library": {"tag": manifest["library_tag"]},
             **{
                 f"bb{cycle}": {
@@ -139,7 +140,6 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
                 }
                 for cycle in range(1, num_cycles + 1)
             },
-            "umi": {"tag": "N" * manifest["umi_length"]},
             "closing": {"tag": manifest["closing_tag"]},
         },
     }
@@ -158,7 +158,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
         "sequence_files": [str(Path(manifest["files"]["fastq"]).resolve())],
         "libraries": [str(library_json.resolve())],
         "decode_settings": {
-            "library_error_tolerance": (1 / len(manifest["library_tag"])) if num_errors == 1 else 0.0,
+            "library_error_tolerance": num_errors,
             "min_library_overlap": len(manifest["library_tag"]),
             "alignment_algorithm": "semi",
             "bb_calling_approach": "bio",
@@ -183,7 +183,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
                 "demultiplexer_algorithm": "regex",
                 "demultiplexer_mode": "library",
                 "realign": False,
-                "library_error_tolerance": (1 / len(manifest["library_tag"])) if num_errors == 1 else 0,
+                "library_error_tolerance": num_errors,
                 "library_error_correction_mode_str": "hamming_dist:1" if num_errors == 1 else "disable",
                 "min_library_overlap": len(manifest["library_tag"]),
                 "revcomp": False,
