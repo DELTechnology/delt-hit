@@ -46,8 +46,19 @@ class Library:
         lib_path = exp_dir / 'library' / 'library.parquet'
         return lib_path
 
+    def get_named_library_path(self, *, config_path: Path, library_name: str) -> Path:
+        """Resolve a named library parquet path inside the experiment library dir."""
+        exp_dir = self.get_experiment_dir(config_path=config_path)
+        return exp_dir / 'library' / f'{library_name}.parquet'
+
+    def get_library_dir(self, *, config_path: Path) -> Path:
+        """Resolve the experiment library output directory."""
+        exp_dir = self.get_experiment_dir(config_path=config_path)
+        return exp_dir / 'library'
+
     def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
-                  graph_only: bool = False, errors: str = 'raise', building_block_ids: list[str] | None = None):
+                  graph_only: bool = False, errors: str = 'raise', building_block_ids: list[str] | None = None,
+                  counts_path: Path | None = None, top_n: int | None = None, library_name: str | None = None):
         """Enumerate the combinatorial library from a config.
 
         Args:
@@ -57,169 +68,163 @@ class Library:
             graph_only: Whether to stop after writing reaction graphs.
             errors: Error handling mode ('raise' or 'ignore').
             building_block_ids: Optional list of building block IDs to keep.
+            counts_path: Optional path to a file with observed combinations.
+            top_n: Optional cap on the number of input combinations to enumerate.
+            library_name: Optional output parquet base name for filtered mode.
         """
-
-        lib_path = self.get_library_path(config_path=config_path)
+        if counts_path is not None:
+            assert library_name, "Filtered enumeration requires `library_name`"
+            lib_path = self.get_named_library_path(config_path=config_path, library_name=library_name)
+        else:
+            lib_path = self.get_library_path(config_path=config_path)
         if lib_path.exists() and not overwrite:
             logger.info(f'Library {lib_path} exists')
             return
 
+        if top_n is not None:
+            assert top_n > 0, "`top_n` must be a positive integer"
+
         cfg = read_yaml(config_path)
+        graph_bundle = prepare_graph_bundle(cfg=cfg)
 
-        building_block_edges = cfg['library']['bb_edges']
-        other_edges = cfg['library']['other_edges']
-        steps = building_block_edges + other_edges
-        building_blocks = {k: dict(smiles=None) for k in cfg['library']['building_blocks']}
-        products = {k: dict(smiles=None) for k in cfg['library']['products']}
-
-        catalog = cfg['catalog']
-        reactions = catalog['reactions']
-        compounds = catalog['compounds']
-
-        bb_G = get_reaction_graph(steps=building_block_edges,
-                                  reactions=reactions,
-                                  building_blocks=building_blocks,
-                                  compounds=compounds,
-                                  products=products)
-
-        ax = visualize_reaction_graph(bb_G)
-        # ax.figure.show()
         lib_path.parent.mkdir(parents=True, exist_ok=True)
-        ax.figure.savefig(lib_path.parent / 'building_block_reactions_graph.png', dpi=300)
-
-        add_G = get_reaction_graph(steps=other_edges,
-                                   reactions=reactions,
-                                   building_blocks=building_blocks,
-                                   compounds=compounds,
-                                   products=products)
-        ax = visualize_reaction_graph(add_G)
-        # ax.figure.show()
-        ax.figure.savefig(lib_path.parent / 'additional_reactions_graph.png', dpi=300)
-
-        G = get_reaction_graph(steps=steps,
-                               reactions=reactions,
-                               building_blocks=building_blocks,
-                               compounds=compounds,
-                               products=products)
-        ax = visualize_reaction_graph(G)
-        ax.figure.savefig(lib_path.parent / 'reaction_graph.png', dpi=300)
+        save_graph_visualizations(graph_bundle=graph_bundle, save_dir=lib_path.parent)
 
         logger.info(f'Saved reaction graph visualizations to {lib_path.parent}')
 
         if graph_only:
             return
 
-        building_block_names = sorted(building_blocks)
+        building_block_names = sorted(graph_bundle['building_blocks'])
         if building_block_ids:
             building_block_names = list(filter(lambda x: x in building_block_ids, building_block_names))
-        lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
-        combs = list(product(*lists))
 
-        library = []
-        logger.info(f'Starting enumeration of library...')
-        for i, comb in tqdm(enumerate(combs)):
-
-            bb_edges = [(bb, c['reaction']) for bb, c in zip(building_block_names, comb)]
-            bb_edges += [(c['reaction'], c['product']) for c in comb]
-            bb_edges += [(c['educt'], c['reaction']) for c in comb]
-            bb_nodes = set([n for e in bb_edges for n in e])
-
-            # NOTE: we add all subgraphs from the additional reaction if a component in the building block
-            #   reaction graph is a sink (out_degree == 0) in the subgraph. This means the additional reactions
-            #   contain instructions on how to synthesize that component.
-            additional_edges = set()
-            subgraphs = list(nx.weakly_connected_components(add_G))
-            for n in bb_nodes:
-                for sgn in subgraphs:
-                    sg = add_G.subgraph(sgn).copy()
-                    if n in sg and sg.out_degree(n) == 0:
-                        additional_edges.update(sg.edges)
-
-            additional_edges = [tuple(e) for e in additional_edges]
-
-            edges = bb_edges + additional_edges
-            edges = [tuple(e) for e in edges]
-            nodes = [n for e in edges for n in e]
-
-            rnx = set([n for n in nodes if n in reactions])
-            prods = set([n for n in nodes if n in products])
-            comps = set([n for n in nodes if n in compounds])
-
-            rnx = {r: cfg['catalog']['reactions'][r] for r in rnx}
-            prods = {p: dict(smiles=None) for p in prods}
-            comps = {c: cfg['catalog']['compounds'][c] for c in comps}
-            bbs = {bbn: bb
-                   for bbn, bb in zip(building_block_names, comb)
-                   if not pd.isna(bb['smiles'])}
-
-            nodes = {**comps, **prods, **bbs, **rnx}
-
-            g = G.edge_subgraph(edges=edges).copy()
-            sinks = [n for n, d in g.out_degree() if d == 0]
-            is_valid = len(sinks) == 1
-
-            if (debug == 'all') or (debug == 'valid') and is_valid:
-                ax = visualize_reaction_graph(g)
-                ax.figure.savefig(
-                    lib_path.parent / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
-                    dpi=300)
-                plt.close('all')
-                # ax.figure.show()
-
-            if is_valid:
-                assert len(sinks) == 1, f"Expected exactly one sink node, found {len(sinks)}"
-                terminal = sinks[0]
-            else:
-                logger.warning(
-                    f'More than one terminal node for combination: {i}',
-                    f"Run with debug='all' to visualize reaction graphs with multiple terminal nodes.")
-                # NOTE: this means the combination is invalid,
-                #   the participating reactions and compounds are not linearly connected. This happens for example if a
-                #   certain product_1 is only used in a subset of subsequent reactions.
-                continue
-
-            nx.set_node_attributes(g, nodes)
-
-            try:
-                g = complete_reaction_graph(g, errors=errors)
-            except Exception as e:
-                if debug == 'invalid':
-                    ax = visualize_reaction_graph(g)
-                    ax.figure.savefig(
-                        lib_path.parent / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
-                        dpi=300)
-                    plt.close('all')
-
-                if errors == 'raise':
-                    raise e
-                elif errors == 'ignore':
-                    continue
-
-            smiles = g.nodes[terminal]['smiles']
-            record = {f'code_{i}': c['index'] for i, c in enumerate(comb)}
-            record['smiles'] = smiles
-            library.append(record)
-
-        df = pd.DataFrame(library)
-        df = df[df.smiles.notna()]
-        # df = get_dummy_library()
+        df = enumerate_library_dataframe(
+            cfg=cfg,
+            graph_bundle=graph_bundle,
+            building_block_names=building_block_names,
+            counts_path=counts_path,
+            top_n=top_n,
+            debug=debug,
+            errors=errors,
+            save_dir=lib_path.parent,
+        )
         df.to_parquet(lib_path, index=False)
 
-    def properties(self, *, config_path: Path, library_path: Path | None = None):
+    def visualize(self, *, config_path: Path, counts_path: Path | None = None, top_n: int = 12,
+                  library_name: str | None = None, building_block_ids: list[str] | None = None,
+                  output_name: str = "visualization", library_path: Path | None = None,
+                  overwrite: bool = False):
+        """Generate reaction and molecule visualization panels.
+
+        Args:
+            config_path: Path to the YAML config file.
+            counts_path: Optional demultiplex-style counts file for top-hit visualization.
+            top_n: Number of rows/molecules to visualize from the filtered input or library.
+            library_name: Optional named library to load or create in filtered mode.
+            building_block_ids: Optional subset of building block IDs to consider.
+            output_name: Base name for the generated PNG files.
+            library_path: Optional explicit library parquet path to visualize.
+            overwrite: Whether to overwrite an existing filtered library in visualization mode.
+        """
+        assert top_n > 0, "`top_n` must be a positive integer"
+        cfg = read_yaml(config_path)
+        lib_dir = self.get_library_dir(config_path=config_path)
+        lib_dir.mkdir(parents=True, exist_ok=True)
+
+        graph_bundle = prepare_graph_bundle(cfg=cfg)
+        save_graph_visualizations(graph_bundle=graph_bundle, save_dir=lib_dir)
+
+        axes = visualize_reaction_schemes(graph_bundle['G'])
+        axes[0].figure.savefig(lib_dir / f"{output_name}_reaction_schemes.png", dpi=300)
+        close_figure(axes[0].figure)
+
+        building_block_names = sorted(graph_bundle['building_blocks'])
+        if building_block_ids:
+            building_block_names = list(filter(lambda x: x in building_block_ids, building_block_names))
+
+        selected_library_path = library_path
+        if selected_library_path is None:
+            if counts_path is not None:
+                assert library_name, "Filtered visualization requires `library_name`"
+                selected_library_path = self.get_named_library_path(config_path=config_path, library_name=library_name)
+                if overwrite or not selected_library_path.exists():
+                    df = enumerate_library_dataframe(
+                        cfg=cfg,
+                        graph_bundle=graph_bundle,
+                        building_block_names=building_block_names,
+                        counts_path=counts_path,
+                        top_n=top_n,
+                        errors='raise',
+                        save_dir=lib_dir,
+                    )
+                    df.to_parquet(selected_library_path, index=False)
+            else:
+                selected_library_path = self.get_library_path(config_path=config_path)
+
+        assert selected_library_path.exists(), f"Library file not found at {selected_library_path}"
+        library_df = pd.read_parquet(selected_library_path).head(top_n)
+
+        product_ax = visualize_smiles(
+            smiles=library_df['smiles'].dropna().tolist(),
+            legends=[f"row_{idx}" for idx in library_df.index],
+            title='Product Structures',
+        )
+        product_ax.figure.savefig(lib_dir / f"{output_name}_products.png", dpi=300)
+        close_figure(product_ax.figure)
+
+        for bb_idx, bb_name in enumerate(building_block_names):
+            if f'code_{bb_idx}' not in library_df.columns:
+                continue
+
+            whitelist = cfg['whitelists'][bb_name]
+            smiles = []
+            legends = []
+            for code in library_df[f'code_{bb_idx}']:
+                if pd.isna(code):
+                    continue
+                entry = whitelist[int(code)]
+                smiles.append(entry['smiles'])
+                legends.append(f"{bb_name}:{int(code)}")
+
+            if not smiles:
+                continue
+
+            ax = visualize_smiles(
+                smiles=smiles,
+                legends=legends,
+                title=f'{bb_name} Building Blocks',
+            )
+            ax.figure.savefig(lib_dir / f"{output_name}_{bb_name}.png", dpi=300)
+            close_figure(ax.figure)
+
+    def properties(self, *, config_path: Path, library_name: str | None = None,
+                   library_path: Path | None = None):
         """Compute molecular properties for a library and plot histograms.
 
         Args:
             config_path: Path to the YAML config file.
+            library_name: Optional named library parquet to load from the experiment library dir.
             library_path: Optional library parquet override.
         """
-        lib_path = library_path or self.get_library_path(config_path=config_path)
+        if library_path is not None:
+            lib_path = library_path
+            output_name = library_path.stem
+        elif library_name is not None:
+            lib_path = self.get_named_library_path(config_path=config_path, library_name=library_name)
+            output_name = library_name
+        else:
+            lib_path = self.get_library_path(config_path=config_path)
+            output_name = 'properties'
+
+        assert lib_path.exists(), f"Library file not found at {lib_path}"
 
         save_dir = lib_path.parent / 'properties'
         save_dir.mkdir(parents=True, exist_ok=True)
 
         df = pd.read_parquet(lib_path)
         df = self.compute_properties(data=df)
-        df.to_parquet(save_dir / 'properties.parquet', index=False)
+        df.to_parquet(save_dir / f'{output_name}.parquet', index=False)
 
         prop_names = [col for col in df.columns if col.startswith('prop_')]
         plt.close('all')
@@ -450,6 +455,67 @@ def get_dummy_library() -> pd.DataFrame:
     return df
 
 
+def get_combinations(*,
+                     cfg: dict,
+                     building_block_names: list[str],
+                     counts_path: Path | None = None,
+                     top_n: int | None = None) -> list[tuple[dict, ...]]:
+    """Return enumeration combinations from either whitelist product or filtered input."""
+    if counts_path is None:
+        lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
+        return list(product(*lists))
+
+    return load_filtered_combinations(
+        cfg=cfg,
+        building_block_names=building_block_names,
+        counts_path=counts_path,
+        top_n=top_n,
+    )
+
+
+def load_filtered_combinations(*,
+                               cfg: dict,
+                               building_block_names: list[str],
+                               counts_path: Path,
+                               top_n: int | None = None) -> list[tuple[dict, ...]]:
+    """Load explicit building-block combinations from a demultiplex-style counts file."""
+    counts_path = Path(counts_path).expanduser().resolve()
+    assert counts_path.exists(), f"Combination file not found at {counts_path}"
+
+    df = pd.read_csv(counts_path, sep=None, engine='python')
+
+    code_columns = [f'code_{i}' for i in range(len(building_block_names))]
+    assert all(name in df.columns for name in code_columns), (
+        "Filtered enumeration expects the same `code_*` columns produced by demultiplex counts files. "
+        f"Missing one or more required columns from {code_columns}."
+    )
+
+    if top_n is not None:
+        df = df.head(top_n)
+
+    combinations = []
+    for row_idx, row in df.loc[:, code_columns].iterrows():
+        combination = []
+        for bb_idx, bb_name in enumerate(building_block_names):
+            whitelist = cfg['whitelists'][bb_name]
+            raw_value = row[f'code_{bb_idx}']
+
+            assert not pd.isna(raw_value), f"Missing value for {bb_name} at row {row_idx}"
+
+            try:
+                value = int(raw_value)
+            except (TypeError, ValueError) as exc:
+                raise AssertionError(f"Invalid value for {bb_name} at row {row_idx}: {raw_value}") from exc
+
+            assert 0 <= value < len(whitelist), (
+                f"Value {value} for {bb_name} at row {row_idx} is outside whitelist range [0, {len(whitelist) - 1}]"
+            )
+            combination.append(whitelist[value])
+        combinations.append(tuple(combination))
+
+    return combinations
+
+
 def get_reaction_graph(steps: list,
                        reactions: dict,
                        compounds: dict,
@@ -487,11 +553,167 @@ def get_reaction_graph(steps: list,
     return G
 
 
-def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
+def prepare_graph_bundle(cfg: dict) -> dict:
+    """Prepare graph inputs shared by enumeration and visualization."""
+    building_block_edges = cfg['library']['bb_edges']
+    other_edges = cfg['library']['other_edges']
+    steps = building_block_edges + other_edges
+    building_blocks = {k: dict(smiles=None) for k in cfg['library']['building_blocks']}
+    products = {k: dict(smiles=None) for k in cfg['library']['products']}
+    reactions = cfg['catalog']['reactions']
+    compounds = cfg['catalog']['compounds']
+
+    bb_G = get_reaction_graph(
+        steps=building_block_edges,
+        reactions=reactions,
+        building_blocks=building_blocks,
+        compounds=compounds,
+        products=products,
+    )
+    add_G = get_reaction_graph(
+        steps=other_edges,
+        reactions=reactions,
+        building_blocks=building_blocks,
+        compounds=compounds,
+        products=products,
+    )
+    G = get_reaction_graph(
+        steps=steps,
+        reactions=reactions,
+        building_blocks=building_blocks,
+        compounds=compounds,
+        products=products,
+    )
+
+    return {
+        'bb_G': bb_G,
+        'add_G': add_G,
+        'G': G,
+        'building_blocks': building_blocks,
+        'products': products,
+        'reactions': reactions,
+        'compounds': compounds,
+    }
+
+
+def save_graph_visualizations(*, graph_bundle: dict, save_dir: Path) -> None:
+    """Write the standard reaction graph PNGs to disk."""
+    for graph, filename in [
+        (graph_bundle['bb_G'], 'building_block_reactions_graph.png'),
+        (graph_bundle['add_G'], 'additional_reactions_graph.png'),
+        (graph_bundle['G'], 'reaction_graph.png'),
+    ]:
+        ax = visualize_reaction_graph(graph, include_smirks=True)
+        ax.figure.savefig(save_dir / filename, dpi=300)
+        close_figure(ax.figure)
+
+
+def enumerate_library_dataframe(*,
+                                cfg: dict,
+                                graph_bundle: dict,
+                                building_block_names: list[str],
+                                counts_path: Path | None = None,
+                                top_n: int | None = None,
+                                debug: str = 'False',
+                                errors: str = 'raise',
+                                save_dir: Path | None = None) -> pd.DataFrame:
+    """Enumerate a library and return it as a dataframe."""
+    reactions = graph_bundle['reactions']
+    products = graph_bundle['products']
+    compounds = graph_bundle['compounds']
+    add_G = graph_bundle['add_G']
+    G = graph_bundle['G']
+
+    combs = get_combinations(
+        cfg=cfg,
+        building_block_names=building_block_names,
+        counts_path=counts_path,
+        top_n=top_n,
+    )
+
+    library = []
+    logger.info('Starting enumeration of library...')
+    for i, comb in tqdm(enumerate(combs)):
+        bb_edges = [(bb, c['reaction']) for bb, c in zip(building_block_names, comb)]
+        bb_edges += [(c['reaction'], c['product']) for c in comb]
+        bb_edges += [(c['educt'], c['reaction']) for c in comb]
+        bb_nodes = {n for e in bb_edges for n in e}
+
+        additional_edges = set()
+        subgraphs = list(nx.weakly_connected_components(add_G))
+        for n in bb_nodes:
+            for sgn in subgraphs:
+                sg = add_G.subgraph(sgn).copy()
+                if n in sg and sg.out_degree(n) == 0:
+                    additional_edges.update(sg.edges)
+
+        edges = bb_edges + [tuple(e) for e in additional_edges]
+        edges = [tuple(e) for e in edges]
+        nodes = [n for e in edges for n in e]
+
+        rnx = {r: cfg['catalog']['reactions'][r] for r in nodes if r in reactions}
+        prods = {p: dict(smiles=None) for p in nodes if p in products}
+        comps = {c: cfg['catalog']['compounds'][c] for c in nodes if c in compounds}
+        bbs = {bbn: bb for bbn, bb in zip(building_block_names, comb) if not pd.isna(bb['smiles'])}
+
+        node_attrs = {**comps, **prods, **bbs, **rnx}
+
+        g = G.edge_subgraph(edges=edges).copy()
+        sinks = [n for n, d in g.out_degree() if d == 0]
+        is_valid = len(sinks) == 1
+
+        if ((debug == 'all') or (debug == 'valid')) and is_valid and save_dir is not None:
+            ax = visualize_reaction_graph(g, include_smirks=True)
+            ax.figure.savefig(
+                save_dir / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
+                dpi=300,
+            )
+            plt.close(ax.figure)
+
+        if is_valid:
+            terminal = sinks[0]
+        else:
+            logger.warning(
+                f'More than one terminal node for combination: {i}',
+                f"Run with debug='all' to visualize reaction graphs with multiple terminal nodes.",
+            )
+            continue
+
+        nx.set_node_attributes(g, node_attrs)
+
+        try:
+            g = complete_reaction_graph(g, errors=errors)
+        except Exception as e:
+            if debug == 'invalid' and save_dir is not None:
+                ax = visualize_reaction_graph(g, include_smirks=True)
+                ax.figure.savefig(
+                    save_dir / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
+                    dpi=300,
+                )
+                plt.close(ax.figure)
+
+            if errors == 'raise':
+                raise e
+            if errors == 'ignore':
+                continue
+
+        smiles = g.nodes[terminal]['smiles']
+        record = {f'code_{j}': c['index'] for j, c in enumerate(comb)}
+        record['smiles'] = smiles
+        library.append(record)
+
+    df = pd.DataFrame(library)
+    if 'smiles' in df.columns:
+        df = df[df.smiles.notna()]
+    return df
+
+
+def visualize_reaction_graph(G: nx.DiGraph, include_smirks: bool = False) -> plt.Axes:
     """Render a reaction graph with typed node coloring.
 
     Args:
         G: Reaction graph.
+        include_smirks: Whether to include SMIRKS in reaction-node labels.
 
     Returns:
         Matplotlib Axes with the graph visualization.
@@ -545,11 +767,51 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
         ax=ax
     )
 
-    nx.draw_networkx_labels(G, pos, ax=ax, font_size=8)
+    labels = {}
+    for node, data in G.nodes(data=True):
+        if include_smirks and data.get("type") == "reaction" and data.get("smirks"):
+            labels[node] = f"{node}\n{data['smirks']}"
+        else:
+            labels[node] = node
+
+    nx.draw_networkx_labels(G, pos, labels=labels, ax=ax, font_size=8)
     nx.draw_networkx_edges(G, pos, ax=ax, arrows=True)
+    ax.set_axis_off()
+    ax.figure.tight_layout()
 
     # fig.show()
     return ax
+
+
+def visualize_reaction_schemes(G: nx.DiGraph) -> list[plt.Axes]:
+    """Render one 2D reaction scheme panel per reaction node."""
+    reaction_nodes = [(n, d) for n, d in G.nodes(data=True) if d.get("type") == "reaction"]
+    nrows = max(1, len(reaction_nodes))
+    fig, axes = plt.subplots(nrows, 1, figsize=(10, max(3 * nrows, 4)))
+    axes = np.atleast_1d(axes)
+
+    for ax, (name, data) in zip(axes, reaction_nodes):
+        smirks = data.get("smirks")
+        ax.set_axis_off()
+        if pd.isna(smirks) or smirks is None:
+            ax.text(0.5, 0.5, f"{name}\nPASS", ha='center', va='center', fontsize=12)
+            continue
+
+        rxn = rdChemReactions.ReactionFromSmarts(smirks)
+        img = Draw.ReactionToImage(rxn, subImgSize=(250, 120))
+        ax.imshow(img)
+        ax.set_title(f"{name}: {smirks}", fontsize=10)
+
+    fig.tight_layout()
+    return list(axes)
+
+
+def close_figure(fig) -> None:
+    """Close a matplotlib figure when possible."""
+    try:
+        plt.close(fig)
+    except TypeError:
+        return
 
 
 def find_next_reaction(G: nx.DiGraph):
@@ -660,23 +922,34 @@ def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
     return G
 
 
-def visualize_smiles(smiles: list[str], nrow: int = 25):
+def visualize_smiles(smiles: list[str], nrow: int = 25, legends: list[str] | None = None,
+                     title: str = 'Product Structures'):
     """Create a grid image of molecules.
 
     Args:
         smiles: List of SMILES strings.
         nrow: Maximum number of molecules per row.
+        legends: Optional per-molecule legends.
+        title: Figure title.
 
     Returns:
         Matplotlib Axes containing the image.
     """
+    if len(smiles) == 0:
+        fig, ax = plt.subplots(1, 1, figsize=(8, 3))
+        ax.set_axis_off()
+        ax.text(0.5, 0.5, "No structures to display", ha='center', va='center')
+        ax.set_title(title)
+        fig.tight_layout()
+        return ax
+
     mols = [Chem.MolFromSmiles(s) for s in smiles]
-    # could provide legends=product_names
+    legends = legends or None
     nrow = min(nrow, len(mols))
-    img = Draw.MolsToGridImage(mols, molsPerRow=nrow, subImgSize=(200, 200))
+    img = Draw.MolsToGridImage(mols, legends=legends, molsPerRow=nrow, subImgSize=(200, 200))
     plt.figure(figsize=(10, 6))
     ax = plt.imshow(img)
     ax.axes.set_axis_off()
-    ax.axes.set_title('Product Structures')
+    ax.axes.set_title(title)
     ax.figure.tight_layout()
     return ax

@@ -109,9 +109,27 @@ Useful options:
 - `--overwrite` to re-generate an existing library
 - `--graph_only` to skip enumeration and only write reaction graph visualizations
 - `--building_block_ids` to enumerate a subset of building blocks
+- `--counts_path`, `--top_n`, and `--library_name` to enumerate only the top observed combinations from a demultiplex `counts.txt` file
+
+Example filtered-enumeration workflow:
+
+```
+delt-hit demultiplex process --config_path <path/to/config.yaml>
+
+delt-hit library enumerate \
+  --config_path <path/to/config.yaml> \
+  --counts_path <save_dir>/<experiment_name>/selections/<SELECTION_NAME>/counts.txt \
+  --top_n 1000 \
+  --library_name observed_hits
+
+delt-hit library properties \
+  --config_path <path/to/config.yaml> \
+  --library_name observed_hits
+```
 
 **Outputs**
 - `<save_dir>/<experiment_name>/library/library.parquet`
+- `<save_dir>/<experiment_name>/library/<library_name>.parquet` for filtered enumeration
 - Reaction graph PNGs in the same directory
 
 ### `properties`
@@ -121,9 +139,43 @@ Computes molecular properties (RDKit/chem-informatics descriptors) and plots the
 delt-hit library properties --config_path <path/to/config.yaml>
 ```
 
+Useful options:
+- `--library_name` to compute properties for a named library parquet such as filtered enumeration output
+- `--library_path` to compute properties from an explicit parquet path
+
 **Outputs**
 - `<save_dir>/<experiment_name>/library/properties/properties.parquet`
+- `<save_dir>/<experiment_name>/library/properties/<library_name>.parquet` for named-library mode
 - Histogram PNGs per property
+
+### `visualize`
+Generates reviewer-friendly chemical visualizations: reaction graphs annotated with SMIRKS, 2D reaction scheme panels, and 2D structure grids for products and selected building blocks.
+
+```
+delt-hit library visualize --config_path <path/to/config.yaml>
+```
+
+Useful options:
+- `--counts_path`, `--top_n`, and `--library_name` to visualize the top observed combinations from a demultiplex `counts.txt` file
+- `--output_name` to control the PNG filename prefix
+- `--library_path` to render structures from an existing parquet library
+
+Example top-hit visualization workflow:
+
+```
+delt-hit library visualize \
+  --config_path <path/to/config.yaml> \
+  --counts_path <save_dir>/<experiment_name>/selections/<SELECTION_NAME>/counts.txt \
+  --top_n 24 \
+  --library_name observed_hits \
+  --output_name reviewer_panel
+```
+
+**Outputs**
+- Reaction graph PNGs in `<save_dir>/<experiment_name>/library/`
+- `<output_name>_reaction_schemes.png`
+- `<output_name>_products.png`
+- `<output_name>_<BUILDING_BLOCK_ID>.png` for each visualized building-block family
 
 ### `represent`
 Generates machine-learning representations (fingerprints).
