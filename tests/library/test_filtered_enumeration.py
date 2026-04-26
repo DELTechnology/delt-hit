@@ -196,3 +196,64 @@ def test_visualize_filtered_mode_requires_library_name(tmp_path, monkeypatch):
 
     with pytest.raises(AssertionError, match="library_name"):
         Library().visualize(config_path=config_path, counts_path=counts_path)
+
+
+def test_properties_default_mode_writes_properties_parquet(tmp_path):
+    _, config_path = make_test_config(tmp_path)
+    library_path = tmp_path / "mini" / "library" / "library.parquet"
+    library_path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame({"smiles": ["CO", "CCO"]}).to_parquet(library_path, index=False)
+
+    Library().properties(config_path=config_path)
+
+    properties_path = tmp_path / "mini" / "library" / "properties" / "properties.parquet"
+    assert properties_path.exists()
+
+    df = pd.read_parquet(properties_path)
+    assert list(df["smiles"]) == ["CO", "CCO"]
+    assert "prop_mw" in df.columns
+
+
+def test_properties_named_library_writes_named_properties_parquet(tmp_path):
+    _, config_path = make_test_config(tmp_path)
+    library_path = tmp_path / "mini" / "library" / "observed_hits.parquet"
+    library_path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame({"smiles": ["CO"]}).to_parquet(library_path, index=False)
+
+    Library().properties(config_path=config_path, library_name="observed_hits")
+
+    properties_path = tmp_path / "mini" / "library" / "properties" / "observed_hits.parquet"
+    assert properties_path.exists()
+
+    df = pd.read_parquet(properties_path)
+    assert list(df["smiles"]) == ["CO"]
+    assert "prop_mw" in df.columns
+
+
+def test_properties_library_path_overrides_library_name(tmp_path):
+    _, config_path = make_test_config(tmp_path)
+    library_dir = tmp_path / "mini" / "library"
+    library_dir.mkdir(parents=True, exist_ok=True)
+
+    pd.DataFrame({"smiles": ["CC"]}).to_parquet(library_dir / "observed_hits.parquet", index=False)
+    explicit_path = tmp_path / "custom_library.parquet"
+    pd.DataFrame({"smiles": ["CO"]}).to_parquet(explicit_path, index=False)
+
+    Library().properties(
+        config_path=config_path,
+        library_name="observed_hits",
+        library_path=explicit_path,
+    )
+
+    properties_path = tmp_path / "properties" / "custom_library.parquet"
+    assert properties_path.exists()
+
+    df = pd.read_parquet(properties_path)
+    assert list(df["smiles"]) == ["CO"]
+
+
+def test_properties_named_library_requires_existing_parquet(tmp_path):
+    _, config_path = make_test_config(tmp_path)
+
+    with pytest.raises(AssertionError, match="Library file not found"):
+        Library().properties(config_path=config_path, library_name="observed_hits")

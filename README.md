@@ -174,6 +174,11 @@ Here is a typical workflow for using `delt-hit`:
    # Compute chemical properties
    delt-hit library properties --config_path /path/to/config.yaml
 
+   # Compute chemical properties for a named filtered library
+   delt-hit library properties \
+   --config_path /path/to/config.yaml \
+   --library_name observed_hits
+
    # Generate molecular fingerprints (e.g., Morgan)
    delt-hit library represent --method=morgan --config_path /path/to/config.yaml
    ```
@@ -226,6 +231,12 @@ Commands for library enumeration, and chemical property and representation calcu
 - **`properties`**: Calculates a set of chemical properties for the enumerated library.
   ```bash
   delt-hit library properties --config_path <path/to/config.yaml>
+  ```
+  You can also compute properties for a named filtered library:
+  ```bash
+  delt-hit library properties \
+  --config_path <path/to/config.yaml> \
+  --library_name observed_hits
   ```
 - **`represent`**: Generates molecular representations (fingerprints) for the library.
   ```bash

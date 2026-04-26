@@ -198,21 +198,33 @@ class Library:
             ax.figure.savefig(lib_dir / f"{output_name}_{bb_name}.png", dpi=300)
             close_figure(ax.figure)
 
-    def properties(self, *, config_path: Path, library_path: Path | None = None):
+    def properties(self, *, config_path: Path, library_name: str | None = None,
+                   library_path: Path | None = None):
         """Compute molecular properties for a library and plot histograms.
 
         Args:
             config_path: Path to the YAML config file.
+            library_name: Optional named library parquet to load from the experiment library dir.
             library_path: Optional library parquet override.
         """
-        lib_path = library_path or self.get_library_path(config_path=config_path)
+        if library_path is not None:
+            lib_path = library_path
+            output_name = library_path.stem
+        elif library_name is not None:
+            lib_path = self.get_named_library_path(config_path=config_path, library_name=library_name)
+            output_name = library_name
+        else:
+            lib_path = self.get_library_path(config_path=config_path)
+            output_name = 'properties'
+
+        assert lib_path.exists(), f"Library file not found at {lib_path}"
 
         save_dir = lib_path.parent / 'properties'
         save_dir.mkdir(parents=True, exist_ok=True)
 
         df = pd.read_parquet(lib_path)
         df = self.compute_properties(data=df)
-        df.to_parquet(save_dir / 'properties.parquet', index=False)
+        df.to_parquet(save_dir / f'{output_name}.parquet', index=False)
 
         prop_names = [col for col in df.columns if col.startswith('prop_')]
         plt.close('all')
