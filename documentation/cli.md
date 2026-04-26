@@ -139,6 +139,35 @@ delt-hit library properties --config_path <path/to/config.yaml>
 - `<save_dir>/<experiment_name>/library/properties/properties.parquet`
 - Histogram PNGs per property
 
+### `visualize`
+Generates reviewer-friendly chemical visualizations: reaction graphs annotated with SMIRKS, 2D reaction scheme panels, and 2D structure grids for products and selected building blocks.
+
+```
+delt-hit library visualize --config_path <path/to/config.yaml>
+```
+
+Useful options:
+- `--counts_path`, `--top_n`, and `--library_name` to visualize the top observed combinations from a demultiplex `counts.txt` file
+- `--output_name` to control the PNG filename prefix
+- `--library_path` to render structures from an existing parquet library
+
+Example top-hit visualization workflow:
+
+```
+delt-hit library visualize \
+  --config_path <path/to/config.yaml> \
+  --counts_path <save_dir>/<experiment_name>/selections/<SELECTION_NAME>/counts.txt \
+  --top_n 24 \
+  --library_name observed_hits \
+  --output_name reviewer_panel
+```
+
+**Outputs**
+- Reaction graph PNGs in `<save_dir>/<experiment_name>/library/`
+- `<output_name>_reaction_schemes.png`
+- `<output_name>_products.png`
+- `<output_name>_<BUILDING_BLOCK_ID>.png` for each visualized building-block family
+
 ### `represent`
 Generates machine-learning representations (fingerprints).
 
