@@ -75,14 +75,15 @@ def library_from_excel(path: Path) -> dict:
         df = pd.read_excel(path, sheet_name=sheet)
         df = df.astype(str)
 
-        filter_ = df.smiles.notna()
-        bb_edges.update([(sheet, r) for r in df.reaction[filter_]])
-        bb_edges.update([(i, r) for i, r in zip(df.educt, df.reaction)])
-        bb_edges.update([(r, p) for r,p in zip(df.reaction, df['product'])])
-
-        products.update(df['product'])
-        educts.update(df['educt'])
-        reactions.update(df['reaction'])
+        has_chemistry = {'smiles', 'educt', 'reaction', 'product'}.issubset(df.columns)
+        if has_chemistry:
+            filter_ = df.smiles.notna()
+            bb_edges.update([(sheet, r) for r in df.reaction[filter_]])
+            bb_edges.update([(i, r) for i, r in zip(df.educt, df.reaction)])
+            bb_edges.update([(r, p) for r, p in zip(df.reaction, df['product'])])
+            products.update(df['product'])
+            educts.update(df['educt'])
+            reactions.update(df['reaction'])
 
     edges = [list(i) for i in edges]
     bb_edges = [list(i) for i in bb_edges]
@@ -246,7 +247,7 @@ def get_selection_name_to_ids(path: Path)-> dict:
     df = df[['name', *selection_col_names]]
 
     for col_name in selection_col_names:
-        mapping = df[[col_name]].drop_duplicates().reset_index().set_index(col_name)['index'].to_dict()
+        mapping = df[[col_name]].drop_duplicates().reset_index(drop=True).reset_index().set_index(col_name)['index'].to_dict()
         df[col_name] = df[col_name].map(mapping)
 
     id_to_name = df.set_index(selection_col_names).name.to_dict()
