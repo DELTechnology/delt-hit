@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 def load_generator_module():
-    script_path = Path(__file__).resolve().parents[1] / "scripts" / "generate_synthetic_fastq.py"
+    script_path = Path(__file__).resolve().parents[1] / "benchmarks" / "generate_synthetic_fastq.py"
     spec = importlib.util.spec_from_file_location("generate_synthetic_fastq", script_path)
     module = importlib.util.module_from_spec(spec)
     assert spec is not None
