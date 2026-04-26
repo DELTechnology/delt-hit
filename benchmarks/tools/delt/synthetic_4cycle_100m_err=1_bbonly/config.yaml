@@ -1,8 +1,8 @@
 experiment:
-  name: synthetic_4cycle_100m_err=1
-  fastq_path: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/data/synthetic_4cycle_100m_err=1/synthetic_4cycle_100m_err=1.fastq.gz
-  save_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/delt/synthetic_4cycle_100m_err=1
-  num_cores: 11
+  name: synthetic_4cycle_100m_err=1_bbonly
+  fastq_path: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/data/synthetic_4cycle_100m_err=1_bbonly/synthetic_4cycle_100m_err=1_bbonly.fastq.gz
+  save_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/delt/synthetic_4cycle_100m_err=1_bbonly
+  num_cores: 1
 selections:
   synthetic_selection:
     operator: Codex
