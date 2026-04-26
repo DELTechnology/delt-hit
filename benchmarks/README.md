@@ -48,7 +48,7 @@ The exact `--num-reads-per-compound` values for the target read depths are:
 
 ## 1. Generate Synthetic Datasets
 
-The canonical generator is [`scripts/generate_synthetic_fastq.py`](../scripts/generate_synthetic_fastq.py).
+The canonical generator is [`generate_synthetic_fastq.py`](./generate_synthetic_fastq.py).
 
 Each dataset is written under `benchmarks/data/<dataset>/` and includes:
 
@@ -60,10 +60,11 @@ Each dataset is written under `benchmarks/data/<dataset>/` and includes:
 Example: generate `synthetic_4cycle_100m`:
 
 ```bash
-./.venv/bin/python scripts/generate_synthetic_fastq.py \
+./.venv/bin/python benchmarks/generate_synthetic_fastq.py \
   --num-cycles 4 \
   --building-blocks-per-cycle 10 \
   --num-reads-per-compound 10000 \
+  --num-errors 0 \
   --output-dir benchmarks/data \
   --experiment-name synthetic_4cycle_100m
 ```
@@ -75,6 +76,7 @@ Generate all 12 datasets:
 set -euo pipefail
 
 ROOT="/users/amarti51/projects/delt-hit"
+NUM_ERRORS=0
 cd "$ROOT"
 
 for cycles in 2 3 4; do
@@ -96,10 +98,11 @@ for cycles in 2 3 4; do
 
     dataset="synthetic_${cycles}cycle_${depth}"
 
-    ./.venv/bin/python scripts/generate_synthetic_fastq.py \
+    ./.venv/bin/python benchmarks/generate_synthetic_fastq.py \
       --num-cycles "$cycles" \
       --building-blocks-per-cycle 10 \
       --num-reads-per-compound "$reads_per_compound" \
+      --num-errors "$NUM_ERRORS" \
       --output-dir benchmarks/data \
       --experiment-name "$dataset"
   done
@@ -111,11 +114,13 @@ If you only want to generate data on a compute node, use `$TMPDIR` as the scratc
 ```bash
 ROOT="/users/amarti51/projects/delt-hit"
 DATA_DIR="$TMPDIR/benchmarks/synthetic_4cycle_100m"
+NUM_ERRORS=0
 
-./.venv/bin/python scripts/generate_synthetic_fastq.py \
+./.venv/bin/python benchmarks/generate_synthetic_fastq.py \
   --num-cycles 4 \
   --building-blocks-per-cycle 10 \
   --num-reads-per-compound 10000 \
+  --num-errors "$NUM_ERRORS" \
   --output-dir "$DATA_DIR/data" \
   --experiment-name synthetic_4cycle_100m
 ```
@@ -246,11 +251,11 @@ Submit one `18h` Slurm job per dataset for end-to-end DELi benchmarking on `$TMP
 set -euo pipefail
 
 ROOT="/users/amarti51/projects/delt-hit"
+NUM_ERRORS=0
 cd "$ROOT"
 
 for cycles in 2 3 4; do
-#  for depth in 1m 10m 100m 1000m; do
-  for depth in 1000m; do
+  for depth in 1m 10m 100m 1000m; do
     case "${cycles}:${depth}" in
       2:1m) reads_per_compound=10000 ;;
       2:10m) reads_per_compound=100000 ;;
@@ -266,13 +271,14 @@ for cycles in 2 3 4; do
       4:1000m) reads_per_compound=100000 ;;
     esac
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=12:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_deli_${dataset}" --output="$HOME/logs/%j.out" --wrap "
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_deli_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
-./.venv/bin/python scripts/generate_synthetic_fastq.py \
+./.venv/bin/python benchmarks/generate_synthetic_fastq.py \
   --num-cycles $cycles \
   --building-blocks-per-cycle 10 \
   --num-reads-per-compound $reads_per_compound \
+  --num-errors $NUM_ERRORS \
   --output-dir \$DATA_DIR/data \
   --experiment-name $dataset &&
 ./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
@@ -301,6 +307,7 @@ Run DELT-Hit across all 12 datasets in-place:
 set -euo pipefail
 
 ROOT="/users/amarti51/projects/delt-hit"
+NUM_ERRORS=0
 cd "$ROOT"
 for depth in 1m 10m 100m 1000m; do
   for cycles in 2 3 4; do
@@ -338,13 +345,14 @@ for cycles in 2 3 4; do
       4:1000m) reads_per_compound=100000 ;;
     esac
     dataset="synthetic_${cycles}cycle_${depth}"
-    sbatch --time=04:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
 cd $ROOT &&
 DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
-./.venv/bin/python scripts/generate_synthetic_fastq.py \
+./.venv/bin/python benchmarks/generate_synthetic_fastq.py \
   --num-cycles $cycles \
   --building-blocks-per-cycle 10 \
   --num-reads-per-compound $reads_per_compound \
+  --num-errors $NUM_ERRORS \
   --output-dir \$DATA_DIR/data \
   --experiment-name $dataset &&
 ./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
