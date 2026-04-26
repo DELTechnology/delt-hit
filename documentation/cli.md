@@ -109,9 +109,23 @@ Useful options:
 - `--overwrite` to re-generate an existing library
 - `--graph_only` to skip enumeration and only write reaction graph visualizations
 - `--building_block_ids` to enumerate a subset of building blocks
+- `--counts_path`, `--top_n`, and `--library_name` to enumerate only the top observed combinations from a demultiplex `counts.txt` file
+
+Example filtered-enumeration workflow:
+
+```
+delt-hit demultiplex process --config_path <path/to/config.yaml>
+
+delt-hit library enumerate \
+  --config_path <path/to/config.yaml> \
+  --counts_path <save_dir>/<experiment_name>/selections/<SELECTION_NAME>/counts.txt \
+  --top_n 1000 \
+  --library_name observed_hits
+```
 
 **Outputs**
 - `<save_dir>/<experiment_name>/library/library.parquet`
+- `<save_dir>/<experiment_name>/library/<library_name>.parquet` for filtered enumeration
 - Reaction graph PNGs in the same directory
 
 ### `properties`

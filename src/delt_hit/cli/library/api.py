@@ -46,8 +46,14 @@ class Library:
         lib_path = exp_dir / 'library' / 'library.parquet'
         return lib_path
 
+    def get_named_library_path(self, *, config_path: Path, library_name: str) -> Path:
+        """Resolve a named library parquet path inside the experiment library dir."""
+        exp_dir = self.get_experiment_dir(config_path=config_path)
+        return exp_dir / 'library' / f'{library_name}.parquet'
+
     def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
-                  graph_only: bool = False, errors: str = 'raise', building_block_ids: list[str] | None = None):
+                  graph_only: bool = False, errors: str = 'raise', building_block_ids: list[str] | None = None,
+                  counts_path: Path | None = None, top_n: int | None = None, library_name: str | None = None):
         """Enumerate the combinatorial library from a config.
 
         Args:
@@ -57,12 +63,21 @@ class Library:
             graph_only: Whether to stop after writing reaction graphs.
             errors: Error handling mode ('raise' or 'ignore').
             building_block_ids: Optional list of building block IDs to keep.
+            counts_path: Optional path to a file with observed combinations.
+            top_n: Optional cap on the number of input combinations to enumerate.
+            library_name: Optional output parquet base name for filtered mode.
         """
-
-        lib_path = self.get_library_path(config_path=config_path)
+        if counts_path is not None:
+            assert library_name, "Filtered enumeration requires `library_name`"
+            lib_path = self.get_named_library_path(config_path=config_path, library_name=library_name)
+        else:
+            lib_path = self.get_library_path(config_path=config_path)
         if lib_path.exists() and not overwrite:
             logger.info(f'Library {lib_path} exists')
             return
+
+        if top_n is not None:
+            assert top_n > 0, "`top_n` must be a positive integer"
 
         cfg = read_yaml(config_path)
 
@@ -112,8 +127,12 @@ class Library:
         building_block_names = sorted(building_blocks)
         if building_block_ids:
             building_block_names = list(filter(lambda x: x in building_block_ids, building_block_names))
-        lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
-        combs = list(product(*lists))
+        combs = get_combinations(
+            cfg=cfg,
+            building_block_names=building_block_names,
+            counts_path=counts_path,
+            top_n=top_n,
+        )
 
         library = []
         logger.info(f'Starting enumeration of library...')
@@ -448,6 +467,67 @@ def get_dummy_library() -> pd.DataFrame:
         'coda_2': range(len(smiles)),
         'smiles': smiles})
     return df
+
+
+def get_combinations(*,
+                     cfg: dict,
+                     building_block_names: list[str],
+                     counts_path: Path | None = None,
+                     top_n: int | None = None) -> list[tuple[dict, ...]]:
+    """Return enumeration combinations from either whitelist product or filtered input."""
+    if counts_path is None:
+        lists = [cfg['whitelists'][bbn] for bbn in building_block_names]
+        return list(product(*lists))
+
+    return load_filtered_combinations(
+        cfg=cfg,
+        building_block_names=building_block_names,
+        counts_path=counts_path,
+        top_n=top_n,
+    )
+
+
+def load_filtered_combinations(*,
+                               cfg: dict,
+                               building_block_names: list[str],
+                               counts_path: Path,
+                               top_n: int | None = None) -> list[tuple[dict, ...]]:
+    """Load explicit building-block combinations from a demultiplex-style counts file."""
+    counts_path = Path(counts_path).expanduser().resolve()
+    assert counts_path.exists(), f"Combination file not found at {counts_path}"
+
+    df = pd.read_csv(counts_path, sep=None, engine='python')
+
+    code_columns = [f'code_{i}' for i in range(len(building_block_names))]
+    assert all(name in df.columns for name in code_columns), (
+        "Filtered enumeration expects the same `code_*` columns produced by demultiplex counts files. "
+        f"Missing one or more required columns from {code_columns}."
+    )
+
+    if top_n is not None:
+        df = df.head(top_n)
+
+    combinations = []
+    for row_idx, row in df.loc[:, code_columns].iterrows():
+        combination = []
+        for bb_idx, bb_name in enumerate(building_block_names):
+            whitelist = cfg['whitelists'][bb_name]
+            raw_value = row[f'code_{bb_idx}']
+
+            assert not pd.isna(raw_value), f"Missing value for {bb_name} at row {row_idx}"
+
+            try:
+                value = int(raw_value)
+            except (TypeError, ValueError) as exc:
+                raise AssertionError(f"Invalid value for {bb_name} at row {row_idx}: {raw_value}") from exc
+
+            assert 0 <= value < len(whitelist), (
+                f"Value {value} for {bb_name} at row {row_idx} is outside whitelist range [0, {len(whitelist) - 1}]"
+            )
+            combination.append(whitelist[value])
+        combinations.append(tuple(combination))
+
+    return combinations
 
 
 def get_reaction_graph(steps: list,

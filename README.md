@@ -164,6 +164,13 @@ Here is a typical workflow for using `delt-hit`:
    # Enumerate all molecules in the library
    delt-hit library enumerate --config_path /path/to/config.yaml
 
+   # Enumerate only the top observed combinations from a demultiplex counts file
+   delt-hit library enumerate \
+   --config_path /path/to/config.yaml \
+   --counts_path /path/to/selections/SELECTION_NAME/counts.txt \
+   --top_n 1000 \
+   --library_name observed_hits
+
    # Compute chemical properties
    delt-hit library properties --config_path /path/to/config.yaml
 
@@ -207,6 +214,14 @@ Commands for library enumeration, and chemical property and representation calcu
 - **`enumerate`**: Generates the full library of molecules from the reaction steps defined in the configuration file.
   ```bash
   delt-hit library enumerate --config_path <path/to/config.yaml>
+  ```
+  You can also enumerate only the top observed barcode combinations from a demultiplex counts file:
+  ```bash
+  delt-hit library enumerate \
+  --config_path <path/to/config.yaml> \
+  --counts_path <path/to/selections/SELECTION_NAME/counts.txt> \
+  --top_n 1000 \
+  --library_name observed_hits
   ```
 - **`properties`**: Calculates a set of chemical properties for the enumerated library.
   ```bash
