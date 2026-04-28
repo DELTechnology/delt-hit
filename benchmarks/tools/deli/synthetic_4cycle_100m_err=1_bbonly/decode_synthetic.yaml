@@ -1,0 +1,22 @@
+selection_id: synthetic_4cycle_100m_err=1_bbonly_selection
+target_id: synthetic_target
+selection_condition: synthetic_benchmark
+additional_info: Synthetic neutral dataset with 100000 reads across 10000 encoded
+  compounds.
+data_ran: '2026-04-24T00:00:00'
+sequence_files:
+- /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/data/synthetic_4cycle_100m_err=1_bbonly/synthetic_4cycle_100m_err=1_bbonly.fastq.gz
+libraries:
+- /work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/benchmarks/tools/deli/synthetic_4cycle_100m_err=1_bbonly/data/libraries/synthetic_4cycle_100m_err=1_bbonly_library.json
+decode_settings:
+  library_error_tolerance: 1
+  min_library_overlap: 10
+  alignment_algorithm: semi
+  bb_calling_approach: bio
+  revcomp: false
+  max_read_length: 128
+  min_read_length: 50
+  read_type: single
+  disable_error_correction: false
+  umi_clustering: false
+  umi_min_distance: 2
