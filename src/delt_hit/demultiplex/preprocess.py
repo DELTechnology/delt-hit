@@ -10,6 +10,10 @@ from delt_hit.utils import read_yaml
 from delt_hit.demultiplex.validation import Region
 
 
+FASTQ_SUFFIXES = {'.fastq', '.fq'}
+FASTA_SUFFIXES = {'.fasta', '.fa'}
+
+
 def get_codons(name: str, whitelists: dict) -> list[str]:
     """Return codon strings for a named whitelist.
 
@@ -75,6 +79,25 @@ def write_fastq_files(regions: list[Region], save_path: Path) -> None:
             f.write(fastq)
 
 
+def _get_input_suffix_and_stride(path_input_fastq: Path) -> tuple[str, int]:
+    """Return the suffix chain and record stride for an input file."""
+    suffixes = path_input_fastq.suffixes
+    extension = ''.join(suffixes)
+    normalized_suffixes = [suffix.lower() for suffix in suffixes if suffix.lower() != '.gz']
+    has_fastq_suffix = any(suffix in FASTQ_SUFFIXES for suffix in normalized_suffixes)
+    has_fasta_suffix = any(suffix in FASTA_SUFFIXES for suffix in normalized_suffixes)
+
+    assert not (has_fastq_suffix and has_fasta_suffix), (
+        f'Ambiguous input file extension for demultiplexing: {path_input_fastq.name}'
+    )
+
+    if has_fastq_suffix:
+        return extension, 4
+    if has_fasta_suffix:
+        return extension, 2
+    raise ValueError(f'Unsupported input file extension for demultiplexing: {path_input_fastq.name}')
+
+
 def generate_input_files(
         config_path: Path,
         write_json_file: bool = True,
@@ -98,6 +121,7 @@ def generate_input_files(
 
     save_dir = Path(config['experiment']['save_dir']).expanduser().resolve()
     path_input_fastq = Path(config['experiment']['fastq_path']).expanduser().resolve()
+    file_extension, header_stride = _get_input_suffix_and_stride(path_input_fastq)
 
     num_cores = config['experiment']['num_cores']
     num_cores = multiprocessing.cpu_count() if pd.isna(num_cores) else num_cores
@@ -113,7 +137,7 @@ def generate_input_files(
     path_demultiplex_exec = cutadapt_input_files_dir / 'demultiplex.sh'
 
     path_final_reads = cutadapt_output_files_dir / 'reads_with_adapters.gz'
-    path_output_fastq = cutadapt_output_files_dir / 'out.fastq.gz'
+    path_output_fastq = cutadapt_output_files_dir / f'out{file_extension}'
 
     regions = get_regions(structure=structure, whitelists=whitelists)
     write_fastq_files(regions, save_path=cutadapt_input_files_dir)
@@ -147,7 +171,7 @@ def generate_input_files(
         indels = f' --no-indels' if not int(region.indels) else ''
         path_adapters = cutadapt_input_files_dir / f'{region.id}.fastq'
         # NOTE: from now on we use the output of the previous step as input
-        path_input_fastq = cutadapt_output_files_dir / 'input.fastq.gz'
+        path_input_fastq = cutadapt_output_files_dir / f'input{file_extension}'
 
         report_file_name = cutadapt_output_files_dir / f'{region.id}.cutadapt.json'
         stdout_file_name = cutadapt_output_files_dir / f'{region.id}.cutadapt.log'
@@ -178,13 +202,13 @@ def generate_input_files(
 
     if with_processing:
         with open(path_demultiplex_exec, 'a') as f:
-            f.write(f'\nzcat "{path_output_fastq}" | sed -n \'1~4p\' | gzip -c > "{path_final_reads}" || exit\n')
+            f.write(f'\nzcat "{path_output_fastq}" | sed -n \'1~{header_stride}p\' | gzip -c > "{path_final_reads}" || exit\n')
             f.write(f'delt-hit demultiplex process --config_path="{config_path}" || exit\n')
             f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
         os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
     else:
         with open(path_demultiplex_exec, 'a') as f:
-            f.write(f'\nzcat "{path_output_fastq}" | sed -n \'1~4p\' | gzip -c > "{path_final_reads}" || exit\n')
+            f.write(f'\nzcat "{path_output_fastq}" | sed -n \'1~{header_stride}p\' | gzip -c > "{path_final_reads}" || exit\n')
         os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 
 
