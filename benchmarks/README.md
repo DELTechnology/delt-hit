@@ -162,8 +162,8 @@ Example: generate `synthetic_4cycle_100m`:
 ./.venv/bin/python benchmarks/generate_synthetic_fastq.py \
   --num-cycles 4 \
   --building-blocks-per-cycle 10 \
-  --num-reads-per-compound 10000 \
-  --num-errors 0 \
+  --num-reads-per-compound 10 \
+  --num-errors 1 \
   --output-dir benchmarks/data \
   --experiment-name synthetic_4cycle_100m
 ```
@@ -395,7 +395,7 @@ done
 
 ```bash
 ./.venv/bin/python benchmarks/run_split_timing.py \
-  --dataset-name synthetic_4cycle_100m \
+  --dataset-name synthetic_4cycle_100m_err=1 \
   --tool delt
 ```
 

@@ -81,12 +81,20 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
     fastq_path = Path(manifest["files"]["fastq"]).resolve()
     library_error_rate = num_errors / len(manifest["library_tag"])
     barcode_error_rate = num_errors / int(manifest["tag_length"])
-    closing_error_rate = num_errors / len(manifest["closing_tag"])
-
+    umi_length = int(manifest["umi_length"])
+    # Absorb UMI bases into C0 with Ns — cutadapt cannot demux all-N adapters,
+    # so we lump the UMI skip into the closing-tag step.
+    # Reads start with: [UMI][library_tag][bb0]...[bbN][closing_tag]
+    # cutadapt anchors all adapters at 5', so S0 must absorb the UMI prefix
+    # with Ns, then the barcodes strip naturally, and C0 absorbs any remaining
+    # UMI bases (none, since S0 already consumed them).
+    selection_codon = "N" * umi_length + manifest["library_tag"]
+    selection_error_rate = num_errors / len(manifest["library_tag"])
+    closing_codon = manifest["closing_tag"]
+    closing_error_rate = num_errors / len(closing_codon)
     whitelists = {
-        "C0": [{"codon": manifest["closing_tag"]}],
-        "S0": [{"name": "synthetic_selection", "codon": manifest["library_tag"]}],
-        "U0": [{"codon": "N" * manifest["umi_length"]}],
+        "C0": [{"codon": closing_codon}],
+        "S0": [{"name": "synthetic_selection", "codon": selection_codon}],
     }
     for cycle in range(1, num_cycles + 1):
         sheet_name = f"B{cycle - 1}"
@@ -119,12 +127,11 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
             }
         },
         "structure": [
-            {"name": "S0", "type": "selection", "max_error_rate": library_error_rate, "indels": False},
+            {"name": "S0", "type": "selection", "max_error_rate": selection_error_rate, "indels": False},
             *[
                 {"name": f"B{cycle - 1}", "type": "building_block", "max_error_rate": barcode_error_rate, "indels": False}
                 for cycle in range(1, num_cycles + 1)
             ],
-            {"name": "U0", "type": "constant", "max_error_rate": 0, "indels": False},
             {"name": "C0", "type": "constant", "max_error_rate": closing_error_rate, "indels": False},
         ],
         "whitelists": whitelists,
