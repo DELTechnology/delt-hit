@@ -4,7 +4,6 @@ delt-hit init --excel_path template.xlsx
 
 CONFIG_PATH=experiments/template/config.yaml
 
-delt-hit library enumerate --config_path=$CONFIG_PATH --graph_only=True  # produce reaction graph only for inspection
 delt-hit library enumerate --config_path=$CONFIG_PATH
 
 delt-hit visualize enumerate --config_path=$CONFIG_PATH --output_name=library_overview

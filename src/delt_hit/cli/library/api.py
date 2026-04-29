@@ -59,7 +59,7 @@ class LibraryPaths:
 class Enumerate(LibraryPaths):
 
     def run(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
-            graph_only: bool = False, errors: str = 'raise', building_block_ids: list[str] | None = None,
+            errors: str = 'raise', building_block_ids: list[str] | None = None,
             counts_path: Path | None = None, top_n: int | None = None, library_name: str | None = None):
         """Enumerate the combinatorial library from a config.
 
@@ -67,7 +67,6 @@ class Enumerate(LibraryPaths):
             config_path: Path to the YAML config file.
             debug: Debug mode ('False', 'all', 'valid', 'invalid').
             overwrite: Whether to overwrite an existing library file.
-            graph_only: Whether to stop after writing reaction graphs.
             errors: Error handling mode ('raise' or 'ignore').
             building_block_ids: Optional list of building block IDs to keep.
             counts_path: Optional path to a file with observed combinations.
@@ -93,9 +92,6 @@ class Enumerate(LibraryPaths):
         save_graph_visualizations(graph_bundle=graph_bundle, save_dir=lib_path.parent)
 
         logger.info(f'Saved reaction graph visualizations to {lib_path.parent}')
-
-        if graph_only:
-            return
 
         building_block_names = sorted(graph_bundle['building_blocks'])
         if building_block_ids:
