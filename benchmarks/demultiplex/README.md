@@ -489,9 +489,9 @@ Each run also compares the observed output against `expected_counts.tsv` and rec
 After the timing runs are available under `benchmarks/demultiplex/tools`, generate the current runtime plots with:
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/plot_benchmark_runtimes.py
+uv run python benchmarks/demultiplex/plot_benchmark_runtimes.py
 
-./.venv/bin/python benchmarks/demultiplex/plot_2cycle_bbpc_comparison.py
+uv run python  benchmarks/demultiplex/plot_2cycle_bbpc_comparison.py
 ```
 
 This writes:
