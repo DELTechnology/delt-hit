@@ -14,9 +14,9 @@ FASTQ_SUFFIXES = {'.fastq', '.fq'}
 FASTA_SUFFIXES = {'.fasta', '.fa'}
 
 
-def _reverse_complement_dna(codon: str) -> str:
-    """Return the DNA reverse complement of a codon string."""
-    return codon.translate(str.maketrans('ACGT', 'TGCA'))[::-1]
+def _complement_dna(codon: str) -> str:
+    """Return the DNA complement of a codon string."""
+    return codon.translate(str.maketrans('ACGT', 'TGCA'))
 
 
 def get_codons(name: str, whitelists: dict) -> list[str]:
@@ -32,8 +32,8 @@ def get_codons(name: str, whitelists: dict) -> list[str]:
     codons = []
     for item in whitelists[name]:
         codon = item['codon']
-        if name.startswith('B') and item.get('reverse', False):
-            codon = _reverse_complement_dna(codon)
+        if name.startswith('B') and item.get('complement', False):
+            codon = _complement_dna(codon)
         codons.append(codon)
     return codons
 

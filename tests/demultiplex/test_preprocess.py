@@ -51,22 +51,22 @@ def test_generate_input_files_preserves_fasta_suffixes_and_stride(tmp_path):
     assert "sed -n '1~2p'" in script
 
 
-def test_get_codons_reverse_complements_building_blocks_only():
+def test_get_codons_complements_building_blocks_only():
     whitelists = {
         "B0": [
-            {"codon": "GCCTCG", "reverse": True},
-            {"codon": "AATTCC", "reverse": False},
+            {"codon": "GCCTCG", "complement": True},
+            {"codon": "AATTCC", "complement": False},
         ],
-        "S0": [{"codon": "GCCTCG", "reverse": True}],
+        "S0": [{"codon": "GCCTCG", "complement": True}],
         "C0": [{"codon": "TTGGCC"}],
     }
 
-    assert get_codons("B0", whitelists) == ["CGAGGC", "AATTCC"]
+    assert get_codons("B0", whitelists) == ["CGGAGC", "AATTCC"]
     assert get_codons("S0", whitelists) == ["GCCTCG"]
     assert get_codons("C0", whitelists) == ["TTGGCC"]
 
 
-def test_generate_input_files_writes_reverse_complemented_building_block_adapters(tmp_path):
+def test_generate_input_files_writes_complemented_building_block_adapters(tmp_path):
     config = {
         "experiment": {
             "save_dir": str(tmp_path),
@@ -88,8 +88,8 @@ def test_generate_input_files_writes_reverse_complemented_building_block_adapter
         ],
         "whitelists": {
             "B0": [
-                {"index": 0, "codon": "GCCTCG", "reverse": True},
-                {"index": 1, "codon": "AATTCC", "reverse": False},
+                {"index": 0, "codon": "GCCTCG", "complement": True},
+                {"index": 1, "codon": "AATTCC", "complement": False},
             ],
             "S0": [{"codon": "GCCTCG"}],
         },
@@ -106,5 +106,5 @@ def test_generate_input_files_writes_reverse_complemented_building_block_adapter
         tmp_path / "demo" / "demultiplex" / "cutadapt_input_files" / "1-S0.fastq"
     ).read_text()
 
-    assert b0_fastq == ">0-B0.0\nCGAGGC\n>0-B0.1\nAATTCC"
+    assert b0_fastq == ">0-B0.0\nCGGAGC\n>0-B0.1\nAATTCC"
     assert s0_fastq == ">1-S0.0\nGCCTCG"
