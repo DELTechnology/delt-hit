@@ -71,7 +71,9 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
 
     manifest = read_manifest(dataset_dir)
     building_blocks = read_building_blocks(dataset_dir)
-    experiment_name = manifest["experiment_name"]
+    dataset_name = manifest.get("dataset_name", manifest.get("experiment_name"))
+    if dataset_name is None:
+        raise KeyError("Manifest must contain dataset_name")
     num_cycles = manifest["num_cycles"]
     num_errors = int(manifest.get("num_errors", 0))
     if num_errors not in {0, 1}:
@@ -111,7 +113,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
 
     config = {
         "experiment": {
-            "name": experiment_name,
+            "name": dataset_name,
             "fastq_path": str(fastq_path),
             "save_dir": str(output_dir.resolve()),
             "num_cores": num_cores,
@@ -161,7 +163,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
     )
 
     print(f"Wrote DELT-Hit config to {config_path}")
-    print(f"Prepared demultiplex inputs under {output_dir / experiment_name / 'demultiplex'}")
+    print(f"Prepared demultiplex inputs under {output_dir / dataset_name / 'demultiplex'}")
 
 
 if __name__ == "__main__":

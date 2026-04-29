@@ -18,7 +18,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "target" / "synthetic"
-DEFAULT_EXPERIMENT_NAME = "synthetic"
+DEFAULT_DATASET_NAME = "synthetic"
 DEFAULT_NUM_CYCLES = 2
 DEFAULT_BUILDING_BLOCKS_PER_CYCLE = 10
 DEFAULT_NUM_READS_PER_COMPOUND = 1
@@ -147,7 +147,7 @@ def write_fastq(
     building_blocks_by_cycle: list[list[dict[str, object]]],
     *,
     num_reads_per_compound: int,
-    experiment_name: str,
+    dataset_name: str,
     compressed: bool,
     num_errors: int,
     errors_in_bb_only: bool = False,
@@ -186,7 +186,7 @@ def write_fastq(
                     sequence = f"{umi}{''.join(mutated_regions)}"
                 quality = QUALITY_CHAR * len(sequence)
                 handle.write(
-                    f"@{experiment_name}_compound_{compound_idx:06d}_read_{replicate_idx:03d}_{ids}\n"
+                    f"@{dataset_name}_compound_{compound_idx:06d}_read_{replicate_idx:03d}_{ids}\n"
                     f"{sequence}\n"
                     "+\n"
                     f"{quality}\n"
@@ -197,7 +197,7 @@ def write_fastq(
 def write_manifest(
     path: Path,
     *,
-    experiment_name: str,
+    dataset_name: str,
     num_cycles: int,
     building_blocks_per_cycle: int,
     num_reads_per_compound: int,
@@ -209,7 +209,7 @@ def write_manifest(
     building_blocks_path: Path,
 ) -> None:
     manifest = {
-        "experiment_name": experiment_name,
+        "dataset_name": dataset_name,
         "output_dir": str(output_dir.resolve()),
         "num_cycles": num_cycles,
         "building_blocks_per_cycle": building_blocks_per_cycle,
@@ -274,9 +274,9 @@ def parse_args() -> argparse.Namespace:
         help="Directory where the experiment folder is created.",
     )
     parser.add_argument(
-        "--experiment-name",
-        default=DEFAULT_EXPERIMENT_NAME,
-        help="Name used for the experiment folder and FASTQ read identifiers.",
+        "--dataset-name",
+        default=DEFAULT_DATASET_NAME,
+        help="Name used for the dataset folder and FASTQ read identifiers.",
     )
     parser.add_argument(
         "--compressed",
@@ -312,7 +312,7 @@ def main(
     num_errors: int = DEFAULT_NUM_ERRORS,
     errors_in_bb_only: bool = DEFAULT_ERRORS_IN_BB_ONLY,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
-    experiment_name: str = DEFAULT_EXPERIMENT_NAME,
+    dataset_name: str = DEFAULT_DATASET_NAME,
     compressed: bool = DEFAULT_COMPRESSED,
 ) -> None:
     if num_cycles < 1:
@@ -324,18 +324,14 @@ def main(
     if num_errors not in {0, 1}:
         raise ValueError("num_errors must be 0 or 1")
 
-    suffix = f"_err={num_errors}" + ("_bbonly" if errors_in_bb_only and num_errors > 0 else "")
-    if suffix not in experiment_name:
-        experiment_name = f"{experiment_name}{suffix}"
-
-    experiment_dir = output_dir / experiment_name
-    experiment_dir.mkdir(parents=True, exist_ok=True)
+    dataset_dir = output_dir / dataset_name
+    dataset_dir.mkdir(parents=True, exist_ok=True)
 
     fastq_suffix = ".fastq.gz" if compressed else ".fastq"
-    fastq_path = experiment_dir / f"{experiment_name}{fastq_suffix}"
-    expected_counts_path = experiment_dir / "expected_counts.tsv"
-    building_blocks_path = experiment_dir / "building_blocks.tsv"
-    manifest_path = experiment_dir / "manifest.json"
+    fastq_path = dataset_dir / f"{dataset_name}{fastq_suffix}"
+    expected_counts_path = dataset_dir / "expected_counts.tsv"
+    building_blocks_path = dataset_dir / "building_blocks.tsv"
+    manifest_path = dataset_dir / "manifest.json"
 
     building_blocks_by_cycle = make_building_blocks(
         num_cycles=num_cycles,
@@ -351,20 +347,20 @@ def main(
         fastq_path,
         building_blocks_by_cycle,
         num_reads_per_compound=num_reads_per_compound,
-        experiment_name=experiment_name,
+        dataset_name=dataset_name,
         compressed=compressed,
         num_errors=num_errors,
         errors_in_bb_only=errors_in_bb_only,
     )
     write_manifest(
         manifest_path,
-        experiment_name=experiment_name,
+        dataset_name=dataset_name,
         num_cycles=num_cycles,
         building_blocks_per_cycle=building_blocks_per_cycle,
         num_reads_per_compound=num_reads_per_compound,
         num_errors=num_errors,
         errors_in_bb_only=errors_in_bb_only,
-        output_dir=experiment_dir,
+        output_dir=dataset_dir,
         fastq_path=fastq_path,
         expected_counts_path=expected_counts_path,
         building_blocks_path=building_blocks_path,
@@ -385,6 +381,6 @@ if __name__ == "__main__":
         num_errors=cli_args.num_errors,
         errors_in_bb_only=cli_args.errors_in_bb_only,
         output_dir=cli_args.output_dir,
-        experiment_name=cli_args.experiment_name,
+        dataset_name=cli_args.dataset_name,
         compressed=cli_args.compressed,
     )
