@@ -20,11 +20,11 @@ def load_module(module_name: str, relative_path: str):
 
 
 def load_generator_module():
-    return load_module("generate_synthetic_enrichment", "benchmarks/generate_synthetic_enrichment.py")
+    return load_module("generate_synthetic_enrichment", "benchmarks/enrichment/generate_synthetic_enrichment.py")
 
 
 def load_compare_module():
-    return load_module("compare_synthetic_enrichment", "benchmarks/compare_synthetic_enrichment.py")
+    return load_module("compare_synthetic_enrichment", "benchmarks/enrichment/compare_synthetic_enrichment.py")
 
 
 def r_with_required_packages_available() -> bool:

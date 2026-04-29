@@ -5,24 +5,27 @@ import gzip
 import importlib.util
 import json
 from pathlib import Path
+import sys
 
 
 def load_generator_module():
-    script_path = Path(__file__).resolve().parents[1] / "benchmarks" / "generate_synthetic_fastq.py"
+    script_path = Path(__file__).resolve().parents[1] / "benchmarks" / "demultiplex" / "generate_synthetic_fastq.py"
     spec = importlib.util.spec_from_file_location("generate_synthetic_fastq", script_path)
     module = importlib.util.module_from_spec(spec)
     assert spec is not None
     assert spec.loader is not None
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
 
 def load_matrix_module():
-    script_path = Path(__file__).resolve().parents[1] / "benchmarks" / "generate_synthetic_benchmark_matrix.py"
+    script_path = Path(__file__).resolve().parents[1] / "benchmarks" / "demultiplex" / "generate_synthetic_benchmark_matrix.py"
     spec = importlib.util.spec_from_file_location("generate_synthetic_benchmark_matrix", script_path)
     module = importlib.util.module_from_spec(spec)
     assert spec is not None
     assert spec.loader is not None
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -49,14 +52,14 @@ def test_small_smoke_case(tmp_path):
         experiment_name="smoke",
     )
 
-    experiment_dir = tmp_path / "smoke"
+    experiment_dir = tmp_path / "smoke_err=0"
     manifest = json.loads((experiment_dir / "manifest.json").read_text())
     expected_counts = read_tsv(experiment_dir / "expected_counts.tsv")
 
     assert manifest["expected_compounds"] == 9
     assert manifest["expected_reads"] == 18
     assert manifest["compressed_fastq"] is True
-    assert count_fastq_reads(experiment_dir / "smoke.fastq.gz") == 18
+    assert count_fastq_reads(experiment_dir / "smoke_err=0.fastq.gz") == 18
     assert len(expected_counts) == 9
     assert {int(row["count"]) for row in expected_counts} == {2}
     assert {int(row["code_1"]) for row in expected_counts} == {1, 2, 3}
@@ -74,7 +77,7 @@ def test_higher_cycle_schema_and_building_blocks(tmp_path):
         experiment_name="shape",
     )
 
-    experiment_dir = tmp_path / "shape"
+    experiment_dir = tmp_path / "shape_err=0"
     manifest = json.loads((experiment_dir / "manifest.json").read_text())
     expected_counts = read_tsv(experiment_dir / "expected_counts.tsv")
     building_blocks = read_tsv(experiment_dir / "building_blocks.tsv")
@@ -84,7 +87,7 @@ def test_higher_cycle_schema_and_building_blocks(tmp_path):
     assert manifest["expected_compounds"] == 16
     assert manifest["expected_reads"] == 16
     assert manifest["compressed_fastq"] is True
-    assert count_fastq_reads(experiment_dir / "shape.fastq.gz") == 16
+    assert count_fastq_reads(experiment_dir / "shape_err=0.fastq.gz") == 16
     assert len(expected_counts) == 16
     assert len(building_blocks) == 8
     assert set(expected_counts[0]) == {
