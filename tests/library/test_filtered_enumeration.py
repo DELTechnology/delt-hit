@@ -173,12 +173,15 @@ def test_visualize_enumerate_writes_expected_input_bundle(tmp_path, monkeypatch)
 
     Visualize().enumerate(
         config_path=config_path,
-        output_name="review_example",
     )
 
-    assert (tmp_path / "mini" / "library" / "review_example_compounds.png").exists()
-    assert (tmp_path / "mini" / "library" / "review_example_B0.png").exists()
-    assert (tmp_path / "mini" / "library" / "review_example_B1.png").exists()
+    viz_dir = tmp_path / "mini" / "library" / "visualization"
+    assert (viz_dir / "building_blocks_B0.png").exists()
+    assert (viz_dir / "building_blocks_B0.pdf").exists()
+    assert (viz_dir / "building_blocks_B1.png").exists()
+    assert (viz_dir / "building_blocks_B1.pdf").exists()
+    assert (viz_dir / "compounds" / "scaffold.png").exists()
+    assert (viz_dir / "compounds" / "scaffold.pdf").exists()
 
 
 def test_visualize_enumerate_flags_limit_outputs(tmp_path, monkeypatch):
@@ -200,13 +203,14 @@ def test_visualize_enumerate_flags_limit_outputs(tmp_path, monkeypatch):
 
     Visualize().enumerate(
         config_path=config_path,
-        output_name="compounds_only",
         compounds=True,
     )
 
-    assert (tmp_path / "mini" / "library" / "compounds_only_compounds.png").exists()
-    assert not (tmp_path / "mini" / "library" / "compounds_only_B0.png").exists()
-    assert not (tmp_path / "mini" / "library" / "compounds_only_B1.png").exists()
+    viz_dir = tmp_path / "mini" / "library" / "visualization"
+    assert (viz_dir / "compounds" / "scaffold.png").exists()
+    assert (viz_dir / "compounds" / "scaffold.pdf").exists()
+    assert not (viz_dir / "building_blocks_B0.png").exists()
+    assert not (viz_dir / "building_blocks_B1.png").exists()
 
 
 def test_properties_default_mode_writes_properties_parquet(tmp_path):

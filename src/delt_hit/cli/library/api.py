@@ -511,15 +511,24 @@ def prepare_graph_bundle(cfg: dict) -> dict:
     }
 
 
-def save_graph_visualizations(*, graph_bundle: dict, save_dir: Path) -> None:
-    """Write the standard reaction graph PNGs to disk."""
+def save_figure_outputs(fig, output_path: Path, *, dpi: int = 300) -> None:
+    """Save a figure as both PNG and PDF with compact margins."""
+    tight_layout = getattr(fig, "tight_layout", None)
+    if callable(tight_layout):
+        tight_layout()
+    fig.savefig(output_path.with_suffix(".png"), dpi=dpi, bbox_inches="tight")
+    fig.savefig(output_path.with_suffix(".pdf"), dpi=dpi, bbox_inches="tight")
+
+
+def save_graph_visualizations(*, graph_bundle: dict, save_dir: Path, dpi: int = 300) -> None:
+    """Write the standard reaction graph visualizations to disk."""
     for graph, filename in [
-        (graph_bundle['bb_G'], 'building_block_reactions_graph.png'),
-        (graph_bundle['add_G'], 'additional_reactions_graph.png'),
-        (graph_bundle['G'], 'reaction_graph.png'),
+        (graph_bundle['bb_G'], 'reaction_graph_building_blocks'),
+        (graph_bundle['add_G'], 'reaction_graph_additional'),
+        (graph_bundle['G'], 'reaction_graph'),
     ]:
         ax = visualize_reaction_graph(graph)
-        ax.figure.savefig(save_dir / filename, dpi=300)
+        save_figure_outputs(ax.figure, save_dir / filename, dpi=dpi)
         close_figure(ax.figure)
 
 
@@ -655,8 +664,8 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
     return ax
 
 
-def visualize_reaction_schemes(reactions: dict, save_dir: Path) -> None:
-    """Save one PNG per reaction directly from config reaction data.
+def visualize_reaction_schemes(reactions: dict, save_dir: Path, *, dpi: int = 300) -> None:
+    """Save one reaction scheme per reaction directly from config reaction data.
 
     Args:
         reactions: Mapping of reaction name to reaction metadata (must include 'smirks').
@@ -675,8 +684,7 @@ def visualize_reaction_schemes(reactions: dict, save_dir: Path) -> None:
             ax.imshow(img)
             ax.set_title(name, fontsize=12)
 
-        fig.tight_layout()
-        fig.savefig(save_dir / f"{name}.png", dpi=300)
+        save_figure_outputs(fig, save_dir / name, dpi=dpi)
         close_figure(fig)
 
 
@@ -799,7 +807,6 @@ def visualize_smiles(smiles: list[str], nrow: int = 25, legends: list[str] | Non
         ax.set_axis_off()
         ax.text(0.5, 0.5, "No structures to display", ha='center', va='center')
         ax.set_title(title)
-        fig.tight_layout()
         return ax
 
     mols = [Chem.MolFromSmiles(s) for s in smiles]
@@ -810,5 +817,4 @@ def visualize_smiles(smiles: list[str], nrow: int = 25, legends: list[str] | Non
     ax = plt.imshow(img)
     ax.axes.set_axis_off()
     ax.axes.set_title(title)
-    ax.figure.tight_layout()
     return ax

@@ -6,6 +6,7 @@ from delt_hit.cli.library.api import (
     LibraryPaths,
     close_figure,
     prepare_graph_bundle,
+    save_figure_outputs,
     save_graph_visualizations,
     visualize_reaction_schemes,
     visualize_smiles,
@@ -19,7 +20,8 @@ class Visualize(LibraryPaths):
         *,
         config_path: Path,
         building_block_ids: list[str] | None = None,
-        nrow: int = 10,
+        nrow: int = 25,
+        dpi: int = 300,
         graph: bool = False,
         reactions: bool = False,
         building_blocks: bool = False,
@@ -31,13 +33,12 @@ class Visualize(LibraryPaths):
             config_path: Path to the YAML config file.
             building_block_ids: Optional subset of building block IDs to consider.
             nrow: Number of molecules per row in structure grids.
+            dpi: Raster DPI used when exporting PNGs.
             graph: Whether to save reaction graph visualizations.
             reactions: Whether to save reaction scheme panels from SMIRKS.
             building_blocks: Whether to save building block structure grids.
             compounds: Whether to save configured compound structure grids.
         """
-        output_name: str = "visualization"
-
         if not any([graph, reactions, building_blocks, compounds]):
             graph = True
             reactions = True
@@ -47,16 +48,18 @@ class Visualize(LibraryPaths):
         cfg = read_yaml(config_path)
         lib_dir = self.get_library_dir(config_path=config_path)
         lib_dir.mkdir(parents=True, exist_ok=True)
+        visualization_dir = lib_dir / "visualization"
+        visualization_dir.mkdir(parents=True, exist_ok=True)
 
         graph_bundle = prepare_graph_bundle(cfg=cfg)
 
         if graph:
-            save_graph_visualizations(graph_bundle=graph_bundle, save_dir=lib_dir)
+            save_graph_visualizations(graph_bundle=graph_bundle, save_dir=visualization_dir, dpi=dpi)
 
         if reactions:
-            reactions_dir = lib_dir / output_name / 'reactions'
+            reactions_dir = visualization_dir / 'reactions'
             reactions_dir.mkdir(parents=True, exist_ok=True)
-            visualize_reaction_schemes(cfg['catalog']['reactions'], save_dir=reactions_dir)
+            visualize_reaction_schemes(cfg['catalog']['reactions'], save_dir=reactions_dir, dpi=dpi)
 
         if building_blocks:
             building_block_names = sorted(graph_bundle['building_blocks'])
@@ -77,26 +80,23 @@ class Visualize(LibraryPaths):
                     title=f'{bb_name} Building Blocks',
                     nrow=nrow,
                 )
-                ax.figure.savefig(lib_dir / output_name / f"{bb_name}.png", dpi=300)
+                save_figure_outputs(ax.figure, visualization_dir / f"building_blocks_{bb_name}", dpi=dpi)
                 close_figure(ax.figure)
 
         if compounds:
             compound_entries = cfg['catalog'].get('compounds', {})
-            compound_smiles = []
-            compound_legends = []
+            compounds_dir = visualization_dir / "compounds"
+            compounds_dir.mkdir(parents=True, exist_ok=True)
+
             for name, entry in compound_entries.items():
                 smiles = entry.get('smiles')
                 if pd.isna(smiles):
                     continue
-                compound_smiles.append(smiles)
-                compound_legends.append(name)
-
-            if compound_smiles:
                 compound_ax = visualize_smiles(
-                    smiles=compound_smiles,
-                    legends=compound_legends,
-                    title='Compounds',
-                    nrow=nrow,
+                    smiles=[smiles],
+                    legends=[name],
+                    title=name,
+                    nrow=1,
                 )
-                compound_ax.figure.savefig(lib_dir / output_name / f"compounds.png", dpi=300)
+                save_figure_outputs(compound_ax.figure, compounds_dir / name, dpi=dpi)
                 close_figure(compound_ax.figure)
