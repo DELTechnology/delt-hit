@@ -86,22 +86,19 @@ class Library:
         """
         if library_path is not None:
             lib_path = library_path
-            output_name = library_path.stem
         elif library_name is not None:
             lib_path = get_named_library_path(config_path, library_name)
-            output_name = library_name
         else:
             lib_path = get_library_path(config_path)
-            output_name = 'properties'
 
         assert lib_path.exists(), f"Library file not found at {lib_path}"
 
-        save_dir = lib_path.parent / 'properties'
+        save_dir = lib_path.parent / 'properties' / lib_path.stem
         save_dir.mkdir(parents=True, exist_ok=True)
 
         df = pd.read_parquet(lib_path)
         df = self.compute_properties(data=df)
-        df.to_parquet(save_dir / f'{output_name}.parquet', index=False)
+        df.to_parquet(save_dir / 'properties.parquet', index=False)
 
         prop_names = [col for col in df.columns if col.startswith('prop_')]
         plt.close('all')
