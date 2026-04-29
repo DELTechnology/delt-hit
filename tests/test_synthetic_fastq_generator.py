@@ -125,6 +125,25 @@ def test_two_cycle_large_library_profile_has_expected_presets():
     assert by_name["synthetic_2cycle_1000bbpc_1000m"].num_reads_per_compound == 1_000
 
 
+def test_canonical_profile_uses_explicit_10bbpc_names():
+    module = load_matrix_module()
+
+    assert module.get_profile_dataset_names("canonical") == [
+        "synthetic_2cycle_10bbpc_1m",
+        "synthetic_2cycle_10bbpc_10m",
+        "synthetic_2cycle_10bbpc_100m",
+        "synthetic_2cycle_10bbpc_1000m",
+        "synthetic_3cycle_10bbpc_1m",
+        "synthetic_3cycle_10bbpc_10m",
+        "synthetic_3cycle_10bbpc_100m",
+        "synthetic_3cycle_10bbpc_1000m",
+        "synthetic_4cycle_10bbpc_1m",
+        "synthetic_4cycle_10bbpc_10m",
+        "synthetic_4cycle_10bbpc_100m",
+        "synthetic_4cycle_10bbpc_1000m",
+    ]
+
+
 def test_matrix_profile_generation_writes_new_two_cycle_dataset(tmp_path):
     module = load_matrix_module()
     spec = module.make_dataset_spec(
