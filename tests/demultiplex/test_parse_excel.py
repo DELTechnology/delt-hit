@@ -3,7 +3,7 @@ import pandas as pd
 from delt_hit.demultiplex.parser import whitelists_from_excel
 
 
-def _write_excel_config(path, *, include_b1_reverse_column: bool) -> None:
+def _write_excel_config(path, *, include_b1_complement_column: bool) -> None:
     with pd.ExcelWriter(path) as writer:
         pd.DataFrame(
             {
@@ -23,28 +23,28 @@ def _write_excel_config(path, *, include_b1_reverse_column: bool) -> None:
         pd.DataFrame(
             {
                 'codon': ['GCCTCG', 'AATTCC', 'TTGGCC'],
-                'reverse': [True, None, 'TRUE'],
+                'complement': [True, None, 'TRUE'],
             }
         ).to_excel(writer, sheet_name='B0', index=False)
 
         b1_df = pd.DataFrame({'codon': ['AGTCGA']})
-        if include_b1_reverse_column:
-            b1_df['reverse'] = [None]
+        if include_b1_complement_column:
+            b1_df['complement'] = [None]
         b1_df.to_excel(writer, sheet_name='B1', index=False)
 
 
-def test_whitelists_from_excel_normalizes_reverse_flags_for_building_blocks(tmp_path):
+def test_whitelists_from_excel_normalizes_complement_flags_for_building_blocks(tmp_path):
     excel_path = tmp_path / 'config.xlsx'
-    _write_excel_config(excel_path, include_b1_reverse_column=True)
+    _write_excel_config(excel_path, include_b1_complement_column=True)
 
     whitelists = whitelists_from_excel(excel_path)
 
     assert whitelists['B0'][:3] == [
-        {'index': 0, 'codon': 'GCCTCG', 'reverse': True},
-        {'index': 1, 'codon': 'AATTCC', 'reverse': False},
-        {'index': 2, 'codon': 'TTGGCC', 'reverse': True},
+        {'index': 0, 'codon': 'GCCTCG', 'complement': True},
+        {'index': 1, 'codon': 'AATTCC', 'complement': False},
+        {'index': 2, 'codon': 'TTGGCC', 'complement': True},
     ]
-    assert whitelists['B1'] == [{'index': 0, 'codon': 'AGTCGA', 'reverse': False}]
+    assert whitelists['B1'] == [{'index': 0, 'codon': 'AGTCGA', 'complement': False}]
     assert whitelists['S0'] == [
         {'name': 'sel_a', 'codon': 'AAAA'},
         {'name': 'sel_b', 'codon': 'CCCC'},
@@ -52,10 +52,10 @@ def test_whitelists_from_excel_normalizes_reverse_flags_for_building_blocks(tmp_
     assert whitelists['C0'] == [{'codon': 'ACAC'}]
 
 
-def test_whitelists_from_excel_defaults_missing_reverse_column_to_false(tmp_path):
+def test_whitelists_from_excel_defaults_missing_complement_column_to_false(tmp_path):
     excel_path = tmp_path / 'config.xlsx'
-    _write_excel_config(excel_path, include_b1_reverse_column=False)
+    _write_excel_config(excel_path, include_b1_complement_column=False)
 
     whitelists = whitelists_from_excel(excel_path)
 
-    assert whitelists['B1'] == [{'index': 0, 'codon': 'AGTCGA', 'reverse': False}]
+    assert whitelists['B1'] == [{'index': 0, 'codon': 'AGTCGA', 'complement': False}]

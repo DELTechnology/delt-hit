@@ -2,8 +2,8 @@ from pathlib import Path
 import pandas as pd
 
 
-def _normalize_reverse_flag(value) -> bool:
-    """Normalize optional reverse flags from Excel into booleans."""
+def _normalize_complement_flag(value) -> bool:
+    """Normalize optional complement flags from Excel into booleans."""
     if pd.isna(value):
         return False
     if isinstance(value, bool):
@@ -203,10 +203,10 @@ def whitelists_from_excel(path: Path):
         df = pd.read_excel(path, sheet_name=sheet)
         assert df.codon.nunique() == len(df), f"Codons for building blocks {sheet} must be unique"
         assert df.codon.notna().all(), f"Codons for building blocks {sheet} cannot be empty"
-        if 'reverse' in df.columns:
-            df['reverse'] = df['reverse'].map(_normalize_reverse_flag)
+        if 'complement' in df.columns:
+            df['complement'] = df['complement'].map(_normalize_complement_flag)
         else:
-            df['reverse'] = False
+            df['complement'] = False
 
         df.index.name = 'index'
         df = df.reset_index()
