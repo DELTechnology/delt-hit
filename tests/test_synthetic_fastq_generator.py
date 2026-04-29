@@ -38,17 +38,17 @@ def test_small_smoke_case(tmp_path):
         building_blocks_per_cycle=3,
         num_reads_per_compound=2,
         output_dir=tmp_path,
-        experiment_name="smoke",
+        dataset_name="smoke",
     )
 
-    experiment_dir = tmp_path / "smoke_err=0"
+    experiment_dir = tmp_path / "smoke"
     manifest = json.loads((experiment_dir / "manifest.json").read_text())
     expected_counts = read_tsv(experiment_dir / "expected_counts.tsv")
 
     assert manifest["expected_compounds"] == 9
     assert manifest["expected_reads"] == 18
     assert manifest["compressed_fastq"] is True
-    assert count_fastq_reads(experiment_dir / "smoke_err=0.fastq.gz") == 18
+    assert count_fastq_reads(experiment_dir / "smoke.fastq.gz") == 18
     assert len(expected_counts) == 9
     assert {int(row["count"]) for row in expected_counts} == {2}
     assert {int(row["code_1"]) for row in expected_counts} == {1, 2, 3}
@@ -63,10 +63,10 @@ def test_higher_cycle_schema_and_building_blocks(tmp_path):
         building_blocks_per_cycle=2,
         num_reads_per_compound=1,
         output_dir=tmp_path,
-        experiment_name="shape",
+        dataset_name="shape",
     )
 
-    experiment_dir = tmp_path / "shape_err=0"
+    experiment_dir = tmp_path / "shape"
     manifest = json.loads((experiment_dir / "manifest.json").read_text())
     expected_counts = read_tsv(experiment_dir / "expected_counts.tsv")
     building_blocks = read_tsv(experiment_dir / "building_blocks.tsv")
@@ -76,7 +76,7 @@ def test_higher_cycle_schema_and_building_blocks(tmp_path):
     assert manifest["expected_compounds"] == 16
     assert manifest["expected_reads"] == 16
     assert manifest["compressed_fastq"] is True
-    assert count_fastq_reads(experiment_dir / "shape_err=0.fastq.gz") == 16
+    assert count_fastq_reads(experiment_dir / "shape.fastq.gz") == 16
     assert len(expected_counts) == 16
     assert len(building_blocks) == 8
     assert set(expected_counts[0]) == {

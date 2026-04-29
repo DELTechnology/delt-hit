@@ -58,7 +58,7 @@ The exact `--num-reads-per-compound` values for the target read depths are:
 
 The canonical generator is [`generate_synthetic_fastq.py`](./generate_synthetic_fastq.py).
 
-Each dataset is written under `benchmarks/demultiplex/data/<dataset>/` and includes:
+Each dataset is written under `benchmarks/demultiplex/data/<dataset>_err=<num-errors>/` and includes:
 
 - `<dataset>.fastq.gz`
 - `building_blocks.tsv`
@@ -68,27 +68,34 @@ Each dataset is written under `benchmarks/demultiplex/data/<dataset>/` and inclu
 Create one synthetic dataset as a concrete example:
 
 ```bash
+CYCLES=4
+BBPC=10
+DEPTH=100m
+READS=10000
+ERR=0
+DATASET="synthetic_${CYCLES}cycle_${BBPC}bbpc_${DEPTH}_err=${ERR}"
+
 ./.venv/bin/python benchmarks/demultiplex/generate_synthetic_fastq.py \
-  --num-cycles 4 \
-  --building-blocks-per-cycle 10 \
-  --num-reads-per-compound 10 \
-  --num-errors 0 \
+  --num-cycles "$CYCLES" \
+  --building-blocks-per-cycle "$BBPC" \
+  --num-reads-per-compound "$READS" \
+  --num-errors "$ERR" \
   --output-dir benchmarks/demultiplex/data \
-  --experiment-name synthetic_4cycle_10bbpc_100m
+  --dataset-name "$DATASET"
 ```
 
 Prepare DELi inputs for that dataset:
 
 ```bash
 ./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
-  --dataset-name synthetic_4cycle_10bbpc_100m
+  --dataset-name "$DATASET"
 ```
 
 Prepare DELT-Hit inputs for that dataset:
 
 ```bash
 ./.venv/bin/python benchmarks/demultiplex/converter/create_delt_inputs.py \
-  --dataset-name synthetic_4cycle_10bbpc_100m \
+  --dataset-name "$DATASET" \
   --num-cores 11
 ```
 
@@ -96,7 +103,7 @@ Run the benchmark for that dataset:
 
 ```bash
 ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
-  --dataset-name synthetic_4cycle_10bbpc_100m \
+  --dataset-name "$DATASET" \
   --tool both
 ```
 
@@ -108,7 +115,7 @@ Use the converter scripts in [`benchmarks/demultiplex/converter`](./converter).
 
 ```bash
 ./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
-  --dataset-name synthetic_4cycle_10bbpc_100m
+  --dataset-name synthetic_4cycle_10bbpc_100m_err=0
 ```
 
 Prepared inputs are written to:
@@ -120,7 +127,7 @@ Prepared inputs are written to:
 
 ```bash
 ./.venv/bin/python benchmarks/demultiplex/converter/create_delt_inputs.py \
-  --dataset-name synthetic_4cycle_10bbpc_100m \
+  --dataset-name synthetic_4cycle_10bbpc_100m_err=0 \
   --num-cores 11
 ```
 
@@ -155,7 +162,7 @@ It writes the canonical machine-readable report to:
 
 ```bash
 ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
-  --dataset-name synthetic_4cycle_10bbpc_100m \
+  --dataset-name synthetic_4cycle_10bbpc_100m_err=0 \
   --tool deli
 ```
 
@@ -163,7 +170,7 @@ It writes the canonical machine-readable report to:
 
 ```bash
 ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
-  --dataset-name synthetic_4cycle_10bbpc_100m_err=1 \
+  --dataset-name synthetic_4cycle_10bbpc_100m_err=0 \
   --tool delt
 ```
 
@@ -248,6 +255,8 @@ dataset_spec() {
 for dataset in "${ALL_DATASETS[@]}"; do
   time_limit="$(dataset_time_limit "$dataset")"
   read -r cycles bbpc reads < <(dataset_spec "$dataset")
+  err=0
+  dataset="${dataset}_err=${err}"
 
   for tool in deli delt; do
     sbatch \
@@ -256,7 +265,7 @@ for dataset in "${ALL_DATASETS[@]}"; do
       --cpus-per-task=12 \
       --mem=32G \
       --output="$HOME/logs/slurm-%j.out" \
-      --export=ALL,DATASET="$dataset",CYCLES="$cycles",BBPC="$bbpc",READS="$reads",TOOL="$tool" <<'EOF'
+      --export=ALL,DATASET="$dataset",ERR="$err",CYCLES="$cycles",BBPC="$bbpc",READS="$reads",TOOL="$tool" <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -270,9 +279,9 @@ mkdir -p "$DATA_ROOT"
   --num-cycles "$CYCLES" \
   --building-blocks-per-cycle "$BBPC" \
   --num-reads-per-compound "$READS" \
-  --num-errors 0 \
+  --num-errors "$ERR" \
   --output-dir "$DATA_ROOT/data" \
-  --experiment-name "$DATASET"
+  --dataset-name "$DATASET"
 
 ./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
   --dataset-name "$DATASET" \
@@ -292,7 +301,7 @@ EOF
 done
 ```
 
-If you prefer a timing-only submission loop, use it only after each dataset has already been generated and prepared in a job-specific scratch directory. This version also requires `$TMPDIR`:
+If you prefer a timing-only submission loop, use it only after each dataset has already been generated and prepared in a stable scratch directory. This version uses one shared scratch path per dataset under `$TMPDIR`:
 
 ```bash
 dataset_time_limit() {
@@ -307,6 +316,8 @@ dataset_time_limit() {
 
 for dataset in "${ALL_DATASETS[@]}"; do
   time_limit="$(dataset_time_limit "$dataset")"
+  err=0
+  dataset="${dataset}_err=${err}"
 
   for tool in deli delt; do
     sbatch \
@@ -322,7 +333,7 @@ set -euo pipefail
 cd /path/to/delt-hit
 
 TMPDIR="${TMPDIR:?TMPDIR must be set for Slurm benchmark jobs}"
-DATA_ROOT="$TMPDIR/delt-hit-benchmarks/${SLURM_JOB_ID}/${DATASET}"
+DATA_ROOT="$TMPDIR/delt-hit-benchmarks/$DATASET"
 mkdir -p "$DATA_ROOT"
 
 ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
@@ -413,6 +424,8 @@ dataset_spec() {
 for dataset in "${ALL_DATASETS[@]}"; do
   time_limit="$(dataset_time_limit "$dataset")"
   read -r cycles bbpc reads < <(dataset_spec "$dataset")
+  err=0
+  dataset="${dataset}_err=${err}"
 
   DATA_ROOT="$JOB_TMPDIR/$dataset"
   mkdir -p "$DATA_ROOT"
@@ -423,9 +436,9 @@ for dataset in "${ALL_DATASETS[@]}"; do
     --num-cycles "$cycles" \
     --building-blocks-per-cycle "$bbpc" \
     --num-reads-per-compound "$reads" \
-    --num-errors 0 \
+    --num-errors "$err" \
     --output-dir "$DATA_ROOT/data" \
-    --experiment-name "$dataset"
+    --dataset-name "$dataset"
 
   ./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
     --dataset-name "$dataset" \
@@ -472,7 +485,7 @@ If you want to run the prepared inputs manually instead of using `run_split_timi
 set -euo pipefail
 
 ROOT="/users/amarti51/projects/delt-hit"
-DATASET="synthetic_4cycle_10bbpc_100m"
+DATASET="synthetic_4cycle_10bbpc_100m_err=0"
 
 DELI_DIR="$ROOT/benchmarks/demultiplex/tools/deli/$DATASET"
 DELT_DIR="$ROOT/benchmarks/demultiplex/tools/delt/$DATASET"
