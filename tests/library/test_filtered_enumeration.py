@@ -143,6 +143,24 @@ def test_enumerate_filtered_mode_writes_named_library_and_selected_rows(tmp_path
     assert df[["code_0", "code_1"]].to_dict("records") == [{"code_0": 1, "code_1": 0}]
 
 
+def test_enumerate_writes_reaction_graphs_under_visualization_dir(tmp_path, monkeypatch):
+    _, config_path = make_test_config(tmp_path)
+    captured_save_dir = None
+
+    def capture_save_graph_visualizations(**kwargs):
+        nonlocal captured_save_dir
+        captured_save_dir = kwargs["save_dir"]
+
+    monkeypatch.setattr(
+        "delt_hit.cli.library.api.save_graph_visualizations",
+        capture_save_graph_visualizations,
+    )
+
+    Library().enumerate(config_path=config_path)
+
+    assert captured_save_dir == tmp_path / "mini" / "library" / "visualization"
+
+
 def test_enumerate_filtered_mode_requires_library_name(tmp_path, monkeypatch):
     _, config_path = make_test_config(tmp_path)
     counts_path = tmp_path / "observed.tsv"

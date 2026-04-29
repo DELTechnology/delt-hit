@@ -18,6 +18,7 @@ from tqdm import tqdm
 
 from delt_hit.cli.helper import (
     get_experiment_dir,
+    get_library_dir,
     get_library_path,
     get_named_library_path,
 )
@@ -54,9 +55,11 @@ class Library:
         graph_bundle = prepare_graph_bundle(cfg=cfg)
 
         lib_path.parent.mkdir(parents=True, exist_ok=True)
-        save_graph_visualizations(graph_bundle=graph_bundle, save_dir=lib_path.parent)
+        visualization_dir = get_library_dir(config_path) / "visualization"
+        visualization_dir.mkdir(parents=True, exist_ok=True)
+        save_graph_visualizations(graph_bundle=graph_bundle, save_dir=visualization_dir)
 
-        logger.info(f'Saved reaction graph visualizations to {lib_path.parent}')
+        logger.info(f'Saved reaction graph visualizations to {visualization_dir}')
 
         building_block_names = sorted(graph_bundle['building_blocks'])
 
