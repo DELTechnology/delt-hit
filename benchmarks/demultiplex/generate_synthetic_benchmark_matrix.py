@@ -20,6 +20,7 @@ from generate_synthetic_fastq import main as generate_dataset
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "benchmarks" / "demultiplex" / "data"
 DEFAULT_PROFILE = "canonical"
 DEFAULT_NUM_ERRORS = 0
+DEPTH_LABELS = ("1m", "10m", "100m", "1000m")
 
 
 @dataclass(frozen=True)
@@ -57,9 +58,8 @@ def make_dataset_spec(*, num_cycles: int, building_blocks_per_cycle: int, depth_
             f"({expected_compounds}) for {num_cycles} cycles x {building_blocks_per_cycle} BBs"
         )
 
-    suffix = "" if building_blocks_per_cycle == 10 else f"_{building_blocks_per_cycle}bbpc"
     return DatasetSpec(
-        experiment_name=f"synthetic_{num_cycles}cycle{suffix}_{depth_label}",
+        experiment_name=f"synthetic_{num_cycles}cycle_{building_blocks_per_cycle}bbpc_{depth_label}",
         num_cycles=num_cycles,
         building_blocks_per_cycle=building_blocks_per_cycle,
         num_reads_per_compound=total_reads // expected_compounds,
@@ -74,7 +74,7 @@ def canonical_specs() -> list[DatasetSpec]:
             depth_label=depth_label,
         )
         for num_cycles in (2, 3, 4)
-        for depth_label in ("1m", "10m", "100m", "1000m")
+        for depth_label in DEPTH_LABELS
     ]
 
 
@@ -86,7 +86,7 @@ def two_cycle_large_library_specs() -> list[DatasetSpec]:
             depth_label=depth_label,
         )
         for building_blocks_per_cycle in (100, 1000)
-        for depth_label in ("1m", "10m", "100m", "1000m")
+        for depth_label in DEPTH_LABELS
     ]
 
 
@@ -95,6 +95,17 @@ PROFILES: dict[str, list[DatasetSpec]] = {
     "two_cycle_large_libraries": two_cycle_large_library_specs(),
     "all": canonical_specs() + two_cycle_large_library_specs(),
 }
+
+
+def get_profile_specs(profile: str) -> list[DatasetSpec]:
+    try:
+        return PROFILES[profile]
+    except KeyError as exc:
+        raise ValueError(f"Unknown profile: {profile}") from exc
+
+
+def get_profile_dataset_names(profile: str) -> list[str]:
+    return [spec.experiment_name for spec in get_profile_specs(profile)]
 
 
 def parse_args() -> argparse.Namespace:
@@ -151,7 +162,7 @@ def print_plan(specs: list[DatasetSpec]) -> None:
 
 def main() -> None:
     args = parse_args()
-    specs = PROFILES[args.profile]
+    specs = get_profile_specs(args.profile)
     print_plan(specs)
     if args.dry_run:
         return
