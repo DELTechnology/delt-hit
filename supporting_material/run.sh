@@ -4,9 +4,9 @@ delt-hit init --excel_path template.xlsx
 
 CONFIG_PATH=experiments/template/config.yaml
 
-delt-hit library enumerate --config_path=$CONFIG_PATH
+delt-hit visualize enumerate --config_path=$CONFIG_PATH
 
-delt-hit visualize enumerate --config_path=$CONFIG_PATH --output_name=library_overview
+delt-hit library enumerate --config_path=$CONFIG_PATH
 
 delt-hit library properties --config_path=$CONFIG_PATH
 

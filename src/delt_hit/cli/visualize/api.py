@@ -19,7 +19,6 @@ class Visualize(LibraryPaths):
         *,
         config_path: Path,
         building_block_ids: list[str] | None = None,
-        output_name: str = "visualization",
         nrow: int = 10,
         graph: bool = False,
         reactions: bool = False,
@@ -31,13 +30,14 @@ class Visualize(LibraryPaths):
         Args:
             config_path: Path to the YAML config file.
             building_block_ids: Optional subset of building block IDs to consider.
-            output_name: Base name for the generated PNG files.
             nrow: Number of molecules per row in structure grids.
             graph: Whether to save reaction graph visualizations.
             reactions: Whether to save reaction scheme panels from SMIRKS.
             building_blocks: Whether to save building block structure grids.
             compounds: Whether to save configured compound structure grids.
         """
+        output_name: str = "visualization"
+
         if not any([graph, reactions, building_blocks, compounds]):
             graph = True
             reactions = True
@@ -54,7 +54,7 @@ class Visualize(LibraryPaths):
             save_graph_visualizations(graph_bundle=graph_bundle, save_dir=lib_dir)
 
         if reactions:
-            reactions_dir = lib_dir / 'reactions'
+            reactions_dir = lib_dir / output_name / 'reactions'
             reactions_dir.mkdir(parents=True, exist_ok=True)
             visualize_reaction_schemes(cfg['catalog']['reactions'], save_dir=reactions_dir)
 
@@ -77,7 +77,7 @@ class Visualize(LibraryPaths):
                     title=f'{bb_name} Building Blocks',
                     nrow=nrow,
                 )
-                ax.figure.savefig(lib_dir / f"{output_name}_{bb_name}.png", dpi=300)
+                ax.figure.savefig(lib_dir / output_name / f"{bb_name}.png", dpi=300)
                 close_figure(ax.figure)
 
         if compounds:
@@ -98,5 +98,5 @@ class Visualize(LibraryPaths):
                     title='Compounds',
                     nrow=nrow,
                 )
-                compound_ax.figure.savefig(lib_dir / f"{output_name}_compounds.png", dpi=300)
+                compound_ax.figure.savefig(lib_dir / output_name / f"compounds.png", dpi=300)
                 close_figure(compound_ax.figure)
