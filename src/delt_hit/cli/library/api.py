@@ -512,12 +512,11 @@ def prepare_graph_bundle(cfg: dict) -> dict:
 
 
 def save_figure_outputs(fig, output_path: Path, *, dpi: int = 300) -> None:
-    """Save a figure as both PNG and PDF with compact margins."""
+    """Save a figure as PNG with compact margins."""
     tight_layout = getattr(fig, "tight_layout", None)
     if callable(tight_layout):
         tight_layout()
     fig.savefig(output_path.with_suffix(".png"), dpi=dpi, bbox_inches="tight")
-    fig.savefig(output_path.with_suffix(".pdf"), dpi=dpi, bbox_inches="tight")
 
 
 def save_graph_visualizations(*, graph_bundle: dict, save_dir: Path, dpi: int = 300) -> None:
@@ -789,8 +788,14 @@ def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
     return G
 
 
-def visualize_smiles(smiles: list[str], nrow: int = 25, legends: list[str] | None = None,
-                     title: str = 'Structures'):
+def visualize_smiles(
+    smiles: list[str],
+    nrow: int = 25,
+    legends: list[str] | None = None,
+    title: str = 'Structures',
+    *,
+    sub_img_size: tuple[int, int] = (300, 300),
+):
     """Create a grid image of molecules.
 
     Args:
@@ -798,6 +803,7 @@ def visualize_smiles(smiles: list[str], nrow: int = 25, legends: list[str] | Non
         nrow: Maximum number of molecules per row.
         legends: Optional per-molecule legends.
         title: Figure title.
+        sub_img_size: Pixel size used by RDKit for each molecule tile.
 
     Returns:
         Matplotlib Axes containing the image.
@@ -812,9 +818,20 @@ def visualize_smiles(smiles: list[str], nrow: int = 25, legends: list[str] | Non
     mols = [Chem.MolFromSmiles(s) for s in smiles]
     legends = legends or None
     nrow = min(nrow, len(mols))
-    img = Draw.MolsToGridImage(mols, legends=legends, molsPerRow=nrow, subImgSize=(200, 200))
-    plt.figure(figsize=(10, 6))
-    ax = plt.imshow(img)
+    img = Draw.MolsToGridImage(
+        mols,
+        legends=legends,
+        molsPerRow=nrow,
+        subImgSize=sub_img_size,
+    )
+    width_px, height_px = img.size
+    fig, ax = plt.subplots(
+        1,
+        1,
+        figsize=(width_px / 100, height_px / 100),
+        dpi=100,
+    )
+    ax.imshow(img, interpolation="none")
     ax.axes.set_axis_off()
     ax.axes.set_title(title)
     return ax
