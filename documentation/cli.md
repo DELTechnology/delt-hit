@@ -148,24 +148,39 @@ Useful options:
 - `<save_dir>/<experiment_name>/library/properties/<library_name>.parquet` for named-library mode
 - Histogram PNGs per property
 
-### `enumerate visualize`
+## `visualize`
+Visualization commands for chemistry assets and workflow outputs.
+
+### `enumerate`
 Generates reviewer-friendly input visualizations for enumeration: reaction graphs, 2D reaction scheme panels from SMIRKS, 2D structure grids for building blocks, and configured compound structures.
 
 ```
-delt-hit library enumerate visualize --config_path <path/to/config.yaml>
+delt-hit visualize enumerate --config_path <path/to/config.yaml>
 ```
 
 Useful options:
 - `--building_block_ids` to restrict the visualization to selected building-block families
 - `--output_name` to control the PNG filename prefix
 - `--nrow` to control how many molecules are shown per row in structure grids
+- `--graph`, `--reactions`, `--building_blocks`, and `--compounds` to select specific visualization outputs
+
+If none of the selector flags are passed, all enumeration visualizations are generated.
 
 Example visualization workflow:
 
 ```
-delt-hit library enumerate visualize \
+delt-hit visualize enumerate \
   --config_path <path/to/config.yaml> \
   --output_name reviewer_panel
+```
+
+Example compounds-only visualization:
+
+```
+delt-hit visualize enumerate \
+  --config_path <path/to/config.yaml> \
+  --compounds true \
+  --output_name compounds_panel
 ```
 
 **Outputs**
