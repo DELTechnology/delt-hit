@@ -268,8 +268,10 @@ def test_properties_default_mode_writes_properties_parquet(tmp_path):
 
     Library().properties(config_path=config_path)
 
-    properties_path = tmp_path / "mini" / "library" / "properties" / "properties.parquet"
+    properties_dir = tmp_path / "mini" / "library" / "properties" / "library"
+    properties_path = properties_dir / "properties.parquet"
     assert properties_path.exists()
+    assert (properties_dir / "prop_mw.png").exists()
 
     df = pd.read_parquet(properties_path)
     assert list(df["smiles"]) == ["CO", "CCO"]
@@ -284,8 +286,10 @@ def test_properties_named_library_writes_named_properties_parquet(tmp_path):
 
     Library().properties(config_path=config_path, library_name="observed_hits")
 
-    properties_path = tmp_path / "mini" / "library" / "properties" / "observed_hits.parquet"
+    properties_dir = tmp_path / "mini" / "library" / "properties" / "observed_hits"
+    properties_path = properties_dir / "properties.parquet"
     assert properties_path.exists()
+    assert (properties_dir / "prop_mw.png").exists()
 
     df = pd.read_parquet(properties_path)
     assert list(df["smiles"]) == ["CO"]
@@ -307,8 +311,10 @@ def test_properties_library_path_overrides_library_name(tmp_path):
         library_path=explicit_path,
     )
 
-    properties_path = tmp_path / "properties" / "custom_library.parquet"
+    properties_dir = tmp_path / "properties" / "custom_library"
+    properties_path = properties_dir / "properties.parquet"
     assert properties_path.exists()
+    assert (properties_dir / "prop_mw.png").exists()
 
     df = pd.read_parquet(properties_path)
     assert list(df["smiles"]) == ["CO"]

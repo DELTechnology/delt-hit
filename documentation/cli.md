@@ -142,9 +142,8 @@ Useful options:
 - `--library_path` to compute properties from an explicit parquet path
 
 **Outputs**
-- `<save_dir>/<experiment_name>/library/properties/properties.parquet`
-- `<save_dir>/<experiment_name>/library/properties/<library_name>.parquet` for named-library mode
-- Histogram PNGs per property
+- `<save_dir>/<experiment_name>/library/properties/<library_name>/properties.parquet`
+- Histogram PNGs per property in `<save_dir>/<experiment_name>/library/properties/<library_name>/`
 
 ## `visualize`
 Visualization commands for chemistry assets and workflow outputs.
