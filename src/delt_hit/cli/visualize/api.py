@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from delt_hit.cli.helper import get_library_dir
 from delt_hit.cli.library.api import (
-    LibraryPaths,
     close_figure,
     prepare_graph_bundle,
     save_figure_outputs,
@@ -14,7 +14,7 @@ from delt_hit.cli.library.api import (
 from delt_hit.utils import read_yaml
 
 
-class Visualize(LibraryPaths):
+class Visualize:
     def enumerate(
         self,
         *,
@@ -48,7 +48,7 @@ class Visualize(LibraryPaths):
             compounds = True
 
         cfg = read_yaml(config_path)
-        lib_dir = self.get_library_dir(config_path=config_path)
+        lib_dir = get_library_dir(config_path)
         lib_dir.mkdir(parents=True, exist_ok=True)
         visualization_dir = lib_dir / "visualization"
         visualization_dir.mkdir(parents=True, exist_ok=True)

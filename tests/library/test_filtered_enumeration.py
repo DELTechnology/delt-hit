@@ -129,7 +129,7 @@ def test_enumerate_filtered_mode_writes_named_library_and_selected_rows(tmp_path
     )
 
     library = Library()
-    library.enumerate.run(
+    library.enumerate(
         config_path=config_path,
         counts_path=counts_path,
         top_n=1,
@@ -151,7 +151,7 @@ def test_enumerate_filtered_mode_requires_library_name(tmp_path, monkeypatch):
     monkeypatch.setattr("delt_hit.cli.library.api.visualize_reaction_graph", lambda _g: None)
 
     with pytest.raises(AssertionError, match="library_name"):
-        Library().enumerate.run(config_path=config_path, counts_path=counts_path)
+        Library().enumerate(config_path=config_path, counts_path=counts_path)
 
 
 def test_visualize_enumerate_writes_expected_input_bundle(tmp_path, monkeypatch):

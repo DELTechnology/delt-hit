@@ -107,7 +107,6 @@ delt-hit library enumerate --config_path <path/to/config.yaml>
 
 Useful options:
 - `--overwrite` to re-generate an existing library
-- `--building_block_ids` to enumerate a subset of building blocks
 - `--counts_path`, `--top_n`, and `--library_name` to enumerate only the top observed combinations from a demultiplex `counts.txt` file
 
 Example filtered-enumeration workflow:

@@ -16,51 +16,17 @@ from rdkit.Chem import rdChemReactions
 from scipy import sparse
 from tqdm import tqdm
 
+from delt_hit.cli.helper import (
+    get_experiment_dir,
+    get_library_path,
+    get_named_library_path,
+)
 from delt_hit.utils import read_yaml
 
-class LibraryPaths:
-
-    def get_experiment_dir(self, *, config_path: Path) -> Path:
-        """Resolve the experiment output directory.
-
-        Args:
-            config_path: Path to the YAML config file.
-
-        Returns:
-            Experiment directory path.
-        """
-        cfg = read_yaml(config_path)
-        exp_dir = Path(cfg['experiment']['save_dir']).expanduser().resolve() / cfg['experiment']['name']
-        return exp_dir
-
-    def get_library_path(self, *, config_path: Path) -> Path:
-        """Resolve the default library parquet path.
-
-        Args:
-            config_path: Path to the YAML config file.
-
-        Returns:
-            Path to the library parquet file.
-        """
-        exp_dir = self.get_experiment_dir(config_path=config_path)
-        lib_path = exp_dir / 'library' / 'library.parquet'
-        return lib_path
-
-    def get_named_library_path(self, *, config_path: Path, library_name: str) -> Path:
-        """Resolve a named library parquet path inside the experiment library dir."""
-        exp_dir = self.get_experiment_dir(config_path=config_path)
-        return exp_dir / 'library' / f'{library_name}.parquet'
-
-    def get_library_dir(self, *, config_path: Path) -> Path:
-        """Resolve the experiment library output directory."""
-        exp_dir = self.get_experiment_dir(config_path=config_path)
-        return exp_dir / 'library'
-
-class Enumerate(LibraryPaths):
-
-    def run(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
-            errors: str = 'raise', building_block_ids: list[str] | None = None,
-            counts_path: Path | None = None, top_n: int | None = None, library_name: str | None = None):
+class Library:
+    def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
+                  errors: str = 'raise', counts_path: Path | None = None,
+                  top_n: int | None = None, library_name: str | None = None):
         """Enumerate the combinatorial library from a config.
 
         Args:
@@ -68,16 +34,15 @@ class Enumerate(LibraryPaths):
             debug: Debug mode ('False', 'all', 'valid', 'invalid').
             overwrite: Whether to overwrite an existing library file.
             errors: Error handling mode ('raise' or 'ignore').
-            building_block_ids: Optional list of building block IDs to keep.
             counts_path: Optional path to a file with observed combinations.
             top_n: Optional cap on the number of input combinations to enumerate.
             library_name: Optional output parquet base name for filtered mode.
         """
         if counts_path is not None:
             assert library_name, "Filtered enumeration requires `library_name`"
-            lib_path = self.get_named_library_path(config_path=config_path, library_name=library_name)
+            lib_path = get_named_library_path(config_path, library_name)
         else:
-            lib_path = self.get_library_path(config_path=config_path)
+            lib_path = get_library_path(config_path)
         if lib_path.exists() and not overwrite:
             logger.info(f'Library {lib_path} exists')
             return
@@ -94,8 +59,6 @@ class Enumerate(LibraryPaths):
         logger.info(f'Saved reaction graph visualizations to {lib_path.parent}')
 
         building_block_names = sorted(graph_bundle['building_blocks'])
-        if building_block_ids:
-            building_block_names = list(filter(lambda x: x in building_block_ids, building_block_names))
 
         df = enumerate_library_dataframe(
             cfg=cfg,
@@ -108,10 +71,6 @@ class Enumerate(LibraryPaths):
             save_dir=lib_path.parent,
         )
         df.to_parquet(lib_path, index=False)
-
-
-class Library(LibraryPaths):
-    enumerate = Enumerate()
 
     def properties(self, *, config_path: Path, library_name: str | None = None,
                    library_path: Path | None = None):
@@ -126,10 +85,10 @@ class Library(LibraryPaths):
             lib_path = library_path
             output_name = library_path.stem
         elif library_name is not None:
-            lib_path = self.get_named_library_path(config_path=config_path, library_name=library_name)
+            lib_path = get_named_library_path(config_path, library_name)
             output_name = library_name
         else:
-            lib_path = self.get_library_path(config_path=config_path)
+            lib_path = get_library_path(config_path)
             output_name = 'properties'
 
         assert lib_path.exists(), f"Library file not found at {lib_path}"
@@ -214,12 +173,12 @@ class Library(LibraryPaths):
             method: Representation type ('morgan' or 'bert').
             library_path: Optional library parquet override.
         """
-        exp_dir = self.get_experiment_dir(config_path=config_path)
+        exp_dir = get_experiment_dir(config_path)
 
         save_dir = exp_dir / 'representations'
         save_dir.mkdir(parents=True, exist_ok=True)
 
-        lib_path = library_path or self.get_library_path(config_path=config_path)
+        lib_path = library_path or get_library_path(config_path)
         df = pd.read_parquet(lib_path)
         smiles = df.smiles
 
@@ -228,10 +187,6 @@ class Library(LibraryPaths):
                 run_morgan(smiles, save_path=save_dir / 'morgan.npz')
             case 'bert':
                 run_morgan(smiles, save_path=save_dir / 'bert.npz')
-
-
-# self = Library()
-
 
 def run_bert(*, model_name: str, path: Path, save_path: Path, device='cuda'):
     """Compute BERT representations for a SMILES library.
