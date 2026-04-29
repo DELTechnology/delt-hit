@@ -159,8 +159,8 @@ delt-hit visualize enumerate --config_path <path/to/config.yaml>
 
 Useful options:
 - `--building_block_ids` to restrict the visualization to selected building-block families
-- `--output_name` to control the PNG filename prefix
 - `--nrow` to control how many molecules are shown per row in structure grids
+- `--dpi` to control PNG export resolution
 - `--graph`, `--reactions`, `--building_blocks`, and `--compounds` to select specific visualization outputs
 
 If none of the selector flags are passed, all enumeration visualizations are generated.
@@ -169,8 +169,7 @@ Example visualization workflow:
 
 ```
 delt-hit visualize enumerate \
-  --config_path <path/to/config.yaml> \
-  --output_name reviewer_panel
+  --config_path <path/to/config.yaml>
 ```
 
 Example compounds-only visualization:
@@ -178,15 +177,14 @@ Example compounds-only visualization:
 ```
 delt-hit visualize enumerate \
   --config_path <path/to/config.yaml> \
-  --compounds true \
-  --output_name compounds_panel
+  --compounds true
 ```
 
 **Outputs**
-- Reaction graph PNGs in `<save_dir>/<experiment_name>/library/`
-- Reaction scheme PNGs in `<save_dir>/<experiment_name>/library/reactions/`
-- `<output_name>_compounds.png` when compounds with SMILES are defined in the config
-- `<output_name>_<BUILDING_BLOCK_ID>.png` for each visualized building-block family
+- Reaction graph PNG/PDF pairs in `<save_dir>/<experiment_name>/library/visualization/` named `reaction_graph.png|pdf`, `reaction_graph_additional.png|pdf`, and `reaction_graph_building_blocks.png|pdf`
+- Reaction scheme PNG/PDF pairs in `<save_dir>/<experiment_name>/library/visualization/reactions/`
+- `building_blocks_<BUILDING_BLOCK_ID>.png|pdf` for each visualized building-block family
+- Per-compound PNG/PDF pairs in `<save_dir>/<experiment_name>/library/visualization/compounds/`
 
 ### `represent`
 Generates machine-learning representations (fingerprints).
