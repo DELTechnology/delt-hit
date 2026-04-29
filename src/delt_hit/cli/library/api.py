@@ -18,7 +18,7 @@ from tqdm import tqdm
 
 from delt_hit.utils import read_yaml
 
-class Library:
+class LibraryPaths:
 
     def get_experiment_dir(self, *, config_path: Path) -> Path:
         """Resolve the experiment output directory.
@@ -56,9 +56,11 @@ class Library:
         exp_dir = self.get_experiment_dir(config_path=config_path)
         return exp_dir / 'library'
 
-    def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
-                  graph_only: bool = False, errors: str = 'raise', building_block_ids: list[str] | None = None,
-                  counts_path: Path | None = None, top_n: int | None = None, library_name: str | None = None):
+class Enumerate(LibraryPaths):
+
+    def run(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
+            graph_only: bool = False, errors: str = 'raise', building_block_ids: list[str] | None = None,
+            counts_path: Path | None = None, top_n: int | None = None, library_name: str | None = None):
         """Enumerate the combinatorial library from a config.
 
         Args:
@@ -111,24 +113,16 @@ class Library:
         )
         df.to_parquet(lib_path, index=False)
 
-    def visualize(self, *, config_path: Path, counts_path: Path | None = None, top_n: int = 12,
-                  library_name: str | None = None, building_block_ids: list[str] | None = None,
-                  output_name: str = "visualization", library_path: Path | None = None,
-                  overwrite: bool = False, nrow: int = 10):
-        """Generate reaction and molecule visualization panels.
+    def visualize(self, *, config_path: Path, building_block_ids: list[str] | None = None,
+                  output_name: str = "visualization", nrow: int = 10):
+        """Generate enumeration-input visualization panels.
 
         Args:
             config_path: Path to the YAML config file.
-            counts_path: Optional demultiplex-style counts file for top-hit visualization.
-            top_n: Number of rows/molecules to visualize from the filtered input or library.
-            library_name: Optional named library to load or create in filtered mode.
             building_block_ids: Optional subset of building block IDs to consider.
             output_name: Base name for the generated PNG files.
-            library_path: Optional explicit library parquet path to visualize.
-            overwrite: Whether to overwrite an existing filtered library in visualization mode.
             nrow: Number of molecules per row in structure grids.
         """
-        assert top_n > 0, "`top_n` must be a positive integer"
         cfg = read_yaml(config_path)
         lib_dir = self.get_library_dir(config_path=config_path)
         lib_dir.mkdir(parents=True, exist_ok=True)
@@ -144,50 +138,10 @@ class Library:
         if building_block_ids:
             building_block_names = list(filter(lambda x: x in building_block_ids, building_block_names))
 
-        selected_library_path = library_path
-        if selected_library_path is None:
-            if counts_path is not None:
-                assert library_name, "Filtered visualization requires `library_name`"
-                selected_library_path = self.get_named_library_path(config_path=config_path, library_name=library_name)
-                if overwrite or not selected_library_path.exists():
-                    df = enumerate_library_dataframe(
-                        cfg=cfg,
-                        graph_bundle=graph_bundle,
-                        building_block_names=building_block_names,
-                        counts_path=counts_path,
-                        top_n=top_n,
-                        errors='raise',
-                        save_dir=lib_dir,
-                    )
-                    df.to_parquet(selected_library_path, index=False)
-            else:
-                selected_library_path = self.get_library_path(config_path=config_path)
-
-        assert selected_library_path.exists(), f"Library file not found at {selected_library_path}"
-        library_df = pd.read_parquet(selected_library_path).head(top_n)
-
-        product_ax = visualize_smiles(
-            smiles=library_df['smiles'].dropna().tolist(),
-            legends=[f"row_{idx}" for idx in library_df.index],
-            title='Product Structures',
-            nrow=nrow,
-        )
-        product_ax.figure.savefig(lib_dir / f"{output_name}_products.png", dpi=300)
-        close_figure(product_ax.figure)
-
-        for bb_idx, bb_name in enumerate(building_block_names):
-            if f'code_{bb_idx}' not in library_df.columns:
-                continue
-
+        for bb_name in building_block_names:
             whitelist = cfg['whitelists'][bb_name]
-            smiles = []
-            legends = []
-            for code in library_df[f'code_{bb_idx}']:
-                if pd.isna(code):
-                    continue
-                entry = whitelist[int(code)]
-                smiles.append(entry['smiles'])
-                legends.append(f"{bb_name}:{int(code)}")
+            smiles = [entry['smiles'] for entry in whitelist if not pd.isna(entry['smiles'])]
+            legends = [f"{bb_name}:{entry['index']}" for entry in whitelist if not pd.isna(entry['smiles'])]
 
             if not smiles:
                 continue
@@ -200,6 +154,32 @@ class Library:
             )
             ax.figure.savefig(lib_dir / f"{output_name}_{bb_name}.png", dpi=300)
             close_figure(ax.figure)
+
+        compound_entries = cfg['catalog'].get('compounds', {})
+        compound_smiles = []
+        compound_legends = []
+        for name, entry in compound_entries.items():
+            smiles = entry.get('smiles')
+            if pd.isna(smiles):
+                continue
+            compound_smiles.append(smiles)
+            compound_legends.append(name)
+
+        if compound_smiles:
+            compound_ax = visualize_smiles(
+                smiles=compound_smiles,
+                legends=compound_legends,
+                title='Compounds',
+                nrow=nrow,
+            )
+            compound_ax.figure.savefig(lib_dir / f"{output_name}_compounds.png", dpi=300)
+            close_figure(compound_ax.figure)
+
+
+class Library(LibraryPaths):
+
+    def __init__(self):
+        self.enumerate = Enumerate()
 
     def properties(self, *, config_path: Path, library_name: str | None = None,
                    library_path: Path | None = None):
@@ -870,7 +850,7 @@ def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
 
 
 def visualize_smiles(smiles: list[str], nrow: int = 25, legends: list[str] | None = None,
-                     title: str = 'Product Structures'):
+                     title: str = 'Structures'):
     """Create a grid image of molecules.
 
     Args:

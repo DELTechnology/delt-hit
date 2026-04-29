@@ -148,33 +148,30 @@ Useful options:
 - `<save_dir>/<experiment_name>/library/properties/<library_name>.parquet` for named-library mode
 - Histogram PNGs per property
 
-### `visualize`
-Generates reviewer-friendly chemical visualizations: reaction graphs annotated with SMIRKS, 2D reaction scheme panels, and 2D structure grids for products and selected building blocks.
+### `enumerate visualize`
+Generates reviewer-friendly input visualizations for enumeration: reaction graphs, 2D reaction scheme panels from SMIRKS, 2D structure grids for building blocks, and configured compound structures.
 
 ```
-delt-hit library visualize --config_path <path/to/config.yaml>
+delt-hit library enumerate visualize --config_path <path/to/config.yaml>
 ```
 
 Useful options:
-- `--counts_path`, `--top_n`, and `--library_name` to visualize the top observed combinations from a demultiplex `counts.txt` file
+- `--building_block_ids` to restrict the visualization to selected building-block families
 - `--output_name` to control the PNG filename prefix
-- `--library_path` to render structures from an existing parquet library
+- `--nrow` to control how many molecules are shown per row in structure grids
 
-Example top-hit visualization workflow:
+Example visualization workflow:
 
 ```
-delt-hit library visualize \
+delt-hit library enumerate visualize \
   --config_path <path/to/config.yaml> \
-  --counts_path <save_dir>/<experiment_name>/selections/<SELECTION_NAME>/counts.txt \
-  --top_n 24 \
-  --library_name observed_hits \
   --output_name reviewer_panel
 ```
 
 **Outputs**
 - Reaction graph PNGs in `<save_dir>/<experiment_name>/library/`
-- `<output_name>_reaction_schemes.png`
-- `<output_name>_products.png`
+- Reaction scheme PNGs in `<save_dir>/<experiment_name>/library/reactions/`
+- `<output_name>_compounds.png` when compounds with SMILES are defined in the config
 - `<output_name>_<BUILDING_BLOCK_ID>.png` for each visualized building-block family
 
 ### `represent`

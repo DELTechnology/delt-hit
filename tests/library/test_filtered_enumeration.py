@@ -23,7 +23,9 @@ def make_test_config(tmp_path: Path) -> tuple[dict, Path]:
             "reactions": {
                 "rxn_join": {"smirks": "[C:1].[O:2]>>[C:1][O:2]"},
             },
-            "compounds": {},
+            "compounds": {
+                "scaffold": {"smiles": "CC(=O)O"},
+            },
         },
         "whitelists": {
             "B0": [
@@ -126,7 +128,7 @@ def test_enumerate_filtered_mode_writes_named_library_and_selected_rows(tmp_path
     )
 
     library = Library()
-    library.enumerate(
+    library.enumerate.run(
         config_path=config_path,
         counts_path=counts_path,
         top_n=1,
@@ -148,13 +150,11 @@ def test_enumerate_filtered_mode_requires_library_name(tmp_path, monkeypatch):
     monkeypatch.setattr("delt_hit.cli.library.api.visualize_reaction_graph", lambda _g: None)
 
     with pytest.raises(AssertionError, match="library_name"):
-        Library().enumerate(config_path=config_path, counts_path=counts_path)
+        Library().enumerate.run(config_path=config_path, counts_path=counts_path)
 
 
-def test_visualize_filtered_mode_writes_bundle_and_named_library(tmp_path, monkeypatch):
+def test_enumerate_visualize_writes_expected_input_bundle(tmp_path, monkeypatch):
     _, config_path = make_test_config(tmp_path)
-    counts_path = tmp_path / "observed.tsv"
-    counts_path.write_text("code_0\tcode_1\n1\t0\n0\t1\n")
 
     class DummyFigure:
         def savefig(self, path, *_args, **_kwargs):
@@ -167,35 +167,18 @@ def test_visualize_filtered_mode_writes_bundle_and_named_library(tmp_path, monke
         figure = DummyFigure()
 
     monkeypatch.setattr("delt_hit.cli.library.api.save_graph_visualizations", lambda **_kwargs: None)
-    monkeypatch.setattr("delt_hit.cli.library.api.visualize_reaction_schemes", lambda _g: [DummyAxes()])
+    monkeypatch.setattr("delt_hit.cli.library.api.visualize_reaction_schemes", lambda *_args, **_kwargs: None)
     monkeypatch.setattr("delt_hit.cli.library.api.visualize_smiles", lambda *args, **kwargs: DummyAxes())
 
     library = Library()
-    library.visualize(
+    library.enumerate.visualize(
         config_path=config_path,
-        counts_path=counts_path,
-        top_n=1,
-        library_name="observed_hits",
         output_name="review_example",
     )
 
-    library_path = tmp_path / "mini" / "library" / "observed_hits.parquet"
-    assert library_path.exists()
-    assert (tmp_path / "mini" / "library" / "review_example_reaction_schemes.png").exists()
-    assert (tmp_path / "mini" / "library" / "review_example_products.png").exists()
+    assert (tmp_path / "mini" / "library" / "review_example_compounds.png").exists()
     assert (tmp_path / "mini" / "library" / "review_example_B0.png").exists()
     assert (tmp_path / "mini" / "library" / "review_example_B1.png").exists()
-
-
-def test_visualize_filtered_mode_requires_library_name(tmp_path, monkeypatch):
-    _, config_path = make_test_config(tmp_path)
-    counts_path = tmp_path / "observed.tsv"
-    counts_path.write_text("code_0\tcode_1\n1\t0\n")
-
-    monkeypatch.setattr("delt_hit.cli.library.api.save_graph_visualizations", lambda **_kwargs: None)
-
-    with pytest.raises(AssertionError, match="library_name"):
-        Library().visualize(config_path=config_path, counts_path=counts_path)
 
 
 def test_properties_default_mode_writes_properties_parquet(tmp_path):
