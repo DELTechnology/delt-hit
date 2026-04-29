@@ -14,6 +14,11 @@ FASTQ_SUFFIXES = {'.fastq', '.fq'}
 FASTA_SUFFIXES = {'.fasta', '.fa'}
 
 
+def _complement_dna(codon: str) -> str:
+    """Return the DNA complement of a codon string."""
+    return codon.translate(str.maketrans('ACGT', 'TGCA'))
+
+
 def get_codons(name: str, whitelists: dict) -> list[str]:
     """Return codon strings for a named whitelist.
 
@@ -24,7 +29,13 @@ def get_codons(name: str, whitelists: dict) -> list[str]:
     Returns:
         A list of codon strings.
     """
-    return [item['codon'] for item in whitelists[name]]
+    codons = []
+    for item in whitelists[name]:
+        codon = item['codon']
+        if name.startswith('B') and item.get('complement', False):
+            codon = _complement_dna(codon)
+        codons.append(codon)
+    return codons
 
 
 def get_regions(structure: list[dict], whitelists: dict) -> list[Region]:
