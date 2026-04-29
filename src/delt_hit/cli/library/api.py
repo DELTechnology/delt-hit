@@ -32,9 +32,14 @@ class Library:
 
         Args:
             config_path: Path to the YAML config file.
-            debug: Debug mode ('False', 'all', 'valid', 'invalid').
+            debug: Debug output mode. Use 'all' or 'valid' to save
+                per-combination reaction graphs for combinations with a
+                single terminal node, or 'invalid' to save graphs for
+                combinations that fail during reaction execution.
             overwrite: Whether to overwrite an existing library file.
-            errors: Error handling mode ('raise' or 'ignore').
+            errors: Error handling mode. Use 'raise' to stop on the first
+                reaction error or 'ignore' to skip failing combinations and
+                continue enumeration.
             counts_path: Optional path to a file with observed combinations.
             top_n: Optional cap on the number of input combinations to enumerate.
             library_name: Optional output parquet base name for filtered mode.

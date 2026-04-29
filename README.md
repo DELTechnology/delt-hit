@@ -220,6 +220,13 @@ Commands for library enumeration, and chemical property and representation calcu
   ```bash
   delt-hit library enumerate --config_path <path/to/config.yaml>
   ```
+  For troubleshooting, `--debug` can write per-combination reaction-graph PNGs into the library output directory. Use `--debug invalid --errors ignore` to keep enumerating while capturing combinations that fail during reaction execution.
+  ```bash
+  delt-hit library enumerate \
+  --config_path <path/to/config.yaml> \
+  --debug invalid \
+  --errors ignore
+  ```
   You can also enumerate only the top observed barcode combinations from a demultiplex counts file:
   ```bash
   delt-hit library enumerate \

@@ -1,6 +1,6 @@
 # Paper Notes — DELT-Hit Manuscript & Revision
 
-*Reference notes synthesised from `Martinelli_etal_manuscript.docx` and `260422_Nature Protocols_Revisions.docx`. Last updated: 2026-04-29.*
+*Reference notes synthesised from `Martinelli_etal_manuscript.docx`, `260422_Nature Protocols_Revisions.docx`, and `CHANGELOG.md` (2026-04-24 to 2026-04-29). Last updated: 2026-04-29.*
 
 ---
 
@@ -179,7 +179,38 @@ Full in-silico enumeration of billion-member libraries is expensive. Required: o
 
 ---
 
-## 5. Open engineering issues (from `issues/`)
+## 5. Major revision checklist — status against CHANGELOG
+
+The CHANGELOG covers work merged between 2026-04-24 and 2026-04-29. Each item below is one required revision point; status reflects what the changelog confirms as done vs. what still needs manuscript or experimental work.
+
+| # | Requirement | Source | Code status | Manuscript / data still needed? |
+|---|---|---|---|---|
+| R1.1 | Re-analyse NF2 (Nat Chem 2021) dataset with DELT-Hit; provide comparison table | R1, R2 | CHANGELOG mentions "additional experiment templates and supporting-material runs for Favalli and related comparison workflows" — infrastructure is in place | Yes — actual counts comparison and results table must still be produced and written up |
+| R1.2 / R2.2 | Quantitative DELi benchmark on synthetic libraries; compare demultiplexing stats, enrichment reliability, speed | R1, R2 | CHANGELOG: "Synthetic benchmarking utilities for demultiplexing and enrichment, including FASTQ generation, DELT/DELi input converters, runtime plotting, worker/chunk-size sweeps, and large-library benchmark matrices" — tooling done | Yes — results need to be collected, compared, and written into the "Comparison" section |
+| R1.3 / R3.3 | Justify edgeR for DEL data; show positive-control retrieval on NF library with triplicates | R1, R3 | Not mentioned in CHANGELOG | Blocked — Jörg still needs to provide NF library files and positive-control info (Johanna) |
+| R3.2 / R4.2-vis | Dual-display case study + 2D chemical visualisation (reaction graphs, BB grids, compound structure panels) | R3, R4 | CHANGELOG: "New `visualize enumerate` CLI workflow … including reaction graphs, reaction schemes, building-block grids, and compound structure panels" — feature implemented | Yes — GB library pairing Excel still needed from Alice; dual-display integration confirmation needed; screenshots/figures to be prepared |
+| R4.1 | Expand SMIRKS template library with validated DEL-compatible chemistries + chemical schemes | R4 | Not explicitly mentioned in CHANGELOG | Alice still needs to compile the file |
+| R4.3 | Discuss handling of nuanced selection conditions (competitive, gradient, stringency) | R4 | Not in CHANGELOG | Manuscript-only addition; Adriano to investigate and write |
+| R4.4 | Implement normalised Z-score enrichment (Faver et al. 2019) as third enrichment mode | R4 | CHANGELOG mentions "z-score" under Documented — design documented but not yet implemented | Leandro to implement; CLI flag `--method zscore`; full spec in `issues/z-score.md` |
+| R4.5 | Filtered enumeration from counts matrix | R4 | CHANGELOG: "Filtered library enumeration from observed `counts.txt` inputs with `--counts_path`, `--top_n`, and `--library_name`" — **implemented** ✓ | Mention in manuscript (one sentence in Procedure/Features) |
+| R2.1 | Annotate each application example with actual runtime | R2 | CHANGELOG: benchmarking infrastructure and "configurable loops, estimated iteration controls" — tooling done | Yes — timing numbers for each case study must be collected and added to Table 14.1 / application examples |
+| Editorial | Title punctuation removed | Editor | N/A | Manuscript edit only |
+| Editorial | Abstract: skill-set sentence, time estimate, GitHub link | Editor | Time-estimate data may come from benchmarks (see R2.1) | Manuscript edit; GitHub link needs Zenodo DOI first |
+| Editorial | Technical Overview section reformatted | Editor | N/A | Manuscript restructuring (Alice) |
+| Editorial | Procedure renumbered continuously | Editor | N/A | Manuscript restructuring (Alice) |
+| Editorial | Timing section: add step numbers | Editor | N/A | Manuscript edit |
+| Editorial | Troubleshooting: add "Step" column | Editor | N/A | Manuscript edit |
+| Editorial | Zenodo DOI for GitHub repo | Editor | N/A | Jörg / Adriano to create once repo is public |
+| R3.1 | Soften claims about "no existing open-source solution" | R3 | N/A | Manuscript edit only |
+| R3.4 | Add sentence on barcode error-tolerance balance | R3 | N/A | Manuscript edit only |
+| R3.5 | Stress enumeration subset-validation guidance | R3 | N/A | Manuscript edit only |
+| R3.6–3.13 | Minor additions (quick-start, I/O table, Figure 1 revision, YAML example, QC captions, replicate guidance, worked example, low-read-retention troubleshooting) | R3 | CHANGELOG: "reviewer-oriented examples and workflow notes" — partial | Most are manuscript edits; Figure 1 needs graphic work |
+
+**Summary:** Of the ~20 required revision points, the CHANGELOG confirms that code-side work is complete or substantially done for **4 items** (filtered enumeration ✓, visualise-enumerate CLI ✓, synthetic benchmarking tooling ✓, Favalli experiment templates ✓). The remaining items are either blocked on data from Jörg/Johanna, still need Alice's file compilation, require Leandro's Z-score implementation, or are manuscript-only edits.
+
+---
+
+## 6. Open engineering issues (from `issues/`)
 
 ### 5.1 `get_counts` performance (`issues/get_counts_performance.md` + `…_plan.md`)
 - Bottleneck: serial gzip decompression in the main process (not Python parsing).
@@ -206,7 +237,7 @@ Full in-silico enumeration of billion-member libraries is expensive. Required: o
 
 ---
 
-## 6. Comparison with DELi (`other_tools/report.md` summary)
+## 7. Comparison with DELi (`other_tools/report.md` summary)
 
 | Dimension | DELT-Hit strength | DELi strength |
 |---|---|---|
@@ -226,7 +257,7 @@ Immediate actions recommended by the report (relevant to revision):
 
 ---
 
-## 7. Key external references to cite or address
+## 8. Key external references to cite or address
 
 - Favalli et al. *Nat. Chem.* 2021 — original NF2 dataset to re-analyse (R1.1).
 - Faver et al. *ACS Comb. Sci.* 2019, DOI: 10.1021/acscombsci.8b00116 — normalised Z-score method (R4.4).
