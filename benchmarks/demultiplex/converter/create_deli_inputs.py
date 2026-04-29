@@ -94,7 +94,9 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
 
     manifest = read_manifest(dataset_dir)
     building_blocks = read_building_blocks(dataset_dir)
-    experiment_name = manifest["experiment_name"]
+    dataset_name = manifest.get("dataset_name", manifest.get("experiment_name"))
+    if dataset_name is None:
+        raise KeyError("Manifest must contain dataset_name")
     num_cycles = manifest["num_cycles"]
     num_errors = int(manifest.get("num_errors", 0))
     if num_errors not in {0, 1}:
@@ -115,18 +117,18 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
             for row in building_blocks
             if int(row["cycle"]) == cycle
         ]
-        with (bb_dir / f"{experiment_name}_bb{cycle}.csv").open("w", newline="") as handle:
+        with (bb_dir / f"{dataset_name}_bb{cycle}.csv").open("w", newline="") as handle:
             writer = csv.DictWriter(handle, fieldnames=["id", "tag"])
             writer.writeheader()
             writer.writerows(cycle_rows)
 
-    library_json = lib_dir / f"{experiment_name}_library.json"
+    library_json = lib_dir / f"{dataset_name}_library.json"
     library_data = {
         "dna_barcode_on": None,
         "bb_sets": [
             {
                 "cycle": cycle,
-                "bb_set_path": str((bb_dir / f"{experiment_name}_bb{cycle}.csv").resolve()),
+                "bb_set_path": str((bb_dir / f"{dataset_name}_bb{cycle}.csv").resolve()),
             }
             for cycle in range(1, num_cycles + 1)
         ],
@@ -147,7 +149,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
 
     selection_yaml = output_dir / "decode_synthetic.yaml"
     selection_data = {
-        "selection_id": f"{experiment_name}_selection",
+        "selection_id": f"{dataset_name}_selection",
         "target_id": "synthetic_target",
         "selection_condition": "synthetic_benchmark",
         "additional_info": (
