@@ -113,73 +113,9 @@ class Enumerate(LibraryPaths):
         )
         df.to_parquet(lib_path, index=False)
 
-    def visualize(self, *, config_path: Path, building_block_ids: list[str] | None = None,
-                  output_name: str = "visualization", nrow: int = 10):
-        """Generate enumeration-input visualization panels.
-
-        Args:
-            config_path: Path to the YAML config file.
-            building_block_ids: Optional subset of building block IDs to consider.
-            output_name: Base name for the generated PNG files.
-            nrow: Number of molecules per row in structure grids.
-        """
-        cfg = read_yaml(config_path)
-        lib_dir = self.get_library_dir(config_path=config_path)
-        lib_dir.mkdir(parents=True, exist_ok=True)
-
-        graph_bundle = prepare_graph_bundle(cfg=cfg)
-        save_graph_visualizations(graph_bundle=graph_bundle, save_dir=lib_dir)
-
-        reactions_dir = lib_dir / 'reactions'
-        reactions_dir.mkdir(parents=True, exist_ok=True)
-        visualize_reaction_schemes(cfg['catalog']['reactions'], save_dir=reactions_dir)
-
-        building_block_names = sorted(graph_bundle['building_blocks'])
-        if building_block_ids:
-            building_block_names = list(filter(lambda x: x in building_block_ids, building_block_names))
-
-        for bb_name in building_block_names:
-            whitelist = cfg['whitelists'][bb_name]
-            smiles = [entry['smiles'] for entry in whitelist if not pd.isna(entry['smiles'])]
-            legends = [f"{bb_name}:{entry['index']}" for entry in whitelist if not pd.isna(entry['smiles'])]
-
-            if not smiles:
-                continue
-
-            ax = visualize_smiles(
-                smiles=smiles,
-                legends=legends,
-                title=f'{bb_name} Building Blocks',
-                nrow=nrow,
-            )
-            ax.figure.savefig(lib_dir / f"{output_name}_{bb_name}.png", dpi=300)
-            close_figure(ax.figure)
-
-        compound_entries = cfg['catalog'].get('compounds', {})
-        compound_smiles = []
-        compound_legends = []
-        for name, entry in compound_entries.items():
-            smiles = entry.get('smiles')
-            if pd.isna(smiles):
-                continue
-            compound_smiles.append(smiles)
-            compound_legends.append(name)
-
-        if compound_smiles:
-            compound_ax = visualize_smiles(
-                smiles=compound_smiles,
-                legends=compound_legends,
-                title='Compounds',
-                nrow=nrow,
-            )
-            compound_ax.figure.savefig(lib_dir / f"{output_name}_compounds.png", dpi=300)
-            close_figure(compound_ax.figure)
-
 
 class Library(LibraryPaths):
-
-    def __init__(self):
-        self.enumerate = Enumerate()
+    enumerate = Enumerate()
 
     def properties(self, *, config_path: Path, library_name: str | None = None,
                    library_path: Path | None = None):

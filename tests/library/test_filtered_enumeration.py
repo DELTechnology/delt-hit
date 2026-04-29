@@ -4,6 +4,7 @@ import pandas as pd
 import pytest
 
 from delt_hit.cli.library.api import Library, get_combinations
+from delt_hit.cli.visualize.api import Visualize
 from delt_hit.utils import write_yaml
 
 
@@ -153,7 +154,7 @@ def test_enumerate_filtered_mode_requires_library_name(tmp_path, monkeypatch):
         Library().enumerate.run(config_path=config_path, counts_path=counts_path)
 
 
-def test_enumerate_visualize_writes_expected_input_bundle(tmp_path, monkeypatch):
+def test_visualize_enumerate_writes_expected_input_bundle(tmp_path, monkeypatch):
     _, config_path = make_test_config(tmp_path)
 
     class DummyFigure:
@@ -166,12 +167,11 @@ def test_enumerate_visualize_writes_expected_input_bundle(tmp_path, monkeypatch)
     class DummyAxes:
         figure = DummyFigure()
 
-    monkeypatch.setattr("delt_hit.cli.library.api.save_graph_visualizations", lambda **_kwargs: None)
-    monkeypatch.setattr("delt_hit.cli.library.api.visualize_reaction_schemes", lambda *_args, **_kwargs: None)
-    monkeypatch.setattr("delt_hit.cli.library.api.visualize_smiles", lambda *args, **kwargs: DummyAxes())
+    monkeypatch.setattr("delt_hit.cli.visualize.api.save_graph_visualizations", lambda **_kwargs: None)
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_reaction_schemes", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_smiles", lambda *args, **kwargs: DummyAxes())
 
-    library = Library()
-    library.enumerate.visualize(
+    Visualize().enumerate(
         config_path=config_path,
         output_name="review_example",
     )
@@ -179,6 +179,34 @@ def test_enumerate_visualize_writes_expected_input_bundle(tmp_path, monkeypatch)
     assert (tmp_path / "mini" / "library" / "review_example_compounds.png").exists()
     assert (tmp_path / "mini" / "library" / "review_example_B0.png").exists()
     assert (tmp_path / "mini" / "library" / "review_example_B1.png").exists()
+
+
+def test_visualize_enumerate_flags_limit_outputs(tmp_path, monkeypatch):
+    _, config_path = make_test_config(tmp_path)
+
+    class DummyFigure:
+        def savefig(self, path, *_args, **_kwargs):
+            Path(path).write_text("figure")
+
+        def tight_layout(self):
+            return None
+
+    class DummyAxes:
+        figure = DummyFigure()
+
+    monkeypatch.setattr("delt_hit.cli.visualize.api.save_graph_visualizations", lambda **_kwargs: None)
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_reaction_schemes", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_smiles", lambda *args, **kwargs: DummyAxes())
+
+    Visualize().enumerate(
+        config_path=config_path,
+        output_name="compounds_only",
+        compounds=True,
+    )
+
+    assert (tmp_path / "mini" / "library" / "compounds_only_compounds.png").exists()
+    assert not (tmp_path / "mini" / "library" / "compounds_only_B0.png").exists()
+    assert not (tmp_path / "mini" / "library" / "compounds_only_B1.png").exists()
 
 
 def test_properties_default_mode_writes_properties_parquet(tmp_path):
