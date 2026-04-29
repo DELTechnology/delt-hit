@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-cd /Users/adrianomartinelli/projects/delt/delt-hit/supporting_material
 delt-hit init --excel_path template.xlsx
 
 CONFIG_PATH=experiments/template/config.yaml
@@ -24,6 +23,8 @@ delt-hit library enumerate \
   --counts_path=experiments/template/selections/AG24_4/counts.txt \
   --top_n=1000 \
   --library_name=AG24_4_top_hits
+
+delt-hit library viz --library_name=AG24_4_top_hits
 
 delt-hit demultiplex report --config_path=$CONFIG_PATH
 delt-hit demultiplex qc --config_path=$CONFIG_PATH

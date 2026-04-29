@@ -317,4 +317,9 @@ paper/experiment-1/representations
 experiments/synthetic_2cycle/
 *.zip
 
+
 other_tools/
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml

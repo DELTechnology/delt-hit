@@ -1,6 +1,6 @@
 experiment:
   name: template
-  fastq_path: campaign.fastq.gz
+  fastq_path: /work/FAC/FBM/DBC/mrapsoma/prometex/data/delt-hit/campaign.fastq.gz
   save_dir: experiments
   num_cores: 11
 selections:

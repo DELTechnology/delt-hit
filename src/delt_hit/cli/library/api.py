@@ -114,7 +114,7 @@ class Library:
     def visualize(self, *, config_path: Path, counts_path: Path | None = None, top_n: int = 12,
                   library_name: str | None = None, building_block_ids: list[str] | None = None,
                   output_name: str = "visualization", library_path: Path | None = None,
-                  overwrite: bool = False):
+                  overwrite: bool = False, nrow: int = 10):
         """Generate reaction and molecule visualization panels.
 
         Args:
@@ -126,6 +126,7 @@ class Library:
             output_name: Base name for the generated PNG files.
             library_path: Optional explicit library parquet path to visualize.
             overwrite: Whether to overwrite an existing filtered library in visualization mode.
+            nrow: Number of molecules per row in structure grids.
         """
         assert top_n > 0, "`top_n` must be a positive integer"
         cfg = read_yaml(config_path)
@@ -135,9 +136,9 @@ class Library:
         graph_bundle = prepare_graph_bundle(cfg=cfg)
         save_graph_visualizations(graph_bundle=graph_bundle, save_dir=lib_dir)
 
-        axes = visualize_reaction_schemes(graph_bundle['G'])
-        axes[0].figure.savefig(lib_dir / f"{output_name}_reaction_schemes.png", dpi=300)
-        close_figure(axes[0].figure)
+        reactions_dir = lib_dir / 'reactions'
+        reactions_dir.mkdir(parents=True, exist_ok=True)
+        visualize_reaction_schemes(cfg['catalog']['reactions'], save_dir=reactions_dir)
 
         building_block_names = sorted(graph_bundle['building_blocks'])
         if building_block_ids:
@@ -169,6 +170,7 @@ class Library:
             smiles=library_df['smiles'].dropna().tolist(),
             legends=[f"row_{idx}" for idx in library_df.index],
             title='Product Structures',
+            nrow=nrow,
         )
         product_ax.figure.savefig(lib_dir / f"{output_name}_products.png", dpi=300)
         close_figure(product_ax.figure)
@@ -194,6 +196,7 @@ class Library:
                 smiles=smiles,
                 legends=legends,
                 title=f'{bb_name} Building Blocks',
+                nrow=nrow,
             )
             ax.figure.savefig(lib_dir / f"{output_name}_{bb_name}.png", dpi=300)
             close_figure(ax.figure)
@@ -603,7 +606,7 @@ def save_graph_visualizations(*, graph_bundle: dict, save_dir: Path) -> None:
         (graph_bundle['add_G'], 'additional_reactions_graph.png'),
         (graph_bundle['G'], 'reaction_graph.png'),
     ]:
-        ax = visualize_reaction_graph(graph, include_smirks=True)
+        ax = visualize_reaction_graph(graph)
         ax.figure.savefig(save_dir / filename, dpi=300)
         close_figure(ax.figure)
 
@@ -663,7 +666,7 @@ def enumerate_library_dataframe(*,
         is_valid = len(sinks) == 1
 
         if ((debug == 'all') or (debug == 'valid')) and is_valid and save_dir is not None:
-            ax = visualize_reaction_graph(g, include_smirks=True)
+            ax = visualize_reaction_graph(g)
             ax.figure.savefig(
                 save_dir / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
                 dpi=300,
@@ -685,7 +688,7 @@ def enumerate_library_dataframe(*,
             g = complete_reaction_graph(g, errors=errors)
         except Exception as e:
             if debug == 'invalid' and save_dir is not None:
-                ax = visualize_reaction_graph(g, include_smirks=True)
+                ax = visualize_reaction_graph(g)
                 ax.figure.savefig(
                     save_dir / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
                     dpi=300,
@@ -708,12 +711,11 @@ def enumerate_library_dataframe(*,
     return df
 
 
-def visualize_reaction_graph(G: nx.DiGraph, include_smirks: bool = False) -> plt.Axes:
+def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
     """Render a reaction graph with typed node coloring.
 
     Args:
         G: Reaction graph.
-        include_smirks: Whether to include SMIRKS in reaction-node labels.
 
     Returns:
         Matplotlib Axes with the graph visualization.
@@ -727,83 +729,43 @@ def visualize_reaction_graph(G: nx.DiGraph, include_smirks: bool = False) -> plt
 
     pos = nx.nx_agraph.graphviz_layout(G, prog="dot")
 
-    # Draw compounds
-    nx.draw_networkx_nodes(
-        G, pos,
-        nodelist=compounds,
-        node_color="lightblue",
-        node_shape="o",  # circle
-        node_size=500,
-        ax=ax
-    )
+    nx.draw_networkx_nodes(G, pos, nodelist=compounds, node_color="lightblue", node_shape="o", node_size=500, ax=ax)
+    nx.draw_networkx_nodes(G, pos, nodelist=building_blocks, node_color="mediumorchid", node_shape="o", node_size=500, ax=ax)
+    nx.draw_networkx_nodes(G, pos, nodelist=products, node_color="salmon", node_shape="o", node_size=500, ax=ax)
+    nx.draw_networkx_nodes(G, pos, nodelist=reactions, node_color="lightgreen", node_shape="s", node_size=600, ax=ax)
 
-    # Draw building blocks
-    nx.draw_networkx_nodes(
-        G, pos,
-        nodelist=building_blocks,
-        node_color="mediumorchid",
-        node_shape="o",  # circle
-        node_size=500,
-        ax=ax
-    )
-
-    # Draw compounds
-    nx.draw_networkx_nodes(
-        G, pos,
-        nodelist=products,
-        node_color="salmon",
-        node_shape="o",  # circle
-        node_size=500,
-        ax=ax
-    )
-
-    # Draw reactions
-    nx.draw_networkx_nodes(
-        G, pos,
-        nodelist=reactions,
-        node_color="lightgreen",
-        node_shape="s",  # square
-        node_size=600,
-        ax=ax
-    )
-
-    labels = {}
-    for node, data in G.nodes(data=True):
-        if include_smirks and data.get("type") == "reaction" and data.get("smirks"):
-            labels[node] = f"{node}\n{data['smirks']}"
-        else:
-            labels[node] = node
-
+    labels = {node: node for node in G.nodes()}
     nx.draw_networkx_labels(G, pos, labels=labels, ax=ax, font_size=8)
     nx.draw_networkx_edges(G, pos, ax=ax, arrows=True)
     ax.set_axis_off()
     ax.figure.tight_layout()
 
-    # fig.show()
     return ax
 
 
-def visualize_reaction_schemes(G: nx.DiGraph) -> list[plt.Axes]:
-    """Render one 2D reaction scheme panel per reaction node."""
-    reaction_nodes = [(n, d) for n, d in G.nodes(data=True) if d.get("type") == "reaction"]
-    nrows = max(1, len(reaction_nodes))
-    fig, axes = plt.subplots(nrows, 1, figsize=(10, max(3 * nrows, 4)))
-    axes = np.atleast_1d(axes)
+def visualize_reaction_schemes(reactions: dict, save_dir: Path) -> None:
+    """Save one PNG per reaction directly from config reaction data.
 
-    for ax, (name, data) in zip(axes, reaction_nodes):
+    Args:
+        reactions: Mapping of reaction name to reaction metadata (must include 'smirks').
+        save_dir: Directory to write PNG files into.
+    """
+    for name, data in reactions.items():
         smirks = data.get("smirks")
+        fig, ax = plt.subplots(1, 1, figsize=(10, 3))
         ax.set_axis_off()
-        if pd.isna(smirks) or smirks is None:
-            ax.text(0.5, 0.5, f"{name}\nPASS", ha='center', va='center', fontsize=12)
-            continue
 
-        rxn = rdChemReactions.ReactionFromSmarts(smirks)
-        img = Draw.ReactionToImage(rxn, subImgSize=(250, 120))
-        ax.imshow(img)
-        ax.set_title(f"{name}: {smirks}", fontsize=10)
+        if not smirks or (isinstance(smirks, float) and pd.isna(smirks)):
+            ax.text(0.5, 0.5, name, ha='center', va='center', fontsize=14)
+        else:
+            rxn = rdChemReactions.ReactionFromSmarts(smirks)
+            img = Draw.ReactionToImage(rxn, subImgSize=(300, 150))
+            ax.imshow(img)
+            ax.set_title(name, fontsize=12)
 
-    fig.tight_layout()
-    return list(axes)
+        fig.tight_layout()
+        fig.savefig(save_dir / f"{name}.png", dpi=300)
+        close_figure(fig)
 
 
 def close_figure(fig) -> None:
@@ -897,22 +859,7 @@ def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
 
             logger.error(f"Error processing reaction {next_reaction}: {e}\n")
             logger.error(f"Current products: {products}\n")
-            logger.error(f'Reaction graph at  error: {G.nodes(data=True)}\n')
-            data = G.nodes(data=True)
-
-            data = [i for i in G.nodes(data=True) if i[0] == 'B0']
-            print(data)
-            data = [i for i in G.nodes(data=True) if i[0] == 'product_1B']
-            print(data)
-            data = [i for i in G.nodes(data=True) if i[0] == 'B1']
-            print(data)
-
-            # idx = [i[0] for i in data]
-            # data = [i[1] for i in data]
-            # df = pd.DataFrame(data, index=idx)
-            # print(df.to_markdown())
-            # nodes = [n[1]['smiles'] for n in G.nodes(data=True) if n[0] == 'B1']
-            # logger.error(f'SMILES: {nodes}')
+            logger.error(f'Reaction graph at error: {G.nodes(data=True)}\n')
 
             if errors == 'raise':
                 exit()
