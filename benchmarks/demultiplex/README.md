@@ -296,12 +296,7 @@ mkdir -p "$DATA_ROOT"
   --dataset-name "$DATASET" \
   --data-dir "$DATA_ROOT" \
   --tool "$TOOL"
-
-RESULT_DIR="benchmarks/demultiplex/tools/$TOOL/$DATASET"
-mkdir -p "$RESULT_DIR"
-cp "$DATA_ROOT/tools/$TOOL/$DATASET/timing.json" "$RESULT_DIR/timing.json"
 EOF
-  exit
   done
 done
 ```
@@ -345,10 +340,6 @@ mkdir -p "$DATA_ROOT"
   --dataset-name "$DATASET" \
   --data-dir "$DATA_ROOT" \
   --tool "$TOOL"
-
-RESULT_DIR="benchmarks/demultiplex/tools/$TOOL/$DATASET"
-mkdir -p "$RESULT_DIR"
-cp "$DATA_ROOT/tools/$TOOL/$DATASET/timing.json" "$RESULT_DIR/timing.json"
 EOF
   done
 done
