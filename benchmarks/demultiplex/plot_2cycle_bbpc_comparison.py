@@ -74,12 +74,9 @@ def format_reads(num_reads: int) -> str:
 
 def main(*, tools_root: Path, output_dir: Path) -> None:
     grouped = load_timings(tools_root.resolve())
-    missing_bbpcs = [bbpc for bbpc in EXPECTED_BBPCS if bbpc not in grouped]
-    if missing_bbpcs:
-        missing_labels = ", ".join(str(bbpc) for bbpc in missing_bbpcs)
+    if not grouped:
         raise FileNotFoundError(
-            "Missing timing data for 2-cycle BB/cycle comparison plot: "
-            f"{missing_labels} BB/cycle."
+            f"No 2-cycle timing.json files found under {tools_root} for BB/cycle values {EXPECTED_BBPCS}."
         )
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -130,7 +127,8 @@ def main(*, tools_root: Path, output_dir: Path) -> None:
     axis.set_ylabel("Runtime (s)")
     axis.set_title("Synthetic 2-cycle benchmark runtimes across BB/cycle settings")
     axis.grid(True, which="both", linestyle="--", linewidth=0.5, alpha=0.5)
-    axis.legend(ncol=2)
+    if axis.lines:
+        axis.legend(ncol=2)
 
     figure.tight_layout()
     output_path = output_dir / "synthetic_2cycle_bbpc_comparison_runtime.png"
