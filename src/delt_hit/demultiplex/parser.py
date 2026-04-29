@@ -1,6 +1,18 @@
 from pathlib import Path
 import pandas as pd
 
+
+def _normalize_complement_flag(value) -> bool:
+    """Normalize optional complement flags from Excel into booleans."""
+    if pd.isna(value):
+        return False
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.strip().lower() in {'true', '1', 'yes', 'y'}
+    return bool(value)
+
+
 def validate_config(config: dict):
     """Validate that the config is internally consistent.
 
@@ -191,6 +203,10 @@ def whitelists_from_excel(path: Path):
         df = pd.read_excel(path, sheet_name=sheet)
         assert df.codon.nunique() == len(df), f"Codons for building blocks {sheet} must be unique"
         assert df.codon.notna().all(), f"Codons for building blocks {sheet} cannot be empty"
+        if 'complement' in df.columns:
+            df['complement'] = df['complement'].map(_normalize_complement_flag)
+        else:
+            df['complement'] = False
 
         df.index.name = 'index'
         df = df.reset_index()

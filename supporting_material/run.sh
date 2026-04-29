@@ -7,6 +7,8 @@ CONFIG_PATH=experiments/template/config.yaml
 delt-hit library enumerate --config_path=$CONFIG_PATH --graph_only=True  # produce reaction graph only for inspection
 delt-hit library enumerate --config_path=$CONFIG_PATH
 
+delt-hit library visualize --config_path=$CONFIG_PATH --output_name=library_overview
+
 delt-hit library properties --config_path=$CONFIG_PATH
 
 delt-hit library represent --method=morgan --config_path=$CONFIG_PATH
@@ -24,7 +26,14 @@ delt-hit library enumerate \
   --top_n=1000 \
   --library_name=AG24_4_top_hits
 
-delt-hit library viz --library_name=AG24_4_top_hits
+delt-hit library visualize \
+  --config_path=$CONFIG_PATH \
+  --counts_path=experiments/template/selections/AG24_4/counts.txt \
+  --top_n=24 \
+  --library_name=AG24_4_top_hits \
+  --output_name=AG24_4_top_hits
+
+delt-hit library properties --config_path=$CONFIG_PATH --library_name=AG24_4_top_hits
 
 delt-hit demultiplex report --config_path=$CONFIG_PATH
 delt-hit demultiplex qc --config_path=$CONFIG_PATH

@@ -17,6 +17,16 @@ def load_generator_module():
     return module
 
 
+def load_matrix_module():
+    script_path = Path(__file__).resolve().parents[1] / "benchmarks" / "generate_synthetic_benchmark_matrix.py"
+    spec = importlib.util.spec_from_file_location("generate_synthetic_benchmark_matrix", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec is not None
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
 def count_fastq_reads(path: Path) -> int:
     open_func = gzip.open if path.suffix == ".gz" else open
     with open_func(path, "rt") as handle:
@@ -88,3 +98,53 @@ def test_higher_cycle_schema_and_building_blocks(tmp_path):
         "building_block_id_4",
         "count",
     }
+
+
+def test_two_cycle_large_library_profile_has_expected_presets():
+    module = load_matrix_module()
+
+    specs = module.PROFILES["two_cycle_large_libraries"]
+    by_name = {spec.experiment_name: spec for spec in specs}
+
+    assert set(by_name) == {
+        "synthetic_2cycle_100bbpc_1m",
+        "synthetic_2cycle_100bbpc_10m",
+        "synthetic_2cycle_100bbpc_100m",
+        "synthetic_2cycle_100bbpc_1000m",
+        "synthetic_2cycle_1000bbpc_1m",
+        "synthetic_2cycle_1000bbpc_10m",
+        "synthetic_2cycle_1000bbpc_100m",
+        "synthetic_2cycle_1000bbpc_1000m",
+    }
+    assert by_name["synthetic_2cycle_100bbpc_1m"].num_reads_per_compound == 100
+    assert by_name["synthetic_2cycle_100bbpc_1000m"].num_reads_per_compound == 100_000
+    assert by_name["synthetic_2cycle_1000bbpc_1m"].num_reads_per_compound == 1
+    assert by_name["synthetic_2cycle_1000bbpc_1000m"].num_reads_per_compound == 1_000
+
+
+def test_matrix_profile_generation_writes_new_two_cycle_dataset(tmp_path):
+    module = load_matrix_module()
+    spec = module.make_dataset_spec(
+        num_cycles=2,
+        building_blocks_per_cycle=100,
+        depth_label="1m",
+    )
+
+    module.generate_dataset(
+        num_cycles=spec.num_cycles,
+        building_blocks_per_cycle=spec.building_blocks_per_cycle,
+        num_reads_per_compound=spec.num_reads_per_compound,
+        output_dir=tmp_path,
+        experiment_name=spec.experiment_name,
+        compressed=True,
+    )
+
+    experiment_dir = tmp_path / f"{spec.experiment_name}_err=0"
+    manifest = json.loads((experiment_dir / "manifest.json").read_text())
+
+    assert manifest["experiment_name"] == "synthetic_2cycle_100bbpc_1m_err=0"
+    assert manifest["building_blocks_per_cycle"] == 100
+    assert manifest["num_cycles"] == 2
+    assert manifest["num_reads_per_compound"] == 100
+    assert manifest["expected_compounds"] == 10_000
+    assert manifest["expected_reads"] == 1_000_000
