@@ -296,6 +296,10 @@ mkdir -p "$DATA_ROOT"
   --dataset-name "$DATASET" \
   --data-dir "$DATA_ROOT" \
   --tool "$TOOL"
+
+RESULT_DIR="benchmarks/demultiplex/tools/$TOOL/$DATASET"
+mkdir -p "$RESULT_DIR"
+cp "$DATA_ROOT/tools/$TOOL/$DATASET/timing.json" "$RESULT_DIR/timing.json"
 EOF
   done
 done
@@ -340,6 +344,10 @@ mkdir -p "$DATA_ROOT"
   --dataset-name "$DATASET" \
   --data-dir "$DATA_ROOT" \
   --tool "$TOOL"
+
+RESULT_DIR="benchmarks/demultiplex/tools/$TOOL/$DATASET"
+mkdir -p "$RESULT_DIR"
+cp "$DATA_ROOT/tools/$TOOL/$DATASET/timing.json" "$RESULT_DIR/timing.json"
 EOF
   done
 done
@@ -454,10 +462,18 @@ for dataset in "${ALL_DATASETS[@]}"; do
     --data-dir "$DATA_ROOT" \
     --tool deli
 
+  mkdir -p "benchmarks/demultiplex/tools/deli/$dataset"
+  cp "$DATA_ROOT/tools/deli/$dataset/timing.json" \
+    "benchmarks/demultiplex/tools/deli/$dataset/timing.json"
+
   ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
     --dataset-name "$dataset" \
     --data-dir "$DATA_ROOT" \
     --tool delt
+
+  mkdir -p "benchmarks/demultiplex/tools/delt/$dataset"
+  cp "$DATA_ROOT/tools/delt/$dataset/timing.json" \
+    "benchmarks/demultiplex/tools/delt/$dataset/timing.json"
 done
 ```
 
