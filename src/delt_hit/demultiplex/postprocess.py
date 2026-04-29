@@ -1,6 +1,8 @@
 from collections import defaultdict
+import math
 import multiprocessing
 from pathlib import Path
+import struct
 
 import pandas as pd
 from isal import igzip
@@ -95,6 +97,17 @@ def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None,
             df.to_csv(output_file, index=False, sep='\t')
 
 
+def _estimate_num_chunks(path: Path, chunk_size_bytes: int) -> int:
+    """Estimate chunk count from the gzip stored uncompressed size (last 4 bytes).
+
+    The stored size is modulo 2³², so for files > 4 GB this is an approximation.
+    """
+    with open(path, 'rb') as f:
+        f.seek(-4, 2)
+        uncompressed_size = struct.unpack('<I', f.read(4))[0]
+    return math.ceil(uncompressed_size / chunk_size_bytes)
+
+
 def get_counts(*, input_path: Path, num_reads: int, num_workers: int = 1,
                chunk_size_bytes: int = 5_000_000) -> dict:
     """Count barcode occurrences from a gzipped read file.
@@ -117,9 +130,11 @@ def get_counts(*, input_path: Path, num_reads: int, num_workers: int = 1,
         return counts
 
     counts: dict = {}
+    total_chunks = _estimate_num_chunks(input_path, chunk_size_bytes)
     with multiprocessing.Pool(num_workers) as pool:
         for partial in tqdm(
             pool.imap_unordered(_count_bytes_chunk, _iter_byte_chunks(input_path, chunk_size_bytes)),
+            total=total_chunks,
             ncols=100,
         ):
             for sel, bc_counts in partial.items():
