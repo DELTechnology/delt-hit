@@ -62,6 +62,7 @@ the exact parameter values used for that run.
 ### Run the comparison
 
 ```bash
+module load r-light/4.4.1
 ./.venv/bin/python benchmarks/compare_synthetic_enrichment.py \
   --dataset-dir target/synthetic_enrichment/synthetic_enrichment_default \
   --top-k 100
