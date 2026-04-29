@@ -187,7 +187,6 @@ The next promising options are:
 3. Benchmark a more compact flat key representation without reconstructing nested tuples in the hot path.
 4. If we want a parser rewrite, move it to a compiled path:
    - Cython
-   - Rust
    - Numba on a more array-like representation
 
 ## Bottom line

@@ -63,7 +63,7 @@ Split the raw input FASTQ into N parts before cutadapt, producing N separate `re
 
 ### Option D — Polars / Arrow for counting
 
-Load all header lines into a Polars DataFrame, split columns with Polars string expressions (Rust-level), group-by and count. Avoids Python per-line overhead. Requires buffering the full file or streaming batches. May be memory-intensive at 1B reads.
+Load all header lines into a Polars DataFrame, split columns with native string expressions, group-by and count. Avoids Python per-line overhead. Requires buffering the full file or streaming batches. May be memory-intensive at 1B reads.
 
 ## Recommended Next Steps (open tasks)
 
