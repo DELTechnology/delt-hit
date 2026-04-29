@@ -54,7 +54,7 @@ The exact `--num-reads-per-compound` values for the target read depths are:
 - `3` cycles: `1m=1000`, `10m=10000`, `100m=100000`, `1000m=1000000`
 - `4` cycles: `1m=100`, `10m=1000`, `100m=10000`, `1000m=100000`
 
-## 1. Generate Synthetic Datasets
+## 1. Single-Dataset Example
 
 The canonical generator is [`generate_synthetic_fastq.py`](./generate_synthetic_fastq.py).
 
@@ -65,51 +65,39 @@ Each dataset is written under `benchmarks/demultiplex/data/<dataset>/` and inclu
 - `expected_counts.tsv`
 - `manifest.json`
 
-Example: generate `synthetic_4cycle_10bbpc_100m`:
+Create one synthetic dataset as a concrete example:
 
 ```bash
 ./.venv/bin/python benchmarks/demultiplex/generate_synthetic_fastq.py \
   --num-cycles 4 \
   --building-blocks-per-cycle 10 \
   --num-reads-per-compound 10 \
-  --num-errors 1 \
+  --num-errors 0 \
   --output-dir benchmarks/demultiplex/data \
   --experiment-name synthetic_4cycle_10bbpc_100m
 ```
 
-Generate the canonical `10`-BB/cycle matrix:
+Prepare DELi inputs for that dataset:
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/generate_synthetic_benchmark_matrix.py \
-  --profile canonical \
-  --num-errors 0 \
-  --output-dir benchmarks/demultiplex/data
+./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
+  --dataset-name synthetic_4cycle_10bbpc_100m
 ```
 
-Generate the extended `2`-cycle large-library matrix:
+Prepare DELT-Hit inputs for that dataset:
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/generate_synthetic_benchmark_matrix.py \
-  --profile two_cycle_large_libraries \
-  --num-errors 0 \
-  --output-dir benchmarks/demultiplex/data
+./.venv/bin/python benchmarks/demultiplex/converter/create_delt_inputs.py \
+  --dataset-name synthetic_4cycle_10bbpc_100m \
+  --num-cores 11
 ```
 
-Generate every benchmark dataset in the combined matrix:
+Run the benchmark for that dataset:
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/generate_synthetic_benchmark_matrix.py \
-  --profile all \
-  --num-errors 0 \
-  --output-dir benchmarks/demultiplex/data
-```
-
-Preview the full plan without writing files:
-
-```bash
-./.venv/bin/python benchmarks/demultiplex/generate_synthetic_benchmark_matrix.py \
-  --profile all \
-  --dry-run
+./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
+  --dataset-name synthetic_4cycle_10bbpc_100m \
+  --tool both
 ```
 
 ## 2. Prepare DELi And DELT-Hit Inputs
@@ -179,9 +167,9 @@ It writes the canonical machine-readable report to:
   --tool delt
 ```
 
-## 4. Full-Matrix Bash Loops
+## 4. Full Experiment Matrix
 
-For ad hoc local runs, define the full matrix once and reuse it across generation, preparation, and timing steps:
+For the full experiment matrix, define the dataset families once and reuse them in the Slurm submission loops below:
 
 ```bash
 CANONICAL_DATASETS=(
@@ -216,124 +204,137 @@ ALL_DATASETS=(
 )
 ```
 
-Generate the full dataset matrix without Slurm:
-
-```bash
-for dataset in "${ALL_DATASETS[@]}"; do
-  echo "Generating $dataset"
-done
-
-./.venv/bin/python benchmarks/demultiplex/generate_synthetic_benchmark_matrix.py \
-  --profile all \
-  --num-errors 0 \
-  --output-dir benchmarks/demultiplex/data
-```
-
-Prepare all DELi inputs without Slurm:
-
-```bash
-for dataset in "${ALL_DATASETS[@]}"; do
-  ./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
-    --dataset-name "$dataset"
-done
-```
-
-Prepare all DELT-Hit inputs without Slurm:
-
-```bash
-for dataset in "${ALL_DATASETS[@]}"; do
-  ./.venv/bin/python benchmarks/demultiplex/converter/create_delt_inputs.py \
-    --dataset-name "$dataset" \
-    --num-cores 11
-done
-```
-
-Run timings for all datasets without Slurm:
-
-```bash
-for dataset in "${ALL_DATASETS[@]}"; do
-  ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
-    --dataset-name "$dataset" \
-    --tool both
-done
-```
-
-Rerun just the canonical `10bbpc` family:
-
-```bash
-for dataset in "${CANONICAL_DATASETS[@]}"; do
-  ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
-    --dataset-name "$dataset" \
-    --tool both
-done
-```
-
 ## 5. Slurm / `sbatch` Loops
 
-When you want one job per dataset, keep the same arrays and submit them from a login node:
+When you want one job per dataset and per tool, keep the same arrays and submit them from a login node. These examples require `$TMPDIR` to be set, and each job creates its own synthetic dataset there so jobs do not race on shared files.
 
 ```bash
-for dataset in "${ALL_DATASETS[@]}"; do
-  case "$dataset" in
-    *_1m) time_limit="04:00:00" ;;
-    *_10m) time_limit="08:00:00" ;;
-    *_100m) time_limit="12:00:00" ;;
-    *_1000m) time_limit="24:00:00" ;;
-    *) echo "Unknown dataset size for $dataset" >&2; exit 1 ;;
+dataset_time_limit() {
+  case "$1" in
+    *_1m) echo "04:00:00" ;;
+    *_10m) echo "08:00:00" ;;
+    *_100m) echo "12:00:00" ;;
+    *_1000m) echo "24:00:00" ;;
+    *) echo "Unknown dataset size for $1" >&2; return 1 ;;
   esac
+}
 
-  sbatch --job-name="bench-${dataset}" --time="$time_limit" --export=ALL,DATASET="$dataset" <<'EOF'
+dataset_spec() {
+  case "$1" in
+    synthetic_2cycle_10bbpc_1m) echo "2 10 10000" ;;
+    synthetic_2cycle_10bbpc_10m) echo "2 10 100000" ;;
+    synthetic_2cycle_10bbpc_100m) echo "2 10 1000000" ;;
+    synthetic_2cycle_10bbpc_1000m) echo "2 10 10000000" ;;
+    synthetic_3cycle_10bbpc_1m) echo "3 10 1000" ;;
+    synthetic_3cycle_10bbpc_10m) echo "3 10 10000" ;;
+    synthetic_3cycle_10bbpc_100m) echo "3 10 100000" ;;
+    synthetic_3cycle_10bbpc_1000m) echo "3 10 1000000" ;;
+    synthetic_4cycle_10bbpc_1m) echo "4 10 100" ;;
+    synthetic_4cycle_10bbpc_10m) echo "4 10 1000" ;;
+    synthetic_4cycle_10bbpc_100m) echo "4 10 10000" ;;
+    synthetic_4cycle_10bbpc_1000m) echo "4 10 100000" ;;
+    synthetic_2cycle_100bbpc_1m) echo "2 100 100" ;;
+    synthetic_2cycle_100bbpc_10m) echo "2 100 1000" ;;
+    synthetic_2cycle_100bbpc_100m) echo "2 100 10000" ;;
+    synthetic_2cycle_100bbpc_1000m) echo "2 100 100000" ;;
+    synthetic_2cycle_1000bbpc_1m) echo "2 1000 1" ;;
+    synthetic_2cycle_1000bbpc_10m) echo "2 1000 10" ;;
+    synthetic_2cycle_1000bbpc_100m) echo "2 1000 100" ;;
+    synthetic_2cycle_1000bbpc_1000m) echo "2 1000 1000" ;;
+    *) echo "Unsupported dataset: $1" >&2; return 1 ;;
+  esac
+}
+
+for dataset in "${ALL_DATASETS[@]}"; do
+  time_limit="$(dataset_time_limit "$dataset")"
+  read -r cycles bbpc reads < <(dataset_spec "$dataset")
+
+  for tool in deli delt; do
+    sbatch \
+      --job-name="${tool}-${dataset}" \
+      --time="$time_limit" \
+      --cpus-per-task=12 \
+      --mem=32G \
+      --output="$HOME/logs/slurm-%j.out" \
+      --export=ALL,DATASET="$dataset",CYCLES="$cycles",BBPC="$bbpc",READS="$reads",TOOL="$tool" <<'EOF'
 #!/usr/bin/env bash
-#SBATCH --cpus-per-task=12
-#SBATCH --mem=32G
-#SBATCH --output=slurm-%x-%j.out
 set -euo pipefail
 
 cd /path/to/delt-hit
 
+TMPDIR="${TMPDIR:?TMPDIR must be set for Slurm benchmark jobs}"
+DATA_ROOT="$TMPDIR/delt-hit-benchmarks/${SLURM_JOB_ID}/${DATASET}"
+mkdir -p "$DATA_ROOT"
+
+./.venv/bin/python benchmarks/demultiplex/generate_synthetic_fastq.py \
+  --num-cycles "$CYCLES" \
+  --building-blocks-per-cycle "$BBPC" \
+  --num-reads-per-compound "$READS" \
+  --num-errors 0 \
+  --output-dir "$DATA_ROOT/data" \
+  --experiment-name "$DATASET"
+
 ./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
-  --dataset-name "$DATASET"
+  --dataset-name "$DATASET" \
+  --data-dir "$DATA_ROOT"
 
 ./.venv/bin/python benchmarks/demultiplex/converter/create_delt_inputs.py \
   --dataset-name "$DATASET" \
+  --data-dir "$DATA_ROOT" \
   --num-cores 11
 
 ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
   --dataset-name "$DATASET" \
-  --tool both
+  --data-dir "$DATA_ROOT" \
+  --tool "$TOOL"
 EOF
+  done
 done
 ```
 
-If the datasets are already generated and prepared, submit timing-only jobs:
+If you prefer a timing-only submission loop, use it only after each dataset has already been generated and prepared in a job-specific scratch directory. This version also requires `$TMPDIR`:
 
 ```bash
-for dataset in "${ALL_DATASETS[@]}"; do
-  case "$dataset" in
-    *_1m) time_limit="04:00:00" ;;
-    *_10m) time_limit="08:00:00" ;;
-    *_100m) time_limit="12:00:00" ;;
-    *_1000m) time_limit="24:00:00" ;;
-    *) echo "Unknown dataset size for $dataset" >&2; exit 1 ;;
+dataset_time_limit() {
+  case "$1" in
+    *_1m) echo "04:00:00" ;;
+    *_10m) echo "08:00:00" ;;
+    *_100m) echo "12:00:00" ;;
+    *_1000m) echo "24:00:00" ;;
+    *) echo "Unknown dataset size for $1" >&2; return 1 ;;
   esac
+}
 
-  sbatch --job-name="timing-${dataset}" --time="$time_limit" --export=ALL,DATASET="$dataset" <<'EOF'
+for dataset in "${ALL_DATASETS[@]}"; do
+  time_limit="$(dataset_time_limit "$dataset")"
+
+  for tool in deli delt; do
+    sbatch \
+      --job-name="${tool}-${dataset}" \
+      --time="$time_limit" \
+      --cpus-per-task=12 \
+      --mem=32G \
+      --output="$HOME/logs/slurm-%j.out" \
+      --export=ALL,DATASET="$dataset",TOOL="$tool" <<'EOF'
 #!/usr/bin/env bash
-#SBATCH --cpus-per-task=12
-#SBATCH --mem=32G
-#SBATCH --output=slurm-%x-%j.out
 set -euo pipefail
 
 cd /path/to/delt-hit
 
+TMPDIR="${TMPDIR:?TMPDIR must be set for Slurm benchmark jobs}"
+DATA_ROOT="$TMPDIR/delt-hit-benchmarks/${SLURM_JOB_ID}/${DATASET}"
+mkdir -p "$DATA_ROOT"
+
 ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
   --dataset-name "$DATASET" \
-  --tool both
+  --data-dir "$DATA_ROOT" \
+  --tool "$TOOL"
 EOF
+  done
 done
 ```
 
-If you prefer a single batch job that loops over everything on the compute node:
+If you prefer a single batch job that loops over everything on the compute node, keep the same scratch-local pattern and run DELi and DELT-Hit separately for each dataset:
 
 ```bash
 #!/usr/bin/env bash
@@ -341,10 +342,14 @@ If you prefer a single batch job that loops over everything on the compute node:
 #SBATCH --cpus-per-task=12
 #SBATCH --mem=32G
 #SBATCH --time=72:00:00
-#SBATCH --output=slurm-%x-%j.out
+#SBATCH --output=/home/%u/logs/slurm-%j.out
 set -euo pipefail
 
 cd /path/to/delt-hit
+
+TMPDIR="${TMPDIR:?TMPDIR must be set for Slurm benchmark jobs}"
+JOB_TMPDIR="$TMPDIR/delt-hit-benchmarks/${SLURM_JOB_ID}"
+mkdir -p "$JOB_TMPDIR"
 
 ALL_DATASETS=(
   synthetic_2cycle_10bbpc_1m
@@ -369,19 +374,77 @@ ALL_DATASETS=(
   synthetic_2cycle_1000bbpc_1000m
 )
 
-for dataset in "${ALL_DATASETS[@]}"; do
-  case "$dataset" in
-    *_1m) time_limit="04:00:00" ;;
-    *_10m) time_limit="08:00:00" ;;
-    *_100m) time_limit="12:00:00" ;;
-    *_1000m) time_limit="24:00:00" ;;
-    *) echo "Unknown dataset size for $dataset" >&2; exit 1 ;;
+dataset_time_limit() {
+  case "$1" in
+    *_1m) echo "04:00:00" ;;
+    *_10m) echo "08:00:00" ;;
+    *_100m) echo "12:00:00" ;;
+    *_1000m) echo "24:00:00" ;;
+    *) echo "Unknown dataset size for $1" >&2; return 1 ;;
   esac
+}
+
+dataset_spec() {
+  case "$1" in
+    synthetic_2cycle_10bbpc_1m) echo "2 10 10000" ;;
+    synthetic_2cycle_10bbpc_10m) echo "2 10 100000" ;;
+    synthetic_2cycle_10bbpc_100m) echo "2 10 1000000" ;;
+    synthetic_2cycle_10bbpc_1000m) echo "2 10 10000000" ;;
+    synthetic_3cycle_10bbpc_1m) echo "3 10 1000" ;;
+    synthetic_3cycle_10bbpc_10m) echo "3 10 10000" ;;
+    synthetic_3cycle_10bbpc_100m) echo "3 10 100000" ;;
+    synthetic_3cycle_10bbpc_1000m) echo "3 10 1000000" ;;
+    synthetic_4cycle_10bbpc_1m) echo "4 10 100" ;;
+    synthetic_4cycle_10bbpc_10m) echo "4 10 1000" ;;
+    synthetic_4cycle_10bbpc_100m) echo "4 10 10000" ;;
+    synthetic_4cycle_10bbpc_1000m) echo "4 10 100000" ;;
+    synthetic_2cycle_100bbpc_1m) echo "2 100 100" ;;
+    synthetic_2cycle_100bbpc_10m) echo "2 100 1000" ;;
+    synthetic_2cycle_100bbpc_100m) echo "2 100 10000" ;;
+    synthetic_2cycle_100bbpc_1000m) echo "2 100 100000" ;;
+    synthetic_2cycle_1000bbpc_1m) echo "2 1000 1" ;;
+    synthetic_2cycle_1000bbpc_10m) echo "2 1000 10" ;;
+    synthetic_2cycle_1000bbpc_100m) echo "2 1000 100" ;;
+    synthetic_2cycle_1000bbpc_1000m) echo "2 1000 1000" ;;
+    *) echo "Unsupported dataset: $1" >&2; return 1 ;;
+  esac
+}
+
+for dataset in "${ALL_DATASETS[@]}"; do
+  time_limit="$(dataset_time_limit "$dataset")"
+  read -r cycles bbpc reads < <(dataset_spec "$dataset")
+
+  DATA_ROOT="$JOB_TMPDIR/$dataset"
+  mkdir -p "$DATA_ROOT"
 
   echo "Running $dataset with recommended wall time $time_limit"
+
+  ./.venv/bin/python benchmarks/demultiplex/generate_synthetic_fastq.py \
+    --num-cycles "$cycles" \
+    --building-blocks-per-cycle "$bbpc" \
+    --num-reads-per-compound "$reads" \
+    --num-errors 0 \
+    --output-dir "$DATA_ROOT/data" \
+    --experiment-name "$dataset"
+
+  ./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
+    --dataset-name "$dataset" \
+    --data-dir "$DATA_ROOT"
+
+  ./.venv/bin/python benchmarks/demultiplex/converter/create_delt_inputs.py \
+    --dataset-name "$dataset" \
+    --data-dir "$DATA_ROOT" \
+    --num-cores 11
+
   ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
     --dataset-name "$dataset" \
-    --tool both
+    --data-dir "$DATA_ROOT" \
+    --tool deli
+
+  ./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
+    --dataset-name "$dataset" \
+    --data-dir "$DATA_ROOT" \
+    --tool delt
 done
 ```
 
