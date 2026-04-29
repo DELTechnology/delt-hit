@@ -116,7 +116,10 @@ The benchmark commands below assume these environments already exist:
 
 ## Dataset Matrix
 
-This benchmark runbook uses `10` building blocks per cycle for every dataset.
+This benchmark runbook has two synthetic FASTQ benchmark families:
+
+- the canonical matrix with `10` building blocks per cycle for `2`, `3`, and `4` cycles
+- an extended `2`-cycle matrix with `100` and `1000` building blocks per cycle
 
 The canonical dataset names are:
 
@@ -133,15 +136,28 @@ The canonical dataset names are:
 - `synthetic_4cycle_100m`
 - `synthetic_4cycle_1000m`
 
-With `10` building blocks per cycle, total reads are:
+The extended `2`-cycle dataset names are:
+
+- `synthetic_2cycle_100bbpc_1m`
+- `synthetic_2cycle_100bbpc_10m`
+- `synthetic_2cycle_100bbpc_100m`
+- `synthetic_2cycle_100bbpc_1000m`
+- `synthetic_2cycle_1000bbpc_1m`
+- `synthetic_2cycle_1000bbpc_10m`
+- `synthetic_2cycle_1000bbpc_100m`
+- `synthetic_2cycle_1000bbpc_1000m`
+
+Total reads follow:
 
 ```text
-10 ** num_cycles * num_reads_per_compound
+building_blocks_per_cycle ** num_cycles * num_reads_per_compound
 ```
 
 The exact `--num-reads-per-compound` values for the target read depths are:
 
-- `2` cycles: `1m=10000`, `10m=100000`, `100m=1000000`, `1000m=10000000`
+- `2` cycles with `10` BB/cycle: `1m=10000`, `10m=100000`, `100m=1000000`, `1000m=10000000`
+- `2` cycles with `100` BB/cycle: `1m=100`, `10m=1000`, `100m=10000`, `1000m=100000`
+- `2` cycles with `1000` BB/cycle: `1m=1`, `10m=10`, `100m=100`, `1000m=1000`
 - `3` cycles: `1m=1000`, `10m=10000`, `100m=100000`, `1000m=1000000`
 - `4` cycles: `1m=100`, `10m=1000`, `100m=10000`, `1000m=100000`
 
@@ -168,43 +184,64 @@ Example: generate `synthetic_4cycle_100m`:
   --experiment-name synthetic_4cycle_100m
 ```
 
-Generate all 12 datasets:
+Generate the canonical `10`-BB/cycle matrix:
+
+```bash
+./.venv/bin/python benchmarks/generate_synthetic_benchmark_matrix.py \
+  --profile canonical \
+  --num-errors 0 \
+  --output-dir benchmarks/data
+```
+
+Generate the extended `2`-cycle large-library matrix:
+
+```bash
+./.venv/bin/python benchmarks/generate_synthetic_benchmark_matrix.py \
+  --profile two_cycle_large_libraries \
+  --num-errors 0 \
+  --output-dir benchmarks/data
+```
+
+Preview the full plan without writing files:
+
+```bash
+./.venv/bin/python benchmarks/generate_synthetic_benchmark_matrix.py \
+  --profile all \
+  --dry-run
+```
+
+Generate, prepare, and benchmark the full extended `2`-cycle large-library suite locally:
 
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 
 ROOT="/users/amarti51/projects/delt-hit"
-NUM_ERRORS=0
 cd "$ROOT"
 
-for cycles in 2 3 4; do
-  for depth in 1m 10m 100m 1000m; do
-    case "${cycles}:${depth}" in
-      2:1m) reads_per_compound=10000 ;;
-      2:10m) reads_per_compound=100000 ;;
-      2:100m) reads_per_compound=1000000 ;;
-      2:1000m) reads_per_compound=10000000 ;;
-      3:1m) reads_per_compound=1000 ;;
-      3:10m) reads_per_compound=10000 ;;
-      3:100m) reads_per_compound=100000 ;;
-      3:1000m) reads_per_compound=1000000 ;;
-      4:1m) reads_per_compound=100 ;;
-      4:10m) reads_per_compound=1000 ;;
-      4:100m) reads_per_compound=10000 ;;
-      4:1000m) reads_per_compound=100000 ;;
-    esac
+./.venv/bin/python benchmarks/generate_synthetic_benchmark_matrix.py \
+  --profile two_cycle_large_libraries \
+  --num-errors 0 \
+  --output-dir benchmarks/data
 
-    dataset="synthetic_${cycles}cycle_${depth}"
-
-    ./.venv/bin/python benchmarks/generate_synthetic_fastq.py \
-      --num-cycles "$cycles" \
-      --building-blocks-per-cycle 10 \
-      --num-reads-per-compound "$reads_per_compound" \
-      --num-errors "$NUM_ERRORS" \
-      --output-dir benchmarks/data \
-      --experiment-name "$dataset"
-  done
+for dataset in \
+  synthetic_2cycle_100bbpc_1m \
+  synthetic_2cycle_100bbpc_10m \
+  synthetic_2cycle_100bbpc_100m \
+  synthetic_2cycle_100bbpc_1000m \
+  synthetic_2cycle_1000bbpc_1m \
+  synthetic_2cycle_1000bbpc_10m \
+  synthetic_2cycle_1000bbpc_100m \
+  synthetic_2cycle_1000bbpc_1000m
+do
+  ./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
+    --dataset-name "$dataset"
+  ./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
+    --dataset-name "$dataset" \
+    --num-cores 11
+  ./.venv/bin/python benchmarks/run_split_timing.py \
+    --dataset-name "$dataset" \
+    --tool both
 done
 ```
 
@@ -260,6 +297,24 @@ for cycles in 2 3 4; do
 done
 ```
 
+Prepare DELi inputs for the extended `2`-cycle large-library suite:
+
+```bash
+for dataset in \
+  synthetic_2cycle_100bbpc_1m \
+  synthetic_2cycle_100bbpc_10m \
+  synthetic_2cycle_100bbpc_100m \
+  synthetic_2cycle_100bbpc_1000m \
+  synthetic_2cycle_1000bbpc_1m \
+  synthetic_2cycle_1000bbpc_10m \
+  synthetic_2cycle_1000bbpc_100m \
+  synthetic_2cycle_1000bbpc_1000m
+do
+  ./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
+    --dataset-name "$dataset"
+done
+```
+
 ### DELT-Hit
 
 Example:
@@ -293,6 +348,25 @@ for cycles in 2 3 4; do
       --dataset-name "$dataset" \
       --num-cores 11
   done
+done
+```
+
+Prepare DELT-Hit inputs for the extended `2`-cycle large-library suite:
+
+```bash
+for dataset in \
+  synthetic_2cycle_100bbpc_1m \
+  synthetic_2cycle_100bbpc_10m \
+  synthetic_2cycle_100bbpc_100m \
+  synthetic_2cycle_100bbpc_1000m \
+  synthetic_2cycle_1000bbpc_1m \
+  synthetic_2cycle_1000bbpc_10m \
+  synthetic_2cycle_1000bbpc_100m \
+  synthetic_2cycle_1000bbpc_1000m
+do
+  ./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
+    --dataset-name "$dataset" \
+    --num-cores 11
 done
 ```
 
@@ -340,6 +414,25 @@ for cycles in 2 3 4; do
       --dataset-name "$dataset" \
       --tool deli
   done
+done
+```
+
+Run DELi across the extended `2`-cycle large-library suite:
+
+```bash
+for dataset in \
+  synthetic_2cycle_100bbpc_1m \
+  synthetic_2cycle_100bbpc_10m \
+  synthetic_2cycle_100bbpc_100m \
+  synthetic_2cycle_100bbpc_1000m \
+  synthetic_2cycle_1000bbpc_1m \
+  synthetic_2cycle_1000bbpc_10m \
+  synthetic_2cycle_1000bbpc_100m \
+  synthetic_2cycle_1000bbpc_1000m
+do
+  ./.venv/bin/python benchmarks/run_split_timing.py \
+    --dataset-name "$dataset" \
+    --tool deli
 done
 ```
 
@@ -391,6 +484,36 @@ DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
 done
 ```
 
+Submit one Slurm job per dataset for the extended `2`-cycle large-library DELi suite:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/users/amarti51/projects/delt-hit"
+cd "$ROOT"
+
+for bbpc in 100 1000; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_2cycle_${bbpc}bbpc_${depth}"
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_deli_${dataset}" --output="$HOME/logs/%j.out" --wrap "
+cd $ROOT &&
+DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
+./.venv/bin/python benchmarks/generate_synthetic_benchmark_matrix.py \
+  --profile two_cycle_large_libraries \
+  --num-errors 0 \
+  --output-dir \$DATA_DIR/data &&
+./.venv/bin/python benchmarks/converter/create_deli_inputs.py \
+  --dataset-name $dataset \
+  --data-dir \$DATA_DIR &&
+./.venv/bin/python benchmarks/run_split_timing.py \
+  --dataset-name $dataset \
+  --data-dir \$DATA_DIR \
+  --tool deli"
+  done
+done
+```
+
 ### DELT-Hit Only
 
 ```bash
@@ -415,6 +538,25 @@ for depth in 1m 10m 100m 1000m; do
       --dataset-name "$dataset" \
       --tool delt
   done
+done
+```
+
+Run DELT-Hit across the extended `2`-cycle large-library suite:
+
+```bash
+for dataset in \
+  synthetic_2cycle_100bbpc_1m \
+  synthetic_2cycle_100bbpc_10m \
+  synthetic_2cycle_100bbpc_100m \
+  synthetic_2cycle_100bbpc_1000m \
+  synthetic_2cycle_1000bbpc_1m \
+  synthetic_2cycle_1000bbpc_10m \
+  synthetic_2cycle_1000bbpc_100m \
+  synthetic_2cycle_1000bbpc_1000m
+do
+  ./.venv/bin/python benchmarks/run_split_timing.py \
+    --dataset-name "$dataset" \
+    --tool delt
 done
 ```
 
@@ -454,6 +596,37 @@ DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
   --num-errors $NUM_ERRORS \
   --output-dir \$DATA_DIR/data \
   --experiment-name $dataset &&
+./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
+  --dataset-name $dataset \
+  --data-dir \$DATA_DIR \
+  --num-cores 11 &&
+./.venv/bin/python benchmarks/run_split_timing.py \
+  --dataset-name $dataset \
+  --data-dir \$DATA_DIR \
+  --tool delt"
+  done
+done
+```
+
+Submit one Slurm job per dataset for the extended `2`-cycle large-library DELT-Hit suite:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="/users/amarti51/projects/delt-hit"
+cd "$ROOT"
+
+for bbpc in 100 1000; do
+  for depth in 1m 10m 100m 1000m; do
+    dataset="synthetic_2cycle_${bbpc}bbpc_${depth}"
+    sbatch --time=18:00:00 --mem=64G --cpus-per-task=12 --job-name="bench_delt_${dataset}" --output="$HOME/logs/%j.out" --wrap "
+cd $ROOT &&
+DATA_DIR=\$TMPDIR/benchmarks/$dataset &&
+./.venv/bin/python benchmarks/generate_synthetic_benchmark_matrix.py \
+  --profile two_cycle_large_libraries \
+  --num-errors 0 \
+  --output-dir \$DATA_DIR/data &&
 ./.venv/bin/python benchmarks/converter/create_delt_inputs.py \
   --dataset-name $dataset \
   --data-dir \$DATA_DIR \
