@@ -107,7 +107,22 @@ delt-hit library enumerate --config_path <path/to/config.yaml>
 
 Useful options:
 - `--overwrite` to re-generate an existing library
+- `--debug {all,valid,invalid}` to save per-combination reaction-graph PNGs for troubleshooting enumeration
 - `--counts_path`, `--top_n`, and `--library_name` to enumerate only the top observed combinations from a demultiplex `counts.txt` file
+
+Debugging failed or unexpected enumerations:
+
+```
+delt-hit library enumerate \
+  --config_path <path/to/config.yaml> \
+  --debug invalid \
+  --errors ignore
+```
+
+- `--debug all` saves a reaction graph for every combination that produces a single terminal node
+- `--debug valid` saves the same graphs, but only for combinations that pass the terminal-node validity check
+- `--debug invalid` saves the graph for combinations that fail during reaction execution, which is most useful together with `--errors ignore` so enumeration can continue past the first failure
+- Debug PNGs are written into `<save_dir>/<experiment_name>/library/` alongside the generated parquet file, using filenames such as `reaction_graph_combination=<index>_<codes>.png`
 
 Example filtered-enumeration workflow:
 
@@ -128,6 +143,7 @@ delt-hit library properties \
 **Outputs**
 - `<save_dir>/<experiment_name>/library/library.parquet`
 - `<save_dir>/<experiment_name>/library/<library_name>.parquet` for filtered enumeration
+- `<save_dir>/<experiment_name>/library/reaction_graph_combination=<index>_<codes>.png` when `--debug` is enabled
 - Reaction graph PNGs in the same directory
 
 ### `properties`
