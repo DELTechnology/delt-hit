@@ -18,7 +18,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 TOOLS_ROOT = PROJECT_ROOT / "benchmarks" / "demultiplex" / "tools"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "benchmarks" / "demultiplex" / "plots"
 DATASET_PATTERN = re.compile(
-    r"^synthetic_(?P<cycles>\d+)cycle_(?P<bbpc>\d+)bbpc_(?P<depth>\d+)m$"
+    r"^synthetic_(?P<cycles>\d+)cycle_(?P<bbpc>\d+)bbpc_(?P<depth>\d+)m(?:_err=\d+)?$"
 )
 
 
@@ -119,18 +119,32 @@ def plot_cycle_group(
     return output_path
 
 
+def ensure_expected_cycle_plots(
+    grouped: dict[tuple[int, int], dict[str, list[tuple[int, float, str]]]]
+) -> list[tuple[int, int]]:
+    expected_groups = [(2, 10), (3, 10), (4, 10)]
+    missing_groups = [group for group in expected_groups if group not in grouped]
+    if missing_groups:
+        missing_names = ", ".join(f"{cycles}-cycle/{bbpc}bbpc" for cycles, bbpc in missing_groups)
+        raise FileNotFoundError(
+            "Missing timing data for expected synthetic benchmark groups: "
+            f"{missing_names}. Expected one plot each for the current 2/3/4-cycle libraries."
+        )
+    return expected_groups
+
+
 def main(*, tools_root: Path, output_dir: Path) -> None:
     grouped = load_timings(tools_root.resolve())
     if not grouped:
         raise FileNotFoundError(f"No timing.json files found under {tools_root}")
 
     output_paths = []
-    for (cycles, bbpc), tool_points in sorted(grouped.items()):
+    for cycles, bbpc in ensure_expected_cycle_plots(grouped):
         output_paths.append(
             plot_cycle_group(
                 cycles=cycles,
                 bbpc=bbpc,
-                tool_points=tool_points,
+                tool_points=grouped[(cycles, bbpc)],
                 output_dir=output_dir.resolve(),
             )
         )

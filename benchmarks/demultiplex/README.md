@@ -484,6 +484,23 @@ For DELT-Hit:
 
 Each run also compares the observed output against `expected_counts.tsv` and records whether counts match.
 
+## Plot The Current Benchmark Configurations
+
+After the timing runs are available under `benchmarks/demultiplex/tools`, generate the current runtime plots with:
+
+```bash
+./.venv/bin/python benchmarks/demultiplex/plot_benchmark_runtimes.py
+
+./.venv/bin/python benchmarks/demultiplex/plot_2cycle_bbpc_comparison.py
+```
+
+This writes:
+
+- `benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_runtime.png`
+- `benchmarks/demultiplex/plots/synthetic_3cycle_10bbpc_runtime.png`
+- `benchmarks/demultiplex/plots/synthetic_4cycle_10bbpc_runtime.png`
+- `benchmarks/demultiplex/plots/synthetic_2cycle_bbpc_comparison_runtime.png`
+
 ## Manual Command Sequence
 
 If you want to run the prepared inputs manually instead of using `run_split_timing.py`, the equivalent commands are:
