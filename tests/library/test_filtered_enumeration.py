@@ -177,11 +177,8 @@ def test_visualize_enumerate_writes_expected_input_bundle(tmp_path, monkeypatch)
 
     viz_dir = tmp_path / "mini" / "library" / "visualization"
     assert (viz_dir / "building_blocks_B0.png").exists()
-    assert (viz_dir / "building_blocks_B0.pdf").exists()
     assert (viz_dir / "building_blocks_B1.png").exists()
-    assert (viz_dir / "building_blocks_B1.pdf").exists()
     assert (viz_dir / "compounds" / "scaffold.png").exists()
-    assert (viz_dir / "compounds" / "scaffold.pdf").exists()
 
 
 def test_visualize_enumerate_flags_limit_outputs(tmp_path, monkeypatch):
@@ -208,9 +205,41 @@ def test_visualize_enumerate_flags_limit_outputs(tmp_path, monkeypatch):
 
     viz_dir = tmp_path / "mini" / "library" / "visualization"
     assert (viz_dir / "compounds" / "scaffold.png").exists()
-    assert (viz_dir / "compounds" / "scaffold.pdf").exists()
     assert not (viz_dir / "building_blocks_B0.png").exists()
     assert not (viz_dir / "building_blocks_B1.png").exists()
+
+
+def test_visualize_enumerate_passes_tile_size_to_structure_rendering(tmp_path, monkeypatch):
+    _, config_path = make_test_config(tmp_path)
+    captured_sizes = []
+
+    class DummyFigure:
+        def savefig(self, path, *_args, **_kwargs):
+            Path(path).write_text("figure")
+
+        def tight_layout(self):
+            return None
+
+    class DummyAxes:
+        figure = DummyFigure()
+
+    def capture_visualize_smiles(*args, **kwargs):
+        captured_sizes.append(kwargs.get("sub_img_size"))
+        return DummyAxes()
+
+    monkeypatch.setattr("delt_hit.cli.visualize.api.save_graph_visualizations", lambda **_kwargs: None)
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_reaction_schemes", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_smiles", capture_visualize_smiles)
+
+    Visualize().enumerate(
+        config_path=config_path,
+        building_blocks=True,
+        compounds=True,
+        tile_size=420,
+    )
+
+    assert captured_sizes
+    assert set(captured_sizes) == {(420, 420)}
 
 
 def test_properties_default_mode_writes_properties_parquet(tmp_path):

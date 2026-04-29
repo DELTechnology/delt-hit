@@ -22,6 +22,7 @@ class Visualize(LibraryPaths):
         building_block_ids: list[str] | None = None,
         nrow: int = 25,
         dpi: int = 300,
+        tile_size: int = 300,
         graph: bool = False,
         reactions: bool = False,
         building_blocks: bool = False,
@@ -34,6 +35,7 @@ class Visualize(LibraryPaths):
             building_block_ids: Optional subset of building block IDs to consider.
             nrow: Number of molecules per row in structure grids.
             dpi: Raster DPI used when exporting PNGs.
+            tile_size: Pixel width and height used by RDKit for each molecule tile.
             graph: Whether to save reaction graph visualizations.
             reactions: Whether to save reaction scheme panels from SMIRKS.
             building_blocks: Whether to save building block structure grids.
@@ -79,6 +81,7 @@ class Visualize(LibraryPaths):
                     legends=legends,
                     title=f'{bb_name} Building Blocks',
                     nrow=nrow,
+                    sub_img_size=(tile_size, tile_size),
                 )
                 save_figure_outputs(ax.figure, visualization_dir / f"building_blocks_{bb_name}", dpi=dpi)
                 close_figure(ax.figure)
@@ -97,6 +100,7 @@ class Visualize(LibraryPaths):
                     legends=[name],
                     title=name,
                     nrow=1,
+                    sub_img_size=(tile_size, tile_size),
                 )
                 save_figure_outputs(compound_ax.figure, compounds_dir / name, dpi=dpi)
                 close_figure(compound_ax.figure)
