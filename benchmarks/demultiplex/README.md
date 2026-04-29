@@ -269,7 +269,7 @@ for dataset in "${ALL_DATASETS[@]}"; do
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /path/to/delt-hit
+cd /users/amarti51/projects/delt-hit
 
 TMPDIR="${TMPDIR:?TMPDIR must be set for Slurm benchmark jobs}"
 DATA_ROOT="$TMPDIR/delt-hit-benchmarks/${SLURM_JOB_ID}/${DATASET}"
@@ -301,6 +301,7 @@ RESULT_DIR="benchmarks/demultiplex/tools/$TOOL/$DATASET"
 mkdir -p "$RESULT_DIR"
 cp "$DATA_ROOT/tools/$TOOL/$DATASET/timing.json" "$RESULT_DIR/timing.json"
 EOF
+  exit
   done
 done
 ```
