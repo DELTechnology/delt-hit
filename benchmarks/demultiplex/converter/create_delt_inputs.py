@@ -18,7 +18,7 @@ BENCHMARKS_ROOT = PROJECT_ROOT / "benchmarks" / "demultiplex"
 DATA_ROOT = BENCHMARKS_ROOT / "data"
 TOOLS_ROOT = BENCHMARKS_ROOT / "tools"
 TOOL_ROOT = TOOLS_ROOT / "delt"
-DEFAULT_DATASET_NAME = "synthetic_2cycle_1m"
+DEFAULT_DATASET_NAME = "synthetic_2cycle_10bbpc_1m"
 DELT_HIT_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
 
 

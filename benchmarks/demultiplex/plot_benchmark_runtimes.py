@@ -14,10 +14,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-TOOLS_ROOT = PROJECT_ROOT / "benchmarks" / "tools"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "benchmarks" / "plots"
-DATASET_PATTERN = re.compile(r"^synthetic_(?P<cycles>\d+)cycle_(?P<depth>\d+)m$")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+TOOLS_ROOT = PROJECT_ROOT / "benchmarks" / "demultiplex" / "tools"
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "benchmarks" / "demultiplex" / "plots"
+DATASET_PATTERN = re.compile(
+    r"^synthetic_(?P<cycles>\d+)cycle_(?P<bbpc>\d+)bbpc_(?P<depth>\d+)m$"
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -37,22 +39,28 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def parse_dataset_name(dataset_name: str) -> tuple[int, int] | None:
+def parse_dataset_name(dataset_name: str) -> tuple[int, int, int] | None:
     match = DATASET_PATTERN.match(dataset_name)
     if match is None:
         return None
-    return int(match.group("cycles")), int(match.group("depth")) * 1_000_000
+    return (
+        int(match.group("cycles")),
+        int(match.group("bbpc")),
+        int(match.group("depth")) * 1_000_000,
+    )
 
 
-def load_timings(tools_root: Path) -> dict[int, dict[str, list[tuple[int, float, str]]]]:
-    grouped: dict[int, dict[str, list[tuple[int, float, str]]]] = defaultdict(lambda: defaultdict(list))
+def load_timings(tools_root: Path) -> dict[tuple[int, int], dict[str, list[tuple[int, float, str]]]]:
+    grouped: dict[tuple[int, int], dict[str, list[tuple[int, float, str]]]] = defaultdict(lambda: defaultdict(list))
     for timing_path in sorted(tools_root.glob("*/**/timing.json")):
         report = json.loads(timing_path.read_text())
         parsed = parse_dataset_name(report["dataset_name"])
         if parsed is None:
             continue
-        cycles, expected_reads = parsed
-        grouped[cycles][report["tool"]].append((expected_reads, float(report["timings"]["total_s"]), report["dataset_name"]))
+        cycles, bbpc, expected_reads = parsed
+        grouped[(cycles, bbpc)][report["tool"]].append(
+            (expected_reads, float(report["timings"]["total_s"]), report["dataset_name"])
+        )
     return grouped
 
 
@@ -62,7 +70,13 @@ def format_reads(num_reads: int) -> str:
     return str(num_reads)
 
 
-def plot_cycle_group(*, cycles: int, tool_points: dict[str, list[tuple[int, float, str]]], output_dir: Path) -> Path:
+def plot_cycle_group(
+    *,
+    cycles: int,
+    bbpc: int,
+    tool_points: dict[str, list[tuple[int, float, str]]],
+    output_dir: Path,
+) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
     figure, axis = plt.subplots(figsize=(7, 4.5))
 
@@ -90,7 +104,7 @@ def plot_cycle_group(*, cycles: int, tool_points: dict[str, list[tuple[int, floa
     axis.set_xscale("log")
     axis.set_xlabel("Number of reads")
     axis.set_ylabel("Runtime (s)")
-    axis.set_title(f"Synthetic {cycles}-cycle benchmark runtimes")
+    axis.set_title(f"Synthetic {cycles}-cycle {bbpc} BB/cycle benchmark runtimes")
     axis.grid(True, which="both", linestyle="--", linewidth=0.5, alpha=0.5)
     axis.legend()
 
@@ -99,7 +113,7 @@ def plot_cycle_group(*, cycles: int, tool_points: dict[str, list[tuple[int, floa
         axis.set_xticks(all_x_values, [format_reads(value) for value in all_x_values])
 
     figure.tight_layout()
-    output_path = output_dir / f"synthetic_{cycles}cycle_runtime.png"
+    output_path = output_dir / f"synthetic_{cycles}cycle_{bbpc}bbpc_runtime.png"
     figure.savefig(output_path, dpi=200)
     plt.close(figure)
     return output_path
@@ -111,8 +125,15 @@ def main(*, tools_root: Path, output_dir: Path) -> None:
         raise FileNotFoundError(f"No timing.json files found under {tools_root}")
 
     output_paths = []
-    for cycles, tool_points in sorted(grouped.items()):
-        output_paths.append(plot_cycle_group(cycles=cycles, tool_points=tool_points, output_dir=output_dir.resolve()))
+    for (cycles, bbpc), tool_points in sorted(grouped.items()):
+        output_paths.append(
+            plot_cycle_group(
+                cycles=cycles,
+                bbpc=bbpc,
+                tool_points=tool_points,
+                output_dir=output_dir.resolve(),
+            )
+        )
 
     for output_path in output_paths:
         print(f"Wrote plot to {output_path}")
