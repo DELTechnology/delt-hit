@@ -1,10 +1,13 @@
 # Synthetic Benchmarking
 
-The synthetic benchmark workflow is now maintained in [`benchmarks/README.md`](/Users/adrianomartinelli/projects/delt-hit/benchmarks/README.md).
+The synthetic benchmark workflows are now split across:
 
-Use that runbook for:
+- [`benchmarks/demultiplex/README.md`](/Users/adrianomartinelli/projects/delt-hit/benchmarks/demultiplex/README.md)
+- [`benchmarks/enrichment/README.md`](/Users/adrianomartinelli/projects/delt-hit/benchmarks/enrichment/README.md)
 
-- dataset generation with [`benchmarks/generate_synthetic_fastq.py`](/Users/adrianomartinelli/projects/delt-hit/benchmarks/generate_synthetic_fastq.py)
+Use the demultiplex runbook for:
+
+- dataset generation with [`benchmarks/demultiplex/generate_synthetic_fastq.py`](/Users/adrianomartinelli/projects/delt-hit/benchmarks/demultiplex/generate_synthetic_fastq.py)
 - DELi and DELT-Hit input conversion
 - scratch-space Slurm execution with `--data-dir "$TMPDIR/..."`
-- timing report collection under `benchmarks/tools/<tool>/<dataset>/timing.json`
+- timing report collection under `benchmarks/demultiplex/tools/<tool>/<dataset>/timing.json`
