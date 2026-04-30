@@ -10,8 +10,8 @@ from delt_hit.utils import read_yaml
 from delt_hit.demultiplex.validation import Region
 
 
-FASTQ_SUFFIXES = {'.fastq', '.fq'}
-FASTA_SUFFIXES = {'.fasta', '.fa'}
+FASTQ_SUFFIXES = ('.fastq.gz', '.fastq', '.fq.gz', '.fq')
+FASTA_SUFFIXES = ('.fasta.gz', '.fasta', '.fa.gz', '.fa')
 
 
 def _complement_dna(codon: str) -> str:
@@ -91,21 +91,23 @@ def write_fastq_files(regions: list[Region], save_path: Path) -> None:
 
 
 def _get_input_suffix_and_stride(path_input_fastq: Path) -> tuple[str, int]:
-    """Return the suffix chain and record stride for an input file."""
-    suffixes = path_input_fastq.suffixes
-    extension = ''.join(suffixes)
-    normalized_suffixes = [suffix.lower() for suffix in suffixes if suffix.lower() != '.gz']
-    has_fastq_suffix = any(suffix in FASTQ_SUFFIXES for suffix in normalized_suffixes)
-    has_fasta_suffix = any(suffix in FASTA_SUFFIXES for suffix in normalized_suffixes)
+    """Return the normalized file extension and record stride for an input file."""
+    input_name = path_input_fastq.name.lower()
+    has_fastq_suffix = any(input_name.endswith(suffix) for suffix in FASTQ_SUFFIXES)
+    has_fasta_suffix = any(input_name.endswith(suffix) for suffix in FASTA_SUFFIXES)
 
     assert not (has_fastq_suffix and has_fasta_suffix), (
         f'Ambiguous input file extension for demultiplexing: {path_input_fastq.name}'
     )
 
     if has_fastq_suffix:
-        return extension, 4
+        normalized_suffix = '.fastq.gz' if input_name.endswith('.gz') else '.fastq'
+        return normalized_suffix, 4
+
     if has_fasta_suffix:
-        return extension, 2
+        normalized_suffix = '.fasta.gz' if input_name.endswith('.gz') else '.fasta'
+        return normalized_suffix, 2
+
     raise ValueError(f'Unsupported input file extension for demultiplexing: {path_input_fastq.name}')
 
 
