@@ -55,6 +55,29 @@ def test_generate_input_files_preserves_fasta_suffixes_and_stride(tmp_path):
     assert "sed -n '1~2p'" not in script
 
 
+def test_generate_input_files_normalizes_dotted_fastq_name(tmp_path):
+    config_path = _write_config(tmp_path, "20190812.A-1907_NF2GB2_s1_R1.fastq.gz")
+
+    script_path = generate_input_files(config_path=config_path)
+    script = script_path.read_text()
+
+    assert 'cutadapt_output_files/out.fastq.gz' in script
+    assert 'cutadapt_output_files/input.fastq.gz' in script
+    assert 'out.A-1907_NF2GB2_s1_R1.fastq.gz' not in script
+    assert 'input.A-1907_NF2GB2_s1_R1.fastq.gz' not in script
+
+
+def test_generate_input_files_normalizes_short_fasta_extension(tmp_path):
+    config_path = _write_config(tmp_path, "sample.fa.gz")
+
+    script_path = generate_input_files(config_path=config_path)
+    script = script_path.read_text()
+
+    assert 'cutadapt_output_files/out.fasta.gz' in script
+    assert 'cutadapt_output_files/input.fasta.gz' in script
+    assert "awk 'NR % 2 == 1'" in script
+
+
 def test_get_codons_complements_building_blocks_only():
     whitelists = {
         "B0": [
