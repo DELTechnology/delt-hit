@@ -37,7 +37,9 @@ def test_generate_input_files_preserves_fastq_suffixes_and_stride(tmp_path):
 
     assert 'cutadapt_output_files/out.fastq.gz' in script
     assert 'cutadapt_output_files/input.fastq.gz' in script
-    assert "sed -n '1~4p'" in script
+    assert 'gzip -cd ' in script
+    assert "awk 'NR % 4 == 1'" in script
+    assert "sed -n '1~4p'" not in script
 
 
 def test_generate_input_files_preserves_fasta_suffixes_and_stride(tmp_path):
@@ -48,7 +50,9 @@ def test_generate_input_files_preserves_fasta_suffixes_and_stride(tmp_path):
 
     assert 'cutadapt_output_files/out.fasta.gz' in script
     assert 'cutadapt_output_files/input.fasta.gz' in script
-    assert "sed -n '1~2p'" in script
+    assert 'gzip -cd ' in script
+    assert "awk 'NR % 2 == 1'" in script
+    assert "sed -n '1~2p'" not in script
 
 
 def test_get_codons_complements_building_blocks_only():
