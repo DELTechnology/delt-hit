@@ -180,28 +180,28 @@ For the full experiment matrix, define the dataset families once and reuse them 
 
 ```bash
 CANONICAL_DATASETS=(
-  synthetic_2cycle_10bbpc_1m
-  synthetic_2cycle_10bbpc_10m
-  synthetic_2cycle_10bbpc_100m
+#  synthetic_2cycle_10bbpc_1m
+#  synthetic_2cycle_10bbpc_10m
+#  synthetic_2cycle_10bbpc_100m
   synthetic_2cycle_10bbpc_1000m
-  synthetic_3cycle_10bbpc_1m
-  synthetic_3cycle_10bbpc_10m
-  synthetic_3cycle_10bbpc_100m
+#  synthetic_3cycle_10bbpc_1m
+#  synthetic_3cycle_10bbpc_10m
+#  synthetic_3cycle_10bbpc_100m
   synthetic_3cycle_10bbpc_1000m
-  synthetic_4cycle_10bbpc_1m
-  synthetic_4cycle_10bbpc_10m
-  synthetic_4cycle_10bbpc_100m
+#  synthetic_4cycle_10bbpc_1m
+#  synthetic_4cycle_10bbpc_10m
+#  synthetic_4cycle_10bbpc_100m
   synthetic_4cycle_10bbpc_1000m
 )
 
 LARGE_2CYCLE_DATASETS=(
-  synthetic_2cycle_100bbpc_1m
-  synthetic_2cycle_100bbpc_10m
-  synthetic_2cycle_100bbpc_100m
+#  synthetic_2cycle_100bbpc_1m
+#  synthetic_2cycle_100bbpc_10m
+#  synthetic_2cycle_100bbpc_100m
   synthetic_2cycle_100bbpc_1000m
-  synthetic_2cycle_1000bbpc_1m
-  synthetic_2cycle_1000bbpc_10m
-  synthetic_2cycle_1000bbpc_100m
+#  synthetic_2cycle_1000bbpc_1m
+#  synthetic_2cycle_1000bbpc_10m
+#  synthetic_2cycle_1000bbpc_100m
   synthetic_2cycle_1000bbpc_1000m
 )
 
@@ -221,7 +221,7 @@ dataset_time_limit() {
     *_1m) echo "04:00:00" ;;
     *_10m) echo "08:00:00" ;;
     *_100m) echo "12:00:00" ;;
-    *_1000m) echo "24:00:00" ;;
+    *_1000m) echo "12:00:00" ;;
     *) echo "Unknown dataset size for $1" >&2; return 1 ;;
   esac
 }
@@ -308,7 +308,7 @@ dataset_time_limit() {
   case "$1" in
     *_1m) echo "04:00:00" ;;
     *_10m) echo "08:00:00" ;;
-    *_100m) echo "12:00:00" ;;
+    *_100m) echo "14:00:00" ;;
     *_1000m) echo "24:00:00" ;;
     *) echo "Unknown dataset size for $1" >&2; return 1 ;;
   esac
