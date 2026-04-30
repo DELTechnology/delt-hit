@@ -168,7 +168,7 @@ def generate_input_files(
 
             cmd = f"""
             tmp_file=$(mktemp)
-            gzcat "{path_output_fastq}" | head -n {n_lines} | gzip -c > "$tmp_file"
+            gzip -cd "{path_output_fastq}" | head -n {n_lines} | gzip -c > "$tmp_file"
             mv $tmp_file "{path_output_fastq}"
             """
 
@@ -213,13 +213,13 @@ def generate_input_files(
 
     if with_processing:
         with open(path_demultiplex_exec, 'a') as f:
-            f.write(f'\nzcat "{path_output_fastq}" | sed -n \'1~{header_stride}p\' | gzip -c > "{path_final_reads}" || exit\n')
+            f.write(f'\ngzip -cd "{path_output_fastq}" | awk \'NR % {header_stride} == 1\' | gzip -c > "{path_final_reads}" || exit\n')
             f.write(f'delt-hit demultiplex process --config_path="{config_path}" || exit\n')
             f.write(f'rm "{path_output_fastq}" "{path_input_fastq}"\n')
         os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
     else:
         with open(path_demultiplex_exec, 'a') as f:
-            f.write(f'\nzcat "{path_output_fastq}" | sed -n \'1~{header_stride}p\' | gzip -c > "{path_final_reads}" || exit\n')
+            f.write(f'\ngzip -cd "{path_output_fastq}" | awk \'NR % {header_stride} == 1\' | gzip -c > "{path_final_reads}" || exit\n')
         os.chmod(path_demultiplex_exec, os.stat(path_demultiplex_exec).st_mode | stat.S_IEXEC)
 
 
