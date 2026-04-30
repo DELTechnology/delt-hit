@@ -16,7 +16,7 @@ Add one sentence distinguishing data flow from processing steps: "Solid arrows i
 Add 2–3 sentences: "We recommend a minimum of three biological replicates per condition for edgeR-based analysis. For reliable hit identification, a sequencing depth of at least 10–20 reads per library member per selection is advisable."
 
 **T5. Error-handling balance sentence** (demultiplexing section, ~para 84/279/491)
-Add: "DELT-Hit balances sensitivity and specificity by allowing per-region configuration of maximum error rates and indel tolerance, so users can apply stricter matching to constant regions while permitting controlled mismatches in barcode regions."
+Add: "DELT-Hit balances sensitivity and specificity by allowing per-region configuration of maximum error rates and indel tolerance, so users can apply stricter matching to barcode regions while permitting controlled mismatches in constant regions."
 
 ---
 
@@ -24,9 +24,9 @@ Add: "DELT-Hit balances sensitivity and specificity by allowing per-region confi
 
 **S1. Abstract additions** (para 9)
 Three additions at the end of the abstract:
-- Skill-level sentence: "The protocol is suitable for users with basic command-line experience; no prior expertise in cheminformatics or bioinformatics is required."
-- Time estimate: "Depending on library size, the complete workflow takes 2–8 hours, with chemical enumeration being the most time-consuming step, scaling with library size."
-- GitHub link: "DELT-Hit is freely available at https://github.com/DELTechnology/delt-hit."
+- Skill-level sentence: "The protocol is suitable for users with basic command-line experience; while for the demultiplexing and visualization no prior expertise in cheminformatics is required the enumeration steps require a solid understanding of cheminformatic language to define reaction SMRIKS."
+- Time estimate: "Depending on library size, the complete workflow takes 2–8 hours"
+- GitHub link: "DELT-Hit is  available at https://github.com/DELTechnology/delt-hit."
 
 **S2. Minimal YAML example inline** (Experimental Design > Input requirements, ~para 71–74)
 Insert a short code block showing the minimal `analysis.yaml` structure (experiment name, fastq_path, save_dir, selections with group assignments).
