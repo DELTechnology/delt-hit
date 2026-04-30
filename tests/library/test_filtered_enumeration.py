@@ -260,6 +260,87 @@ def test_visualize_enumerate_passes_tile_size_to_structure_rendering(tmp_path, m
     assert set(captured_sizes) == {(420, 420)}
 
 
+def test_visualize_library_writes_named_library_grid(tmp_path, monkeypatch):
+    _, config_path = make_test_config(tmp_path)
+    library_path = tmp_path / "mini" / "library" / "observed_hits.parquet"
+    library_path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(
+        {
+            "smiles": ["CO", "CCO"],
+            "code_0": [1, 0],
+            "code_1": [0, 1],
+        }
+    ).to_parquet(library_path, index=False)
+
+    class DummyFigure:
+        def savefig(self, path, *_args, **_kwargs):
+            Path(path).write_text("figure")
+
+        def tight_layout(self):
+            return None
+
+    class DummyAxes:
+        figure = DummyFigure()
+
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_smiles", lambda *args, **kwargs: DummyAxes())
+
+    Visualize().library(
+        config_path=config_path,
+        library_name="observed_hits",
+    )
+
+    viz_dir = tmp_path / "mini" / "library" / "visualization"
+    assert (viz_dir / "library_observed_hits.png").exists()
+
+
+def test_visualize_library_passes_legends_and_rendering_options(tmp_path, monkeypatch):
+    _, config_path = make_test_config(tmp_path)
+    library_path = tmp_path / "mini" / "library" / "observed_hits.parquet"
+    library_path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(
+        {
+            "smiles": ["CO", "CCO"],
+            "code_0": [1, 0],
+            "code_1": [0, 1],
+        }
+    ).to_parquet(library_path, index=False)
+    captured_kwargs = {}
+
+    class DummyFigure:
+        def savefig(self, path, *_args, **_kwargs):
+            Path(path).write_text("figure")
+
+        def tight_layout(self):
+            return None
+
+    class DummyAxes:
+        figure = DummyFigure()
+
+    def capture_visualize_smiles(*args, **kwargs):
+        captured_kwargs.update(kwargs)
+        return DummyAxes()
+
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_smiles", capture_visualize_smiles)
+
+    Visualize().library(
+        config_path=config_path,
+        library_name="observed_hits",
+        nrow=7,
+        tile_size=420,
+    )
+
+    assert captured_kwargs["legends"] == ["1:0", "0:1"]
+    assert captured_kwargs["sub_img_size"] == (420, 420)
+    assert captured_kwargs["nrow"] == 7
+
+
+def test_visualize_library_requires_existing_named_library(tmp_path):
+    _, config_path = make_test_config(tmp_path)
+
+    with pytest.raises(AssertionError, match="Library file not found"):
+        Visualize().library(config_path=config_path, library_name="observed_hits")
+
+
 def test_properties_default_mode_writes_properties_parquet(tmp_path):
     _, config_path = make_test_config(tmp_path)
     library_path = tmp_path / "mini" / "library" / "library.parquet"

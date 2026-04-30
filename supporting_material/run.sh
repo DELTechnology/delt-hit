@@ -22,6 +22,7 @@ delt-hit library enumerate \
   --top_n=1000 \
   --library_name=AG24_4_top_hits
 
+delt-hit visualize library --config_path=$CONFIG_PATH --library_name=AG24_4_top_hits
 delt-hit library properties --config_path=$CONFIG_PATH --library_name=AG24_4_top_hits
 
 delt-hit dashboard \

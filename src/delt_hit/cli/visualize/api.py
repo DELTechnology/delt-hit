@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from delt_hit.cli.helper import get_library_dir
+from delt_hit.cli.helper import get_library_dir, get_named_library_path
 from delt_hit.cli.library.api import (
     close_figure,
     prepare_graph_bundle,
@@ -104,3 +104,51 @@ class Visualize:
                 )
                 save_figure_outputs(compound_ax.figure, compounds_dir / name, dpi=dpi)
                 close_figure(compound_ax.figure)
+
+    def library(
+        self,
+        *,
+        config_path: Path,
+        library_name: str,
+        nrow: int = 25,
+        dpi: int = 300,
+        tile_size: int = 300,
+    ):
+        """Generate a structure grid for a named library parquet.
+
+        Args:
+            config_path: Path to the YAML config file.
+            library_name: Named library parquet stem inside the experiment library dir.
+            nrow: Number of molecules per row in the structure grid.
+            dpi: Raster DPI used when exporting PNGs.
+            tile_size: Pixel width and height used by RDKit for each molecule tile.
+        """
+        lib_path = get_named_library_path(config_path, library_name)
+        assert lib_path.exists(), f"Library file not found at {lib_path}"
+
+        df = pd.read_parquet(lib_path)
+        smiles = df["smiles"].dropna().tolist()
+        legend_df = df.loc[df["smiles"].notna()]
+        legends = build_code_legends(legend_df)
+
+        visualization_dir = get_library_dir(config_path) / "visualization"
+        visualization_dir.mkdir(parents=True, exist_ok=True)
+
+        ax = visualize_smiles(
+            smiles=smiles,
+            legends=legends,
+            title=library_name,
+            nrow=nrow,
+            sub_img_size=(tile_size, tile_size),
+        )
+        save_figure_outputs(ax.figure, visualization_dir / f"library_{library_name}", dpi=dpi)
+        close_figure(ax.figure)
+
+
+def build_code_legends(data: pd.DataFrame) -> list[str] | None:
+    """Build ``code_*`` legends for a library dataframe when available."""
+    code_columns = [col for col in data.columns if col.startswith("code_")]
+    code_columns = sorted(code_columns, key=lambda name: int(name.split("_", maxsplit=1)[1]))
+    if not code_columns:
+        return None
+    return data[code_columns].astype(str).agg(":".join, axis=1).tolist()
