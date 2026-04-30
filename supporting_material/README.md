@@ -1,4 +1,9 @@
 # Supporting Material
+
+## Example Workflow
+
+The files below are the data used in the paper to demonstrate the full set of DELT-Hit capabilities.
+
 Download the files:
 
 - `template.xlsx`
@@ -16,21 +21,19 @@ This directory contains rerunnable reproductions for the following publications:
 
 The rerunnable scripts are:
 
-- [supporting_material/experiments/favalli/run.sh](/Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/favalli/run.sh)
-- [supporting_material/experiments/pure-del/run.sh](/Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/pure-del/run.sh)
+- [supporting_material/experiments/favalli/run.sh](experiments/favalli/run.sh)
+- [supporting_material/experiments/pure-del/run.sh](experiments/pure-del/run.sh)
 
 Please adjust the `cd` command in each script to match your local folder structure before running.
 
 Exact-match validation of the published and DELT-Hit selection counts can be performed with:
 
-- [supporting_material/experiments/compare_selection.py](/Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/compare_selection.py)
-- [supporting_material/experiments/favalli/compare_selection.py](/Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/favalli/compare_selection.py)
-
-The shared comparison script accepts `base_dir` as an argument and writes the comparison outputs under `base_dir/comparison`.
+- [supporting_material/experiments/favalli/compare_selection.py](experiments/favalli/compare_selection.py)
+- [supporting_material/experiments/pure-del/compare_selection.py](experiments/pure-del/compare_selection.py)
 
 Example usage:
 
 ```bash
-python supporting_material/experiments/compare_selection.py supporting_material/experiments/favalli
-python supporting_material/experiments/compare_selection.py supporting_material/experiments/pure-del
+uv run python supporting_material/experiments/favalli/compare_selection.py
+uv run python supporting_material/experiments/pure-del/compare_selection.py
 ```
