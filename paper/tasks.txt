@@ -1,0 +1,2 @@
+1. check produces SMIRKS and SMILES for building blocks
+2. 
