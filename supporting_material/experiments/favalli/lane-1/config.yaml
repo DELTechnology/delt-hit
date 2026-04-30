@@ -1,0 +1,5473 @@
+experiment:
+  name: lane-1
+  fastq_path: ./20190812.A-1907_NF2GB2_s1_R1.fastq.gz
+  save_dir: ./
+  num_cores: 11
+selections:
+  '1_1':
+    S0: ACACAC
+    S1: CGCTCGATA
+    ids:
+    - 0
+    - 0
+  '2_1':
+    S0: ACAGCA
+    S1: CGCTCGATA
+    ids:
+    - 1
+    - 0
+  '3_1':
+    S0: ACATGT
+    S1: CGCTCGATA
+    ids:
+    - 2
+    - 0
+  '4_1':
+    S0: ACGACG
+    S1: CGCTCGATA
+    ids:
+    - 3
+    - 0
+  '5_1':
+    S0: ACGCGA
+    S1: CGCTCGATA
+    ids:
+    - 4
+    - 0
+  '6_1':
+    S0: ACTAGC
+    S1: CGCTCGATA
+    ids:
+    - 5
+    - 0
+  '7_1':
+    S0: ACTCTG
+    S1: CGCTCGATA
+    ids:
+    - 6
+    - 0
+  '8_1':
+    S0: ACTGAT
+    S1: CGCTCGATA
+    ids:
+    - 7
+    - 0
+  '9_1':
+    S0: AGACTA
+    S1: CGCTCGATA
+    ids:
+    - 8
+    - 0
+  '10_1':
+    S0: AGAGAG
+    S1: CGCTCGATA
+    ids:
+    - 9
+    - 0
+  '11_1':
+    S0: TAGATG
+    S1: CGCTCGATA
+    ids:
+    - 10
+    - 0
+  '12_1':
+    S0: TAGTGT
+    S1: CGCTCGATA
+    ids:
+    - 11
+    - 0
+  '13_1':
+    S0: TATCAC
+    S1: CGCTCGATA
+    ids:
+    - 12
+    - 0
+  '14_1':
+    S0: TCATAG
+    S1: CGCTCGATA
+    ids:
+    - 13
+    - 0
+  '15_1':
+    S0: TCGTCA
+    S1: CGCTCGATA
+    ids:
+    - 14
+    - 0
+  '16_1':
+    S0: TCTACT
+    S1: CGCTCGATA
+    ids:
+    - 15
+    - 0
+  '17_1':
+    S0: TCTGTA
+    S1: CGCTCGATA
+    ids:
+    - 16
+    - 0
+  '18_1':
+    S0: TGACAT
+    S1: CGCTCGATA
+    ids:
+    - 17
+    - 0
+  '19_1':
+    S0: TGCAGC
+    S1: CGCTCGATA
+    ids:
+    - 18
+    - 0
+  '20_1':
+    S0: TGCGCG
+    S1: CGCTCGATA
+    ids:
+    - 19
+    - 0
+  '21_1':
+    S0: GCTACT
+    S1: CGCTCGATA
+    ids:
+    - 20
+    - 0
+  '22_1':
+    S0: GCACAT
+    S1: CGCTCGATA
+    ids:
+    - 21
+    - 0
+  '23_1':
+    S0: GAGTGT
+    S1: CGCTCGATA
+    ids:
+    - 22
+    - 0
+  '24_1':
+    S0: GTGCGA
+    S1: CGCTCGATA
+    ids:
+    - 23
+    - 0
+  '25_1':
+    S0: GCCGCT
+    S1: CGCTCGATA
+    ids:
+    - 24
+    - 0
+  '26_1':
+    S0: GAAGAT
+    S1: CGCTCGATA
+    ids:
+    - 25
+    - 0
+  '27_1':
+    S0: GTTCAG
+    S1: CGCTCGATA
+    ids:
+    - 26
+    - 0
+  '28_1':
+    S0: GATGCA
+    S1: CGCTCGATA
+    ids:
+    - 27
+    - 0
+  '29_1':
+    S0: CCTAAT
+    S1: CGCTCGATA
+    ids:
+    - 28
+    - 0
+  '30_1':
+    S0: CTAAGT
+    S1: CGCTCGATA
+    ids:
+    - 29
+    - 0
+  '31_1':
+    S0: CGTGCG
+    S1: CGCTCGATA
+    ids:
+    - 30
+    - 0
+  '32_1':
+    S0: CTTGGA
+    S1: CGCTCGATA
+    ids:
+    - 31
+    - 0
+  '33_1':
+    S0: CCATAA
+    S1: CGCTCGATA
+    ids:
+    - 32
+    - 0
+  '34_1':
+    S0: CTCGAT
+    S1: CGCTCGATA
+    ids:
+    - 33
+    - 0
+  '35_1':
+    S0: CAGACT
+    S1: CGCTCGATA
+    ids:
+    - 34
+    - 0
+  '36_1':
+    S0: CTCCGC
+    S1: CGCTCGATA
+    ids:
+    - 35
+    - 0
+  '37_1':
+    S0: AACATT
+    S1: CGCTCGATA
+    ids:
+    - 36
+    - 0
+  '38_1':
+    S0: AATGGT
+    S1: CGCTCGATA
+    ids:
+    - 37
+    - 0
+  '39_1':
+    S0: ACACGG
+    S1: CGCTCGATA
+    ids:
+    - 38
+    - 0
+  '40_1':
+    S0: ACGTTG
+    S1: CGCTCGATA
+    ids:
+    - 39
+    - 0
+  '41_1':
+    S0: ACTGTG
+    S1: CGCTCGATA
+    ids:
+    - 40
+    - 0
+  '42_1':
+    S0: AGTTCT
+    S1: CGCTCGATA
+    ids:
+    - 41
+    - 0
+  '43_1':
+    S0: ATGAGG
+    S1: CGCTCGATA
+    ids:
+    - 42
+    - 0
+  '44_1':
+    S0: ATGTTA
+    S1: CGCTCGATA
+    ids:
+    - 43
+    - 0
+  '45_1':
+    S0: ATTAGA
+    S1: CGCTCGATA
+    ids:
+    - 44
+    - 0
+  '46_1':
+    S0: ATTCGC
+    S1: CGCTCGATA
+    ids:
+    - 45
+    - 0
+  '47_1':
+    S0: CACGTT
+    S1: CGCTCGATA
+    ids:
+    - 46
+    - 0
+  '48_1':
+    S0: AATCAG
+    S1: CGCTCGATA
+    ids:
+    - 47
+    - 0
+  '49_1':
+    S0: CAGCAG
+    S1: CGCTCGATA
+    ids:
+    - 48
+    - 0
+  '50_1':
+    S0: CATCTA
+    S1: CGCTCGATA
+    ids:
+    - 49
+    - 0
+  '51_1':
+    S0: CCAATC
+    S1: CGCTCGATA
+    ids:
+    - 50
+    - 0
+  '52_1':
+    S0: CCTCAC
+    S1: CGCTCGATA
+    ids:
+    - 51
+    - 0
+  '53_1':
+    S0: CGGCAC
+    S1: CGCTCGATA
+    ids:
+    - 52
+    - 0
+  '54_1':
+    S0: CGTATA
+    S1: CGCTCGATA
+    ids:
+    - 53
+    - 0
+  '55_1':
+    S0: CTACAA
+    S1: CGCTCGATA
+    ids:
+    - 54
+    - 0
+  '56_1':
+    S0: CTATAT
+    S1: CGCTCGATA
+    ids:
+    - 55
+    - 0
+  '57_1':
+    S0: CTCAGG
+    S1: CGCTCGATA
+    ids:
+    - 56
+    - 0
+  '58_1':
+    S0: GTCCTG
+    S1: CGCTCGATA
+    ids:
+    - 57
+    - 0
+  '59_1':
+    S0: CTCCTA
+    S1: CGCTCGATA
+    ids:
+    - 58
+    - 0
+  '60_1':
+    S0: CGCTTA
+    S1: CGCTCGATA
+    ids:
+    - 59
+    - 0
+  '61_1':
+    S0: CTGTAC
+    S1: CGCTCGATA
+    ids:
+    - 60
+    - 0
+  '62_1':
+    S0: GACAAC
+    S1: CGCTCGATA
+    ids:
+    - 61
+    - 0
+  '63_1':
+    S0: GACGTG
+    S1: CGCTCGATA
+    ids:
+    - 62
+    - 0
+  '64_1':
+    S0: GAGAAG
+    S1: CGCTCGATA
+    ids:
+    - 63
+    - 0
+  '65_1':
+    S0: GATCGA
+    S1: CGCTCGATA
+    ids:
+    - 64
+    - 0
+  '66_1':
+    S0: GCACGA
+    S1: CGCTCGATA
+    ids:
+    - 65
+    - 0
+  '67_1':
+    S0: GCCTCA
+    S1: CGCTCGATA
+    ids:
+    - 66
+    - 0
+  '68_1':
+    S0: GCGCAC
+    S1: CGCTCGATA
+    ids:
+    - 67
+    - 0
+  '69_1':
+    S0: GCTCGC
+    S1: CGCTCGATA
+    ids:
+    - 68
+    - 0
+  '70_1':
+    S0: GTAACG
+    S1: CGCTCGATA
+    ids:
+    - 69
+    - 0
+  '71_1':
+    S0: GTAGCA
+    S1: CGCTCGATA
+    ids:
+    - 70
+    - 0
+  '72_1':
+    S0: GTCATA
+    S1: CGCTCGATA
+    ids:
+    - 71
+    - 0
+  '73_1':
+    S0: GTGAGA
+    S1: CGCTCGATA
+    ids:
+    - 72
+    - 0
+  '74_1':
+    S0: GTGATT
+    S1: CGCTCGATA
+    ids:
+    - 73
+    - 0
+  '75_1':
+    S0: GTTAGC
+    S1: CGCTCGATA
+    ids:
+    - 74
+    - 0
+  '76_1':
+    S0: TAAGCT
+    S1: CGCTCGATA
+    ids:
+    - 75
+    - 0
+  '77_1':
+    S0: TAATGT
+    S1: CGCTCGATA
+    ids:
+    - 76
+    - 0
+  '78_1':
+    S0: TACTCA
+    S1: CGCTCGATA
+    ids:
+    - 77
+    - 0
+  '79_1':
+    S0: TAGAGG
+    S1: CGCTCGATA
+    ids:
+    - 78
+    - 0
+  '80_1':
+    S0: TAGCAC
+    S1: CGCTCGATA
+    ids:
+    - 79
+    - 0
+  '81_1':
+    S0: TATATC
+    S1: CGCTCGATA
+    ids:
+    - 80
+    - 0
+  '82_1':
+    S0: TATGGA
+    S1: CGCTCGATA
+    ids:
+    - 81
+    - 0
+  '83_1':
+    S0: TCAGAT
+    S1: CGCTCGATA
+    ids:
+    - 82
+    - 0
+  '84_1':
+    S0: TCGATT
+    S1: CGCTCGATA
+    ids:
+    - 83
+    - 0
+  '85_1':
+    S0: TCTCTC
+    S1: CGCTCGATA
+    ids:
+    - 84
+    - 0
+  '86_1':
+    S0: TCTTGC
+    S1: CGCTCGATA
+    ids:
+    - 85
+    - 0
+  '87_1':
+    S0: TGAACG
+    S1: CGCTCGATA
+    ids:
+    - 86
+    - 0
+  '88_1':
+    S0: TGAGCA
+    S1: CGCTCGATA
+    ids:
+    - 87
+    - 0
+  '89_1':
+    S0: TGAGGC
+    S1: CGCTCGATA
+    ids:
+    - 88
+    - 0
+  '90_1':
+    S0: TGCCAG
+    S1: CGCTCGATA
+    ids:
+    - 89
+    - 0
+  '91_1':
+    S0: TGGCGT
+    S1: CGCTCGATA
+    ids:
+    - 90
+    - 0
+  '92_1':
+    S0: TTAATA
+    S1: CGCTCGATA
+    ids:
+    - 91
+    - 0
+  '93_1':
+    S0: TTCACA
+    S1: CGCTCGATA
+    ids:
+    - 92
+    - 0
+  '94_1':
+    S0: TTCTGA
+    S1: CGCTCGATA
+    ids:
+    - 93
+    - 0
+  '95_1':
+    S0: TTGCTT
+    S1: CGCTCGATA
+    ids:
+    - 94
+    - 0
+  '96_1':
+    S0: TTGTGG
+    S1: CGCTCGATA
+    ids:
+    - 95
+    - 0
+  '1_2':
+    S0: ACACAC
+    S1: AGCATATCG
+    ids:
+    - 0
+    - 1
+  '2_2':
+    S0: ACAGCA
+    S1: AGCATATCG
+    ids:
+    - 1
+    - 1
+  '3_2':
+    S0: ACATGT
+    S1: AGCATATCG
+    ids:
+    - 2
+    - 1
+  '4_2':
+    S0: ACGACG
+    S1: AGCATATCG
+    ids:
+    - 3
+    - 1
+  '5_2':
+    S0: ACGCGA
+    S1: AGCATATCG
+    ids:
+    - 4
+    - 1
+  '6_2':
+    S0: ACTAGC
+    S1: AGCATATCG
+    ids:
+    - 5
+    - 1
+  '7_2':
+    S0: ACTCTG
+    S1: AGCATATCG
+    ids:
+    - 6
+    - 1
+  '8_2':
+    S0: ACTGAT
+    S1: AGCATATCG
+    ids:
+    - 7
+    - 1
+  '9_2':
+    S0: AGACTA
+    S1: AGCATATCG
+    ids:
+    - 8
+    - 1
+  '10_2':
+    S0: AGAGAG
+    S1: AGCATATCG
+    ids:
+    - 9
+    - 1
+  '11_2':
+    S0: TAGATG
+    S1: AGCATATCG
+    ids:
+    - 10
+    - 1
+  '12_2':
+    S0: TAGTGT
+    S1: AGCATATCG
+    ids:
+    - 11
+    - 1
+  '13_2':
+    S0: TATCAC
+    S1: AGCATATCG
+    ids:
+    - 12
+    - 1
+  '14_2':
+    S0: TCATAG
+    S1: AGCATATCG
+    ids:
+    - 13
+    - 1
+  '15_2':
+    S0: TCGTCA
+    S1: AGCATATCG
+    ids:
+    - 14
+    - 1
+  '16_2':
+    S0: TCTACT
+    S1: AGCATATCG
+    ids:
+    - 15
+    - 1
+  '17_2':
+    S0: TCTGTA
+    S1: AGCATATCG
+    ids:
+    - 16
+    - 1
+  '18_2':
+    S0: TGACAT
+    S1: AGCATATCG
+    ids:
+    - 17
+    - 1
+  '19_2':
+    S0: TGCAGC
+    S1: AGCATATCG
+    ids:
+    - 18
+    - 1
+  '20_2':
+    S0: TGCGCG
+    S1: AGCATATCG
+    ids:
+    - 19
+    - 1
+  '21_2':
+    S0: GCTACT
+    S1: AGCATATCG
+    ids:
+    - 20
+    - 1
+  '22_2':
+    S0: GCACAT
+    S1: AGCATATCG
+    ids:
+    - 21
+    - 1
+  '23_2':
+    S0: GAGTGT
+    S1: AGCATATCG
+    ids:
+    - 22
+    - 1
+  '24_2':
+    S0: GTGCGA
+    S1: AGCATATCG
+    ids:
+    - 23
+    - 1
+  '25_2':
+    S0: GCCGCT
+    S1: AGCATATCG
+    ids:
+    - 24
+    - 1
+  '26_2':
+    S0: GAAGAT
+    S1: AGCATATCG
+    ids:
+    - 25
+    - 1
+  '27_2':
+    S0: GTTCAG
+    S1: AGCATATCG
+    ids:
+    - 26
+    - 1
+  '28_2':
+    S0: GATGCA
+    S1: AGCATATCG
+    ids:
+    - 27
+    - 1
+  '29_2':
+    S0: CCTAAT
+    S1: AGCATATCG
+    ids:
+    - 28
+    - 1
+  '30_2':
+    S0: CTAAGT
+    S1: AGCATATCG
+    ids:
+    - 29
+    - 1
+  '31_2':
+    S0: CGTGCG
+    S1: AGCATATCG
+    ids:
+    - 30
+    - 1
+  '32_2':
+    S0: CTTGGA
+    S1: AGCATATCG
+    ids:
+    - 31
+    - 1
+  '33_2':
+    S0: CCATAA
+    S1: AGCATATCG
+    ids:
+    - 32
+    - 1
+  '34_2':
+    S0: CTCGAT
+    S1: AGCATATCG
+    ids:
+    - 33
+    - 1
+  '35_2':
+    S0: CAGACT
+    S1: AGCATATCG
+    ids:
+    - 34
+    - 1
+  '36_2':
+    S0: CTCCGC
+    S1: AGCATATCG
+    ids:
+    - 35
+    - 1
+  '37_2':
+    S0: AACATT
+    S1: AGCATATCG
+    ids:
+    - 36
+    - 1
+  '38_2':
+    S0: AATGGT
+    S1: AGCATATCG
+    ids:
+    - 37
+    - 1
+  '39_2':
+    S0: ACACGG
+    S1: AGCATATCG
+    ids:
+    - 38
+    - 1
+  '40_2':
+    S0: ACGTTG
+    S1: AGCATATCG
+    ids:
+    - 39
+    - 1
+  '41_2':
+    S0: ACTGTG
+    S1: AGCATATCG
+    ids:
+    - 40
+    - 1
+  '42_2':
+    S0: AGTTCT
+    S1: AGCATATCG
+    ids:
+    - 41
+    - 1
+  '43_2':
+    S0: ATGAGG
+    S1: AGCATATCG
+    ids:
+    - 42
+    - 1
+  '44_2':
+    S0: ATGTTA
+    S1: AGCATATCG
+    ids:
+    - 43
+    - 1
+  '45_2':
+    S0: ATTAGA
+    S1: AGCATATCG
+    ids:
+    - 44
+    - 1
+  '46_2':
+    S0: ATTCGC
+    S1: AGCATATCG
+    ids:
+    - 45
+    - 1
+  '47_2':
+    S0: CACGTT
+    S1: AGCATATCG
+    ids:
+    - 46
+    - 1
+  '48_2':
+    S0: AATCAG
+    S1: AGCATATCG
+    ids:
+    - 47
+    - 1
+  '49_2':
+    S0: CAGCAG
+    S1: AGCATATCG
+    ids:
+    - 48
+    - 1
+  '50_2':
+    S0: CATCTA
+    S1: AGCATATCG
+    ids:
+    - 49
+    - 1
+  '51_2':
+    S0: CCAATC
+    S1: AGCATATCG
+    ids:
+    - 50
+    - 1
+  '52_2':
+    S0: CCTCAC
+    S1: AGCATATCG
+    ids:
+    - 51
+    - 1
+  '53_2':
+    S0: CGGCAC
+    S1: AGCATATCG
+    ids:
+    - 52
+    - 1
+  '54_2':
+    S0: CGTATA
+    S1: AGCATATCG
+    ids:
+    - 53
+    - 1
+  '55_2':
+    S0: CTACAA
+    S1: AGCATATCG
+    ids:
+    - 54
+    - 1
+  '56_2':
+    S0: CTATAT
+    S1: AGCATATCG
+    ids:
+    - 55
+    - 1
+  '57_2':
+    S0: CTCAGG
+    S1: AGCATATCG
+    ids:
+    - 56
+    - 1
+  '58_2':
+    S0: GTCCTG
+    S1: AGCATATCG
+    ids:
+    - 57
+    - 1
+  '59_2':
+    S0: CTCCTA
+    S1: AGCATATCG
+    ids:
+    - 58
+    - 1
+  '60_2':
+    S0: CGCTTA
+    S1: AGCATATCG
+    ids:
+    - 59
+    - 1
+  '61_2':
+    S0: CTGTAC
+    S1: AGCATATCG
+    ids:
+    - 60
+    - 1
+  '62_2':
+    S0: GACAAC
+    S1: AGCATATCG
+    ids:
+    - 61
+    - 1
+  '63_2':
+    S0: GACGTG
+    S1: AGCATATCG
+    ids:
+    - 62
+    - 1
+  '64_2':
+    S0: GAGAAG
+    S1: AGCATATCG
+    ids:
+    - 63
+    - 1
+  '65_2':
+    S0: GATCGA
+    S1: AGCATATCG
+    ids:
+    - 64
+    - 1
+  '66_2':
+    S0: GCACGA
+    S1: AGCATATCG
+    ids:
+    - 65
+    - 1
+  '67_2':
+    S0: GCCTCA
+    S1: AGCATATCG
+    ids:
+    - 66
+    - 1
+  '68_2':
+    S0: GCGCAC
+    S1: AGCATATCG
+    ids:
+    - 67
+    - 1
+  '69_2':
+    S0: GCTCGC
+    S1: AGCATATCG
+    ids:
+    - 68
+    - 1
+  '70_2':
+    S0: GTAACG
+    S1: AGCATATCG
+    ids:
+    - 69
+    - 1
+  '71_2':
+    S0: GTAGCA
+    S1: AGCATATCG
+    ids:
+    - 70
+    - 1
+  '72_2':
+    S0: GTCATA
+    S1: AGCATATCG
+    ids:
+    - 71
+    - 1
+  '73_2':
+    S0: GTGAGA
+    S1: AGCATATCG
+    ids:
+    - 72
+    - 1
+  '74_2':
+    S0: GTGATT
+    S1: AGCATATCG
+    ids:
+    - 73
+    - 1
+  '75_2':
+    S0: GTTAGC
+    S1: AGCATATCG
+    ids:
+    - 74
+    - 1
+  '76_2':
+    S0: TAAGCT
+    S1: AGCATATCG
+    ids:
+    - 75
+    - 1
+  '77_2':
+    S0: TAATGT
+    S1: AGCATATCG
+    ids:
+    - 76
+    - 1
+  '78_2':
+    S0: TACTCA
+    S1: AGCATATCG
+    ids:
+    - 77
+    - 1
+  '79_2':
+    S0: TAGAGG
+    S1: AGCATATCG
+    ids:
+    - 78
+    - 1
+  '80_2':
+    S0: TAGCAC
+    S1: AGCATATCG
+    ids:
+    - 79
+    - 1
+  '81_2':
+    S0: TATATC
+    S1: AGCATATCG
+    ids:
+    - 80
+    - 1
+  '82_2':
+    S0: TATGGA
+    S1: AGCATATCG
+    ids:
+    - 81
+    - 1
+  '83_2':
+    S0: TCAGAT
+    S1: AGCATATCG
+    ids:
+    - 82
+    - 1
+  '84_2':
+    S0: TCGATT
+    S1: AGCATATCG
+    ids:
+    - 83
+    - 1
+  '85_2':
+    S0: TCTCTC
+    S1: AGCATATCG
+    ids:
+    - 84
+    - 1
+  '86_2':
+    S0: TCTTGC
+    S1: AGCATATCG
+    ids:
+    - 85
+    - 1
+  '87_2':
+    S0: TGAACG
+    S1: AGCATATCG
+    ids:
+    - 86
+    - 1
+  '88_2':
+    S0: TGAGCA
+    S1: AGCATATCG
+    ids:
+    - 87
+    - 1
+  '89_2':
+    S0: TGAGGC
+    S1: AGCATATCG
+    ids:
+    - 88
+    - 1
+  '90_2':
+    S0: TGCCAG
+    S1: AGCATATCG
+    ids:
+    - 89
+    - 1
+  '91_2':
+    S0: TGGCGT
+    S1: AGCATATCG
+    ids:
+    - 90
+    - 1
+  '92_2':
+    S0: TTAATA
+    S1: AGCATATCG
+    ids:
+    - 91
+    - 1
+  '93_2':
+    S0: TTCACA
+    S1: AGCATATCG
+    ids:
+    - 92
+    - 1
+  '94_2':
+    S0: TTCTGA
+    S1: AGCATATCG
+    ids:
+    - 93
+    - 1
+  '95_2':
+    S0: TTGCTT
+    S1: AGCATATCG
+    ids:
+    - 94
+    - 1
+  '96_2':
+    S0: TTGTGG
+    S1: AGCATATCG
+    ids:
+    - 95
+    - 1
+library:
+  products:
+  - product_1B
+  educts:
+  - product_1
+  reactions:
+  - SR
+  bb_edges: []
+  other_edges:
+  - - SR
+    - product_1B
+  - - product_1
+    - SR
+  building_blocks:
+  - B0
+  - B1
+catalog:
+  compounds: {}
+  reactions:
+    ABF1:
+      smirks: '[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);!$([NX3][CX3](=[OX1])[#6]);!$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]'
+    ABF2:
+      smirks: '[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);!$([NX3][CX3](=[OX1])[#6]);!$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]'
+    SR:
+      smirks: '[#6:1][$([NX2-][NX2+]#[NX1]),$([NX2]=[NX2+]=[NX1-])]>>[#6:1][N;H2]'
+    CuAAC:
+      smirks: '[CX2:1]#[CX2;H1:2].[N:3]=[N+:4]=[N-:5]>>[C:1]1=[C:2][N-0:3][N-0:4]=[N-0:5]1'
+structure:
+- name: S0
+  type: selection
+  max_error_rate: 0
+  indels: false
+- name: C0
+  type: constant
+  max_error_rate: 0
+  indels: false
+- name: B0
+  type: building_block
+  max_error_rate: 0
+  indels: false
+- name: C1
+  type: constant
+  max_error_rate: 0
+  indels: false
+- name: B1
+  type: building_block
+  max_error_rate: 0
+  indels: false
+- name: C2
+  type: constant
+  max_error_rate: 0
+  indels: false
+- name: S1
+  type: selection
+  max_error_rate: 0
+  indels: false
+whitelists:
+  C0:
+  - codon: GGAGCTTCTGAATTCTGTGTGCTG
+  C1:
+  - codon: CGAGTCCCATGGCGCCGGATCGACG
+  C2:
+  - codon: GCGTCAGGCAGC
+  B0:
+  - index: 0
+    codon: GCCTCG
+    complement: false
+  - index: 1
+    codon: TCCGAC
+    complement: false
+  - index: 2
+    codon: CAAGTG
+    complement: false
+  - index: 3
+    codon: GTCCGC
+    complement: false
+  - index: 4
+    codon: GACGAC
+    complement: false
+  - index: 5
+    codon: TTATAG
+    complement: false
+  - index: 6
+    codon: CCGAAG
+    complement: false
+  - index: 7
+    codon: GAACCA
+    complement: false
+  - index: 8
+    codon: AGAGAA
+    complement: false
+  - index: 9
+    codon: CATGAG
+    complement: false
+  - index: 10
+    codon: ACATTA
+    complement: false
+  - index: 11
+    codon: GGAATC
+    complement: false
+  - index: 12
+    codon: GCCAAC
+    complement: false
+  - index: 13
+    codon: GTGGCA
+    complement: false
+  - index: 14
+    codon: ATAATA
+    complement: false
+  - index: 15
+    codon: CGTAAG
+    complement: false
+  - index: 16
+    codon: TCTTCT
+    complement: false
+  - index: 17
+    codon: ATTCGC
+    complement: false
+  - index: 18
+    codon: GGAAGG
+    complement: false
+  - index: 19
+    codon: ATGGTA
+    complement: false
+  - index: 20
+    codon: TAATAA
+    complement: false
+  - index: 21
+    codon: TTAACC
+    complement: false
+  - index: 22
+    codon: AATACG
+    complement: false
+  - index: 23
+    codon: AAGCGG
+    complement: false
+  - index: 24
+    codon: CGCTTA
+    complement: false
+  - index: 25
+    codon: TGCTGC
+    complement: false
+  - index: 26
+    codon: TGCACA
+    complement: false
+  - index: 27
+    codon: CTTGCA
+    complement: false
+  - index: 28
+    codon: TTAGAC
+    complement: false
+  - index: 29
+    codon: TGATGA
+    complement: false
+  - index: 30
+    codon: GATATT
+    complement: false
+  - index: 31
+    codon: ACGGTG
+    complement: false
+  - index: 32
+    codon: AGGTAC
+    complement: false
+  - index: 33
+    codon: GCCTGC
+    complement: false
+  - index: 34
+    codon: GCTCCG
+    complement: false
+  - index: 35
+    codon: GATAAC
+    complement: false
+  - index: 36
+    codon: GGCGTT
+    complement: false
+  - index: 37
+    codon: GCGGAA
+    complement: false
+  - index: 38
+    codon: GACAAT
+    complement: false
+  - index: 39
+    codon: CTTCAC
+    complement: false
+  - index: 40
+    codon: CGTGGC
+    complement: false
+  - index: 41
+    codon: ACCTAC
+    complement: false
+  - index: 42
+    codon: TTCGAA
+    complement: false
+  - index: 43
+    codon: CTCCGA
+    complement: false
+  - index: 44
+    codon: AGAGCG
+    complement: false
+  - index: 45
+    codon: CGTGAA
+    complement: false
+  - index: 46
+    codon: TCTCGG
+    complement: false
+  - index: 47
+    codon: TCGGCT
+    complement: false
+  - index: 48
+    codon: ACACTC
+    complement: false
+  - index: 49
+    codon: GTGGTG
+    complement: false
+  - index: 50
+    codon: GGACTT
+    complement: false
+  - index: 51
+    codon: GTACTC
+    complement: false
+  - index: 52
+    codon: AGCTAA
+    complement: false
+  - index: 53
+    codon: TAAGCG
+    complement: false
+  - index: 54
+    codon: CAGCAG
+    complement: false
+  - index: 55
+    codon: CACGAA
+    complement: false
+  - index: 56
+    codon: TATTAT
+    complement: false
+  - index: 57
+    codon: ATGTCA
+    complement: false
+  - index: 58
+    codon: CTAGGA
+    complement: false
+  - index: 59
+    codon: CGGTGC
+    complement: false
+  - index: 60
+    codon: GGCAGA
+    complement: false
+  - index: 61
+    codon: AACCTG
+    complement: false
+  - index: 62
+    codon: TGGTAA
+    complement: false
+  - index: 63
+    codon: GAACGG
+    complement: false
+  - index: 64
+    codon: CAGAAC
+    complement: false
+  - index: 65
+    codon: AAGACC
+    complement: false
+  - index: 66
+    codon: ATATAA
+    complement: false
+  - index: 67
+    codon: AGAATT
+    complement: false
+  - index: 68
+    codon: GCCAGG
+    complement: false
+  - index: 69
+    codon: GCGTAG
+    complement: false
+  - index: 70
+    codon: GCGTCT
+    complement: false
+  - index: 71
+    codon: ACTGAG
+    complement: false
+  - index: 72
+    codon: GCTGTG
+    complement: false
+  - index: 73
+    codon: AGTGGA
+    complement: false
+  - index: 74
+    codon: CAGGAT
+    complement: false
+  - index: 75
+    codon: CAGGCC
+    complement: false
+  - index: 76
+    codon: CTCTAA
+    complement: false
+  - index: 77
+    codon: AACTTA
+    complement: false
+  - index: 78
+    codon: TAGGTT
+    complement: false
+  - index: 79
+    codon: TACTTG
+    complement: false
+  - index: 80
+    codon: ACCTCA
+    complement: false
+  - index: 81
+    codon: GTGAAC
+    complement: false
+  - index: 82
+    codon: AACCGC
+    complement: false
+  - index: 83
+    codon: TAGAAT
+    complement: false
+  - index: 84
+    codon: CGGAAT
+    complement: false
+  - index: 85
+    codon: TATCAA
+    complement: false
+  - index: 86
+    codon: TTGCGG
+    complement: false
+  - index: 87
+    codon: TATTCA
+    complement: false
+  - index: 88
+    codon: ACCTGG
+    complement: false
+  - index: 89
+    codon: CGACTC
+    complement: false
+  - index: 90
+    codon: GTCGTC
+    complement: false
+  - index: 91
+    codon: CGCCAA
+    complement: false
+  - index: 92
+    codon: TAGTAG
+    complement: false
+  - index: 93
+    codon: TATCGC
+    complement: false
+  - index: 94
+    codon: ACGAGT
+    complement: false
+  - index: 95
+    codon: ACTCTG
+    complement: false
+  - index: 96
+    codon: ATCTAG
+    complement: false
+  - index: 97
+    codon: CACAGA
+    complement: false
+  - index: 98
+    codon: TGAGTC
+    complement: false
+  - index: 99
+    codon: AACGAG
+    complement: false
+  - index: 100
+    codon: AGGCCG
+    complement: false
+  - index: 101
+    codon: CAAGCA
+    complement: false
+  - index: 102
+    codon: ATACGA
+    complement: false
+  - index: 103
+    codon: CACTCA
+    complement: false
+  - index: 104
+    codon: GAGACT
+    complement: false
+  - index: 105
+    codon: TAGTCC
+    complement: false
+  - index: 106
+    codon: AGCAGC
+    complement: false
+  - index: 107
+    codon: CCGGAC
+    complement: false
+  - index: 108
+    codon: CGCCGC
+    complement: false
+  - index: 109
+    codon: TGTTGT
+    complement: false
+  - index: 110
+    codon: GTGTGC
+    complement: false
+  - index: 111
+    codon: TAACGA
+    complement: false
+  - index: 112
+    codon: GCGACC
+    complement: false
+  - index: 113
+    codon: GTTGTT
+    complement: false
+  - index: 114
+    codon: TGGAAC
+    complement: false
+  - index: 115
+    codon: CGCTAT
+    complement: false
+  - index: 116
+    codon: TGTTCG
+    complement: false
+  - index: 117
+    codon: CTCATG
+    complement: false
+  - index: 118
+    codon: CTCCTC
+    complement: false
+  - index: 119
+    codon: CTGGTC
+    complement: false
+  - index: 120
+    codon: TGCGAT
+    complement: false
+  - index: 121
+    codon: CTCAGC
+    complement: false
+  - index: 122
+    codon: CCGTCA
+    complement: false
+  - index: 123
+    codon: CGTCCG
+    complement: false
+  - index: 124
+    codon: TGGTTC
+    complement: false
+  - index: 125
+    codon: CAAGGT
+    complement: false
+  - index: 126
+    codon: GAACAC
+    complement: false
+  - index: 127
+    codon: GGATAG
+    complement: false
+  - index: 128
+    codon: ACTCCA
+    complement: false
+  - index: 129
+    codon: CTAGTT
+    complement: false
+  - index: 130
+    codon: AGTGCT
+    complement: false
+  - index: 131
+    codon: AAGGCG
+    complement: false
+  - index: 132
+    codon: AGAAGA
+    complement: false
+  - index: 133
+    codon: CGGCGG
+    complement: false
+  - index: 134
+    codon: ATAGTC
+    complement: false
+  - index: 135
+    codon: CGTCGT
+    complement: false
+  - index: 136
+    codon: TGCGTA
+    complement: false
+  - index: 137
+    codon: TGGTGG
+    complement: false
+  - index: 138
+    codon: GCACAG
+    complement: false
+  - index: 139
+    codon: TCAAGG
+    complement: false
+  - index: 140
+    codon: TTGGAT
+    complement: false
+  - index: 141
+    codon: AATGAC
+    complement: false
+  - index: 142
+    codon: GGCTCT
+    complement: false
+  - index: 143
+    codon: CAACAA
+    complement: false
+  - index: 144
+    codon: AATCCT
+    complement: false
+  - index: 145
+    codon: TCCACG
+    complement: false
+  - index: 146
+    codon: GGCCAC
+    complement: false
+  - index: 147
+    codon: CATTAC
+    complement: false
+  - index: 148
+    codon: GCTAGC
+    complement: false
+  - index: 149
+    codon: ATAAGT
+    complement: false
+  - index: 150
+    codon: TGTGAG
+    complement: false
+  - index: 151
+    codon: CGTTGA
+    complement: false
+  - index: 152
+    codon: GACGTG
+    complement: false
+  - index: 153
+    codon: AGATAT
+    complement: false
+  - index: 154
+    codon: ATTACA
+    complement: false
+  - index: 155
+    codon: TTCGCG
+    complement: false
+  - index: 156
+    codon: CAGTAA
+    complement: false
+  - index: 157
+    codon: AGCGAC
+    complement: false
+  - index: 158
+    codon: CGTGTG
+    complement: false
+  - index: 159
+    codon: GGACAA
+    complement: false
+  - index: 160
+    codon: ACCAGA
+    complement: false
+  - index: 161
+    codon: ACTCAC
+    complement: false
+  - index: 162
+    codon: CCAACC
+    complement: false
+  - index: 163
+    codon: TGAACG
+    complement: false
+  - index: 164
+    codon: TCCGCA
+    complement: false
+  - index: 165
+    codon: TCCAAT
+    complement: false
+  - index: 166
+    codon: TAGCGT
+    complement: false
+  - index: 167
+    codon: TACTGA
+    complement: false
+  - index: 168
+    codon: CACGCG
+    complement: false
+  - index: 169
+    codon: CGGCTT
+    complement: false
+  - index: 170
+    codon: GCGCGG
+    complement: false
+  - index: 171
+    codon: CCACGG
+    complement: false
+  - index: 172
+    codon: AACTCG
+    complement: false
+  - index: 173
+    codon: GAGTAC
+    complement: false
+  - index: 174
+    codon: CTTACC
+    complement: false
+  - index: 175
+    codon: AAGTCT
+    complement: false
+  - index: 176
+    codon: TCCAGC
+    complement: false
+  - index: 177
+    codon: CAACGC
+    complement: false
+  - index: 178
+    codon: CTCGTA
+    complement: false
+  - index: 179
+    codon: ACTTCG
+    complement: false
+  - index: 180
+    codon: TATCTT
+    complement: false
+  - index: 181
+    codon: ATCCAC
+    complement: false
+  - index: 182
+    codon: TGCGCC
+    complement: false
+  - index: 183
+    codon: GTCCTG
+    complement: false
+  - index: 184
+    codon: GGTCCA
+    complement: false
+  - index: 185
+    codon: GAGCAA
+    complement: false
+  - index: 186
+    codon: CGGTAG
+    complement: false
+  - index: 187
+    codon: GAAGTT
+    complement: false
+  - index: 188
+    codon: TTAGCT
+    complement: false
+  - index: 189
+    codon: TTCTAT
+    complement: false
+  - index: 190
+    codon: AATCTC
+    complement: false
+  - index: 191
+    codon: AGTCTA
+    complement: false
+  - index: 192
+    codon: ACCAAG
+    complement: false
+  - index: 193
+    codon: TGTAGC
+    complement: false
+  - index: 194
+    codon: ATACCT
+    complement: false
+  - index: 195
+    codon: CACCTA
+    complement: false
+  - index: 196
+    codon: ACTTAT
+    complement: false
+  - index: 197
+    codon: TTGATC
+    complement: false
+  - index: 198
+    codon: CGATGT
+    complement: false
+  - index: 199
+    codon: ATGCTC
+    complement: false
+  - index: 200
+    codon: GCGCCA
+    complement: false
+  - index: 201
+    codon: CTAACT
+    complement: false
+  - index: 202
+    codon: AATCAG
+    complement: false
+  - index: 203
+    codon: GGATCA
+    complement: false
+  - index: 204
+    codon: GCAGCA
+    complement: false
+  - index: 205
+    codon: TATAGA
+    complement: false
+  - index: 206
+    codon: AGGCGC
+    complement: false
+  - index: 207
+    codon: CACTGT
+    complement: false
+  - index: 208
+    codon: TCACAT
+    complement: false
+  - index: 209
+    codon: TCTGCG
+    complement: false
+  - index: 210
+    codon: CGAGAT
+    complement: false
+  - index: 211
+    codon: TGGCGA
+    complement: false
+  - index: 212
+    codon: GCGATG
+    complement: false
+  - index: 213
+    codon: CAATCC
+    complement: false
+  - index: 214
+    codon: CATCAT
+    complement: false
+  - index: 215
+    codon: CATCCA
+    complement: false
+  - index: 216
+    codon: GTCGAT
+    complement: false
+  - index: 217
+    codon: GTACGT
+    complement: false
+  - index: 218
+    codon: TGCATG
+    complement: false
+  - index: 219
+    codon: GCACCT
+    complement: false
+  - index: 220
+    codon: AAGTTG
+    complement: false
+  - index: 221
+    codon: AATATA
+    complement: false
+  - index: 222
+    codon: GAGCGC
+    complement: false
+  - index: 223
+    codon: TCTGTT
+    complement: false
+  - index: 224
+    codon: GTTGAA
+    complement: false
+  - index: 225
+    codon: TGTCCT
+    complement: false
+  - index: 226
+    codon: GGTCTC
+    complement: false
+  - index: 227
+    codon: GCGCAC
+    complement: false
+  - index: 228
+    codon: AGTTGC
+    complement: false
+  - index: 229
+    codon: AGCGGT
+    complement: false
+  - index: 230
+    codon: ACTGTA
+    complement: false
+  - index: 231
+    codon: TCATAC
+    complement: false
+  - index: 232
+    codon: GGAGTG
+    complement: false
+  - index: 233
+    codon: AACACA
+    complement: false
+  - index: 234
+    codon: TCCTCC
+    complement: false
+  - index: 235
+    codon: AGTCAT
+    complement: false
+  - index: 236
+    codon: CTACTA
+    complement: false
+  - index: 237
+    codon: TCCATA
+    complement: false
+  - index: 238
+    codon: TTGCCA
+    complement: false
+  - index: 239
+    codon: GACATA
+    complement: false
+  - index: 240
+    codon: TTGTCT
+    complement: false
+  - index: 241
+    codon: TACTAC
+    complement: false
+  - index: 242
+    codon: GCAAGT
+    complement: false
+  - index: 243
+    codon: ATGGAC
+    complement: false
+  - index: 244
+    codon: GATTGA
+    complement: false
+  - index: 245
+    codon: TACATC
+    complement: false
+  - index: 246
+    codon: CAGCCT
+    complement: false
+  - index: 247
+    codon: CGGTCT
+    complement: false
+  - index: 248
+    codon: GATCGT
+    complement: false
+  - index: 249
+    codon: TATACC
+    complement: false
+  - index: 250
+    codon: GTAACA
+    complement: false
+  - index: 251
+    codon: ACGGCA
+    complement: false
+  - index: 252
+    codon: GATGCG
+    complement: false
+  - index: 253
+    codon: CGCAGG
+    complement: false
+  - index: 254
+    codon: CTAATC
+    complement: false
+  - index: 255
+    codon: TGATCC
+    complement: false
+  - index: 256
+    codon: ATAGAT
+    complement: false
+  - index: 257
+    codon: CCTCCT
+    complement: false
+  - index: 258
+    codon: CGGAGA
+    complement: false
+  - index: 259
+    codon: GGTGTA
+    complement: false
+  - index: 260
+    codon: TGGACT
+    complement: false
+  - index: 261
+    codon: GCCGGA
+    complement: false
+  - index: 262
+    codon: TGCCGT
+    complement: false
+  - index: 263
+    codon: AACGGA
+    complement: false
+  - index: 264
+    codon: ATATTG
+    complement: false
+  - index: 265
+    codon: GACCTC
+    complement: false
+  - index: 266
+    codon: CATGGA
+    complement: false
+  - index: 267
+    codon: CGAATG
+    complement: false
+  - index: 268
+    codon: ACATAG
+    complement: false
+  - index: 269
+    codon: CCAGCG
+    complement: false
+  - index: 270
+    codon: CGCACT
+    complement: false
+  - index: 271
+    codon: CCGCAA
+    complement: false
+  - index: 272
+    codon: GGCGAA
+    complement: false
+  - index: 273
+    codon: TTATTA
+    complement: false
+  - index: 274
+    codon: ATCACT
+    complement: false
+  - index: 275
+    codon: GACGGT
+    complement: false
+  - index: 276
+    codon: CGGACC
+    complement: false
+  - index: 277
+    codon: GCTCAA
+    complement: false
+  - index: 278
+    codon: GCCGAG
+    complement: false
+  - index: 279
+    codon: AGTAGT
+    complement: false
+  - index: 280
+    codon: AAGGTC
+    complement: false
+  - index: 281
+    codon: AACAAC
+    complement: false
+  - index: 282
+    codon: AGTTAG
+    complement: false
+  - index: 283
+    codon: CCTCTC
+    complement: false
+  - index: 284
+    codon: AGCGCA
+    complement: false
+  - index: 285
+    codon: ACCGTT
+    complement: false
+  - index: 286
+    codon: AAGCCA
+    complement: false
+  - index: 287
+    codon: CGAGTA
+    complement: false
+  - index: 288
+    codon: TCAACT
+    complement: false
+  - index: 289
+    codon: AGCATA
+    complement: false
+  - index: 290
+    codon: GAATGC
+    complement: false
+  - index: 291
+    codon: CCACAC
+    complement: false
+  - index: 292
+    codon: CAGACA
+    complement: false
+  - index: 293
+    codon: TCGTAT
+    complement: false
+  - index: 294
+    codon: GGTACG
+    complement: false
+  - index: 295
+    codon: ACCGCG
+    complement: false
+  - index: 296
+    codon: ACGCAG
+    complement: false
+  - index: 297
+    codon: GCTAAG
+    complement: false
+  - index: 298
+    codon: AGCTCC
+    complement: false
+  - index: 299
+    codon: GATACA
+    complement: false
+  - index: 300
+    codon: CCTAGT
+    complement: false
+  - index: 301
+    codon: CAATGA
+    complement: false
+  - index: 302
+    codon: CTTGGT
+    complement: false
+  - index: 303
+    codon: TAGATA
+    complement: false
+  - index: 304
+    codon: GTATGA
+    complement: false
+  - index: 305
+    codon: ATGGCT
+    complement: false
+  - index: 306
+    codon: TTCAGG
+    complement: false
+  - index: 307
+    codon: CTTCTT
+    complement: false
+  - index: 308
+    codon: TGAATA
+    complement: false
+  - index: 309
+    codon: ATTATT
+    complement: false
+  - index: 310
+    codon: ACGATA
+    complement: false
+  - index: 311
+    codon: TAGGCA
+    complement: false
+  - index: 312
+    codon: GGTTGG
+    complement: false
+  - index: 313
+    codon: CCAATT
+    complement: false
+  - index: 314
+    codon: ACACGT
+    complement: false
+  - index: 315
+    codon: CACACC
+    complement: false
+  - index: 316
+    codon: GGCACC
+    complement: false
+  - index: 317
+    codon: GCCTAT
+    complement: false
+  - index: 318
+    codon: GTGCCT
+    complement: false
+  - index: 319
+    codon: AGCCAG
+    complement: false
+  - index: 320
+    codon: GACGCA
+    complement: false
+  - index: 321
+    codon: TAACCT
+    complement: false
+  - index: 322
+    codon: AGGACA
+    complement: false
+  - index: 323
+    codon: CTGGAA
+    complement: false
+  - index: 324
+    codon: ACTACT
+    complement: false
+  - index: 325
+    codon: TCCTGT
+    complement: false
+  - index: 326
+    codon: CCTATG
+    complement: false
+  - index: 327
+    codon: ACGAAC
+    complement: false
+  - index: 328
+    codon: AGGCAA
+    complement: false
+  - index: 329
+    codon: TGACTG
+    complement: false
+  - index: 330
+    codon: AGTAAC
+    complement: false
+  - index: 331
+    codon: CCAGAA
+    complement: false
+  - index: 332
+    codon: AACAGG
+    complement: false
+  - index: 333
+    codon: AAGAGA
+    complement: false
+  - index: 334
+    codon: TTAAGA
+    complement: false
+  - index: 335
+    codon: CTCGCT
+    complement: false
+  - index: 336
+    codon: CTGCGC
+    complement: false
+  - index: 337
+    codon: TCACTA
+    complement: false
+  - index: 338
+    codon: AATTAA
+    complement: false
+  - index: 339
+    codon: ACATCC
+    complement: false
+  - index: 340
+    codon: AAGCAC
+    complement: false
+  - index: 341
+    codon: TTGGCC
+    complement: false
+  - index: 342
+    codon: TGAAGT
+    complement: false
+  - index: 343
+    codon: AGTGTC
+    complement: false
+  - index: 344
+    codon: CGAAGC
+    complement: false
+  - index: 345
+    codon: TTGTTG
+    complement: false
+  - index: 346
+    codon: GTCCAA
+    complement: false
+  - index: 347
+    codon: GTGTAA
+    complement: false
+  - index: 348
+    codon: TCTTAG
+    complement: false
+  - index: 349
+    codon: TAGCTG
+    complement: false
+  - index: 350
+    codon: CACGGC
+    complement: false
+  - index: 351
+    codon: CTACAT
+    complement: false
+  - index: 352
+    codon: GTCAGT
+    complement: false
+  - index: 353
+    codon: ACGTTC
+    complement: false
+  - index: 354
+    codon: ATTCCG
+    complement: false
+  - index: 355
+    codon: CACCGG
+    complement: false
+  - index: 356
+    codon: TCAGCC
+    complement: false
+  - index: 357
+    codon: GGTGGT
+    complement: false
+  - index: 358
+    codon: CAACTT
+    complement: false
+  - index: 359
+    codon: ATATGC
+    complement: false
+  - index: 360
+    codon: GCATGG
+    complement: false
+  - index: 361
+    codon: GGAACT
+    complement: false
+  - index: 362
+    codon: ATCATC
+    complement: false
+  - index: 363
+    codon: AGTATG
+    complement: false
+  - index: 364
+    codon: GCGAGA
+    complement: false
+  - index: 365
+    codon: TATGCT
+    complement: false
+  - index: 366
+    codon: CTTCGG
+    complement: false
+  - index: 367
+    codon: GGAGAC
+    complement: false
+  - index: 368
+    codon: GGCGCG
+    complement: false
+  - index: 369
+    codon: CGGCCA
+    complement: false
+  - index: 370
+    codon: TTATGT
+    complement: false
+  - index: 371
+    codon: TCTGAA
+    complement: false
+  - index: 372
+    codon: CTGTGA
+    complement: false
+  - index: 373
+    codon: ACCGGC
+    complement: false
+  - index: 374
+    codon: CCTTCC
+    complement: false
+  - index: 375
+    codon: GCCGCC
+    complement: false
+  - index: 376
+    codon: GCTGCT
+    complement: false
+  - index: 377
+    codon: TTGCAC
+    complement: false
+  - index: 378
+    codon: GAATTA
+    complement: false
+  - index: 379
+    codon: CCATTC
+    complement: false
+  - index: 380
+    codon: GCACGA
+    complement: false
+  - index: 381
+    codon: TTACCG
+    complement: false
+  - index: 382
+    codon: ACGTAA
+    complement: false
+  - index: 383
+    codon: CCAGGC
+    complement: false
+  - index: 384
+    codon: TCAGAG
+    complement: false
+  - index: 385
+    codon: AGACAC
+    complement: false
+  - index: 386
+    codon: GGTCAG
+    complement: false
+  - index: 387
+    codon: AGAACC
+    complement: false
+  - index: 388
+    codon: ATGAGC
+    complement: false
+  - index: 389
+    codon: ACTTGA
+    complement: false
+  - index: 390
+    codon: AGGAGG
+    complement: false
+  - index: 391
+    codon: TCGTCG
+    complement: false
+  - index: 392
+    codon: GCTTCA
+    complement: false
+  - index: 393
+    codon: TCAGGT
+    complement: false
+  - index: 394
+    codon: CGAACA
+    complement: false
+  - index: 395
+    codon: CGCGAG
+    complement: false
+  - index: 396
+    codon: CCTCAG
+    complement: false
+  - index: 397
+    codon: GGCCTA
+    complement: false
+  - index: 398
+    codon: TCGACA
+    complement: false
+  - index: 399
+    codon: CATATC
+    complement: false
+  - index: 400
+    codon: AGGATC
+    complement: false
+  - index: 401
+    codon: AAGGAA
+    complement: false
+  - index: 402
+    codon: CTCGAC
+    complement: false
+  - index: 403
+    codon: GTTACT
+    complement: false
+  - index: 404
+    codon: TGCTAG
+    complement: false
+  - index: 405
+    codon: TCGGTA
+    complement: false
+  - index: 406
+    codon: GCTTGT
+    complement: false
+  - index: 407
+    codon: CCGCGT
+    complement: false
+  - index: 408
+    codon: CGATCG
+    complement: false
+  - index: 409
+    codon: ATGAAT
+    complement: false
+  - index: 410
+    codon: CATACT
+    complement: false
+  - index: 411
+    codon: CGACAG
+    complement: false
+  - index: 412
+    codon: GAAGAA
+    complement: false
+  - index: 413
+    codon: GGTTAA
+    complement: false
+  - index: 414
+    codon: ACGCCT
+    complement: false
+  - index: 415
+    codon: AATGTG
+    complement: false
+  - index: 416
+    codon: ACAAGC
+    complement: false
+  - index: 417
+    codon: GACTGG
+    complement: false
+  - index: 418
+    codon: ACGGAT
+    complement: false
+  - index: 419
+    codon: ATCTGA
+    complement: false
+  - index: 420
+    codon: CTCTCC
+    complement: false
+  - index: 421
+    codon: AACGCC
+    complement: false
+  - index: 422
+    codon: CAGGTA
+    complement: false
+  - index: 423
+    codon: GATCTA
+    complement: false
+  - index: 424
+    codon: GCATAA
+    complement: false
+  - index: 425
+    codon: AGCACG
+    complement: false
+  - index: 426
+    codon: ACCGAA
+    complement: false
+  - index: 427
+    codon: AACCAA
+    complement: false
+  - index: 428
+    codon: GCTGAC
+    complement: false
+  - index: 429
+    codon: CAGTCG
+    complement: false
+  - index: 430
+    codon: CACGTT
+    complement: false
+  - index: 431
+    codon: TCACGC
+    complement: false
+  - index: 432
+    codon: AAGCTT
+    complement: false
+  - index: 433
+    codon: CTCACA
+    complement: false
+  - index: 434
+    codon: GCCTTA
+    complement: false
+  - index: 435
+    codon: CGCGTC
+    complement: false
+  - index: 436
+    codon: GCCATT
+    complement: false
+  - index: 437
+    codon: CCGTGG
+    complement: false
+  - index: 438
+    codon: ACTATC
+    complement: false
+  - index: 439
+    codon: ACAACA
+    complement: false
+  - index: 440
+    codon: TGAGCA
+    complement: false
+  - index: 441
+    codon: CTCAAT
+    complement: false
+  - index: 442
+    codon: CGCCTG
+    complement: false
+  - index: 443
+    codon: GTAGTA
+    complement: false
+  - index: 444
+    codon: GACACG
+    complement: false
+  - index: 445
+    codon: TCATTG
+    complement: false
+  - index: 446
+    codon: GACCAG
+    complement: false
+  - index: 447
+    codon: ATAACG
+    complement: false
+  - index: 448
+    codon: ATAGCA
+    complement: false
+  - index: 449
+    codon: CTCTGG
+    complement: false
+  - index: 450
+    codon: CCTGAT
+    complement: false
+  - index: 451
+    codon: ACAGAC
+    complement: false
+  - index: 452
+    codon: CCTCGA
+    complement: false
+  - index: 453
+    codon: GCAGTC
+    complement: false
+  - index: 454
+    codon: GGCGGC
+    complement: false
+  - index: 455
+    codon: AATCGA
+    complement: false
+  - index: 456
+    codon: ATACAG
+    complement: false
+  - index: 457
+    codon: CTGAGT
+    complement: false
+  - index: 458
+    codon: CGCGGA
+    complement: false
+  - index: 459
+    codon: CGCAAC
+    complement: false
+  - index: 460
+    codon: CATCTG
+    complement: false
+  - index: 461
+    codon: TATGTC
+    complement: false
+  - index: 462
+    codon: CAGCGA
+    complement: false
+  - index: 463
+    codon: TAAGTA
+    complement: false
+  - index: 464
+    codon: GGACGC
+    complement: false
+  - index: 465
+    codon: ACTGCC
+    complement: false
+  - index: 466
+    codon: GACAGC
+    complement: false
+  - index: 467
+    codon: GTTATA
+    complement: false
+  - index: 468
+    codon: GAGGAG
+    complement: false
+  - index: 469
+    codon: AATTGG
+    complement: false
+  - index: 470
+    codon: CTCCAG
+    complement: false
+  - index: 471
+    codon: GCAACG
+    complement: false
+  - index: 472
+    codon: GATAGG
+    complement: false
+  - index: 473
+    codon: TACCAT
+    complement: false
+  - index: 474
+    codon: GTCTCA
+    complement: false
+  - index: 475
+    codon: CCGAGC
+    complement: false
+  - index: 476
+    codon: GAGATC
+    complement: false
+  - index: 477
+    codon: CCGGTT
+    complement: false
+  - index: 478
+    codon: GGAGGA
+    complement: false
+  - index: 479
+    codon: TATCCG
+    complement: false
+  - index: 480
+    codon: ATGCGT
+    complement: false
+  - index: 481
+    codon: CAATAG
+    complement: false
+  - index: 482
+    codon: TAGGAC
+    complement: false
+  - index: 483
+    codon: CTGTAT
+    complement: false
+  - index: 484
+    codon: TCGTGA
+    complement: false
+  - index: 485
+    codon: GCGCTT
+    complement: false
+  - index: 486
+    codon: GGCCGG
+    complement: false
+  - index: 487
+    codon: GATTCT
+    complement: false
+  - index: 488
+    codon: CACTTC
+    complement: false
+  - index: 489
+    codon: TAACTC
+    complement: false
+  - index: 490
+    codon: ACAGCT
+    complement: false
+  - index: 491
+    codon: TAATGG
+    complement: false
+  - index: 492
+    codon: AATGGT
+    complement: false
+  - index: 493
+    codon: CCGCCG
+    complement: false
+  - index: 494
+    codon: TAAGGC
+    complement: false
+  - index: 495
+    codon: AAGTGC
+    complement: false
+  - index: 496
+    codon: TCAATC
+    complement: false
+  - index: 497
+    codon: CACCAC
+    complement: false
+  - index: 498
+    codon: CGTATA
+    complement: false
+  - index: 499
+    codon: ATCCTA
+    complement: false
+  - index: 500
+    codon: GTGTCG
+    complement: false
+  - index: 501
+    codon: TTGAAG
+    complement: false
+  - index: 502
+    codon: TCCGTG
+    complement: false
+  - index: 503
+    codon: GGTGCC
+    complement: false
+  - index: 504
+    codon: ATGTGG
+    complement: false
+  - index: 505
+    codon: GCAATA
+    complement: false
+  - index: 506
+    codon: TACACT
+    complement: false
+  - index: 507
+    codon: ACAGGA
+    complement: false
+  - index: 508
+    codon: ACCACC
+    complement: false
+  - index: 509
+    codon: GATTAG
+    complement: false
+  - index: 510
+    codon: CCTACA
+    complement: false
+  - index: 511
+    codon: ATGATG
+    complement: false
+  - index: 512
+    codon: ACAATG
+    complement: false
+  - index: 513
+    codon: AGCCGA
+    complement: false
+  - index: 514
+    codon: TTAGTG
+    complement: false
+  - index: 515
+    codon: GTAATG
+    complement: false
+  - index: 516
+    codon: TTCTTC
+    complement: false
+  - index: 517
+    codon: AAGAAG
+    complement: false
+  - index: 518
+    codon: CTATAC
+    complement: false
+  - index: 519
+    codon: CAAGAC
+    complement: false
+  - index: 520
+    codon: ACGACG
+    complement: false
+  - index: 521
+    codon: TCGATT
+    complement: false
+  - index: 522
+    codon: CCACCA
+    complement: false
+  - index: 523
+    codon: TTCAAC
+    complement: false
+  - index: 524
+    codon: CCATAT
+    complement: false
+  - index: 525
+    codon: CCGACT
+    complement: false
+  - index: 526
+    codon: TAAGAT
+    complement: false
+  - index: 527
+    codon: GTGATT
+    complement: false
+  - index: 528
+    codon: AATGCA
+    complement: false
+  - index: 529
+    codon: ATTCAA
+    complement: false
+  - index: 530
+    codon: AGTTCA
+    complement: false
+  - index: 531
+    codon: AATAGC
+    complement: false
+  - index: 532
+    codon: GTAGCG
+    complement: false
+  - index: 533
+    codon: AGACGG
+    complement: false
+  - index: 534
+    codon: TTAATT
+    complement: false
+  - index: 535
+    codon: AACATT
+    complement: false
+  - index: 536
+    codon: AGCAAT
+    complement: false
+  - index: 537
+    codon: GTCTAC
+    complement: false
+  - index: 538
+    codon: TAACAG
+    complement: false
+  - index: 539
+    codon: AGCGTG
+    complement: false
+  - index: 540
+    codon: CGAGCC
+    complement: false
+  - index: 541
+    codon: CTGATA
+    complement: false
+  - index: 542
+    codon: GTGAGG
+    complement: false
+  - index: 543
+    codon: GAGCCG
+    complement: false
+  - index: 544
+    codon: GGTAAT
+    complement: false
+  - index: 545
+    codon: AATAAT
+    complement: false
+  - index: 546
+    codon: TAGACG
+    complement: false
+  - index: 547
+    codon: CCTTAA
+    complement: false
+  - index: 548
+    codon: TATAAG
+    complement: false
+  - index: 549
+    codon: CGACCT
+    complement: false
+  - index: 550
+    codon: AGCCTC
+    complement: false
+  - index: 551
+    codon: CTTAGA
+    complement: false
+  - index: 552
+    codon: GCCACA
+    complement: false
+  - index: 553
+    codon: TGTATT
+    complement: false
+  - index: 554
+    codon: ATCCGG
+    complement: false
+  - index: 555
+    codon: AGGTGA
+    complement: false
+  - index: 556
+    codon: GTAAGC
+    complement: false
+  - index: 557
+    codon: ACACCG
+    complement: false
+  - index: 558
+    codon: AGACCA
+    complement: false
+  - index: 559
+    codon: TTACAA
+    complement: false
+  - index: 560
+    codon: GACTCC
+    complement: false
+  - index: 561
+    codon: TGGCAG
+    complement: false
+  - index: 562
+    codon: CTAGAG
+    complement: false
+  - index: 563
+    codon: ACTAGG
+    complement: false
+  - index: 564
+    codon: TAGAGC
+    complement: false
+  - index: 565
+    codon: TTCGGC
+    complement: false
+  - index: 566
+    codon: GTATCC
+    complement: false
+  - index: 567
+    codon: GACTAA
+    complement: false
+  - index: 568
+    codon: CTAAGG
+    complement: false
+  - index: 569
+    codon: GTGCGA
+    complement: false
+  - index: 570
+    codon: GTTCAT
+    complement: false
+  - index: 571
+    codon: ACGCGA
+    complement: false
+  - index: 572
+    codon: AGAGGC
+    complement: false
+  - index: 573
+    codon: GATGAT
+    complement: false
+  - index: 574
+    codon: GACCGA
+    complement: false
+  - index: 575
+    codon: GGCAAG
+    complement: false
+  - index: 576
+    codon: GAATAT
+    complement: false
+  - index: 577
+    codon: GAAGCC
+    complement: false
+  - index: 578
+    codon: ACACAA
+    complement: false
+  - index: 579
+    codon: CGGCAC
+    complement: false
+  - index: 580
+    codon: CAGATT
+    complement: false
+  - index: 581
+    codon: TCATCA
+    complement: false
+  - index: 582
+    codon: TTCCTT
+    complement: false
+  - index: 583
+    codon: CAGAGG
+    complement: false
+  - index: 584
+    codon: CAACCG
+    complement: false
+  - index: 585
+    codon: CAGCTC
+    complement: false
+  - index: 586
+    codon: CACAAG
+    complement: false
+  - index: 587
+    codon: AACTAT
+    complement: false
+  - index: 588
+    codon: CTGCTG
+    complement: false
+  - index: 589
+    codon: TCCTAA
+    complement: false
+  - index: 590
+    codon: GAGTCA
+    complement: false
+  - index: 591
+    codon: CTGACG
+    complement: false
+  - index: 592
+    codon: TCGCTC
+    complement: false
+  - index: 593
+    codon: AGATTC
+    complement: false
+  - index: 594
+    codon: GATGGC
+    complement: false
+  - index: 595
+    codon: AATTCC
+    complement: false
+  - index: 596
+    codon: GGCTTC
+    complement: false
+  - index: 597
+    codon: GAATCG
+    complement: false
+  - index: 598
+    codon: CGACGA
+    complement: false
+  - index: 599
+    codon: GGACCG
+    complement: false
+  - index: 600
+    codon: GCGAAT
+    complement: false
+  - index: 601
+    codon: ATTAAG
+    complement: false
+  - index: 602
+    codon: GAGTGT
+    complement: false
+  - index: 603
+    codon: CCTAAC
+    complement: false
+  - index: 604
+    codon: TCTGGC
+    complement: false
+  - index: 605
+    codon: CTATCA
+    complement: false
+  - index: 606
+    codon: GCGGCG
+    complement: false
+  - index: 607
+    codon: CGATAA
+    complement: false
+  - index: 608
+    codon: GCAGAT
+    complement: false
+  - index: 609
+    codon: GTGCAG
+    complement: false
+  - index: 610
+    codon: CCAAGA
+    complement: false
+  - index: 611
+    codon: TGTCAC
+    complement: false
+  B1:
+  - index: 0
+    codon: GTCTCAC
+    complement: false
+  - index: 1
+    codon: GTCGTAC
+    complement: false
+  - index: 2
+    codon: CTCATTG
+    complement: false
+  - index: 3
+    codon: GTAGAGA
+    complement: false
+  - index: 4
+    codon: GTTACCT
+    complement: false
+  - index: 5
+    codon: AGTAATT
+    complement: false
+  - index: 6
+    codon: AGTGAGC
+    complement: false
+  - index: 7
+    codon: ACTGATA
+    complement: false
+  - index: 8
+    codon: ACGTATA
+    complement: false
+  - index: 9
+    codon: TTCTCCT
+    complement: false
+  - index: 10
+    codon: AACTGCT
+    complement: false
+  - index: 11
+    codon: CACACAC
+    complement: false
+  - index: 12
+    codon: CACGTGT
+    complement: false
+  - index: 13
+    codon: CGAGGTG
+    complement: false
+  - index: 14
+    codon: AAGCGAG
+    complement: false
+  - index: 15
+    codon: GCGCATG
+    complement: false
+  - index: 16
+    codon: GTTGGTC
+    complement: false
+  - index: 17
+    codon: CTTCTCT
+    complement: false
+  - index: 18
+    codon: TTGCACG
+    complement: false
+  - index: 19
+    codon: GAGTAGA
+    complement: false
+  - index: 20
+    codon: ATGTGAG
+    complement: false
+  - index: 21
+    codon: AACGTAT
+    complement: false
+  - index: 22
+    codon: TCCGGCT
+    complement: false
+  - index: 23
+    codon: TGATGAT
+    complement: false
+  - index: 24
+    codon: TGTGGAC
+    complement: false
+  - index: 25
+    codon: GTAGTGC
+    complement: false
+  - index: 26
+    codon: GCAACAC
+    complement: false
+  - index: 27
+    codon: AAGACCG
+    complement: false
+  - index: 28
+    codon: AGAGAGA
+    complement: false
+  - index: 29
+    codon: TCGAGAT
+    complement: false
+  - index: 30
+    codon: CCGACTT
+    complement: false
+  - index: 31
+    codon: TGAGATA
+    complement: false
+  - index: 32
+    codon: TTGGCGT
+    complement: false
+  - index: 33
+    codon: AATCCTC
+    complement: false
+  - index: 34
+    codon: CACGTAC
+    complement: false
+  - index: 35
+    codon: CACACGA
+    complement: false
+  - index: 36
+    codon: CGTAACA
+    complement: false
+  - index: 37
+    codon: AATTCCG
+    complement: false
+  - index: 38
+    codon: GCGTTAC
+    complement: false
+  - index: 39
+    codon: CTCCATT
+    complement: false
+  - index: 40
+    codon: CGCCGGT
+    complement: false
+  - index: 41
+    codon: GTAAGAC
+    complement: false
+  - index: 42
+    codon: GCTGAAT
+    complement: false
+  - index: 43
+    codon: ATAAGGT
+    complement: false
+  - index: 44
+    codon: ATCATTC
+    complement: false
+  - index: 45
+    codon: AGCGAGT
+    complement: false
+  - index: 46
+    codon: CCAGACT
+    complement: false
+  - index: 47
+    codon: TGACCAG
+    complement: false
+  - index: 48
+    codon: GCCTACA
+    complement: false
+  - index: 49
+    codon: GCCTCGT
+    complement: false
+  - index: 50
+    codon: TGTCGTT
+    complement: false
+  - index: 51
+    codon: GTCTGAA
+    complement: false
+  - index: 52
+    codon: CCGTACT
+    complement: false
+  - index: 53
+    codon: AGGTGTC
+    complement: false
+  - index: 54
+    codon: TGCCTGG
+    complement: false
+  - index: 55
+    codon: AGGATGC
+    complement: false
+  - index: 56
+    codon: GTTATGC
+    complement: false
+  - index: 57
+    codon: GTAGGAA
+    complement: false
+  - index: 58
+    codon: GTGTCGT
+    complement: false
+  - index: 59
+    codon: GCTCCTT
+    complement: false
+  - index: 60
+    codon: TTCTGAG
+    complement: false
+  - index: 61
+    codon: TCATGGA
+    complement: false
+  - index: 62
+    codon: ATCGTAA
+    complement: false
+  - index: 63
+    codon: GACTTAT
+    complement: false
+  - index: 64
+    codon: CAACGTT
+    complement: false
+  - index: 65
+    codon: CGATACT
+    complement: false
+  - index: 66
+    codon: TACGATG
+    complement: false
+  - index: 67
+    codon: CCAGTGT
+    complement: false
+  - index: 68
+    codon: CCTGGTG
+    complement: false
+  - index: 69
+    codon: CCAGTTG
+    complement: false
+  - index: 70
+    codon: TCATCGT
+    complement: false
+  - index: 71
+    codon: ATATATC
+    complement: false
+  - index: 72
+    codon: GTGCCGA
+    complement: false
+  - index: 73
+    codon: CAGACCA
+    complement: false
+  - index: 74
+    codon: CGATTGC
+    complement: false
+  - index: 75
+    codon: TACCTAC
+    complement: false
+  - index: 76
+    codon: GATGAGC
+    complement: false
+  - index: 77
+    codon: CAGGTTC
+    complement: false
+  - index: 78
+    codon: ATAACTA
+    complement: false
+  - index: 79
+    codon: ACGTCCG
+    complement: false
+  - index: 80
+    codon: GTGCATA
+    complement: false
+  - index: 81
+    codon: GAATCAA
+    complement: false
+  - index: 82
+    codon: ACTTGCG
+    complement: false
+  - index: 83
+    codon: TGTTCGT
+    complement: false
+  - index: 84
+    codon: CCTCCGC
+    complement: false
+  - index: 85
+    codon: CTCATAT
+    complement: false
+  - index: 86
+    codon: CTGAAGG
+    complement: false
+  - index: 87
+    codon: TCTAGCT
+    complement: false
+  - index: 88
+    codon: TTCCTGT
+    complement: false
+  - index: 89
+    codon: GACTGGA
+    complement: false
+  - index: 90
+    codon: TTAACCG
+    complement: false
+  - index: 91
+    codon: AGACTGA
+    complement: false
+  - index: 92
+    codon: ATCTTGC
+    complement: false
+  - index: 93
+    codon: CTAAGGC
+    complement: false
+  - index: 94
+    codon: ATCGCAT
+    complement: false
+  - index: 95
+    codon: AAGTCCA
+    complement: false
+  - index: 96
+    codon: CATTACG
+    complement: false
+  - index: 97
+    codon: ATAGCCT
+    complement: false
+  - index: 98
+    codon: CCAGGTA
+    complement: false
+  - index: 99
+    codon: AGTAGTA
+    complement: false
+  - index: 100
+    codon: TATGGAG
+    complement: false
+  - index: 101
+    codon: AGCACGA
+    complement: false
+  - index: 102
+    codon: AATTGCA
+    complement: false
+  - index: 103
+    codon: CAGATTG
+    complement: false
+  - index: 104
+    codon: GTCCAAG
+    complement: false
+  - index: 105
+    codon: ATGCGCT
+    complement: false
+  - index: 106
+    codon: ACATAGT
+    complement: false
+  - index: 107
+    codon: ATAGAGC
+    complement: false
+  - index: 108
+    codon: TATGTCG
+    complement: false
+  - index: 109
+    codon: TATCATT
+    complement: false
+  - index: 110
+    codon: CCTTCCG
+    complement: false
+  - index: 111
+    codon: TGCGTCG
+    complement: false
+  - index: 112
+    codon: AGAAGTG
+    complement: false
+  - index: 113
+    codon: CGTAGGA
+    complement: false
+  - index: 114
+    codon: CTGTTAG
+    complement: false
+  - index: 115
+    codon: ACGATCA
+    complement: false
+  - index: 116
+    codon: TCGTACA
+    complement: false
+  - index: 117
+    codon: CTATTAT
+    complement: false
+  - index: 118
+    codon: CGCAGGC
+    complement: false
+  - index: 119
+    codon: TAGCTTC
+    complement: false
+  - index: 120
+    codon: CCTTCTC
+    complement: false
+  - index: 121
+    codon: CTGGCCG
+    complement: false
+  - index: 122
+    codon: GTCGAGC
+    complement: false
+  - index: 123
+    codon: TAGATTA
+    complement: false
+  - index: 124
+    codon: TTGATAC
+    complement: false
+  - index: 125
+    codon: GCACAAT
+    complement: false
+  - index: 126
+    codon: GCTTGAG
+    complement: false
+  - index: 127
+    codon: TACTTGG
+    complement: false
+  - index: 128
+    codon: CCACATA
+    complement: false
+  - index: 129
+    codon: GACAGTC
+    complement: false
+  - index: 130
+    codon: CGCGTTA
+    complement: false
+  - index: 131
+    codon: ATCTCCG
+    complement: false
+  - index: 132
+    codon: CTTGCAC
+    complement: false
+  - index: 133
+    codon: TGTCACT
+    complement: false
+  - index: 134
+    codon: GTGCGTG
+    complement: false
+  - index: 135
+    codon: ACGCATC
+    complement: false
+  - index: 136
+    codon: GACGCGT
+    complement: false
+  - index: 137
+    codon: AGCGACG
+    complement: false
+  - index: 138
+    codon: GCCGTAG
+    complement: false
+  - index: 139
+    codon: CTCAGCA
+    complement: false
+  - index: 140
+    codon: CTTACCA
+    complement: false
+  - index: 141
+    codon: GCAGGTG
+    complement: false
+  - index: 142
+    codon: CCGGCTG
+    complement: false
+  - index: 143
+    codon: CAACAAC
+    complement: false
+  - index: 144
+    codon: CGTTCAG
+    complement: false
+  - index: 145
+    codon: CCACGAA
+    complement: false
+  - index: 146
+    codon: CGGAGAG
+    complement: false
+  - index: 147
+    codon: GTCATGA
+    complement: false
+  - index: 148
+    codon: ACTGACG
+    complement: false
+  - index: 149
+    codon: TGACGGA
+    complement: false
+  - index: 150
+    codon: TCTTATT
+    complement: false
+  - index: 151
+    codon: ATACTAC
+    complement: false
+  - index: 152
+    codon: TAGCCGT
+    complement: false
+  - index: 153
+    codon: TCCACGG
+    complement: false
+  - index: 154
+    codon: CGGCTTC
+    complement: false
+  - index: 155
+    codon: TGTGCTT
+    complement: false
+  - index: 156
+    codon: TTGTCTT
+    complement: false
+  - index: 157
+    codon: ATAGTCA
+    complement: false
+  - index: 158
+    codon: TGGAGTA
+    complement: false
+  - index: 159
+    codon: CGGATGG
+    complement: false
+  - index: 160
+    codon: GCTACCA
+    complement: false
+  - index: 161
+    codon: ACAACGA
+    complement: false
+  - index: 162
+    codon: TTGATGA
+    complement: false
+  - index: 163
+    codon: GAGCCGC
+    complement: false
+  - index: 164
+    codon: GATTAAT
+    complement: false
+  - index: 165
+    codon: GATGCGG
+    complement: false
+  - index: 166
+    codon: TAACGTA
+    complement: false
+  - index: 167
+    codon: ACGCGTT
+    complement: false
+  - index: 168
+    codon: CGGCCGT
+    complement: false
+  - index: 169
+    codon: ATGGTTA
+    complement: false
+  - index: 170
+    codon: GTCGCCG
+    complement: false
+  - index: 171
+    codon: TACGTCA
+    complement: false
+  - index: 172
+    codon: AGCTCTT
+    complement: false
+  - index: 173
+    codon: CATTGTT
+    complement: false
+  - index: 174
+    codon: ACAGGAA
+    complement: false
+  - index: 175
+    codon: TCTATGC
+    complement: false
+  - index: 176
+    codon: TAATACA
+    complement: false
+  - index: 177
+    codon: TACTCGA
+    complement: false
+  - index: 178
+    codon: TGTCTAG
+    complement: false
+  - index: 179
+    codon: TTCGCTC
+    complement: false
+  - index: 180
+    codon: GCTCAGT
+    complement: false
+  - index: 181
+    codon: TACAGGA
+    complement: false
+  - index: 182
+    codon: CCGGAAG
+    complement: false
+  - index: 183
+    codon: CCACGCT
+    complement: false
+  - index: 184
+    codon: AGATAAG
+    complement: false
+  - index: 185
+    codon: ATCAGAC
+    complement: false
+  - index: 186
+    codon: ATCTCAA
+    complement: false
+  - index: 187
+    codon: GTAACTC
+    complement: false
+  - index: 188
+    codon: ACAGTAG
+    complement: false
+  - index: 189
+    codon: CGCTGTA
+    complement: false
+  - index: 190
+    codon: GAGCCAT
+    complement: false
+  - index: 191
+    codon: ACTCTTG
+    complement: false
+  - index: 192
+    codon: TGTAGAG
+    complement: false
+  - index: 193
+    codon: AGAACAA
+    complement: false
+  - index: 194
+    codon: ATCTACT
+    complement: false
+  - index: 195
+    codon: GATAACG
+    complement: false
+  - index: 196
+    codon: TTACGCT
+    complement: false
+  - index: 197
+    codon: TAGACGA
+    complement: false
+  - index: 198
+    codon: AAGCATG
+    complement: false
+  - index: 199
+    codon: GACTTCA
+    complement: false
+  - index: 200
+    codon: ATGTGTT
+    complement: false
+  - index: 201
+    codon: GTATGGA
+    complement: false
+  - index: 202
+    codon: CGGTTAA
+    complement: false
+  - index: 203
+    codon: TTACGAG
+    complement: false
+  - index: 204
+    codon: ATTCTGG
+    complement: false
+  - index: 205
+    codon: CTATGCG
+    complement: false
+  - index: 206
+    codon: CCGTTAT
+    complement: false
+  - index: 207
+    codon: ACGCTGT
+    complement: false
+  - index: 208
+    codon: CTAGTGA
+    complement: false
+  - index: 209
+    codon: TTACAGG
+    complement: false
+  - index: 210
+    codon: GTAGCCA
+    complement: false
+  - index: 211
+    codon: CCTGTCG
+    complement: false
+  - index: 212
+    codon: GCACGTC
+    complement: false
+  - index: 213
+    codon: TTGGCTA
+    complement: false
+  - index: 214
+    codon: TTAAGTG
+    complement: false
+  - index: 215
+    codon: TAGGAAC
+    complement: false
+  - index: 216
+    codon: GTGATGG
+    complement: false
+  - index: 217
+    codon: ACAAGAG
+    complement: false
+  - index: 218
+    codon: ACATGAT
+    complement: false
+  - index: 219
+    codon: TTGCCTG
+    complement: false
+  - index: 220
+    codon: GAGTCTT
+    complement: false
+  - index: 221
+    codon: CGCGGAG
+    complement: false
+  - index: 222
+    codon: ATCTGTC
+    complement: false
+  - index: 223
+    codon: CGTAGTG
+    complement: false
+  - index: 224
+    codon: GAGCAGG
+    complement: false
+  - index: 225
+    codon: AGCTGAA
+    complement: false
+  - index: 226
+    codon: TCGCCGC
+    complement: false
+  - index: 227
+    codon: CGCCTGC
+    complement: false
+  - index: 228
+    codon: AACGACT
+    complement: false
+  - index: 229
+    codon: GCGTATT
+    complement: false
+  - index: 230
+    codon: CACGGTC
+    complement: false
+  - index: 231
+    codon: GAGCAAC
+    complement: false
+  - index: 232
+    codon: ATTAAGT
+    complement: false
+  - index: 233
+    codon: GAGTATG
+    complement: false
+  - index: 234
+    codon: CCTTGGC
+    complement: false
+  - index: 235
+    codon: CTTCCTC
+    complement: false
+  - index: 236
+    codon: TTGGTCG
+    complement: false
+  - index: 237
+    codon: GTGGCTT
+    complement: false
+  - index: 238
+    codon: TCAACTC
+    complement: false
+  - index: 239
+    codon: GTGAGTC
+    complement: false
+  - index: 240
+    codon: AATGATG
+    complement: false
+  - index: 241
+    codon: CCAGCTC
+    complement: false
+  - index: 242
+    codon: AACAAGG
+    complement: false
+  - index: 243
+    codon: GCTGCCG
+    complement: false
+  - index: 244
+    codon: TTGTCCG
+    complement: false
+  - index: 245
+    codon: GCGTAGG
+    complement: false
+  - index: 246
+    codon: GAACCTG
+    complement: false
+  - index: 247
+    codon: AGGTAGG
+    complement: false
+  - index: 248
+    codon: CAATATT
+    complement: false
+  - index: 249
+    codon: ATCACTG
+    complement: false
+  - index: 250
+    codon: CAACGAG
+    complement: false
+  - index: 251
+    codon: CGAACGC
+    complement: false
+  - index: 252
+    codon: GCTCGCT
+    complement: false
+  - index: 253
+    codon: TAACTAG
+    complement: false
+  - index: 254
+    codon: CTTCTAC
+    complement: false
+  - index: 255
+    codon: ATATGCT
+    complement: false
+  - index: 256
+    codon: GCAAGCT
+    complement: false
+  - index: 257
+    codon: CGTGATT
+    complement: false
+  - index: 258
+    codon: CCGAATC
+    complement: false
+  - index: 259
+    codon: TCAGGCG
+    complement: false
+  - index: 260
+    codon: CATGCGT
+    complement: false
+  - index: 261
+    codon: TGGAAGC
+    complement: false
+  - index: 262
+    codon: CTTAACT
+    complement: false
+  - index: 263
+    codon: AAGGCGT
+    complement: false
+  - index: 264
+    codon: AGGTTCT
+    complement: false
+  - index: 265
+    codon: TTACAAT
+    complement: false
+  - index: 266
+    codon: CGACGAC
+    complement: false
+  - index: 267
+    codon: CGTGAAG
+    complement: false
+  - index: 268
+    codon: ACACCGG
+    complement: false
+  - index: 269
+    codon: AACCTTA
+    complement: false
+  - index: 270
+    codon: AGTTCGG
+    complement: false
+  - index: 271
+    codon: TGATTCT
+    complement: false
+  - index: 272
+    codon: CTCGAGT
+    complement: false
+  - index: 273
+    codon: TACACTC
+    complement: false
+  - index: 274
+    codon: CGTGTAC
+    complement: false
+  - index: 275
+    codon: CCGCTGA
+    complement: false
+  - index: 276
+    codon: ACGCGCA
+    complement: false
+  - index: 277
+    codon: GCCGCTT
+    complement: false
+  - index: 278
+    codon: CACCTCT
+    complement: false
+  - index: 279
+    codon: GCTTCAC
+    complement: false
+  - index: 280
+    codon: GACCAGC
+    complement: false
+  - index: 281
+    codon: TCTTCAG
+    complement: false
+  - index: 282
+    codon: TAGTCGG
+    complement: false
+  - index: 283
+    codon: GTGTCAA
+    complement: false
+  - index: 284
+    codon: TAGGTCT
+    complement: false
+  - index: 285
+    codon: GAACTAC
+    complement: false
+  - index: 286
+    codon: CTGTAGT
+    complement: false
+  - index: 287
+    codon: CAATTGG
+    complement: false
+  - index: 288
+    codon: ATACAGT
+    complement: false
+  - index: 289
+    codon: AAGCAAT
+    complement: false
+  - index: 290
+    codon: GCGTGCG
+    complement: false
+  - index: 291
+    codon: CGGTATG
+    complement: false
+  - index: 292
+    codon: TATCGGA
+    complement: false
+  - index: 293
+    codon: TGGTAAC
+    complement: false
+  - index: 294
+    codon: GCGGAGA
+    complement: false
+  - index: 295
+    codon: AGCTAAC
+    complement: false
+  - index: 296
+    codon: TGCCTTC
+    complement: false
+  - index: 297
+    codon: TGCCGGC
+    complement: false
+  - index: 298
+    codon: ACTGCTC
+    complement: false
+  - index: 299
+    codon: TCCTATA
+    complement: false
+  - index: 300
+    codon: AACGGTT
+    complement: false
+  - index: 301
+    codon: ACTCCGA
+    complement: false
+  - index: 302
+    codon: CACGCAA
+    complement: false
+  - index: 303
+    codon: GCTCTAT
+    complement: false
+  - index: 304
+    codon: AGAACCG
+    complement: false
+  - index: 305
+    codon: ATGATTG
+    complement: false
+  - index: 306
+    codon: GTGTACT
+    complement: false
+  - index: 307
+    codon: GCTGCGC
+    complement: false
+  - index: 308
+    codon: GCTTGTA
+    complement: false
+  - index: 309
+    codon: GCTACTG
+    complement: false
+  - index: 310
+    codon: AGCATCT
+    complement: false
+  - index: 311
+    codon: TATGCAC
+    complement: false
+  - index: 312
+    codon: TTGACAT
+    complement: false
+  - index: 313
+    codon: CCGTTCG
+    complement: false
+  - index: 314
+    codon: TATGATC
+    complement: false
+  - index: 315
+    codon: CGTCAAC
+    complement: false
+  - index: 316
+    codon: GCTCACA
+    complement: false
+  - index: 317
+    codon: ACGAGAA
+    complement: false
+  - index: 318
+    codon: TATATGA
+    complement: false
+  - index: 319
+    codon: TAGTAGT
+    complement: false
+  - index: 320
+    codon: CACAACG
+    complement: false
+  - index: 321
+    codon: CAGTACA
+    complement: false
+  - index: 322
+    codon: ACCGGAC
+    complement: false
+  - index: 323
+    codon: GCAGATT
+    complement: false
+  - index: 324
+    codon: CCACCAC
+    complement: false
+  - index: 325
+    codon: AGAAGCA
+    complement: false
+  - index: 326
+    codon: TGCGATC
+    complement: false
+  - index: 327
+    codon: AGGCAAC
+    complement: false
+  - index: 328
+    codon: CATCAGC
+    complement: false
+  - index: 329
+    codon: GTTAGAT
+    complement: false
+  - index: 330
+    codon: CTGCAGC
+    complement: false
+  - index: 331
+    codon: TCTTCCT
+    complement: false
+  - index: 332
+    codon: ATCTGGT
+    complement: false
+  - index: 333
+    codon: TGAACGG
+    complement: false
+  - index: 334
+    codon: CGCCACA
+    complement: false
+  - index: 335
+    codon: TCATAGC
+    complement: false
+  - index: 336
+    codon: ACCGATC
+    complement: false
+  - index: 337
+    codon: ACCGTCA
+    complement: false
+  - index: 338
+    codon: TACTAAG
+    complement: false
+  - index: 339
+    codon: GCACTAA
+    complement: false
+  - index: 340
+    codon: TAGGTGG
+    complement: false
+  - index: 341
+    codon: AGATATT
+    complement: false
+  - index: 342
+    codon: ATTGTAG
+    complement: false
+  - index: 343
+    codon: TCACTCT
+    complement: false
+  - index: 344
+    codon: AACGCTA
+    complement: false
+  - index: 345
+    codon: TATGGCT
+    complement: false
+  - index: 346
+    codon: CCTTGAA
+    complement: false
+  - index: 347
+    codon: CTCGCAG
+    complement: false
+  - index: 348
+    codon: AGAGAAT
+    complement: false
+  - index: 349
+    codon: TCCTACG
+    complement: false
+  - index: 350
+    codon: AGCTCGC
+    complement: false
+  - index: 351
+    codon: CAAGCCT
+    complement: false
+  - index: 352
+    codon: ATGTAGC
+    complement: false
+  - index: 353
+    codon: GAAGGCT
+    complement: false
+  - index: 354
+    codon: TCATGAC
+    complement: false
+  - index: 355
+    codon: TTCTAGC
+    complement: false
+  - index: 356
+    codon: AACGTGA
+    complement: false
+  - index: 357
+    codon: ACAATTA
+    complement: false
+  - index: 358
+    codon: GAATGTC
+    complement: false
+  - index: 359
+    codon: TCGCCAT
+    complement: false
+  - index: 360
+    codon: GAATGGT
+    complement: false
+  - index: 361
+    codon: ATGCCGG
+    complement: false
+  - index: 362
+    codon: CTTGATA
+    complement: false
+  - index: 363
+    codon: GATCGGC
+    complement: false
+  - index: 364
+    codon: GATAAGT
+    complement: false
+  - index: 365
+    codon: ACCACTC
+    complement: false
+  - index: 366
+    codon: GCCAAGA
+    complement: false
+  - index: 367
+    codon: CGACTAA
+    complement: false
+  - index: 368
+    codon: CAACAGG
+    complement: false
+  - index: 369
+    codon: CGCTCAC
+    complement: false
+  - index: 370
+    codon: TGGATAG
+    complement: false
+  - index: 371
+    codon: ACGGCAT
+    complement: false
+  - index: 372
+    codon: TGCAAGT
+    complement: false
+  - index: 373
+    codon: AATAATA
+    complement: false
+  - index: 374
+    codon: TGTAGGC
+    complement: false
+  - index: 375
+    codon: ACTAACA
+    complement: false
+  - index: 376
+    codon: CATATAC
+    complement: false
+  - index: 377
+    codon: CCTCGGT
+    complement: false
+  - index: 378
+    codon: GACTCCG
+    complement: false
+  - index: 379
+    codon: CGCTATC
+    complement: false
+  - index: 380
+    codon: ATCGCGA
+    complement: false
+  - index: 381
+    codon: CGAGAGC
+    complement: false
+  - index: 382
+    codon: AAGAGGA
+    complement: false
+  - index: 383
+    codon: CAGAGAT
+    complement: false
+  - index: 384
+    codon: CGCAATT
+    complement: false
+  - index: 385
+    codon: TGGTACG
+    complement: false
+  - index: 386
+    codon: ACGTCGA
+    complement: false
+  - index: 387
+    codon: CCAAGGT
+    complement: false
+  - index: 388
+    codon: GAACCGT
+    complement: false
+  - index: 389
+    codon: AATCGTT
+    complement: false
+  - index: 390
+    codon: TAGGATT
+    complement: false
+  - index: 391
+    codon: AGTACAT
+    complement: false
+  - index: 392
+    codon: CGGAACT
+    complement: false
+  - index: 393
+    codon: CCGACGC
+    complement: false
+  - index: 394
+    codon: TGCTTAG
+    complement: false
+  - index: 395
+    codon: TCCGCAG
+    complement: false
+  - index: 396
+    codon: GTACATT
+    complement: false
+  - index: 397
+    codon: CTTAAGC
+    complement: false
+  - index: 398
+    codon: TGCTGCA
+    complement: false
+  - index: 399
+    codon: GACTATT
+    complement: false
+  - index: 400
+    codon: AATACTT
+    complement: false
+  - index: 401
+    codon: CCGAGGA
+    complement: false
+  - index: 402
+    codon: CAGTTCT
+    complement: false
+  - index: 403
+    codon: GCCTAGC
+    complement: false
+  - index: 404
+    codon: GCCATCT
+    complement: false
+  - index: 405
+    codon: GTTACGA
+    complement: false
+  - index: 406
+    codon: TCGGTGC
+    complement: false
+  - index: 407
+    codon: AATATGT
+    complement: false
+  - index: 408
+    codon: TACGTTC
+    complement: false
+  - index: 409
+    codon: AGTCCAA
+    complement: false
+  - index: 410
+    codon: TCAAGTT
+    complement: false
+  - index: 411
+    codon: CATCGTG
+    complement: false
+  - index: 412
+    codon: CCGGAGC
+    complement: false
+  - index: 413
+    codon: GCGAGTT
+    complement: false
+  - index: 414
+    codon: GAGGACA
+    complement: false
+  - index: 415
+    codon: TGTGTGG
+    complement: false
+  - index: 416
+    codon: GCATCCA
+    complement: false
+  - index: 417
+    codon: CGGATTA
+    complement: false
+  - index: 418
+    codon: GTGACTG
+    complement: false
+  - index: 419
+    codon: GTGTTGA
+    complement: false
+  - index: 420
+    codon: TGAGCGT
+    complement: false
+  - index: 421
+    codon: TCGGCGG
+    complement: false
+  - index: 422
+    codon: GATCTCT
+    complement: false
+  - index: 423
+    codon: TGAGTAT
+    complement: false
+  - index: 424
+    codon: TTCCACA
+    complement: false
+  - index: 425
+    codon: TAATGCT
+    complement: false
+  - index: 426
+    codon: TCTAATC
+    complement: false
+  - index: 427
+    codon: ACACACT
+    complement: false
+  - index: 428
+    codon: GAACAGA
+    complement: false
+  - index: 429
+    codon: TCGGAGT
+    complement: false
+  - index: 430
+    codon: GCCACAG
+    complement: false
+  - index: 431
+    codon: TGGTGAA
+    complement: false
+  - index: 432
+    codon: AATCGAA
+    complement: false
+  - index: 433
+    codon: TCGATAA
+    complement: false
+  - index: 434
+    codon: GAGAGCT
+    complement: false
+  - index: 435
+    codon: TTACATA
+    complement: false
+  - index: 436
+    codon: TTGCTAA
+    complement: false
+  - index: 437
+    codon: ACTCGAG
+    complement: false
+  - index: 438
+    codon: CCTAACG
+    complement: false
+  - index: 439
+    codon: ACTTCTG
+    complement: false
+  - index: 440
+    codon: AATCTAG
+    complement: false
+  - index: 441
+    codon: AAGCTGA
+    complement: false
+  - index: 442
+    codon: AGTATTC
+    complement: false
+  - index: 443
+    codon: AGGCATT
+    complement: false
+  - index: 444
+    codon: ACGGACA
+    complement: false
+  - index: 445
+    codon: GTACGCA
+    complement: false
+  - index: 446
+    codon: ATCCGAA
+    complement: false
+  - index: 447
+    codon: GTGAGAA
+    complement: false
+  - index: 448
+    codon: GTCGGTT
+    complement: false
+  - index: 449
+    codon: GCGAGAC
+    complement: false
+  - index: 450
+    codon: AGCTAGA
+    complement: false
+  - index: 451
+    codon: AGAGTAC
+    complement: false
+  - index: 452
+    codon: ATATTGA
+    complement: false
+  - index: 453
+    codon: AGTCATA
+    complement: false
+  - index: 454
+    codon: CTAGTCG
+    complement: false
+  - index: 455
+    codon: TTAGAAG
+    complement: false
+  - index: 456
+    codon: ATCTAAG
+    complement: false
+  - index: 457
+    codon: CATTAGT
+    complement: false
+  - index: 458
+    codon: GCAGTTA
+    complement: false
+  - index: 459
+    codon: TCTGTCA
+    complement: false
+  - index: 460
+    codon: CTGTATC
+    complement: false
+  - index: 461
+    codon: CGGTCCA
+    complement: false
+  - index: 462
+    codon: ATGTATG
+    complement: false
+  - index: 463
+    codon: TAACGAT
+    complement: false
+  - index: 464
+    codon: GTTCTCA
+    complement: false
+  - index: 465
+    codon: CGCGTCT
+    complement: false
+  - index: 466
+    codon: TGACCTC
+    complement: false
+  - index: 467
+    codon: TTCGATA
+    complement: false
+  - index: 468
+    codon: TATTAGC
+    complement: false
+  - index: 469
+    codon: ACCAGGC
+    complement: false
+  - index: 470
+    codon: GTTCAGC
+    complement: false
+  - index: 471
+    codon: TGCTTGT
+    complement: false
+  - index: 472
+    codon: TCATCTA
+    complement: false
+  - index: 473
+    codon: TCTGTAT
+    complement: false
+  - index: 474
+    codon: CATCCGA
+    complement: false
+  - index: 475
+    codon: TCGACCT
+    complement: false
+  - index: 476
+    codon: CAATCGA
+    complement: false
+  - index: 477
+    codon: AATACAC
+    complement: false
+  - index: 478
+    codon: ACTATAG
+    complement: false
+  - index: 479
+    codon: ACGTAAT
+    complement: false
+  - index: 480
+    codon: GCTGTTG
+    complement: false
+  - index: 481
+    codon: CCTCAAT
+    complement: false
+  - index: 482
+    codon: TCACTGC
+    complement: false
+  - index: 483
+    codon: TGTATGT
+    complement: false
+  - index: 484
+    codon: TAGCCAA
+    complement: false
+  - index: 485
+    codon: CGCTTAT
+    complement: false
+  - index: 486
+    codon: CTCGTCA
+    complement: false
+  - index: 487
+    codon: CGAACTG
+    complement: false
+  - index: 488
+    codon: TCTCTAA
+    complement: false
+  - index: 489
+    codon: ATGGATC
+    complement: false
+  - index: 490
+    codon: AGCCTAT
+    complement: false
+  - index: 491
+    codon: TACGCAT
+    complement: false
+  - index: 492
+    codon: AACCGAT
+    complement: false
+  - index: 493
+    codon: AGGTACA
+    complement: false
+  - index: 494
+    codon: GAACTTA
+    complement: false
+  - index: 495
+    codon: CCAGCAG
+    complement: false
+  - index: 496
+    codon: TGTGCCA
+    complement: false
+  - index: 497
+    codon: GCCAACG
+    complement: false
+  - index: 498
+    codon: GCCGGAA
+    complement: false
+  - index: 499
+    codon: GTAATTA
+    complement: false
+  - index: 500
+    codon: CTCGTGG
+    complement: false
+  - index: 501
+    codon: TCGCTAC
+    complement: false
+  - index: 502
+    codon: TCAGCTG
+    complement: false
+  - index: 503
+    codon: TGAGGTC
+    complement: false
+  - index: 504
+    codon: TCTTAGA
+    complement: false
+  - index: 505
+    codon: TTCAATC
+    complement: false
+  - index: 506
+    codon: TCCGTGT
+    complement: false
+  - index: 507
+    codon: TTCATGG
+    complement: false
+  - index: 508
+    codon: TGGTAGA
+    complement: false
+  - index: 509
+    codon: TTGCATC
+    complement: false
+  - index: 510
+    codon: CTACATG
+    complement: false
+  - index: 511
+    codon: CGCATCG
+    complement: false
+  - index: 512
+    codon: CGCATAA
+    complement: false
+  - index: 513
+    codon: CGTTAAT
+    complement: false
+  - index: 514
+    codon: TAAGAGC
+    complement: false
+  - index: 515
+    codon: ACATTAA
+    complement: false
+  - index: 516
+    codon: GAAGGAC
+    complement: false
+  - index: 517
+    codon: GTGAACG
+    complement: false
+  - index: 518
+    codon: CTGGATG
+    complement: false
+  - index: 519
+    codon: CCTCGAC
+    complement: false
+  - index: 520
+    codon: CACACTT
+    complement: false
+  - index: 521
+    codon: TATTCAT
+    complement: false
+  - index: 522
+    codon: AGCTGTG
+    complement: false
+  - index: 523
+    codon: TATTGAC
+    complement: false
+  - index: 524
+    codon: TCACGGT
+    complement: false
+  - index: 525
+    codon: CGGTGGA
+    complement: false
+  - index: 526
+    codon: GTTGACA
+    complement: false
+  - index: 527
+    codon: CGTCCAT
+    complement: false
+  - index: 528
+    codon: CTAAGAG
+    complement: false
+  - index: 529
+    codon: GTATTCG
+    complement: false
+  - index: 530
+    codon: GCGCTGG
+    complement: false
+  - index: 531
+    codon: ATGCCAC
+    complement: false
+  - index: 532
+    codon: TAGCAGC
+    complement: false
+  - index: 533
+    codon: GAAGCTC
+    complement: false
+  - index: 534
+    codon: GTCCATC
+    complement: false
+  - index: 535
+    codon: CCAGCCA
+    complement: false
+  - index: 536
+    codon: TCACATG
+    complement: false
+  - index: 537
+    codon: CTACACT
+    complement: false
+  - index: 538
+    codon: ATGTTGT
+    complement: false
+  - index: 539
+    codon: CATAGAG
+    complement: false
+  - index: 540
+    codon: TTGTGAC
+    complement: false
+  - index: 541
+    codon: GCGGTGT
+    complement: false
+  - index: 542
+    codon: GTACTGG
+    complement: false
+  - index: 543
+    codon: TCGTCTC
+    complement: false
+  - index: 544
+    codon: TACCACT
+    complement: false
+  - index: 545
+    codon: AGTCTCA
+    complement: false
+  - index: 546
+    codon: TGTTGCT
+    complement: false
+  - index: 547
+    codon: TGGCAAT
+    complement: false
+  S0:
+  - name: '1_1'
+    codon: ACACAC
+  - name: '2_1'
+    codon: ACAGCA
+  - name: '3_1'
+    codon: ACATGT
+  - name: '4_1'
+    codon: ACGACG
+  - name: '5_1'
+    codon: ACGCGA
+  - name: '6_1'
+    codon: ACTAGC
+  - name: '7_1'
+    codon: ACTCTG
+  - name: '8_1'
+    codon: ACTGAT
+  - name: '9_1'
+    codon: AGACTA
+  - name: '10_1'
+    codon: AGAGAG
+  - name: '11_1'
+    codon: TAGATG
+  - name: '12_1'
+    codon: TAGTGT
+  - name: '13_1'
+    codon: TATCAC
+  - name: '14_1'
+    codon: TCATAG
+  - name: '15_1'
+    codon: TCGTCA
+  - name: '16_1'
+    codon: TCTACT
+  - name: '17_1'
+    codon: TCTGTA
+  - name: '18_1'
+    codon: TGACAT
+  - name: '19_1'
+    codon: TGCAGC
+  - name: '20_1'
+    codon: TGCGCG
+  - name: '21_1'
+    codon: GCTACT
+  - name: '22_1'
+    codon: GCACAT
+  - name: '23_1'
+    codon: GAGTGT
+  - name: '24_1'
+    codon: GTGCGA
+  - name: '25_1'
+    codon: GCCGCT
+  - name: '26_1'
+    codon: GAAGAT
+  - name: '27_1'
+    codon: GTTCAG
+  - name: '28_1'
+    codon: GATGCA
+  - name: '29_1'
+    codon: CCTAAT
+  - name: '30_1'
+    codon: CTAAGT
+  - name: '31_1'
+    codon: CGTGCG
+  - name: '32_1'
+    codon: CTTGGA
+  - name: '33_1'
+    codon: CCATAA
+  - name: '34_1'
+    codon: CTCGAT
+  - name: '35_1'
+    codon: CAGACT
+  - name: '36_1'
+    codon: CTCCGC
+  - name: '37_1'
+    codon: AACATT
+  - name: '38_1'
+    codon: AATGGT
+  - name: '39_1'
+    codon: ACACGG
+  - name: '40_1'
+    codon: ACGTTG
+  - name: '41_1'
+    codon: ACTGTG
+  - name: '42_1'
+    codon: AGTTCT
+  - name: '43_1'
+    codon: ATGAGG
+  - name: '44_1'
+    codon: ATGTTA
+  - name: '45_1'
+    codon: ATTAGA
+  - name: '46_1'
+    codon: ATTCGC
+  - name: '47_1'
+    codon: CACGTT
+  - name: '48_1'
+    codon: AATCAG
+  - name: '49_1'
+    codon: CAGCAG
+  - name: '50_1'
+    codon: CATCTA
+  - name: '51_1'
+    codon: CCAATC
+  - name: '52_1'
+    codon: CCTCAC
+  - name: '53_1'
+    codon: CGGCAC
+  - name: '54_1'
+    codon: CGTATA
+  - name: '55_1'
+    codon: CTACAA
+  - name: '56_1'
+    codon: CTATAT
+  - name: '57_1'
+    codon: CTCAGG
+  - name: '58_1'
+    codon: GTCCTG
+  - name: '59_1'
+    codon: CTCCTA
+  - name: '60_1'
+    codon: CGCTTA
+  - name: '61_1'
+    codon: CTGTAC
+  - name: '62_1'
+    codon: GACAAC
+  - name: '63_1'
+    codon: GACGTG
+  - name: '64_1'
+    codon: GAGAAG
+  - name: '65_1'
+    codon: GATCGA
+  - name: '66_1'
+    codon: GCACGA
+  - name: '67_1'
+    codon: GCCTCA
+  - name: '68_1'
+    codon: GCGCAC
+  - name: '69_1'
+    codon: GCTCGC
+  - name: '70_1'
+    codon: GTAACG
+  - name: '71_1'
+    codon: GTAGCA
+  - name: '72_1'
+    codon: GTCATA
+  - name: '73_1'
+    codon: GTGAGA
+  - name: '74_1'
+    codon: GTGATT
+  - name: '75_1'
+    codon: GTTAGC
+  - name: '76_1'
+    codon: TAAGCT
+  - name: '77_1'
+    codon: TAATGT
+  - name: '78_1'
+    codon: TACTCA
+  - name: '79_1'
+    codon: TAGAGG
+  - name: '80_1'
+    codon: TAGCAC
+  - name: '81_1'
+    codon: TATATC
+  - name: '82_1'
+    codon: TATGGA
+  - name: '83_1'
+    codon: TCAGAT
+  - name: '84_1'
+    codon: TCGATT
+  - name: '85_1'
+    codon: TCTCTC
+  - name: '86_1'
+    codon: TCTTGC
+  - name: '87_1'
+    codon: TGAACG
+  - name: '88_1'
+    codon: TGAGCA
+  - name: '89_1'
+    codon: TGAGGC
+  - name: '90_1'
+    codon: TGCCAG
+  - name: '91_1'
+    codon: TGGCGT
+  - name: '92_1'
+    codon: TTAATA
+  - name: '93_1'
+    codon: TTCACA
+  - name: '94_1'
+    codon: TTCTGA
+  - name: '95_1'
+    codon: TTGCTT
+  - name: '96_1'
+    codon: TTGTGG
+  - name: '1_2'
+    codon: ACACAC
+  - name: '2_2'
+    codon: ACAGCA
+  - name: '3_2'
+    codon: ACATGT
+  - name: '4_2'
+    codon: ACGACG
+  - name: '5_2'
+    codon: ACGCGA
+  - name: '6_2'
+    codon: ACTAGC
+  - name: '7_2'
+    codon: ACTCTG
+  - name: '8_2'
+    codon: ACTGAT
+  - name: '9_2'
+    codon: AGACTA
+  - name: '10_2'
+    codon: AGAGAG
+  - name: '11_2'
+    codon: TAGATG
+  - name: '12_2'
+    codon: TAGTGT
+  - name: '13_2'
+    codon: TATCAC
+  - name: '14_2'
+    codon: TCATAG
+  - name: '15_2'
+    codon: TCGTCA
+  - name: '16_2'
+    codon: TCTACT
+  - name: '17_2'
+    codon: TCTGTA
+  - name: '18_2'
+    codon: TGACAT
+  - name: '19_2'
+    codon: TGCAGC
+  - name: '20_2'
+    codon: TGCGCG
+  - name: '21_2'
+    codon: GCTACT
+  - name: '22_2'
+    codon: GCACAT
+  - name: '23_2'
+    codon: GAGTGT
+  - name: '24_2'
+    codon: GTGCGA
+  - name: '25_2'
+    codon: GCCGCT
+  - name: '26_2'
+    codon: GAAGAT
+  - name: '27_2'
+    codon: GTTCAG
+  - name: '28_2'
+    codon: GATGCA
+  - name: '29_2'
+    codon: CCTAAT
+  - name: '30_2'
+    codon: CTAAGT
+  - name: '31_2'
+    codon: CGTGCG
+  - name: '32_2'
+    codon: CTTGGA
+  - name: '33_2'
+    codon: CCATAA
+  - name: '34_2'
+    codon: CTCGAT
+  - name: '35_2'
+    codon: CAGACT
+  - name: '36_2'
+    codon: CTCCGC
+  - name: '37_2'
+    codon: AACATT
+  - name: '38_2'
+    codon: AATGGT
+  - name: '39_2'
+    codon: ACACGG
+  - name: '40_2'
+    codon: ACGTTG
+  - name: '41_2'
+    codon: ACTGTG
+  - name: '42_2'
+    codon: AGTTCT
+  - name: '43_2'
+    codon: ATGAGG
+  - name: '44_2'
+    codon: ATGTTA
+  - name: '45_2'
+    codon: ATTAGA
+  - name: '46_2'
+    codon: ATTCGC
+  - name: '47_2'
+    codon: CACGTT
+  - name: '48_2'
+    codon: AATCAG
+  - name: '49_2'
+    codon: CAGCAG
+  - name: '50_2'
+    codon: CATCTA
+  - name: '51_2'
+    codon: CCAATC
+  - name: '52_2'
+    codon: CCTCAC
+  - name: '53_2'
+    codon: CGGCAC
+  - name: '54_2'
+    codon: CGTATA
+  - name: '55_2'
+    codon: CTACAA
+  - name: '56_2'
+    codon: CTATAT
+  - name: '57_2'
+    codon: CTCAGG
+  - name: '58_2'
+    codon: GTCCTG
+  - name: '59_2'
+    codon: CTCCTA
+  - name: '60_2'
+    codon: CGCTTA
+  - name: '61_2'
+    codon: CTGTAC
+  - name: '62_2'
+    codon: GACAAC
+  - name: '63_2'
+    codon: GACGTG
+  - name: '64_2'
+    codon: GAGAAG
+  - name: '65_2'
+    codon: GATCGA
+  - name: '66_2'
+    codon: GCACGA
+  - name: '67_2'
+    codon: GCCTCA
+  - name: '68_2'
+    codon: GCGCAC
+  - name: '69_2'
+    codon: GCTCGC
+  - name: '70_2'
+    codon: GTAACG
+  - name: '71_2'
+    codon: GTAGCA
+  - name: '72_2'
+    codon: GTCATA
+  - name: '73_2'
+    codon: GTGAGA
+  - name: '74_2'
+    codon: GTGATT
+  - name: '75_2'
+    codon: GTTAGC
+  - name: '76_2'
+    codon: TAAGCT
+  - name: '77_2'
+    codon: TAATGT
+  - name: '78_2'
+    codon: TACTCA
+  - name: '79_2'
+    codon: TAGAGG
+  - name: '80_2'
+    codon: TAGCAC
+  - name: '81_2'
+    codon: TATATC
+  - name: '82_2'
+    codon: TATGGA
+  - name: '83_2'
+    codon: TCAGAT
+  - name: '84_2'
+    codon: TCGATT
+  - name: '85_2'
+    codon: TCTCTC
+  - name: '86_2'
+    codon: TCTTGC
+  - name: '87_2'
+    codon: TGAACG
+  - name: '88_2'
+    codon: TGAGCA
+  - name: '89_2'
+    codon: TGAGGC
+  - name: '90_2'
+    codon: TGCCAG
+  - name: '91_2'
+    codon: TGGCGT
+  - name: '92_2'
+    codon: TTAATA
+  - name: '93_2'
+    codon: TTCACA
+  - name: '94_2'
+    codon: TTCTGA
+  - name: '95_2'
+    codon: TTGCTT
+  - name: '96_2'
+    codon: TTGTGG
+  S1:
+  - name: '1_1'
+    codon: CGCTCGATA
+  - name: '2_1'
+    codon: CGCTCGATA
+  - name: '3_1'
+    codon: CGCTCGATA
+  - name: '4_1'
+    codon: CGCTCGATA
+  - name: '5_1'
+    codon: CGCTCGATA
+  - name: '6_1'
+    codon: CGCTCGATA
+  - name: '7_1'
+    codon: CGCTCGATA
+  - name: '8_1'
+    codon: CGCTCGATA
+  - name: '9_1'
+    codon: CGCTCGATA
+  - name: '10_1'
+    codon: CGCTCGATA
+  - name: '11_1'
+    codon: CGCTCGATA
+  - name: '12_1'
+    codon: CGCTCGATA
+  - name: '13_1'
+    codon: CGCTCGATA
+  - name: '14_1'
+    codon: CGCTCGATA
+  - name: '15_1'
+    codon: CGCTCGATA
+  - name: '16_1'
+    codon: CGCTCGATA
+  - name: '17_1'
+    codon: CGCTCGATA
+  - name: '18_1'
+    codon: CGCTCGATA
+  - name: '19_1'
+    codon: CGCTCGATA
+  - name: '20_1'
+    codon: CGCTCGATA
+  - name: '21_1'
+    codon: CGCTCGATA
+  - name: '22_1'
+    codon: CGCTCGATA
+  - name: '23_1'
+    codon: CGCTCGATA
+  - name: '24_1'
+    codon: CGCTCGATA
+  - name: '25_1'
+    codon: CGCTCGATA
+  - name: '26_1'
+    codon: CGCTCGATA
+  - name: '27_1'
+    codon: CGCTCGATA
+  - name: '28_1'
+    codon: CGCTCGATA
+  - name: '29_1'
+    codon: CGCTCGATA
+  - name: '30_1'
+    codon: CGCTCGATA
+  - name: '31_1'
+    codon: CGCTCGATA
+  - name: '32_1'
+    codon: CGCTCGATA
+  - name: '33_1'
+    codon: CGCTCGATA
+  - name: '34_1'
+    codon: CGCTCGATA
+  - name: '35_1'
+    codon: CGCTCGATA
+  - name: '36_1'
+    codon: CGCTCGATA
+  - name: '37_1'
+    codon: CGCTCGATA
+  - name: '38_1'
+    codon: CGCTCGATA
+  - name: '39_1'
+    codon: CGCTCGATA
+  - name: '40_1'
+    codon: CGCTCGATA
+  - name: '41_1'
+    codon: CGCTCGATA
+  - name: '42_1'
+    codon: CGCTCGATA
+  - name: '43_1'
+    codon: CGCTCGATA
+  - name: '44_1'
+    codon: CGCTCGATA
+  - name: '45_1'
+    codon: CGCTCGATA
+  - name: '46_1'
+    codon: CGCTCGATA
+  - name: '47_1'
+    codon: CGCTCGATA
+  - name: '48_1'
+    codon: CGCTCGATA
+  - name: '49_1'
+    codon: CGCTCGATA
+  - name: '50_1'
+    codon: CGCTCGATA
+  - name: '51_1'
+    codon: CGCTCGATA
+  - name: '52_1'
+    codon: CGCTCGATA
+  - name: '53_1'
+    codon: CGCTCGATA
+  - name: '54_1'
+    codon: CGCTCGATA
+  - name: '55_1'
+    codon: CGCTCGATA
+  - name: '56_1'
+    codon: CGCTCGATA
+  - name: '57_1'
+    codon: CGCTCGATA
+  - name: '58_1'
+    codon: CGCTCGATA
+  - name: '59_1'
+    codon: CGCTCGATA
+  - name: '60_1'
+    codon: CGCTCGATA
+  - name: '61_1'
+    codon: CGCTCGATA
+  - name: '62_1'
+    codon: CGCTCGATA
+  - name: '63_1'
+    codon: CGCTCGATA
+  - name: '64_1'
+    codon: CGCTCGATA
+  - name: '65_1'
+    codon: CGCTCGATA
+  - name: '66_1'
+    codon: CGCTCGATA
+  - name: '67_1'
+    codon: CGCTCGATA
+  - name: '68_1'
+    codon: CGCTCGATA
+  - name: '69_1'
+    codon: CGCTCGATA
+  - name: '70_1'
+    codon: CGCTCGATA
+  - name: '71_1'
+    codon: CGCTCGATA
+  - name: '72_1'
+    codon: CGCTCGATA
+  - name: '73_1'
+    codon: CGCTCGATA
+  - name: '74_1'
+    codon: CGCTCGATA
+  - name: '75_1'
+    codon: CGCTCGATA
+  - name: '76_1'
+    codon: CGCTCGATA
+  - name: '77_1'
+    codon: CGCTCGATA
+  - name: '78_1'
+    codon: CGCTCGATA
+  - name: '79_1'
+    codon: CGCTCGATA
+  - name: '80_1'
+    codon: CGCTCGATA
+  - name: '81_1'
+    codon: CGCTCGATA
+  - name: '82_1'
+    codon: CGCTCGATA
+  - name: '83_1'
+    codon: CGCTCGATA
+  - name: '84_1'
+    codon: CGCTCGATA
+  - name: '85_1'
+    codon: CGCTCGATA
+  - name: '86_1'
+    codon: CGCTCGATA
+  - name: '87_1'
+    codon: CGCTCGATA
+  - name: '88_1'
+    codon: CGCTCGATA
+  - name: '89_1'
+    codon: CGCTCGATA
+  - name: '90_1'
+    codon: CGCTCGATA
+  - name: '91_1'
+    codon: CGCTCGATA
+  - name: '92_1'
+    codon: CGCTCGATA
+  - name: '93_1'
+    codon: CGCTCGATA
+  - name: '94_1'
+    codon: CGCTCGATA
+  - name: '95_1'
+    codon: CGCTCGATA
+  - name: '96_1'
+    codon: CGCTCGATA
+  - name: '1_2'
+    codon: AGCATATCG
+  - name: '2_2'
+    codon: AGCATATCG
+  - name: '3_2'
+    codon: AGCATATCG
+  - name: '4_2'
+    codon: AGCATATCG
+  - name: '5_2'
+    codon: AGCATATCG
+  - name: '6_2'
+    codon: AGCATATCG
+  - name: '7_2'
+    codon: AGCATATCG
+  - name: '8_2'
+    codon: AGCATATCG
+  - name: '9_2'
+    codon: AGCATATCG
+  - name: '10_2'
+    codon: AGCATATCG
+  - name: '11_2'
+    codon: AGCATATCG
+  - name: '12_2'
+    codon: AGCATATCG
+  - name: '13_2'
+    codon: AGCATATCG
+  - name: '14_2'
+    codon: AGCATATCG
+  - name: '15_2'
+    codon: AGCATATCG
+  - name: '16_2'
+    codon: AGCATATCG
+  - name: '17_2'
+    codon: AGCATATCG
+  - name: '18_2'
+    codon: AGCATATCG
+  - name: '19_2'
+    codon: AGCATATCG
+  - name: '20_2'
+    codon: AGCATATCG
+  - name: '21_2'
+    codon: AGCATATCG
+  - name: '22_2'
+    codon: AGCATATCG
+  - name: '23_2'
+    codon: AGCATATCG
+  - name: '24_2'
+    codon: AGCATATCG
+  - name: '25_2'
+    codon: AGCATATCG
+  - name: '26_2'
+    codon: AGCATATCG
+  - name: '27_2'
+    codon: AGCATATCG
+  - name: '28_2'
+    codon: AGCATATCG
+  - name: '29_2'
+    codon: AGCATATCG
+  - name: '30_2'
+    codon: AGCATATCG
+  - name: '31_2'
+    codon: AGCATATCG
+  - name: '32_2'
+    codon: AGCATATCG
+  - name: '33_2'
+    codon: AGCATATCG
+  - name: '34_2'
+    codon: AGCATATCG
+  - name: '35_2'
+    codon: AGCATATCG
+  - name: '36_2'
+    codon: AGCATATCG
+  - name: '37_2'
+    codon: AGCATATCG
+  - name: '38_2'
+    codon: AGCATATCG
+  - name: '39_2'
+    codon: AGCATATCG
+  - name: '40_2'
+    codon: AGCATATCG
+  - name: '41_2'
+    codon: AGCATATCG
+  - name: '42_2'
+    codon: AGCATATCG
+  - name: '43_2'
+    codon: AGCATATCG
+  - name: '44_2'
+    codon: AGCATATCG
+  - name: '45_2'
+    codon: AGCATATCG
+  - name: '46_2'
+    codon: AGCATATCG
+  - name: '47_2'
+    codon: AGCATATCG
+  - name: '48_2'
+    codon: AGCATATCG
+  - name: '49_2'
+    codon: AGCATATCG
+  - name: '50_2'
+    codon: AGCATATCG
+  - name: '51_2'
+    codon: AGCATATCG
+  - name: '52_2'
+    codon: AGCATATCG
+  - name: '53_2'
+    codon: AGCATATCG
+  - name: '54_2'
+    codon: AGCATATCG
+  - name: '55_2'
+    codon: AGCATATCG
+  - name: '56_2'
+    codon: AGCATATCG
+  - name: '57_2'
+    codon: AGCATATCG
+  - name: '58_2'
+    codon: AGCATATCG
+  - name: '59_2'
+    codon: AGCATATCG
+  - name: '60_2'
+    codon: AGCATATCG
+  - name: '61_2'
+    codon: AGCATATCG
+  - name: '62_2'
+    codon: AGCATATCG
+  - name: '63_2'
+    codon: AGCATATCG
+  - name: '64_2'
+    codon: AGCATATCG
+  - name: '65_2'
+    codon: AGCATATCG
+  - name: '66_2'
+    codon: AGCATATCG
+  - name: '67_2'
+    codon: AGCATATCG
+  - name: '68_2'
+    codon: AGCATATCG
+  - name: '69_2'
+    codon: AGCATATCG
+  - name: '70_2'
+    codon: AGCATATCG
+  - name: '71_2'
+    codon: AGCATATCG
+  - name: '72_2'
+    codon: AGCATATCG
+  - name: '73_2'
+    codon: AGCATATCG
+  - name: '74_2'
+    codon: AGCATATCG
+  - name: '75_2'
+    codon: AGCATATCG
+  - name: '76_2'
+    codon: AGCATATCG
+  - name: '77_2'
+    codon: AGCATATCG
+  - name: '78_2'
+    codon: AGCATATCG
+  - name: '79_2'
+    codon: AGCATATCG
+  - name: '80_2'
+    codon: AGCATATCG
+  - name: '81_2'
+    codon: AGCATATCG
+  - name: '82_2'
+    codon: AGCATATCG
+  - name: '83_2'
+    codon: AGCATATCG
+  - name: '84_2'
+    codon: AGCATATCG
+  - name: '85_2'
+    codon: AGCATATCG
+  - name: '86_2'
+    codon: AGCATATCG
+  - name: '87_2'
+    codon: AGCATATCG
+  - name: '88_2'
+    codon: AGCATATCG
+  - name: '89_2'
+    codon: AGCATATCG
+  - name: '90_2'
+    codon: AGCATATCG
+  - name: '91_2'
+    codon: AGCATATCG
+  - name: '92_2'
+    codon: AGCATATCG
+  - name: '93_2'
+    codon: AGCATATCG
+  - name: '94_2'
+    codon: AGCATATCG
+  - name: '95_2'
+    codon: AGCATATCG
+  - name: '96_2'
+    codon: AGCATATCG
