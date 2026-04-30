@@ -6,10 +6,12 @@ from loguru import logger
 
 base_dir = Path(__file__).resolve().parent
 legacy_path = base_dir / "published" / "1907_NF2GB2_s1_R1_260424JS_2026_4_24_16_20_51_eval.txt"
-selection_names = [path.stem for path in (base_dir / "lane-1" / "selections").glob("*_1") if path.is_dir()]
+lane = "lane-2"
+selection_names = [path.stem for path in (base_dir / lane / "selections").glob("*") if path.is_dir()]
+selection_names = sorted(selection_names)
 
 for selection_name in sorted(selection_names):
-    delt = pd.read_csv(base_dir / "lane-1" / "selections" / selection_name / "counts.txt", sep="\t")
+    delt = pd.read_csv(base_dir / lane / "selections" / selection_name / "counts.txt", sep="\t")
     delt = delt.rename(columns={"count": "delt"})
     delt.loc[:, ["code_0", "code_1"]] = delt.loc[:, ["code_0", "code_1"]] + 1
 
@@ -33,7 +35,7 @@ for selection_name in sorted(selection_names):
     counts = counts.convert_dtypes()
     counts["identical"] = counts.legacy == counts.delt
 
-    save_path = base_dir / "comparison" / f"{selection_name}.csv"
+    save_path = base_dir / "comparison" / lane / f"{selection_name}.csv"
     save_path.parent.mkdir(parents=True, exist_ok=True)
     counts.to_csv(save_path, index=True)
 
