@@ -1,8 +1,6 @@
 from collections import defaultdict
-import math
 import multiprocessing
 from pathlib import Path
-import struct
 
 import pandas as pd
 from isal import igzip
@@ -75,7 +73,13 @@ def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None,
 
     sort_by_cols = 'count' if sort_by_counts else codon_cols
 
-    for selection_ids, count in tqdm(counts.items(), ncols=100):
+    for selection_ids, count in tqdm(
+        counts.items(),
+        total=len(counts),
+        desc='Writing selection counts',
+        unit='selection',
+        ncols=100,
+    ):
         rows = [(*k, v, "_".join(map(str, k))) for k, v in count.items()]
         df = pd.DataFrame.from_records(rows, columns=[*columns, 'id'])
         df = df.astype({k: int for k in columns})
@@ -95,19 +99,6 @@ def save_counts(counts: dict, output_dir: Path, ids_to_name: dict = None,
             selection_dir.mkdir(parents=True, exist_ok=True)
             output_file = selection_dir / f'counts.txt'
             df.to_csv(output_file, index=False, sep='\t')
-
-
-def _estimate_num_chunks(path: Path, chunk_size_bytes: int) -> int:
-    """Estimate chunk count from the gzip stored uncompressed size (last 4 bytes).
-
-    The stored size is modulo 2³², so for files > 4 GB this is an approximation.
-    """
-    with open(path, 'rb') as f:
-        f.seek(-4, 2)
-        uncompressed_size = struct.unpack('<I', f.read(4))[0]
-    return math.ceil(uncompressed_size / chunk_size_bytes)
-
-
 def get_counts(*, input_path: Path, num_reads: int, num_workers: int = 1,
                chunk_size_bytes: int = 5_000_000) -> dict:
     """Count barcode occurrences from a gzipped read file.
@@ -124,17 +115,23 @@ def get_counts(*, input_path: Path, num_reads: int, num_workers: int = 1,
     if num_workers == 1:
         with igzip.open(input_path, 'rt') as f:
             counts = defaultdict(lambda: defaultdict(int))
-            for line in tqdm(f, total=num_reads, ncols=100):
+            for line in tqdm(
+                f,
+                total=num_reads,
+                desc='Counting demultiplexed reads',
+                unit='read',
+                ncols=100,
+            ):
                 ids = extract_ids(line)
                 counts[ids['selection_ids']][ids['barcodes']] += 1
         return counts
 
     counts: dict = {}
-    total_chunks = _estimate_num_chunks(input_path, chunk_size_bytes)
     with multiprocessing.Pool(num_workers) as pool:
         for partial in tqdm(
             pool.imap_unordered(_count_bytes_chunk, _iter_byte_chunks(input_path, chunk_size_bytes)),
-            total=total_chunks,
+            desc='Counting demultiplexed chunks',
+            unit='chunk',
             ncols=100,
         ):
             for sel, bc_counts in partial.items():
