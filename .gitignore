@@ -312,11 +312,17 @@ paper/experiment-1/representations
 *.npz
 *.tsv
 *.ndjson
+*.tar
+~$*.docx
+~$*.xlsx
+~$*.pptx
+*.o
 
 # experiments
 experiments/synthetic_2cycle/
 *.zip
 
+.claude
 
 other_tools/
 
