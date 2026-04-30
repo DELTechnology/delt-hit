@@ -83,7 +83,7 @@ ignore_missing_imports = true
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
-platforms = ["linux-64"]
+platforms = ["linux-64", "osx-arm64"]
 
 [tool.pixi.pypi-dependencies]
 delt-hit = { path = ".", editable = true }
