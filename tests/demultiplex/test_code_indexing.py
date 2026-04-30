@@ -3,7 +3,12 @@ import gzip
 
 import pandas as pd
 
-from delt_hit.demultiplex.postprocess import _count_bytes_chunk, extract_ids, get_counts, save_counts
+from delt_hit.demultiplex.postprocess import (
+    _count_bytes_chunk,
+    extract_ids,
+    get_counts,
+    save_counts,
+)
 from delt_hit.demultiplex.parser import whitelists_from_excel
 
 
