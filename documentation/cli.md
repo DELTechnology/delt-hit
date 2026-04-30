@@ -201,6 +201,30 @@ delt-hit visualize enumerate \
 - `building_blocks_<BUILDING_BLOCK_ID>.png` for each visualized building-block family
 - Per-compound PNG files in `<save_dir>/<experiment_name>/library/visualization/compounds/`
 
+### `library`
+Generates a 2D structure grid for a named library parquet, with labels built from `code_0:code_1:...:code_n`.
+
+```
+delt-hit visualize library --config_path <path/to/config.yaml> --library_name <name>
+```
+
+Useful options:
+- `--library_name` to choose the named library parquet from `<save_dir>/<experiment_name>/library/<library_name>.parquet`
+- `--nrow` to control how many molecules are shown per row in the structure grid
+- `--dpi` to control PNG export resolution
+- `--tile_size` to control the RDKit tile size used for each rendered molecule
+
+Example named-library visualization:
+
+```
+delt-hit visualize library \
+  --config_path <path/to/config.yaml> \
+  --library_name observed_hits
+```
+
+**Outputs**
+- `<save_dir>/<experiment_name>/library/visualization/library_<library_name>.png`
+
 ### `represent`
 Generates machine-learning representations (fingerprints).
 
