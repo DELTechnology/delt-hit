@@ -1,0 +1,22 @@
+selection_id: synthetic_4cycle_10bbpc_1000m_err=0_selection
+target_id: synthetic_target
+selection_condition: synthetic_benchmark
+additional_info: Synthetic neutral dataset with 1000000000 reads across 10000 encoded
+  compounds.
+data_ran: '2026-04-24T00:00:00'
+sequence_files:
+- /tmp/60664159/delt-hit-benchmarks/60664159/synthetic_4cycle_10bbpc_1000m_err=0/data/synthetic_4cycle_10bbpc_1000m_err=0/synthetic_4cycle_10bbpc_1000m_err=0.fastq.gz
+libraries:
+- /tmp/60664159/delt-hit-benchmarks/60664159/synthetic_4cycle_10bbpc_1000m_err=0/tools/deli/synthetic_4cycle_10bbpc_1000m_err=0/data/libraries/synthetic_4cycle_10bbpc_1000m_err=0_library.json
+decode_settings:
+  library_error_tolerance: 0
+  min_library_overlap: 10
+  alignment_algorithm: semi
+  bb_calling_approach: bio
+  revcomp: false
+  max_read_length: 128
+  min_read_length: 50
+  read_type: single
+  disable_error_correction: true
+  umi_clustering: false
+  umi_min_distance: 2
