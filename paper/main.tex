@@ -38,159 +38,155 @@
 \newcommand{\setupitem}[1]{\par\medskip\noindent\textbf{#1}\par}
 
 \title{An end-to-end computational framework for DNA-encoded chemical library analysis}
-\author{Adriano Martinelli+*, Alice Lessing+, Gary Hoppeler, Andreas Gloger, Louise Plais,, Jörg Scheuermann*\\
+\author{Adriano Martinelli+*, Alice Lessing+, Gary Hoppeler, Andreas Gloger, Louise Plais, Jörg Scheuermann*\\
 \small Institute of Pharmaceutical Sciences, Department of Chemistry and Applied Biosciences, ETH Zurich 8083 Zurich, Switzerland\\
-\small + these authors contributed equally; *corresponding authors:; Adriano Martinelli, e-mail: adriano.martinelli@pharma.ethz.ch  Jörg Scheuermann, email: joerg.scheuermann@pharma.ethz.ch}
+\small + these authors contributed equally; *corresponding authors: Adriano Martinelli, e-mail: adriano.martinelli@pharma.ethz.ch; Jörg Scheuermann, e-mail: joerg.scheuermann@pharma.ethz.ch}
 \date{}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-DNA-encoded chemical libraries (DELs) have emerged as a transformative technology in drug discovery, enabling the simultaneous screening of millions to billions of individually DNA-tagged small molecules and their identification after PCR amplification and high-throughput DNA sequencing. However, the computational analysis of DEL screening data is a challenge, requiring sophisticated integration of genomics, cheminformatics, and statistical analysis workflows for which currently no general, open-source software solution is available. This protocol presents DELT-Hit (DNA-Encoded Library Technology Hit Identification), a comprehensive open-source command line tool which allows computational and experimental researchers to analyze DEL data through an intuitive command-line interface. DELT-Hit offers a pipeline that converts raw FASTQ reads into machine learning-ready chemical information by five interconnected modules: (1) adaptive sequence demultiplexing using optimized algorithms with error correction and flexible barcode handling, (2) automated chemical structure reconstruction from building block libraries using reaction SMIRKS templates with support for both single and dual display DEL architectures, (3) comprehensive molecular property calculation and descriptor generation using established cheminformatics libraries, (4) statistical analysis and hit ranking with multiple normalization strategies adapted from proven RNA-seq methodologies, and (5) integrated quality control and visualization tools specifically designed for DEL data interpretation. DELT-Hit addresses a critical computational gap identified in the DEL field and provides the standardization necessary for reproducible analysis across research groups. The protocol is accompanied by comprehensive documentation and a tutorial dataset, allowing for a consistent implementation across the rapidly growing DEL community. This protocol can be carried out by researchers with basic command-line data-analysis skills and familiarity with DNA-encoded library selection workflows for demultiplexing and downstream analysis, whereas defining new reaction SMIRKS templates for compound enumeration requires substantial cheminformatics expertise; the workflow can be completed in approximately [X-Y] h, with full-library enumeration typically representing the most time-consuming step, and DELT-Hit is openly available at \url{https://github.com/DELTtechnologies/delt-hit}.
+DNA-encoded chemical libraries (DELs) enable the screening of millions to billions of DNA-tagged small molecules in a single experiment, with binders identified after PCR amplification and high-throughput DNA sequencing. Analysis of DEL selection data requires the integration of sequence processing, cheminformatics, and statistical analysis, yet no general open-source workflow currently covers this full process. This protocol describes DELT-Hit (DNA-Encoded Library Technology Hit Identification), an open-source command-line tool for DEL data analysis. DELT-Hit converts raw FASTQ reads into analysis-ready chemical data through five connected modules: sequence demultiplexing with error-tolerant barcode handling; chemical structure reconstruction from building block libraries and reaction SMIRKS templates; molecular property and descriptor calculation; enrichment analysis and hit ranking using count-based and RNA-seq-derived methods; and quality-control and visualization tools for DEL data interpretation. The workflow supports both single-display and dual-display DEL architectures and produces standardized outputs for downstream analysis, including machine-learning applications. Researchers with basic command-line skills and familiarity with DEL selection workflows can perform demultiplexing and downstream analysis, whereas defining new reaction SMIRKS templates for library enumeration requires substantial cheminformatics expertise. The workflow can be completed in approximately [X--Y] h, with full-library enumeration typically representing the most time-consuming step. DELT-Hit is available at \url{https://github.com/DELTechnology/delt-hit}.
 \end{abstract}
 
-Key Points
+\section*{Key points}
 
 \begin{itemize}
-  \item Scalability and performance: DELT-Hit is designed to handle the computational demands of modern pharmaceutical DEL campaigns, efficiently processing libraries containing millions of compounds while maintaining a user-friendly interface
-  \item Comprehensive DEL architecture support: The framework provides native support for both single and dual display DEL architectures, addressing the full spectrum of current library designs used in industry and academia
-  \item Validated algorithms: Integrates proven bioinformatics tools (Cutadapt for sequence processing, edgeR for statistical analysis) with specialized DEL-specific optimizations, error handling, and quality control metrics
-  \item Flexible and robust design: Modular architecture accommodates diverse library formats, custom reaction templates, and building block definitions
-  \item Machine learning ecosystem integration: Generates standardized, analysis-ready datasets compatible with downstream machine learning workflows for advanced hit prediction, structure-activity relationship analysis, and virtual screening applications
+  \item DELT-Hit processes large DEL datasets and supports libraries containing millions of compounds.
+  \item The workflow supports both single-display and dual-display DEL architectures.
+  \item Established tools such as Cutadapt and edgeR are integrated with DEL-specific sequence handling, enumeration, and quality control.
+  \item The modular design supports diverse library formats, custom reaction templates, and user-defined building block tables.
+  \item Standardized outputs can be used directly for downstream cheminformatics and machine-learning analyses.
 \end{itemize}
 
-\subsection{Introduction}
-DNA-encoded chemical libraries (DELs) have revolutionized modern small-molecule drug discovery by enabling the synthesis and screening of chemical spaces that would be impractical to explore using traditional high-throughput screening approaches\cite{ref1,ref2,ref3,ref4,ref5,ref6,ref7,ref8,ref9}. In analogy to biological display technologies, DEL features a direct link between a library member's phenotype (i.e., the small molecule) and genotype (i.e, the encoding DNA oligonucleotide) which allows for the simultaneous and inexpensive screening of libraries of very large sizes (millions to billions) against chosen biological targets, thus greatly facilitating hit discovery\cite{ref4,ref10}.
-These affinity-based selections on targets can be automatized and have been reported in a previous Nature Protocol\cite{ref11}. At the last step of the affinity-based selection process, the DNA tags of the remaining/binding compounds need to be PCR amplified and deep-sequenced by high-throughput DNA sequencing, to reveal the frequency (code counts) of each selected library member\cite{ref11,ref7}.
+\section{Introduction}
+DNA-encoded chemical libraries (DELs) enable the synthesis and screening of chemical spaces that would be difficult to access with conventional high-throughput screening\cite{ref1,ref2,ref3,ref4,ref5,ref6,ref7,ref8,ref9}. As in other display technologies, each library member is linked to an encoding DNA sequence, which connects phenotype (the small molecule) to genotype (the DNA tag). This design enables the parallel screening of very large libraries against biological targets and supports efficient hit discovery\cite{ref4,ref10}.
 
-As outlined in comprehensive review articles on DEL technology12,7-9, DELs are now employed by essentially all large pharmaceutical companies, and also by a multitude of academic laboratories worldwide.
+Affinity-based DEL selections can be automated and have been described previously in a Nature Protocol\cite{ref11}. After selection, the DNA tags of retained compounds are PCR-amplified and analyzed by high-throughput sequencing to determine the abundance of individual library members\cite{ref11,ref7}. DELs are now used widely in both industry and academia\cite{ref7,ref8,ref9,ref12}.
 
-Various types of DEL architectures have been developed, which can be classified as single-display and dual-display libraries, depending on the pharmacophore being displayed by just one linked DNA fragment, or jointly displayed by two strands of stably or dynamically pairing oligonucleotides\cite{ref13}. While standard DELs are usually encoded by a double stranded “DNA headpiece”, other setups feature single-stranded DNA or Y-shaped encoding systems\cite{ref14}. However, regardless of the encoding system used, after selection and PCR amplification, all displays eventually lead to double-stranded amplicons which are DNA sequenced and analyzed\cite{ref11}.
+DEL architectures include single-display and dual-display formats, depending on whether the pharmacophore is presented on one DNA-linked fragment or on two pairing oligonucleotide strands\cite{ref13}. Standard libraries are often encoded on double-stranded DNA headpieces, but single-stranded and Y-shaped encoding schemes are also used\cite{ref14}. Regardless of the encoding format, selection and PCR amplification ultimately produce double-stranded amplicons for sequencing and downstream analysis\cite{ref11}.
 
-Considering the large volume of data generated, the computational analysis of DEL screening data is a critical factor, requiring sophisticated integration of genomics, cheminformatics, and statistical analysis . DEL screening data presents unique opportunities for machine learning\cite{ref15,ref16,ref17,ref18,ref19,ref20,ref21,ref22,ref23,ref24,ref25,ref26,ref27,ref28} – but also challenges that require specialized approaches distinct from conventional genomics workflows: accurate demultiplexing of complex DNA barcode combinations from sequencing reads, reconstruction of chemical structures from building block combinations defined by reaction schemes, statistical analysis of enrichment patterns across multiple selection conditions, and integration with cheminformatics workflows for hit optimization and structure-activity relationship analysis.
+DEL datasets require integrated sequence processing, cheminformatics, and statistical analysis. They also create opportunities for machine-learning applications\cite{ref15,ref16,ref17,ref18,ref19,ref20,ref21,ref22,ref23,ref24,ref25,ref26,ref27,ref28}. At the same time, DEL analysis poses challenges that are not addressed by standard genomics workflows, including demultiplexing complex barcode combinations, reconstructing chemical structures from encoded building blocks, comparing enrichment across conditions, and connecting selection outputs to downstream structure-based analysis.
 
-While individual steps of a typical DEL analysis workflow can be completed by adapting tools originally developed for RNA-seq29, these tools lack the flexibility to accommodate diverse library architectures and experimental designs. Most existing approaches do not integrate well with standard bioinformatics pipelines or provide adequate quality control mechanisms for systematic troubleshooting and validation.
+Individual parts of a DEL analysis workflow can be assembled from tools originally developed for RNA-seq\cite{ref29}, but these tools do not readily accommodate the range of DEL architectures and experimental designs used in practice. They also do not usually provide DEL-specific intermediate outputs or quality-control measures for troubleshooting and validation.
 
 
-\subsubsection{Development of the protocol}
-As a research lab that is practicing DEL technology in all aspects (i.e., design, synthesis, target-based screening), we designed DELT-Hit to address the scale and complexity of modern DEL campaigns, supporting libraries with millions of compounds while maintaining computational efficiency and user friendliness. Its modular architecture enables workflow customization while preserving reproducibility through configuration files and standardized outputs. The framework combines established bioinformatics methods with DEL-specific optimization, provides flexible configuration for diverse library designs and experimental protocols, incorporates comprehensive quality controls at each analysis stage, and remains accessible to users with varying computational backgrounds through intuitive command-line interfaces and extensive documentation.
+\subsection{Development of the protocol}
+We developed DELT-Hit to support routine analysis of DEL campaigns across a wide range of library sizes and architectures. The workflow combines established bioinformatics methods with DEL-specific sequence handling, chemical enumeration, and quality control. Configuration files and standardized outputs support reproducibility, while the modular design allows users to adapt the workflow to different experimental settings.
 
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/image1.png}
-\caption{DELT-Hit is organized in several modules (blue rectangles) which integrate seamlessly with the wet-lab DEL workflow (green rectangles). The synthesis of the DEL (A.) from selected building blocks is done over iterative cycles of building block addition and encoding. DELs are then interrogated in affinity-based selection experiments (B.) against relevant biological targets. Whilst non-binding library members are washed away, DNA-encoded small molecules bound to the target can be selectively eluted. The coding information of selection eluates is then amplified by PCR and sequenced through next-generation sequencing. To reveal the identities of the selected compounds, DELT-Hit uses cutadapt\cite{ref29} to demultiplex the obtained sequencing data (C.), allowing for user-specified error rates. The obtained counts matrix tabulates sequence counts for all combinations of codes and enables resolution between different selection experiments through distinct selection codes. In parallel, in silico enumeration of library compounds (D.) can be performed using SMILES to represent building block structures and customizable reaction SMIRKS to define the coupling steps. Properties and molecular descriptors for the compounds comprised within the in silico libraries can be computed (E.) to assess drug-likeness and overall library properties. Importantly, DELT-Hit can already be used to guide library planning and building block selection through its library enumeration (D.) and property calculation (E.) modules by generating prospective libraries in silico and analysing their chemical properties. Hit analysis by DELT-Hit (F.) integrates the sequencing data within the counts matrix and the molecular information generated through library enumeration and property calculation. DELT-Hit also enables an assessment of data quality, through quality control metrics giving insight into retention of reads during demultiplexing, barcode coverage and reproducibility between replicates. To evaluate hits, library members can be ranked according to their enrichment, using several ranking methods such as edgeR and counts and the dashboard provides an intuitive visualisation of selection fingerprints and enables their interactive exploration. Finally, DELT-Hit provides the obtained enrichment data and representations of library compounds as Morgan fingerprints and BERT embeddings in a format ready for downstream machine learning applications.}
+\caption{DELT-Hit is organized into analysis modules (blue) that align with the wet-lab DEL workflow (green). DEL synthesis (A) proceeds through iterative cycles of building block addition and encoding. Libraries are then screened in affinity-based selection experiments (B), after which retained DNA tags are PCR-amplified and sequenced. DELT-Hit uses Cutadapt\cite{ref29} to demultiplex sequencing reads (C) with user-defined error tolerances and produces count matrices for combinations of selection and building block codes. In parallel, library compounds can be enumerated in silico (D) from building block structures and reaction SMIRKS definitions, and molecular properties can be calculated (E). DELT-Hit then combines count data and chemical information for hit analysis (F), quality control, enrichment ranking, and interactive data exploration. The workflow also exports molecular representations, including Morgan fingerprints and BERT embeddings, for downstream machine-learning analyses.}
 \label{fig:figure1}
 \end{figure}
-The framework integrates multiple specialized modules (Figure 1), including sequence demultiplexing via adapted Cutadapt workflows\cite{ref29}; chemical compound representation as SMILES\cite{ref30,ref31,ref32} and chemical reaction step definitions as reaction SMIRKS\cite{ref33,ref34} implemented in RDKit\cite{ref35}; statistical analysis with edgeR\cite{ref36}; comprehensive molecular property calculations for drug-likeness assessment; and interactive visualization dashboards for real-time data exploration and hit interpretation.
-
-This modular architecture enables users to execute complete workflows for routine analysis or utilize individual components for specialized applications. Each stage of the pipeline produces an executable script, allowing users to easily adapt the workflow to more complex experimental designs and custom settings, while maintaining reproducibility through standardized configuration files and output formats. The protocol has been successfully validated across diverse DEL architectures including multi-cycle libraries, hybridized libraries combining independent synthetic routes, and large-scale pharmaceutical screens with millions of compounds.
+The workflow integrates sequence demultiplexing via Cutadapt\cite{ref29}, chemical structure representation in SMILES\cite{ref30,ref31,ref32}, reaction definitions in SMIRKS\cite{ref33,ref34} implemented in RDKit\cite{ref35}, statistical analysis with edgeR\cite{ref36}, molecular property calculation, and interactive visualization. Users can run the full workflow or individual modules, and each stage produces executable scripts and standardized outputs that can be adapted to more specialized analyses.
 
 
-\subsubsection{Overview of the procedure}
-The DELT-Hit protocol is organized into six sequential stages executed through a command-line interface designed to support both computational chemists experienced with bioinformatics tools and experimental scientists new to DEL data analysis:
+\subsection{Overview of the procedure}
+The DELT-Hit protocol is organized into six sequential stages executed from the command line:
 
-(i) Project setup and library specification (Steps 1--3): Configuration file creation from Excel templates, library architecture definition, and experimental metadata specification.
+(i) Project setup and library specification (Steps 1--9): Configuration file creation from Excel templates, library architecture definition, reaction specification, and experimental metadata setup.
 
-(ii) Sequence demultiplexing and quality assessment (Steps 4--7): High-throughput sequence processing, barcode identification with error correction, and quality control metric generation.
+(ii) Sequence demultiplexing and quality assessment (Steps 10--13): High-throughput sequence processing, barcode identification with error correction, and quality-control metric generation.
 
-(iii) Data visualization and interpretation (Step 8): Interactive dashboard exploration of raw count data to identify selections of interest.
+(iii) Data visualization and interpretation (Step 14): Interactive dashboard exploration of raw count data to identify selections of interest.
 
-(iv) Selection-centric enumeration and analysis (Steps 9--10): Automated SMILES generation and molecular property calculation for the top enriched compounds of a chosen selection.
+(iv) Selection-centric enumeration and analysis (Steps 15--16): Automated SMILES generation and molecular property calculation for the top enriched compounds of a chosen selection.
 
-(v) Statistical analysis and hit detection (Steps 12--13): Enrichment analysis using established RNA-seq methods, hit ranking with multiple statistical approaches, and result validation.
+(v) Statistical analysis and hit detection (Steps 17--18): Enrichment analysis using established RNA-seq methods, hit ranking with multiple statistical approaches, and result validation.
 
-(vi) Full library enumeration and machine learning representations (Step 14): Optional full-library enumeration and generation of molecular fingerprints and embeddings for downstream machine learning workflows.
-
-
-\subsubsection{Applications of the method}
-The DELT-Hit framework accommodates various library architectures from simple two-cycle libraries to complex multi-branch synthetic schemes and has been successfully applied across our diverse DEL screening campaigns:
-
-A single-display DEL of two diversity elements comprising 366,600 glutamic acid derivatives (GB-DEL) was encoded in single-stranded DNA format and was tested in affinity-based selections, eventually allowing for the de novo identification of specific binders against several pharmaceutically relevant proteins. In addition, the GB-DEL was used for affinity maturation in dual display fashion by combining it with low affinity hits displayed on a pairing strand\cite{ref37}.
-
-A further single-display DEL of two diversity elements 670,752 derivatives based on 2-azido-3-iodophenylpropionic acid scaffold (NF-DEL) which was also encoded in single-stranded DNA format and used for investigating the impact of stereo- and regiochemistry on ligand discovery. The NF-DEL was tested for a set of protein targets of pharmaceutical relevance, yielding selective enzyme inhibitors and binders to tumor-associated antigens, which enabled conditional chimeric antigen receptor T-cell activation and tumor targeting\cite{ref38}.
-
-A single-display, double-stranded proof-of-principle 1,100 member DEL of three amino acid diversity elements was synthesized using a novel solid phase-based approach on magnetic beads featuring a final release of the library from the support. This release was enabled by both simple cleavage of the connecting linker to the solid support, resulting in a standard DEL (unpurified DEL), as well as by installing a terminal second linker to the bead, followed by cleavage of the first linker (thereby releasing incomplete synthetic structures) and then the second linker, releasing only the desired structures (self-purified DEL). Both versions of the DEL were then tested in affinity-based selections against carbonic anhydrase II and IX, revealing a markedly improved enrichment of the positive control for the self-purified DEL version. While the final synthetic yields of the individual library members of the self-purified DEL still vary depending on the individual building block, unlike standard DELs, the yields of chemical display of the self-purified DEL can be assessed by DNA sequencing of the unselected library because synthesis and encoding yields correlate. Furthermore, as synthesis occurs on solid support, this PureDEL technology allows the use of anhydrous reaction conditions, thereby enabling higher conversion yields and the implementation of – so far DEL-incompatible – water-free chemistry\cite{ref39}.
-
-A dual display, DEL encoded Self-Assembling Chemical (ESAC) Libraries of 56 million members allowed for the two displayed peptides to be connected in an incremental fashion. The DP-DEL was synthesized and tested for modulating macrocycle flexibility using a two-step cyclization strategy. By performing affinity-based selections on three different targets, specific preferences for the various degrees of flexibility were observed, i.e., a 314 nM thrombin inhibitor from the conformationally restrained macrocyclic subset of the ESAC library,  a more flexible streptavidin binder from the semi-closed conformation, as well as  binders to human alkaline phosphatase (PLAP) from the open, conventional dual-display setup. The results obtained from this approach demonstrated the utility of dual-display DEL technology for facilitating the de novo discovery of peptide ligands through flexibility-tuning\cite{ref40}.
+(vi) Full library enumeration and machine learning representations (Steps 19--21): Optional full-library enumeration and generation of molecular fingerprints and embeddings for downstream machine-learning workflows.
 
 
-\subsubsection{Limitations}
+\subsection{Applications of the method}
+DELT-Hit accommodates library architectures ranging from simple two-cycle libraries to more complex multi-branch schemes. The workflow has been applied across several DEL campaigns:
+
+A single-display DEL with two diversity elements comprising 366,600 glutamic acid derivatives (GB-DEL) was encoded in single-stranded DNA format and tested in affinity-based selections, enabling de novo identification of binders against several pharmaceutically relevant proteins. The GB-DEL was also used for affinity maturation in a dual-display format by combining it with low-affinity hits displayed on a pairing strand\cite{ref37}.
+
+A second single-display DEL with two diversity elements comprising 670,752 derivatives based on a 2-azido-3-iodophenylpropionic acid scaffold (NF-DEL) was likewise encoded in single-stranded DNA format and used to investigate the effect of stereo- and regiochemistry on ligand discovery. Selections against pharmaceutically relevant protein targets yielded selective enzyme inhibitors and binders to tumor-associated antigens that enabled conditional chimeric antigen receptor T-cell activation and tumor targeting\cite{ref38}.
+
+A proof-of-principle single-display, double-stranded DEL containing 1,100 members and three amino acid diversity elements was synthesized on magnetic beads using a solid-phase approach with final release of the library from the support. The workflow supported analysis of both the standard released library and a self-purified version in which incomplete synthetic structures were removed before final release. Selections against carbonic anhydrase II and IX showed improved enrichment of the positive control for the self-purified DEL. Because synthesis and encoding yields correlate in this format, DNA sequencing of the unselected library can be used to assess chemical display yields. The solid-support synthesis also permits anhydrous reaction conditions and therefore enables water-free chemistry that is difficult to implement in standard DEL workflows\cite{ref39}.
+
+A dual-display encoded self-assembling chemical (ESAC) library containing 56 million members enabled incremental connection of two displayed peptides. This library was used to study macrocycle flexibility with a two-step cyclization strategy. Selections against three targets revealed target-specific preferences for different conformational states, including a 314 nM thrombin inhibitor from the conformationally restrained macrocyclic subset, a more flexible streptavidin binder from the semi-closed conformation, and binders to human alkaline phosphatase (PLAP) from the open dual-display format\cite{ref40}.
+
+
+\subsection{Limitations}
 While DELT-Hit addresses many challenges in DEL analysis, several limitations should be considered:
 
 \begin{itemize}
-  \item Computational complexity: library size grows combinatorially with the number of diversity elements, which primarily impacts enumeration, property computation and representation. In contrast, demultiplexing complexity is limited by the number of sequencing reads, making this step largely independent of the library size.
-  \item Library complexity: DELT-Hit supports arbitrary sequences of chemical reactions, provided that each synthetic route yields a single, well-defined final product, as is expected for high-quality DNA-encoded libraries. Libraries with complex architectures, such as non-standard reaction schemes, atypical building block representations, or unconventional precursor handling may require additional custom configuration and validation. In particular, the library enumeration step assumes accurate specification of reaction chemistry using reaction SMIRKS. While DELT-Hit provides templates for commonly used DEL reactions, defining library-specific SMARTS/SMIRKS may require advanced cheminformatics expertise to ensure correct product generation and structure reconstruction.
+  \item Computational complexity: library size grows combinatorially with the number of diversity elements, which mainly affects enumeration, property calculation, and molecular representation. By contrast, demultiplexing depends primarily on the number of sequencing reads and is therefore largely independent of library size.
+  \item Library chemistry: DELT-Hit supports arbitrary reaction sequences provided that each synthetic route yields a single, well-defined final product. Libraries with non-standard reaction schemes, unconventional building block representations, or complex precursor handling may require additional configuration and validation. Accurate reaction SMIRKS definitions are essential for correct enumeration and structure reconstruction, and library-specific templates may require advanced cheminformatics expertise.
 \end{itemize}
 
-\subsection{Comparison with other methods}
-Pharmaceutical companies that actively conduct DEL campaigns typically rely on internally developed or licensed software platforms that integrate sequencing, barcode decoding, hit identification, and downstream hit prioritization within proprietary ecosystems. While these systems support scalability, automation, and tight integration with experimental follow-up, they are closed-source, which restricts methodological transparency, limits user-driven customization, and hinders iterative improvement by the broader research community.
+\section{Comparison with other methods}
+Pharmaceutical companies that run DEL campaigns typically use internal or licensed software platforms that integrate sequencing, barcode decoding, hit identification, and downstream prioritization within proprietary ecosystems. These systems can support scalability and automation, but they are closed-source and therefore limit methodological transparency, user-driven customization, and community-led improvement.
 
-In parallel, contract research organizations (CROs) provide DEL screening as a service against user-supplied targets. These services generally return processed results without disclosing the underlying computational workflows or intermediate data products. Consequently, users have limited ability to adapt analytical procedures, interrogate intermediate outputs, or incorporate DEL informatics into their own computational pipelines.
+Contract research organizations (CROs) also provide DEL screening as a service against user-supplied targets. These services usually return processed results without exposing the underlying computational workflow or intermediate data products. As a result, users have limited opportunity to adapt the analysis, inspect intermediate outputs, or integrate DEL informatics into their own pipelines.
 
-To our knowledge, DELi\cite{ref41} is the only existing open-source software solution, including barcode decoding, enrichment analysis, and library enumeration. DELi and DELT-Hit share key design principles, such as modular architecture, transparent configuration, and integration with established bioinformatics and cheminformatics tools (e.g., Cutadapt, RDKit). However, our framework differentiates itself through several distinct capabilities:
+To our knowledge, DELi\cite{ref41} is the only other open-source software package that combines barcode decoding, enrichment analysis, and library enumeration. DELi and DELT-Hit share several design principles, including modular architecture, transparent configuration, and integration with established bioinformatics and cheminformatics tools such as Cutadapt and RDKit. DELT-Hit differs in several areas:
 
-Support for arbitrary reaction graphs for enumeration, enabling faithful reconstruction of complex synthetic schemes.
+\begin{itemize}
+  \item support for arbitrary reaction graphs for enumeration, enabling reconstruction of complex synthetic schemes
+  \item integration of RNA-seq-derived statistical models for hit calling that account for replicate structure and dispersion
+  \item support for arbitrary library designs, including single-display and dual-display formats
+  \item standardized SMILES outputs for library members to facilitate downstream machine-learning workflows
+\end{itemize}
 
-Integration of statistical models developed for RNA-seq analysis for hit calling that account for replicate structure and dispersion.
-
-Support for arbitrary library designs, including single- and dual-display formats
-
-Standardized output of SMILES representations for library members, facilitating downstream machine-learning workflows.
-
-DELT-Hit explicitly and deliberately exposes intermediate data products and executable scripts, facilitating reproducibility, benchmarking, and integration, which allows users to inspect, adapt, and extend each analysis step. This positions DELT-Hit as a complementary alternative for academic and industrial users seeking industrial-scale performance without the constraints of proprietary software.
-
-
-\subsection{Experimental design}
-
-\subsubsection{Input requirements}
-The DELT-Hit framework processes three primary input categories, each with specific formatting requirements that are described in the following sections in detail:
-
-(1) Library definition files (.xlsx): Defines building block structures in SMILES format, reaction SMIRKS templates defining reaction steps, DNA constant sequences, and barcode-to-building block mapping tables. These are typically provided in Excel format with standardized sheet names for automated parsing.
-
-(2) Raw sequencing data (fastq.gz): FASTQ files generated by Illumina or compatible sequencing platforms are supported in both compressed and uncompressed formats.
-
-(3) Experimental metadata (.yaml): Selection condition specifications including target proteins, control experiments, and replicate groupings. This information defines the statistical comparisons and quality control parameters for downstream analysis.
+DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration.
 
 
-\subsubsection{Library architecture considerations}
-DELT-Hit supports diverse library architectures with flexible configuration options:
+\section{Experimental design}
 
-Single display libraries: Linear synthetic schemes where DNA tags are appended after each reaction cycle, suitable for most academic and industrial applications and focused screening campaigns.
+\subsection{Input requirements}
+DELT-Hit uses three main input categories:
 
-Dual display libraries: Architectures where compounds are displayed on both complementary DNA strands, enabling higher diversity and more specialized DEL applications.
+(1) Library definition files (.xlsx): These files specify building block structures in SMILES format, reaction SMIRKS templates, DNA constant sequences, and barcode-to-building block mapping tables. They are typically provided as Excel workbooks with standardized sheet names for automated parsing.
 
-Multi-cycle libraries: Complex reaction schemes with arbitrary numbers of synthetic steps, branching reactions, and multiple building block incorporation sites.
+(2) Raw sequencing data (fastq.gz): FASTQ files generated by Illumina or compatible sequencing platforms are supported in compressed and uncompressed formats.
 
-The framework automatically validates library architecture consistency and provides warnings for potential issues such as incomplete reaction definitions or missing building blocks.
-
-
-\subsubsection{Library chemistry and reaction definition}
-Reaction cycles used during library construction are specified using standardized reaction SMIRKS notation provided via structured Excel configuration files. DELT-Hit translates these definitions into an explicit reaction graph that supports arbitrary reaction sequences, branching synthetic pathways, and multi-step transformations.
-
-DELT-Hit accommodates libraries of varying complexity, including architectures with multiple reaction cycles, provided that each synthetic route resolves to a single, well-defined final product, consistent with best practices for high-quality DNA-encoded libraries. Libraries employing non-standard reaction schemes, unconventional building block representations, or complex precursor handling may require additional customization and validation.
-
-The library enumeration process critically depends on accurate specification of reaction schemes through SMIRKS definition. Although DELT-Hit supplies validated templates for commonly used DEL reactions, library-specific adaptations often necessitate advanced cheminformatics expertise to ensure chemically correct product formation and reliable structure reconstruction.
+(3) Experimental metadata (.yaml): These files define selection conditions, target proteins, control experiments, and replicate groupings for downstream statistical analysis and quality control.
 
 
-\subsubsection{Quality control parameters}
-DELT-Hit monitors comprehensive quality metrics throughout the analysis workflow:
+\subsection{Library architecture considerations}
+DELT-Hit supports several library architectures:
 
-Demultiplexing efficiency: Percentage of sequencing reads successfully assigned to valid barcode combinations, typically \textgreater{}70\% for high-quality datasets.
+Single-display libraries: Linear synthetic schemes in which DNA tags are appended after each reaction cycle.
 
-Barcode recovery rates: Coverage of each barcode to identify abnormalities in the demultiplexing.
+Dual-display libraries: Architectures in which compounds are displayed on both complementary DNA strands.
 
-Statistical significance assessment: Multiple testing correction and false discovery rate control using established RNA-seq analysis methodologies.
+Multi-cycle libraries: Schemes with multiple synthetic steps, branching reactions, and multiple building block incorporation sites.
+
+The framework validates library architecture consistency and issues warnings for potential problems such as incomplete reaction definitions or missing building blocks.
+
+
+\subsection{Library chemistry and reaction definition}
+Reaction cycles used during library construction are specified with reaction SMIRKS in the Excel configuration file. DELT-Hit translates these definitions into an explicit reaction graph that supports arbitrary reaction sequences, branching pathways, and multi-step transformations.
+
+DELT-Hit accommodates libraries of varying complexity, including architectures with multiple reaction cycles, provided that each synthetic route resolves to a single, well-defined final product. Libraries with non-standard reaction schemes, unconventional building block representations, or complex precursor handling may require additional customization and validation.
+
+Library enumeration depends on accurate SMIRKS definitions. DELT-Hit provides templates for commonly used DEL reactions, but library-specific adaptations may require advanced cheminformatics expertise to ensure chemically correct product formation and reliable structure reconstruction.
+
+
+\subsection{Quality control parameters}
+DELT-Hit monitors quality metrics throughout the workflow:
+
+Demultiplexing efficiency: Percentage of sequencing reads assigned to valid barcode combinations, typically \textgreater{}70\% for high-quality datasets.
+
+Barcode recovery rates: Coverage of individual barcodes to identify imbalances or failed assignments.
+
+Statistical significance assessment: Multiple-testing correction and false discovery rate control using established RNA-seq-derived methods.
 
 Replicate consistency: Correlation analysis across biological and technical replicates.
 
-Chemical reaction validation: Strict requirements on reaction products.
+Chemical reaction validation: Verification that reaction definitions produce the expected products.
 
 
-\subsection{Materials}
+\section{Materials}
 
-\subsubsection{Equipment}
+\subsection{Equipment}
 Computing hardware:
 
 \begin{itemize}
@@ -206,8 +202,8 @@ Operating systems:
   \item Windows 10/11 (with Windows Subsystem for Linux recommended)
 \end{itemize}
 
-\subsubsection{Software dependencies}
-DELT-Hit is implemented as a Python package organized into the modules \texttt{init}, \texttt{demultiplex}, \texttt{qc}, \texttt{report}, \texttt{library}, \texttt{enumerate}, \texttt{properties}, \texttt{represent}, \texttt{dashboard}, and \texttt{analyse}. Core requirements:
+\subsection{Software dependencies}
+DELT-Hit is implemented as a Python package organized into the modules \texttt{init}, \texttt{demultiplex}, \texttt{qc}, \texttt{report}, \texttt{library}, \texttt{enumerate}, \texttt{properties}, \texttt{represent}, \texttt{dashboard}, and \texttt{analyse}. Core requirements are:
 
 \begin{itemize}
   \item Python 3.12 or higher with pip package manager
@@ -236,20 +232,20 @@ R packages (manual installation required):
   \item BiocManager: Bioconductor package management
 \end{itemize}
 
-\subsubsection{Input file preparation}
+\subsection{Input file preparation}
 Required input files:
 
 
 \input{tables/table1}
 Example datasets (available for download):
 
-The provided example dataset is based on a toy library based on the architecture of a published library\cite{ref37}.
+The provided example dataset is a toy library based on the architecture of a published library\cite{ref37}.
 
 
 \input{tables/table2}
 
-\subsubsection{Experimental setup}
-The following installation procedure needs to be performed once before running the DELT-Hit protocol and is executed entirely from the command line. All subsequent analyses are likewise performed via terminal-based commands within the same software environment.
+\subsection{Experimental setup}
+The installation procedure below is performed once before running the DELT-Hit workflow. Subsequent analyses are also executed from the command line within the same software environment.
 
 
 \setupitem{Install Git version control system}
@@ -289,7 +285,7 @@ git --version
 
 \setupitem{Environment setup with Conda}
 
-We recommend using Miniconda package manager to create an isolated environment ensuring proper dependency management. This step only needs to be performed once.
+We recommend using Miniconda to create an isolated environment with controlled dependencies. This step is only required once.
 
 
 \begin{lstlisting}
@@ -306,12 +302,12 @@ conda install pygraphviz -y
 # Install DELT-Hit package
 pip install git+https://git@github.com/DELTechnology/delt-hit.git
 \end{lstlisting}
-CRITICAL STEP: You will need to activate the delt-hit environment (conda activate delt-hit) each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with conda during installation such that the conda command is available when opening a new terminal window. Should you not be able to activate conda after the installation please refer to the Troubleshooting section for help.
+CRITICAL STEP: Activate the \texttt{delt-hit} environment (\texttt{conda activate delt-hit}) each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with Conda during installation so that the \texttt{conda} command is available in new terminal windows. If activation fails, see Troubleshooting.
 
 
 \setupitem{R environment configuration}
 
-Statistical analysis components require R with specific Bioconductor packages. This configuration only needs to be performed once.
+Statistical analysis requires R and specific Bioconductor packages. This configuration is only required once.
 
 Open R or RStudio and execute:
 
@@ -343,26 +339,26 @@ delt-hit --help
 # Expected output: Help message describing the delt-hit command
 \end{lstlisting}
 
-\subsection{Procedure}
+\section{Procedure}
 
-\subsubsection{Phase 1: Project initialization and configuration • TIMING 30-60 min}
-The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit supports initialization from standardized Excel templates for user convenience.
+\subsection{Phase 1: Project initialization and configuration • TIMING 30-60 min}
+The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template.
 
-In this phase, we will create a YAML configuration file from an Excel spreadsheet that contains all the information about your DEL library and experimental design.
+In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL library and experimental design information.
 
 
 \protocolstep{1}{Create the experiment sheet}
 
-Create an Excel file with multiple sheets defining your experiment. Each sheet contains specific information required for the analysis. The following sections describe the required sheets and their format. For convenience, users can start from the template provided in Table 3. The experiment sheet contains basic experiment parameters including experiment name, file paths, and computational resources.
+Create an Excel workbook with multiple sheets defining the experiment. Each sheet contains specific information required for the analysis. The following sections describe the required sheets and their format. Users can start from the template provided in Table 3. The experiment sheet contains the experiment name, file paths, and computational resource settings.
 
 
 \input{tables/table3}
-CRITICAL STEP: Use absolute paths or paths relative to your working directory for fastq\_path and save\_dir and ensure there are no trailing whitespaces.
+CRITICAL STEP: Use absolute paths, or paths relative to the working directory, for \texttt{fastq\_path} and \texttt{save\_dir}. Remove any trailing whitespace.
 
 
 \protocolstep{2}{Create the selection sheet}
 
-This sheet defines the experimental design including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes an experimental setting (for example a different protein target or experimental condition like controls) and is identified by a unique combination of S0 and S1 primers to demultiplex the sequencing data into the individual experiments.
+This sheet defines the experimental design, including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes one experimental setting, such as a target protein or control condition, and is identified by a unique combination of \texttt{S0} and \texttt{S1} primers for demultiplexing.
 
 
 \input{tables/table4}
@@ -382,21 +378,21 @@ Optional columns:
 \begin{itemize}
   \item operator: Person who performed the selection
   \item date: Date of selection experiment
-  \item other columns can be added up to the users discretion
+  \item other columns can be added at the user's discretion
 \end{itemize}
 
 \protocolstep{3}{Create the structure sheet}
 
-This sheet defines the DNA construct architecture and error tolerance for demultiplexing.
+This sheet defines the DNA construct architecture and error tolerances for demultiplexing.
 
 There are three types of DNA regions:
 
 \begin{itemize}
-  \item selection: This region is used for the selection primer as defined in the selection sheet and need to be named S0 and S1.
-  \item constant: These regions are used as constant regions across all DNA constructs and need to be named sequentially C0, C1, etc.
-  \item building\_block: This region identifies a chemical building block used and needs to be named sequentially B0, B1, etc.
+  \item selection: Region used for selection primers defined in the selection sheet; these regions should be named \texttt{S0}, \texttt{S1}, and so on.
+  \item constant: Constant regions shared across DNA constructs; these regions should be named sequentially \texttt{C0}, \texttt{C1}, and so on.
+  \item building\_block: Region identifying a chemical building block; these regions should be named sequentially \texttt{B0}, \texttt{B1}, and so on.
 \end{itemize}
-Each region in the DNA construct is identified by a unique name and a max\_error\_rate and whether indels are allowed during multiplexing can be configured for each region.
+Each DNA region is identified by a unique name. A \texttt{max\_error\_rate} and the allowance of indels can be configured separately for each region.
 
 
 \input{tables/table5}
@@ -405,10 +401,10 @@ Column descriptions:
 \begin{itemize}
   \item name: Unique identifier for each DNA region
   \item type: Region type (selection, constant, or building\_block)
-  \item max\_error\_rate: Maximum allowed error rate for adapter trimming (0 = perfect match, 1.1 = \textasciitilde\{\}10\% errors)
+  \item max\_error\_rate: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
   \item indels: Whether to allow insertions/deletions (TRUE/FALSE)
 \end{itemize}
-CRITICAL STEP: Selection barcodes should require perfect matches (max\_error\_rate = 0, indels = FALSE) to ensure accurate multiplexing, while constant regions can tolerate higher error rates depending on their length.
+CRITICAL STEP: Selection barcodes should require perfect matches (\texttt{max\_error\_rate = 0}, \texttt{indels = FALSE}) to ensure accurate multiplexing. Constant regions can tolerate higher error rates depending on their length.
 
 
 \protocolstep{4}{Create the constant sheet}
@@ -417,12 +413,12 @@ This sheet contains the DNA sequences for all constant regions defined in the st
 
 
 \input{tables/table6}
-Note: The name column must match the constant region names defined in the structure sheet.
+Note: The \texttt{name} column must match the constant-region names defined in the structure sheet.
 
 
 \protocolstep{5}{Create building block sheets (B0, B1, etc.)}
 
-DELT-Hit supports libraries with an arbitrary number of building blocks. For each building block region defined in the structure sheet, the user must define the used DNA codons in a sheet named according to the structure sheet (i.e. B0, B1, ..., BN). To enable library enumeration and property calculation, users must define the chemical structure of the building blocks and reactions used in the library synthesis as well. For each building block position defined in your structure sheet, create a separate sheet containing all building blocks for that position.
+DELT-Hit supports libraries with an arbitrary number of building block regions. For each region defined in the structure sheet, create a sheet with the corresponding name (for example, \texttt{B0}, \texttt{B1}, ..., \texttt{BN}) and list the DNA codons used at that position. To enable library enumeration and property calculation, also define the chemical structures of the building blocks and the reactions used during library synthesis.
 
 
 \input{tables/table7}
@@ -442,11 +438,11 @@ Required columns for library enumeration:
 
 \protocolstep{6}{Create the reactions sheet}
 
-Only required for library enumeration. Define all chemical reactions used during library synthesis using SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS must be adapted to the building blocks used to yield a single product for each transformation. If a reaction is used several times throughout library synthesis, these must be defined as individual reactions. Table 9 demonstrates this with two amide-bond forming reactions (ABF1 and ABF2)
+Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}).
 
 
 \input{tables/table8}
-Note: The name column must match the reaction names used in the building block sheets.
+Note: The \texttt{name} column must match the reaction names used in the building block sheets.
 
 
 \protocolstep{7}{Create the compounds sheet}
@@ -458,11 +454,11 @@ Only required for library enumeration. Define any additional chemical compounds 
 
 \protocolstep{8}{Create the additional reaction steps}
 
-Only required for advanced library enumeration. If the synthesis of the library requires additional reaction steps, for example for conversion of precursor molecules or deprotection steps before reactions, those can be described in the sheet reaction\_graph. A reaction is defined by at most two educts that react through a reaction to a new product. For each additional reaction step you want to add, include a new row with the corresponding compound names and reaction names from the reactions and compounds sheet.
+Only required for advanced library enumeration. If library synthesis includes additional steps, such as precursor conversion or deprotection before a reaction, define them in the \texttt{reaction\_graph} sheet. Each row describes a reaction with up to two educts, a reaction name, and the resulting product. Add one row for each additional step using the compound and reaction names defined in the corresponding sheets.
 
 
 \input{tables/table10}
-More advanced reaction-graph edge cases, including multi-path precursor activation schemes that require separate reaction nodes, are described in the supplementary note ``Advanced reaction-graph configurations'' so that the core protocol can stay aligned to the single-stranded workflow example while retaining the broader guidance.
+More advanced reaction-graph edge cases, including multi-path precursor activation schemes that require separate reaction nodes, are described in the supplementary note ``Advanced reaction-graph configurations''.
 
 \protocolstep{9}{Generate the configuration file}
 
@@ -482,7 +478,7 @@ delt-hit init --excel_path=example-single-stranded.xlsx
 # Reuse this config path in the downstream commands
 CONFIG_PATH=campaign/config.yaml
 \end{lstlisting}
-This command creates a YAML configuration file at save\_dir/name/config.yaml as specified in your Excel file in sheet experiment.
+This command creates a YAML configuration file at \texttt{save\_dir/name/config.yaml}, as defined in the \texttt{experiment} sheet.
 
 Expected output:
 
@@ -490,7 +486,7 @@ Expected output:
 \begin{lstlisting}
 Configuration created at campaign/config.yaml
 \end{lstlisting}
-CRITICAL STEP: Review the generated YAML file to verify all information was parsed correctly. The YAML file will be used for all subsequent analysis steps.
+CRITICAL STEP: Review the generated YAML file to verify that all information was parsed correctly. This file is used in all downstream steps.
 
 \textbf{Troubleshooting.} While the tool supports some basic input validation it is helpful to check the following if the command fails:
 
@@ -500,19 +496,19 @@ CRITICAL STEP: Review the generated YAML file to verify all information was pars
   \item Excel file was saved with the latest changes before running the command
 \end{itemize}
 
-\subsubsection{Phase 2: Sequence processing and demultiplexing • TIMING 30 min - 4 h}
+\subsection{Phase 2: Sequence processing and demultiplexing • TIMING 30 min - 4 h}
 This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
 
 
 \protocolstep{10}{Configure demultiplexing parameters}
 
-The demultiplexing parameters defined in your Excel file control how sequence reads are processed by cutadapt. Key parameters include:
+The demultiplexing parameters defined in the Excel file control how reads are processed by Cutadapt. Key parameters include:
 
 \begin{itemize}
-  \item max\_error\_rate: Tolerance for sequencing errors (0 = perfect match, 1.1 = \textasciitilde\{\}10\% errors)
+  \item max\_error\_rate: Tolerance for sequencing errors (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
   \item indels: Whether to allow insertions/deletions during barcode matching
 \end{itemize}
-As mentioned earlier, we recommend requiring exact matches for selection barcodes (max\_error\_rate = 0, indels = FALSE) to ensure accurate multiplexing, while allowing higher error rates for constant regions depending on their length.
+As noted above, exact matches are recommended for selection barcodes (\texttt{max\_error\_rate = 0}, \texttt{indels = FALSE}) to ensure accurate multiplexing. Constant regions can tolerate higher error rates depending on their length.
 
 
 \protocolstep{11}{Prepare and execute sequence demultiplexing}
@@ -530,13 +526,13 @@ campaign/demultiplex/cutadapt_input_files/demultiplex.sh
 The demultiplexing process performs:
 
 \begin{itemize}
-  \item Adapter detection and trimming: Removal of sequencing adapters
-  \item Barcode extraction: Sequential identification of selection and building block barcodes
-  \item Quality filtering: Rejection of reads with errors exceeding defined thresholds
+  \item Adapter detection and trimming: removal of sequencing adapters
+  \item Barcode extraction: sequential identification of selection and building block barcodes
+  \item Quality filtering: rejection of reads with errors exceeding the defined thresholds
 \end{itemize}
-The produced demultiplexing executable (.sh) uses cutadapt and to process the FASTQ file and maps the sequences to the selection and codon IDs. It generates the reads\_with\_adapters.gz file that contains all sequences that have been mapped.
+The generated shell script runs Cutadapt on the FASTQ file and maps reads to selection and codon identifiers. It produces \texttt{reads\_with\_adapters.gz}, which contains all mapped sequences.
 
-Performance note: Processing speed is approximately 50,000-200,000 reads/second. For a typical dataset with 50-100 million reads, expect 30 minutes to 2 hours processing time.
+Performance note: Processing speed is approximately 50,000--200,000 reads per second. For a typical dataset with 50--100 million reads, expect 30 min to 2 h of processing time.
 
 Expected outputs:
 
@@ -547,7 +543,7 @@ Expected outputs:
 
 \protocolstep{12}{Process demultiplexing results and generate count tables}
 
-After demultiplexing completes, the single-stranded example workflow next generates the text report and QC figures before aggregating the results into count tables for each selection:
+After demultiplexing, generate the text report and QC figures, then aggregate the results into count tables for each selection:
 
 
 \begin{lstlisting}
@@ -569,10 +565,10 @@ delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True
 These commands:
 
 \begin{itemize}
-  \item Parses the demultiplexed reads
-  \item Maps barcode combinations to library members
-  \item Generates count tables for each selection
-  \item Saves results in standardized format
+  \item parse the demultiplexed reads
+  \item map barcode combinations to library members
+  \item generate count tables for each selection
+  \item save the results in a standardized format
 \end{itemize}
 Expected outputs:
 
@@ -581,12 +577,12 @@ Expected outputs:
   \item code\_1, code\_2,...: Building block indices
   \item name: Selection identifier
   \item count: Number of reads for this compound in this selection
-  \item NOTE: alternatively, counts can be saved as \{selection\_name\}\_counts.txt by using the flag --as\_files=True. To save the counts sorted by codon ids instead of observed counts, set the flag --sort\_by\_counts=False.
+  \item Alternatively, counts can be saved as \texttt{\{selection\_name\}\_counts.txt} with the flag \texttt{--as\_files=True}. To save counts in codon order rather than sorted by observed counts, use \texttt{--sort\_by\_counts=False}.
 \end{itemize}
 
 \protocolstep{13}{Generate quality control reports}
 
-Assess demultiplexing quality with comprehensive statistics and visualizations:
+Assess demultiplexing quality with summary statistics and visualizations:
 
 
 \begin{lstlisting}
@@ -629,7 +625,7 @@ Quality assessment criteria:
   \item Poor library quality
 \end{itemize}
 
-\subsubsection{Phase 3: Data visualization and interpretation • TIMING 15-60 min}
+\subsection{Phase 3: Data visualization and interpretation • TIMING 15-60 min}
 The interactive dashboard provides real-time exploration of raw count data and experimental metadata.
 
 
@@ -645,14 +641,14 @@ delt-hit dashboard --config_path=$CONFIG_PATH --counts_path=campaign/selections/
 # * Serving Flask app 'delt_hit.cli.dashboard.api'
 # * Debug mode: on
 \end{lstlisting}
-This command starts a server interface that can be opened from a web browser (typically at http://localhost:8050). Stop the server with ctrl+c or by closing the terminal.
+This command starts a local server that can be opened in a web browser, typically at \texttt{http://localhost:8050}. Stop the server with \texttt{Ctrl+C} or by closing the terminal.
 
 Dashboard features:
 
 \begin{itemize}
-  \item Experimental metadata display: Selection conditions, target information, and experimental parameters
-  \item Count distribution visualization: Scatter/Histograms and summary statistics for the selected condition
-  \item Interactive filtering: Explore specific regions of the count distribution
+  \item Experimental metadata display: selection conditions, target information, and experimental parameters
+  \item Count distribution visualization: scatter plots, histograms, and summary statistics for the selected condition
+  \item Interactive filtering: exploration of specific regions of the count distribution
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -668,18 +664,18 @@ Using the dashboard:
   \item Visualize aggregated counts across codon dimensions:
   \item Apply filters to focus on specific count ranges
 \end{itemize}
-Note: The dashboard displays raw counts from the demultiplexing step. For statistical comparisons and hit identification, use the enrichment analysis results from Phase 5. The dashboard command accepts counts provided as a .txt file. Users can therefore perform their own custom normalization and simply point the dashboard to the resulting normalized counts.txt file for visualization by using --counts\_path and --selection\_name with the dashboard command.
+Note: The dashboard displays raw counts from demultiplexing. For statistical comparisons and hit identification, use the enrichment analysis results from Phase 5. The command accepts counts provided as a \texttt{.txt} file, so users can also visualize custom normalized count tables by passing \texttt{--counts\_path} and, if needed, \texttt{--selection\_name}.
 
-CRITICAL STEP: The default folder hierarchy as produced by delt-hit process needs to be used or if a custom counts.txt is provided the user needs to pass the selection name with as specified in the selection sheet as well.
+CRITICAL STEP: Use the default folder hierarchy produced by \texttt{delt-hit demultiplex process}. If a custom \texttt{counts.txt} file is provided, also pass the selection name exactly as specified in the selection sheet.
 
 
-\subsubsection{Phase 4: Selection-centric enumeration and analysis • TIMING 10 min - 2 h}
-This phase generates chemical structures and calculates molecular properties for the top enriched compounds identified in a given selection. Library enumeration requires advanced knowledge of the SMARTS/SMIRKS language. While we provide common reaction patterns observed in DNA encoded libraries, library specific tweaks are often necessary.
+\subsection{Phase 4: Selection-centric enumeration and analysis • TIMING 10 min - 2 h}
+This phase generates chemical structures and molecular properties for the top enriched compounds in a selected experiment. Library enumeration requires advanced knowledge of SMARTS/SMIRKS, and library-specific adjustments are often necessary.
 
 
 \protocolstep{15}{Enumerate top compounds from a selection}
 
-Generate chemical structures for the top enriched compounds identified in a given selection. First visualize the reaction graph to verify the library architecture, then enumerate the top hits:
+Generate chemical structures for the top enriched compounds in a selected experiment. First visualize the reaction graph to verify the library architecture, then enumerate the top hits:
 
 
 \begin{lstlisting}
@@ -691,13 +687,13 @@ delt-hit library enumerate \
   --top_n=1000 \
   --library_name=AG24_4_top_hits
 \end{lstlisting}
-Those commands:
+These commands:
 
 \begin{itemize}
-  \item Visualize the reaction graph of the library architecture for inspection
-  \item Enumerate the top \texttt{top\_n} compounds by count for the specified selection
-  \item Validates chemical structures
-  \item Saves the compound catalog for the selected hits
+  \item visualize the reaction graph for inspection
+  \item enumerate the top \texttt{top\_n} compounds by count for the selected experiment
+  \item validate chemical structures
+  \item save the compound catalog for the selected hits
 \end{itemize}
 Expected outputs:
 
@@ -714,7 +710,7 @@ Expected outputs:
 \caption{Complete reaction graph for a DEL with two building blocks (violet), reactions (green), products (red) and starting compounds (blue).}
 \label{fig:figure2}
 \end{figure}
-Performance: Enumeration speed is approximately 1’000-10’000 compounds/second depending on reaction complexity. For a 1 million compound library, expect 2-10 minutes of processing time depending on the machine.
+Performance note: Enumeration speed is approximately 1,000--10,000 compounds per second, depending on reaction complexity. For a library with 1 million compounds, expect 2--10 min of processing time depending on the hardware.
 
 \textbf{Troubleshooting.}
 
@@ -726,7 +722,7 @@ Performance: Enumeration speed is approximately 1’000-10’000 compounds/secon
 
 \protocolstep{16}{Visualize and calculate molecular properties of top hits}
 
-Visualize the enumerated top hits and compute comprehensive molecular descriptors for drug-likeness assessment and chemical space characterization of the selected compounds:
+Visualize the enumerated top hits and calculate molecular descriptors for chemical space characterization:
 
 
 \begin{lstlisting}
@@ -757,15 +753,15 @@ Expected outputs:
 Performance note: Property calculation processes approximately 600-1000 compounds/second. For a 1 million compound library, expect 15-30 minutes processing time.
 
 
-\subsubsection{Phase 5: Statistical analysis and hit identification • TIMING 10-30 min}
+\subsection{Phase 5: Statistical analysis and hit identification • TIMING 10-30 min}
 This phase identifies enriched library members by comparing selection conditions using established statistical methods.
 
 
 \protocolstep{17}{Define statistical comparisons}
 
-From the information in the selection sheet, create a new dedicated configuration yaml file to specify which selections to compare.
+Using the information from the selection sheet, create a dedicated YAML configuration file that specifies which selections to compare.
 
-A new configuration file is used to support comparisons across different selection runs, i.e. runs that might come from multiple individual sequencing files.
+This file supports comparisons across different selection runs, including runs derived from multiple sequencing files.
 
 
 \begin{lstlisting}
@@ -796,7 +792,7 @@ experiments:
 
 \protocolstep{18}{Perform enrichment analysis with statistical methods}
 
-DELT-Hit supports two statistical approaches for identifying enriched compounds. Both methods generate an Rscript that can be executed and/or further modified by the user.
+DELT-Hit supports two statistical approaches for identifying enriched compounds. Both methods generate an R script that can be executed directly or modified further by the user.
 
 A. Simple counts method (suitable for single replicates)
 
@@ -811,10 +807,10 @@ Rscript --vanilla campaign/analysis/protein_vs_no_protein/counts/enrichment_coun
 The counts method:
 
 \begin{itemize}
-  \item Averages counts across replicates within each group
-  \item Computes simple differences between groups
-  \item Does not provide statistical significance testing
-  \item Suitable for exploratory analysis or when replicates are not available
+  \item averages counts across replicates within each group
+  \item computes simple differences between groups
+  \item does not provide statistical significance testing
+  \item is suitable for exploratory analysis or for datasets without replicates
 \end{itemize}
 B. edgeR method (recommended when replicates are available)
 
@@ -830,13 +826,13 @@ Rscript --vanilla campaign/analysis/protein_vs_no_protein/edgeR/enrichment_edgeR
 The edgeR method:
 
 \begin{itemize}
-  \item Implements sophisticated RNA-seq-derived statistical models
-  \item Uses empirical Bayes shrinkage for improved power
-  \item Calculates false discovery rate (FDR) corrected p-values
-  \item Requires replicates (minimum 2 per group)
-  \item Provides normalized count tables
+  \item implements RNA-seq-derived statistical models
+  \item uses empirical Bayes shrinkage to improve power
+  \item calculates false discovery rate (FDR)-corrected \textit{P} values
+  \item requires replicates (minimum of two per group)
+  \item provides normalized count tables
 \end{itemize}
-For both methods, the tool produces the Rscripts that implement the corresponding analysis. This enables users to easily further customize their analysis pipelines.
+For both methods, the tool produces the R scripts used for the analysis, which can be adapted to more specialized workflows.
 
 Expected outputs (both methods):
 
@@ -875,12 +871,12 @@ CRITICAL STEP: Always examine replicate correlation plots to verify data quality
 \input{tables/table12}
 
 
-\subsubsection{Phase 6: Full library enumeration and machine learning representations • TIMING 1 h - 8 h}
-This phase performs full library enumeration and generates molecular representations for downstream machine learning applications. These steps are optional and only required for ML workflows.
+\subsection{Phase 6: Full library enumeration and machine learning representations • TIMING 1 h - 8 h}
+This phase performs full-library enumeration and generates molecular representations for downstream machine-learning applications. These steps are optional.
 
 \protocolstep{19}{Enumerate the full library}
 
-Enumerate all library members for downstream machine learning tasks:
+Enumerate all library members for downstream machine-learning tasks:
 
 \begin{lstlisting}
 delt-hit library enumerate --config_path=$CONFIG_PATH
@@ -896,7 +892,7 @@ delt-hit library properties --config_path=$CONFIG_PATH
 
 \protocolstep{21}{Generate molecular representations for machine learning}
 
-Create standardized chemical representations compatible with machine learning frameworks:
+Create standardized chemical representations compatible with common machine-learning frameworks:
 
 
 \begin{lstlisting}
@@ -912,7 +908,7 @@ Available representation methods:
 
 \begin{itemize}
   \item morgan: Morgan circular fingerprints (2048-bit vectors) for similarity searching and clustering
-  \item bert: Transformer-based molecular embeddings (768-dimensional vectors) for deep learning
+  \item bert: Transformer-based molecular embeddings (768-dimensional vectors) for deep-learning applications
 \end{itemize}
 Expected outputs:
 
@@ -920,48 +916,48 @@ Expected outputs:
   \item representations/morgan.npz: Sparse matrix of Morgan fingerprints
   \item representations/bert.npz: Dense matrix of BERT embeddings
 \end{itemize}
-Note: These representations are compatible with scikit-learn, PyTorch, and TensorFlow for downstream machine learning applications.
+Note: These representations are compatible with scikit-learn, PyTorch, and TensorFlow.
 
 
-\subsection{Troubleshooting}
-This section provides solutions to common issues encountered during DELT-Hit analysis.
+\section{Troubleshooting}
+This section summarizes common issues encountered during DELT-Hit analysis.
 
 
 \input{tables/table13}
 
-\subsubsection{Performance optimization guidelines}
-Memory requirements by library size:
+\subsection{Performance optimization guidelines}
+Approximate memory requirements by library size are:
 
 \begin{itemize}
-  \item Small libraries (\textless{}1M compounds): 16 GB RAM sufficient
-  \item Medium libraries (1-50M compounds): 32GB RAM recommended
-  \item Large libraries (\textgreater{}50M compounds): 32GB RAM required
+  \item Small libraries (\textless{}1M compounds): 16 GB RAM is usually sufficient
+  \item Medium libraries (1--50M compounds): 32 GB RAM is recommended
+  \item Large libraries (\textgreater{}50M compounds): at least 32 GB RAM is required
 \end{itemize}
-Processing speed optimization:
+To improve processing speed:
 
 \begin{itemize}
-  \item Use SSD storage for faster I/O operations
-  \item Increase num\_cores parameter for parallel processing
-  \item Use compressed FASTQ files (.gz) to reduce disk space
+  \item use SSD storage to improve I/O performance
+  \item increase the \texttt{num\_cores} parameter for parallel processing
+  \item use compressed FASTQ files (\texttt{.gz}) to reduce disk usage
 \end{itemize}
 
-\subsubsection{Quality control thresholds}
-Demultiplexing quality indicators:
+\subsection{Quality control thresholds}
+Suggested quality indicators for demultiplexing are:
 
 \begin{itemize}
   \item Excellent: \textgreater{}90\% initial read retention
-  \item Good: 70-90\% initial retention
-  \item Acceptable: 50-70\% initial retention
+  \item Good: 70--90\% initial retention
+  \item Acceptable: 50--70\% initial retention
   \item Poor: \textless{}50\% retention (requires troubleshooting)
 \end{itemize}
-Statistical analysis quality indicators:
+Suggested quality indicators for statistical analysis are:
 
 \begin{itemize}
-  \item Replicate correlation: R² \textgreater{}0.7 for biological replicates (R² \textgreater{}0.9 for technical replicates)
-  \item Positive / negative controls: That positive and negative controls give expected outputs
+  \item Replicate correlation: R² \textgreater{}0.7 for biological replicates and R² \textgreater{}0.9 for technical replicates
+  \item Positive and negative controls: controls should show the expected behavior
 \end{itemize}
 
-\subsection{Timing}
+\section{Timing}
 Protocol execution times depend on dataset characteristics and computational resources. This table provides estimates for different dataset scales using the recommended hardware configuration (32 GB RAM, 16 CPU cores).
 
 
@@ -974,14 +970,14 @@ Notes:
 
 \begin{itemize}
   \item Software installation is required only once before first use
-  \item Times assume recommended hardware configuration (32 GB RAM, 16 CPU cores)
-  \item Parallel processing (num\_cores parameter) significantly affects timing
+  \item Times assume the recommended hardware configuration (32 GB RAM, 16 CPU cores)
+  \item Parallel processing with the \texttt{num\_cores} parameter can substantially affect runtime
 \end{itemize}
 
-\subsection{Anticipated results}
+\section{Anticipated results}
 
-\subsubsection{Output file structure}
-DELT-Hit generates a comprehensive, standardized output hierarchy:
+\subsection{Output file structure}
+DELT-Hit generates a standardized output hierarchy:
 
 
 \begin{lstlisting}
@@ -1059,12 +1055,12 @@ supporting_material/experiments/example-single-stranded/
                 `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
 \end{lstlisting}
 
-\subsubsection{Chemical library characterization}
-Library enumeration generates comprehensive structural and chemical space information for all possible compounds in your DEL.
+\subsection{Chemical library characterization}
+Library enumeration generates structural and chemical-space information for all possible compounds in the DEL.
 
 Library enumeration:
 
-The reaction graph (Figure 2) visualizes the synthetic scheme, showing how building blocks combine through defined reactions to generate final products. This representation helps validate:
+The reaction graph (Figure 2) visualizes the synthetic scheme and shows how building blocks combine through defined reactions to generate final products. This representation helps validate:
 
 \begin{itemize}
   \item Correct reaction connectivity
@@ -1078,102 +1074,98 @@ Library size:
 \end{itemize}
 Molecular property distributions:
 
-Property calculation provides comprehensive descriptor analysis for drug-likeness assessment. Figure 3 shows a typical molecular weight distribution with most compounds falling in the 300-600 Da range.
+Property calculation provides descriptor analysis for chemical characterization. Figure 3 shows a typical molecular weight distribution, with most compounds falling in the 300--600 Da range.
 
 
-\subsubsection{Demultiplexing performance}
-Successful demultiplexing indicates high-quality library and sequencing data.
+\subsection{Demultiplexing performance}
+Successful demultiplexing is consistent with good library and sequencing quality.
 
-Quality control visualizations (Figures 4 - 5) show:
-
-\begin{itemize}
-  \item Read retention through processing steps: Tracks the percentage of reads retained after each adapter trimming step
-  \item Barcode coverage distributions: Displays how evenly reads are distributed across building blocks
-  \item Error rate distributions: Shows the frequency of sequencing errors detected at each position
-\end{itemize}
-Performance interpretation:
+Quality-control visualizations (Figures 4--5) show:
 
 \begin{itemize}
-  \item Excellent/Good performance: Library is well constructed with high-quality sequencing
-  \item Acceptable performance: Usable for analysis but may have reduced sensitivity
-  \item Poor performance: Indicates technical issues requiring troubleshooting (see Troubleshooting section)
+  \item Read retention through processing steps: the percentage of reads retained after each adapter-trimming step
+  \item Barcode coverage distributions: how evenly reads are distributed across building blocks
+  \item Error-rate distributions: the frequency of sequencing errors detected at each position
 \end{itemize}
-Common patterns:
+Typical interpretations are:
 
 \begin{itemize}
-  \item High initial retention (\textgreater{}90\%): Correct adapter sequences, good sequencing quality
-  \item Even barcode distribution: Well-balanced library without synthesis bias
-  \item Low error rates (\textless{}2\%): High-quality sequencing suitable for stringent matching
+  \item Excellent or good performance: library construction and sequencing quality are likely to be high
+  \item Acceptable performance: the dataset remains usable but may have reduced sensitivity
+  \item Poor performance: technical issues are likely and troubleshooting is required
 \end{itemize}
-
-\subsubsection{Statistical analysis outputs}
-Hit identification provides ranked lists of enriched compounds with statistical significance assessment.
-
-Expected enrichment patterns:
-
-For a typical protein target screen against negative controls:
+Common patterns include:
 
 \begin{itemize}
-  \item Dynamic range: 2-1000 fold enrichment over negative controls
-  \item Replicate consistency: Pearson correlation R \textgreater{} 0.7 between biological replicates
-  \item Statistical power: Reliable detection of \textgreater{}2-fold enrichment with \textgreater{}100 reads per compound
-  \item Reproducible selection experiments
-  \item Minimal batch effects
-  \item Reliable statistical inference
+  \item High initial retention (\textgreater{}90\%): correct adapter sequences and good sequencing quality
+  \item Even barcode distribution: a well-balanced library with limited synthesis bias
+  \item Low error rates (\textless{}2\%): sequencing quality suitable for stringent matching
 \end{itemize}
 
-\subsubsection{Integration capabilities and downstream applications}
-DELT-Hit outputs integrate seamlessly with established cheminformatics and machine learning workflows.
+\subsection{Statistical analysis outputs}
+Hit identification produces ranked lists of enriched compounds together with measures of statistical significance.
 
-Machine learning workflows:
+Expected enrichment patterns for a typical protein target screen against negative controls include:
+
+\begin{itemize}
+  \item dynamic range of approximately 2--1000-fold enrichment over negative controls
+  \item replicate consistency, with Pearson correlation \textit{R} \textgreater{} 0.7 between biological replicates
+  \item reliable detection of \textgreater{}2-fold enrichment when counts exceed \textgreater{}100 reads per compound
+  \item reproducible selection experiments with limited batch effects
+\end{itemize}
+
+\subsection{Integration capabilities and downstream applications}
+DELT-Hit outputs can be used in established cheminformatics and machine-learning workflows.
+
+Machine-learning workflows:
 
 The generated molecular representations enable:
 
 \begin{itemize}
   \item Scikit-learn compatibility: Morgan fingerprints for classification, regression, and clustering
-  \item Deep learning frameworks: BERT embeddings compatible with TensorFlow and PyTorch
-  \item Chemical similarity analysis: Tanimoto similarity calculations using Morgan fingerprints
-  \item Dimensionality reduction: PCA, t-SNE, or UMAP visualization of chemical space
+  \item deep-learning workflows: BERT embeddings compatible with TensorFlow and PyTorch
+  \item chemical similarity analysis: Tanimoto similarity calculations using Morgan fingerprints
+  \item dimensionality reduction: PCA, t-SNE, or UMAP visualization of chemical space
 \end{itemize}
 Cheminformatics pipelines:
 
-Integration with RDKit and other tools for:
+Integration with RDKit and related tools supports:
 
 \begin{itemize}
-  \item Structure-activity relationship (SAR) analysis: Identification of structural motifs associated with activity
-  \item Virtual screening: Use enriched compounds to search larger chemical databases
+  \item structure-activity relationship (SAR) analysis to identify structural motifs associated with activity
+  \item virtual screening of larger chemical databases using enriched compounds
 \end{itemize}
 Statistical analysis:
 
-Direct export to R for specialized modeling:
+Direct export to R supports:
 
 \begin{itemize}
-  \item Dose-response modeling: Analyze enrichment across multiple selection stringencies
-  \item Multi-target analysis: Compare enrichment patterns across different protein targets
+  \item dose-response modeling across multiple selection stringencies
+  \item multi-target analysis across different protein targets
 \end{itemize}
 
-\subsection{Data and code availability}
+\section{Data and code availability}
 
-\subsubsection{Software access and documentation}
-DELT-Hit software is freely available under MIT License:
+\subsection{Software access and documentation}
+DELT-Hit is available under the MIT License:
 
 \begin{itemize}
-  \item Primary repository: https://github.com/DELTechnology/delt-hit
-  \item Installation: pip install git+https://git@github.com/DELTechnology/delt-hit.git
-  \item Documentation: Comprehensive user guides, API reference, and tutorials at the repository
-  \item Issue tracking: Community support and bug reporting via GitHub Issues
+  \item Primary repository: \url{https://github.com/DELTechnology/delt-hit}
+  \item Installation: \texttt{pip install git+https://git@github.com/DELTechnology/delt-hit.git}
+  \item Documentation: user guides, API reference, and tutorials are provided in the repository
+  \item Issue tracking: bug reports and support requests can be submitted through GitHub Issues
 \end{itemize}
 
-\subsection{Author contributions}
-A.M. conceived the project, designed the software architecture, and implemented core algorithms. A.L. created and maintained the configuration files and testing frameworks. G.H implemented core algorithms. A.G. performed selection experiments and helped with result interpretation. L.P. performed software validation and contributed to code fine-tuning. J.S. provided scientific oversight and experimental validation. All authors contributed to manuscript preparation and revision.
+\section{Author contributions}
+A.M. conceived the project, designed the software architecture, and implemented core algorithms. A.L. created and maintained the configuration files and testing frameworks. G.H. implemented core algorithms. A.G. performed selection experiments and contributed to result interpretation. L.P. performed software validation and contributed to code refinement. J.S. provided scientific oversight and experimental validation. All authors contributed to manuscript preparation and revision.
 
 
-\subsection{Competing interests}
+\section{Competing interests}
 The authors declare no competing financial interests.
 
 
-\subsection{Acknowledgments}
-We thank the DEL research community for valuable feedback during software development and beta testing. We acknowledge the developers of Cutadapt, RDKit, edgeR, and other open-source tools that enable this framework. Special thanks to early adopters who provided critical feedback for improving usability and robustness.
+\section{Acknowledgments}
+We thank the DEL research community for feedback during software development and beta testing. We also acknowledge the developers of Cutadapt, RDKit, edgeR, and other open-source tools used in this workflow, as well as early adopters who helped improve usability and robustness.
 
 
 
