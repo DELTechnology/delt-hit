@@ -61,11 +61,6 @@ class Library:
         graph_bundle = prepare_graph_bundle(cfg=cfg)
 
         lib_path.parent.mkdir(parents=True, exist_ok=True)
-        visualization_dir = get_library_dir(config_path) / "visualization"
-        visualization_dir.mkdir(parents=True, exist_ok=True)
-        save_graph_visualizations(graph_bundle=graph_bundle, save_dir=visualization_dir)
-
-        logger.info(f'Saved reaction graph visualizations to {visualization_dir}')
 
         building_block_names = sorted(graph_bundle['building_blocks'])
 
@@ -514,17 +509,6 @@ def save_figure_outputs(fig, output_path: Path, *, dpi: int = 300) -> None:
         tight_layout()
     fig.savefig(output_path.with_suffix(".png"), dpi=dpi, bbox_inches="tight")
 
-
-def save_graph_visualizations(*, graph_bundle: dict, save_dir: Path, dpi: int = 300) -> None:
-    """Write the standard reaction graph visualizations to disk."""
-    for graph, filename in [
-        (graph_bundle['bb_G'], 'reaction_graph_building_blocks'),
-        (graph_bundle['add_G'], 'reaction_graph_additional'),
-        (graph_bundle['G'], 'reaction_graph'),
-    ]:
-        ax = visualize_reaction_graph(graph)
-        save_figure_outputs(ax.figure, save_dir / filename, dpi=dpi)
-        close_figure(ax.figure)
 
 
 def enumerate_single_strand(*,
