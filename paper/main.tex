@@ -102,17 +102,19 @@ This modular architecture enables users to execute complete workflows for routin
 
 
 \subsubsection{Overview of the procedure}
-The DELT-Hit protocol is organized into five sequential stages executed through a command-line interface designed to support both computational chemists experienced with bioinformatics tools and experimental scientists new to DEL data analysis:
+The DELT-Hit protocol is organized into six sequential stages executed through a command-line interface designed to support both computational chemists experienced with bioinformatics tools and experimental scientists new to DEL data analysis:
 
-(i) Project setup and library specification (Steps 1-3): Configuration file creation from Excel templates, library architecture definition, and experimental metadata specification
+(i) Project setup and library specification (Steps 1--3): Configuration file creation from Excel templates, library architecture definition, and experimental metadata specification.
 
-(ii) Chemical structure enumeration and property calculation (Steps 4-6): Automated SMILES generation from reaction schemes, comprehensive molecular descriptor calculation, and chemical space visualization
+(ii) Sequence demultiplexing and quality assessment (Steps 4--7): High-throughput sequence processing, barcode identification with error correction, and quality control metric generation.
 
-(iii) Sequence demultiplexing and quality assessment (Steps 7-10): High-throughput sequence processing, barcode identification with error correction, and quality control metric generation
+(iii) Data visualization and interpretation (Step 8): Interactive dashboard exploration of raw count data to identify selections of interest.
 
-(iv) Data visualization and interpretation (Step 11): Interactive dashboard exploration
+(iv) Selection-centric enumeration and analysis (Steps 9--10): Automated SMILES generation and molecular property calculation for the top enriched compounds of a chosen selection.
 
-(v) Statistical analysis and hit detection (Steps 12--13): Enrichment analysis using established RNA-seq methods, hit ranking with multiple statistical approaches, and result validation
+(v) Statistical analysis and hit detection (Steps 12--13): Enrichment analysis using established RNA-seq methods, hit ranking with multiple statistical approaches, and result validation.
+
+(vi) Full library enumeration and machine learning representations (Step 14): Optional full-library enumeration and generation of molecular fingerprints and embeddings for downstream machine learning workflows.
 
 
 \subsubsection{Applications of the method}
@@ -683,30 +685,35 @@ CRITICAL: The default folder hierarchy as produced by delt-hit process needs to 
 
 
 \subsubsection{Phase 4: Selection-centric enumeration and analysis • TIMING 10 min - 2 h}
-This phase generates all possible chemical structures from your building block combinations and calculates molecular properties for downstream analysis. Library enumeration requires advanced knowledge of the SMARTS/SMIRKS language. While we provide common reaction patterns observed in DNA encoded libraries, library specific tweaks are often necessary.
+This phase generates chemical structures and calculates molecular properties for the top enriched compounds identified in a given selection. Library enumeration requires advanced knowledge of the SMARTS/SMIRKS language. While we provide common reaction patterns observed in DNA encoded libraries, library specific tweaks are often necessary.
 
 
-\paragraph{Step 9 \textbar{} Enumerate library compounds from building blocks}
+\paragraph{Step 9 \textbar{} Enumerate top compounds from a selection}
 
-Generate all possible chemical structures by combining building blocks according to the defined reaction schemes:
+Generate chemical structures for the top enriched compounds identified in a given selection. First visualize the reaction graph to verify the library architecture, then enumerate the top hits:
 
 
 \begin{lstlisting}
-delt-hit library enumerate --config_path=/path/to/config.yaml --graph_only=True  # produce reaction graph only for inspection
-delt-hit library enumerate --config_path=/path/to/config.yaml
+delt-hit visualize enumerate --config_path=$CONFIG_PATH
+
+delt-hit library enumerate \
+  --config_path=$CONFIG_PATH \
+  --counts_path=/path/to/selections/SELECTION/counts.txt \
+  --top_n=1000 \
+  --library_name=SELECTION_top_hits
 \end{lstlisting}
 Those commands:
 
 \begin{itemize}
-  \item Construct a reaction graph from your building blocks and reactions
-  \item Enumerates all valid compound combinations
+  \item Visualize the reaction graph of the library architecture for inspection
+  \item Enumerate the top \texttt{top\_n} compounds by count for the specified selection
   \item Validates chemical structures
-  \item Saves the complete library catalog
+  \item Saves the compound catalog for the selected hits
 \end{itemize}
 Expected outputs:
 
 \begin{itemize}
-  \item library.parquet: Complete compound catalog with SMILES and barcode mappings
+  \item library/SELECTION\_top\_hits/library.parquet: Compound catalog for the top hits with SMILES and barcode mappings
   \item reaction\_graph.png: Visual representation of synthetic schema
   \item additional\_reactions\_graph.png: Visualizes the additional reactions from the reaction\_graph sheet
   \item building\_block\_reactions\_graph.png: Visualizes the reactions derived from the building block sheets B0, B1, etc.
@@ -728,13 +735,14 @@ TROUBLESHOOTING:
   \item Re-run enumeration in debugging mode to visualize the reaction graphs that fail: delt-hit library enumerate --config\_path=/path/to/config.yaml --debug=invalid
 \end{itemize}
 
-\paragraph{Step 10 \textbar{} Calculate molecular properties and descriptors}
+\paragraph{Step 10 \textbar{} Visualize and calculate molecular properties of top hits}
 
-Compute comprehensive molecular descriptors for drug-likeness assessment and chemical space characterization:
+Visualize the enumerated top hits and compute comprehensive molecular descriptors for drug-likeness assessment and chemical space characterization of the selected compounds:
 
 
 \begin{lstlisting}
-delt-hit library properties --config_path=/path/to/config.yaml
+delt-hit visualize library --config_path=$CONFIG_PATH --library_name=SELECTION_top_hits
+delt-hit library properties --config_path=$CONFIG_PATH --library_name=SELECTION_top_hits
 \end{lstlisting}
 Computed properties include:
 
@@ -880,6 +888,22 @@ TROUBLESHOOTING: If no hits are identified:
 
 \subsubsection{Phase 6: Full library enumeration and machine learning representations • TIMING 1 h - 8 h}
 This phase performs full library enumeration and generates molecular representations for downstream machine learning applications. These steps are optional and only required for ML workflows.
+
+\paragraph{Step 12 \textbar{} Enumerate the full library}
+
+Enumerate all library members for downstream machine learning tasks:
+
+\begin{lstlisting}
+delt-hit library enumerate --config_path=$CONFIG_PATH
+\end{lstlisting}
+
+\paragraph{Step 13 \textbar{} Calculate molecular properties for the full library}
+
+Calculate molecular properties for all library members:
+
+\begin{lstlisting}
+delt-hit library properties --config_path=$CONFIG_PATH
+\end{lstlisting}
 
 \paragraph{Step 14 \textbar{} Generate molecular representations for machine learning}
 
