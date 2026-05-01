@@ -24,6 +24,42 @@ from delt_hit.cli.helper import (
 )
 from delt_hit.utils import read_yaml
 
+MAX_RASTER_IMAGE_PIXELS = 40_000_000
+
+
+def _scale_dimensions_to_pixel_budget(
+    width_px: int,
+    height_px: int,
+    *,
+    max_pixels: int = MAX_RASTER_IMAGE_PIXELS,
+) -> tuple[int, int]:
+    """Scale raster dimensions down to fit within a pixel budget."""
+    total_pixels = width_px * height_px
+    if total_pixels <= max_pixels:
+        return width_px, height_px
+
+    scale = (max_pixels / total_pixels) ** 0.5
+    scaled_width = max(1, int(width_px * scale))
+    scaled_height = max(1, int(height_px * scale))
+    return scaled_width, scaled_height
+
+
+def _cap_figure_dpi(
+    fig,
+    *,
+    requested_dpi: int,
+    max_pixels: int = MAX_RASTER_IMAGE_PIXELS,
+) -> int:
+    """Return a DPI that keeps figure rasterization under a pixel budget."""
+    width_in, height_in = fig.get_size_inches()
+    requested_pixels = width_in * height_in * requested_dpi * requested_dpi
+    if requested_pixels <= max_pixels:
+        return requested_dpi
+
+    safe_dpi = int((max_pixels / (width_in * height_in)) ** 0.5)
+    return max(1, min(requested_dpi, safe_dpi))
+
+
 class Library:
     def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
                   errors: str = 'raise', counts_path: Path | None = None,
@@ -511,7 +547,11 @@ def save_figure_outputs(fig, output_path: Path, *, dpi: int = 300) -> None:
     tight_layout = getattr(fig, "tight_layout", None)
     if callable(tight_layout):
         tight_layout()
-    fig.savefig(output_path.with_suffix(".png"), dpi=dpi, bbox_inches="tight")
+    fig.savefig(
+        output_path.with_suffix(".png"),
+        dpi=_cap_figure_dpi(fig, requested_dpi=dpi),
+        bbox_inches="tight",
+    )
 
 
 def save_graph_visualizations(*, graph_bundle: dict, save_dir: Path, dpi: int = 300) -> None:
@@ -957,11 +997,20 @@ def visualize_smiles(
     mols = [Chem.MolFromSmiles(s) for s in smiles]
     legends = legends or None
     nrow = min(nrow, len(mols))
+    ncols = nrow
+    nrows = int(np.ceil(len(mols) / ncols))
+    base_width = ncols * sub_img_size[0]
+    base_height = nrows * sub_img_size[1]
+    scaled_width, scaled_height = _scale_dimensions_to_pixel_budget(base_width, base_height)
+    scaled_sub_img_size = (
+        max(1, scaled_width // ncols),
+        max(1, scaled_height // nrows),
+    )
     img = Draw.MolsToGridImage(
         mols,
         legends=legends,
         molsPerRow=nrow,
-        subImgSize=sub_img_size,
+        subImgSize=scaled_sub_img_size,
     )
     width_px, height_px = img.size
     fig, ax = plt.subplots(
