@@ -75,19 +75,20 @@ def parse_args() -> argparse.Namespace:
         "--data-dir",
         type=Path,
         default=None,
-        help="Scratch workspace root for one dataset. Uses <data-dir>/data/<dataset> and writes tool inputs under <data-dir>/tools/deli/<dataset>.",
+        help="Scratch workspace root for one dataset. Uses <data-dir>/data/<dataset>, caches benchmark config under benchmarks/demultiplex/tools/deli/<dataset>, and writes generated DELi input assets under <data-dir>/tools/deli/<dataset>.",
     )
     return parser.parse_args()
 
 
 def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = None) -> None:
+    config_dir = (TOOL_ROOT / dataset_name).resolve()
     if data_dir is None:
         dataset_dir = (DATA_ROOT / dataset_name).resolve()
-        output_dir = (TOOL_ROOT / dataset_name).resolve()
+        runtime_dir = config_dir
     else:
         data_dir = data_dir.resolve()
         dataset_dir = data_dir / "data" / dataset_name
-        output_dir = data_dir / "tools" / "deli" / dataset_name
+        runtime_dir = data_dir / "tools" / "deli" / dataset_name
 
     if not dataset_dir.exists():
         raise FileNotFoundError(f"Dataset directory not found: {dataset_dir}")
@@ -102,7 +103,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
     if num_errors not in {0, 1}:
         raise ValueError(f"Unsupported num_errors={num_errors}; only 0 and 1 are supported")
 
-    data_dir = output_dir / "data"
+    data_dir = runtime_dir / "data"
     bb_dir = data_dir / "building_blocks"
     lib_dir = data_dir / "libraries"
     reaction_dir = data_dir / "reactions"
@@ -147,7 +148,9 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
     }
     library_json.write_text(json.dumps(library_data, indent=2) + "\n")
 
-    selection_yaml = output_dir / "decode_synthetic.yaml"
+    config_dir.mkdir(parents=True, exist_ok=True)
+
+    selection_yaml = config_dir / "decode_synthetic.yaml"
     selection_data = {
         "selection_id": f"{dataset_name}_selection",
         "target_id": "synthetic_target",
@@ -177,7 +180,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
     }
     selection_yaml.write_text(yaml.safe_dump(selection_data, sort_keys=False))
 
-    decode_settings_path = output_dir / "decode_settings_v02.yaml"
+    decode_settings_path = config_dir / "decode_settings_v02.yaml"
     decode_settings_path.write_text(
         yaml.safe_dump(
             {
@@ -202,7 +205,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, data_dir: Path | None = No
         )
     )
 
-    deli_config = output_dir / "deli_config"
+    deli_config = config_dir / "deli_config"
     write_deli_config(deli_config, data_dir)
 
     print(f"Wrote DELi selection file to {selection_yaml}")

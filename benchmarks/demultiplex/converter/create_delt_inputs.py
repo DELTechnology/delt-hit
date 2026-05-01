@@ -52,19 +52,20 @@ def parse_args() -> argparse.Namespace:
         "--data-dir",
         type=Path,
         default=None,
-        help="Scratch workspace root for one dataset. Uses <data-dir>/data/<dataset> and writes tool inputs under <data-dir>/tools/delt/<dataset>.",
+        help="Scratch workspace root for one dataset. Uses <data-dir>/data/<dataset>, caches benchmark config under benchmarks/demultiplex/tools/delt/<dataset>, and writes generated DELT-Hit demultiplex inputs under <data-dir>/tools/delt/<dataset>.",
     )
     return parser.parse_args()
 
 
 def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_dir: Path | None = None) -> None:
+    config_dir = (TOOL_ROOT / dataset_name).resolve()
     if data_dir is None:
         dataset_dir = (DATA_ROOT / dataset_name).resolve()
-        output_dir = (TOOL_ROOT / dataset_name).resolve()
+        runtime_dir = config_dir
     else:
         data_dir = data_dir.resolve()
         dataset_dir = data_dir / "data" / dataset_name
-        output_dir = data_dir / "tools" / "delt" / dataset_name
+        runtime_dir = data_dir / "tools" / "delt" / dataset_name
 
     if not dataset_dir.exists():
         raise FileNotFoundError(f"Dataset directory not found: {dataset_dir}")
@@ -79,7 +80,8 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
     if num_errors not in {0, 1}:
         raise ValueError(f"Unsupported num_errors={num_errors}; only 0 and 1 are supported")
 
-    output_dir.mkdir(parents=True, exist_ok=True)
+    config_dir.mkdir(parents=True, exist_ok=True)
+    runtime_dir.mkdir(parents=True, exist_ok=True)
     fastq_path = Path(manifest["files"]["fastq"]).resolve()
     library_error_rate = num_errors / len(manifest["library_tag"])
     barcode_error_rate = num_errors / int(manifest["tag_length"])
@@ -115,7 +117,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
         "experiment": {
             "name": dataset_name,
             "fastq_path": str(fastq_path),
-            "save_dir": str(output_dir.resolve()),
+            "save_dir": str(runtime_dir.resolve()),
             "num_cores": num_cores,
         },
         "selections": {
@@ -151,7 +153,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
         },
     }
 
-    config_path = output_dir / "config.yaml"
+    config_path = config_dir / "config.yaml"
     with config_path.open("w") as handle:
         yaml.safe_dump(config, handle, sort_keys=False)
 
@@ -160,7 +162,7 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
     )
 
     print(f"Wrote DELT-Hit config to {config_path}")
-    print(f"Prepared demultiplex inputs under {output_dir / dataset_name / 'demultiplex'}")
+    print(f"Prepared demultiplex inputs under {runtime_dir / dataset_name / 'demultiplex'}")
 
 
 if __name__ == "__main__":
