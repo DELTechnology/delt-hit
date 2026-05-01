@@ -72,17 +72,18 @@ The publication re-analysis folders reproduce the DELT-Hit processing for the Fa
 Source folder: `supporting_material/experiments/favalli/`  
 Publication DOI: [10.1038/s41557-021-00660-y](https://doi.org/10.1038/s41557-021-00660-y)
 
-Download the raw FASTQ files first:
+Download the raw FASTQ files and published comparison table first:
 
 ```bash
 cd supporting_material/experiments/favalli
 bash download.sh
 ```
 
-This downloads the two expected files into the experiment root:
+This script:
 
-- `20190812.A-1907_NF2GB2_s1_R1.fastq.gz`
-- `20190812.A-1907_NF2GB2_s2_R1.fastq.gz`
+- downloads `20190812.A-1907_NF2GB2_s1_R1.fastq.gz`
+- downloads `20190812.A-1907_NF2GB2_s2_R1.fastq.gz`
+- downloads the published evaluation table into `supporting_material/experiments/favalli/published/`
 
 Run DELT-Hit for a given lane:
 
