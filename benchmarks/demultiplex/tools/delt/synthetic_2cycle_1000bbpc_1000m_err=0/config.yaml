@@ -1,0 +1,6051 @@
+experiment:
+  name: synthetic_2cycle_1000bbpc_1000m_err=0
+  fastq_path: /tmp/60664161/delt-hit-benchmarks/60664161/synthetic_2cycle_1000bbpc_1000m_err=0/data/synthetic_2cycle_1000bbpc_1000m_err=0/synthetic_2cycle_1000bbpc_1000m_err=0.fastq.gz
+  save_dir: /tmp/60664161/delt-hit-benchmarks/60664161/synthetic_2cycle_1000bbpc_1000m_err=0/tools/delt/synthetic_2cycle_1000bbpc_1000m_err=0
+  num_cores: 11
+selections:
+  synthetic_selection:
+    operator: Codex
+    date: '2026-04-24'
+    group: synthetic
+    target: synthetic_target
+    S0: ACGTACGTAC
+    ids:
+    - 0
+structure:
+- name: S0
+  type: selection
+  max_error_rate: 0.0
+  indels: false
+- name: B0
+  type: building_block
+  max_error_rate: 0.0
+  indels: false
+- name: B1
+  type: building_block
+  max_error_rate: 0.0
+  indels: false
+- name: C0
+  type: constant
+  max_error_rate: 0.0
+  indels: false
+whitelists:
+  C0:
+  - codon: TTGGAACC
+  S0:
+  - name: synthetic_selection
+    codon: NNNNNNNNACGTACGTAC
+  B0:
+  - index: 0
+    codon: AAAAAAAA
+    building_block_id: BB1_001
+  - index: 1
+    codon: AAAAAAAC
+    building_block_id: BB1_002
+  - index: 2
+    codon: AAAAAAAG
+    building_block_id: BB1_003
+  - index: 3
+    codon: AAAAAAAT
+    building_block_id: BB1_004
+  - index: 4
+    codon: AAAAAACA
+    building_block_id: BB1_005
+  - index: 5
+    codon: AAAAAACC
+    building_block_id: BB1_006
+  - index: 6
+    codon: AAAAAACG
+    building_block_id: BB1_007
+  - index: 7
+    codon: AAAAAACT
+    building_block_id: BB1_008
+  - index: 8
+    codon: AAAAAAGA
+    building_block_id: BB1_009
+  - index: 9
+    codon: AAAAAAGC
+    building_block_id: BB1_010
+  - index: 10
+    codon: AAAAAAGG
+    building_block_id: BB1_011
+  - index: 11
+    codon: AAAAAAGT
+    building_block_id: BB1_012
+  - index: 12
+    codon: AAAAAATA
+    building_block_id: BB1_013
+  - index: 13
+    codon: AAAAAATC
+    building_block_id: BB1_014
+  - index: 14
+    codon: AAAAAATG
+    building_block_id: BB1_015
+  - index: 15
+    codon: AAAAAATT
+    building_block_id: BB1_016
+  - index: 16
+    codon: AAAAACAA
+    building_block_id: BB1_017
+  - index: 17
+    codon: AAAAACAC
+    building_block_id: BB1_018
+  - index: 18
+    codon: AAAAACAG
+    building_block_id: BB1_019
+  - index: 19
+    codon: AAAAACAT
+    building_block_id: BB1_020
+  - index: 20
+    codon: AAAAACCA
+    building_block_id: BB1_021
+  - index: 21
+    codon: AAAAACCC
+    building_block_id: BB1_022
+  - index: 22
+    codon: AAAAACCG
+    building_block_id: BB1_023
+  - index: 23
+    codon: AAAAACCT
+    building_block_id: BB1_024
+  - index: 24
+    codon: AAAAACGA
+    building_block_id: BB1_025
+  - index: 25
+    codon: AAAAACGC
+    building_block_id: BB1_026
+  - index: 26
+    codon: AAAAACGG
+    building_block_id: BB1_027
+  - index: 27
+    codon: AAAAACGT
+    building_block_id: BB1_028
+  - index: 28
+    codon: AAAAACTA
+    building_block_id: BB1_029
+  - index: 29
+    codon: AAAAACTC
+    building_block_id: BB1_030
+  - index: 30
+    codon: AAAAACTG
+    building_block_id: BB1_031
+  - index: 31
+    codon: AAAAACTT
+    building_block_id: BB1_032
+  - index: 32
+    codon: AAAAAGAA
+    building_block_id: BB1_033
+  - index: 33
+    codon: AAAAAGAC
+    building_block_id: BB1_034
+  - index: 34
+    codon: AAAAAGAG
+    building_block_id: BB1_035
+  - index: 35
+    codon: AAAAAGAT
+    building_block_id: BB1_036
+  - index: 36
+    codon: AAAAAGCA
+    building_block_id: BB1_037
+  - index: 37
+    codon: AAAAAGCC
+    building_block_id: BB1_038
+  - index: 38
+    codon: AAAAAGCG
+    building_block_id: BB1_039
+  - index: 39
+    codon: AAAAAGCT
+    building_block_id: BB1_040
+  - index: 40
+    codon: AAAAAGGA
+    building_block_id: BB1_041
+  - index: 41
+    codon: AAAAAGGC
+    building_block_id: BB1_042
+  - index: 42
+    codon: AAAAAGGG
+    building_block_id: BB1_043
+  - index: 43
+    codon: AAAAAGGT
+    building_block_id: BB1_044
+  - index: 44
+    codon: AAAAAGTA
+    building_block_id: BB1_045
+  - index: 45
+    codon: AAAAAGTC
+    building_block_id: BB1_046
+  - index: 46
+    codon: AAAAAGTG
+    building_block_id: BB1_047
+  - index: 47
+    codon: AAAAAGTT
+    building_block_id: BB1_048
+  - index: 48
+    codon: AAAAATAA
+    building_block_id: BB1_049
+  - index: 49
+    codon: AAAAATAC
+    building_block_id: BB1_050
+  - index: 50
+    codon: AAAAATAG
+    building_block_id: BB1_051
+  - index: 51
+    codon: AAAAATAT
+    building_block_id: BB1_052
+  - index: 52
+    codon: AAAAATCA
+    building_block_id: BB1_053
+  - index: 53
+    codon: AAAAATCC
+    building_block_id: BB1_054
+  - index: 54
+    codon: AAAAATCG
+    building_block_id: BB1_055
+  - index: 55
+    codon: AAAAATCT
+    building_block_id: BB1_056
+  - index: 56
+    codon: AAAAATGA
+    building_block_id: BB1_057
+  - index: 57
+    codon: AAAAATGC
+    building_block_id: BB1_058
+  - index: 58
+    codon: AAAAATGG
+    building_block_id: BB1_059
+  - index: 59
+    codon: AAAAATGT
+    building_block_id: BB1_060
+  - index: 60
+    codon: AAAAATTA
+    building_block_id: BB1_061
+  - index: 61
+    codon: AAAAATTC
+    building_block_id: BB1_062
+  - index: 62
+    codon: AAAAATTG
+    building_block_id: BB1_063
+  - index: 63
+    codon: AAAAATTT
+    building_block_id: BB1_064
+  - index: 64
+    codon: AAAACAAA
+    building_block_id: BB1_065
+  - index: 65
+    codon: AAAACAAC
+    building_block_id: BB1_066
+  - index: 66
+    codon: AAAACAAG
+    building_block_id: BB1_067
+  - index: 67
+    codon: AAAACAAT
+    building_block_id: BB1_068
+  - index: 68
+    codon: AAAACACA
+    building_block_id: BB1_069
+  - index: 69
+    codon: AAAACACC
+    building_block_id: BB1_070
+  - index: 70
+    codon: AAAACACG
+    building_block_id: BB1_071
+  - index: 71
+    codon: AAAACACT
+    building_block_id: BB1_072
+  - index: 72
+    codon: AAAACAGA
+    building_block_id: BB1_073
+  - index: 73
+    codon: AAAACAGC
+    building_block_id: BB1_074
+  - index: 74
+    codon: AAAACAGG
+    building_block_id: BB1_075
+  - index: 75
+    codon: AAAACAGT
+    building_block_id: BB1_076
+  - index: 76
+    codon: AAAACATA
+    building_block_id: BB1_077
+  - index: 77
+    codon: AAAACATC
+    building_block_id: BB1_078
+  - index: 78
+    codon: AAAACATG
+    building_block_id: BB1_079
+  - index: 79
+    codon: AAAACATT
+    building_block_id: BB1_080
+  - index: 80
+    codon: AAAACCAA
+    building_block_id: BB1_081
+  - index: 81
+    codon: AAAACCAC
+    building_block_id: BB1_082
+  - index: 82
+    codon: AAAACCAG
+    building_block_id: BB1_083
+  - index: 83
+    codon: AAAACCAT
+    building_block_id: BB1_084
+  - index: 84
+    codon: AAAACCCA
+    building_block_id: BB1_085
+  - index: 85
+    codon: AAAACCCC
+    building_block_id: BB1_086
+  - index: 86
+    codon: AAAACCCG
+    building_block_id: BB1_087
+  - index: 87
+    codon: AAAACCCT
+    building_block_id: BB1_088
+  - index: 88
+    codon: AAAACCGA
+    building_block_id: BB1_089
+  - index: 89
+    codon: AAAACCGC
+    building_block_id: BB1_090
+  - index: 90
+    codon: AAAACCGG
+    building_block_id: BB1_091
+  - index: 91
+    codon: AAAACCGT
+    building_block_id: BB1_092
+  - index: 92
+    codon: AAAACCTA
+    building_block_id: BB1_093
+  - index: 93
+    codon: AAAACCTC
+    building_block_id: BB1_094
+  - index: 94
+    codon: AAAACCTG
+    building_block_id: BB1_095
+  - index: 95
+    codon: AAAACCTT
+    building_block_id: BB1_096
+  - index: 96
+    codon: AAAACGAA
+    building_block_id: BB1_097
+  - index: 97
+    codon: AAAACGAC
+    building_block_id: BB1_098
+  - index: 98
+    codon: AAAACGAG
+    building_block_id: BB1_099
+  - index: 99
+    codon: AAAACGAT
+    building_block_id: BB1_100
+  - index: 100
+    codon: AAAACGCA
+    building_block_id: BB1_101
+  - index: 101
+    codon: AAAACGCC
+    building_block_id: BB1_102
+  - index: 102
+    codon: AAAACGCG
+    building_block_id: BB1_103
+  - index: 103
+    codon: AAAACGCT
+    building_block_id: BB1_104
+  - index: 104
+    codon: AAAACGGA
+    building_block_id: BB1_105
+  - index: 105
+    codon: AAAACGGC
+    building_block_id: BB1_106
+  - index: 106
+    codon: AAAACGGG
+    building_block_id: BB1_107
+  - index: 107
+    codon: AAAACGGT
+    building_block_id: BB1_108
+  - index: 108
+    codon: AAAACGTA
+    building_block_id: BB1_109
+  - index: 109
+    codon: AAAACGTC
+    building_block_id: BB1_110
+  - index: 110
+    codon: AAAACGTG
+    building_block_id: BB1_111
+  - index: 111
+    codon: AAAACGTT
+    building_block_id: BB1_112
+  - index: 112
+    codon: AAAACTAA
+    building_block_id: BB1_113
+  - index: 113
+    codon: AAAACTAC
+    building_block_id: BB1_114
+  - index: 114
+    codon: AAAACTAG
+    building_block_id: BB1_115
+  - index: 115
+    codon: AAAACTAT
+    building_block_id: BB1_116
+  - index: 116
+    codon: AAAACTCA
+    building_block_id: BB1_117
+  - index: 117
+    codon: AAAACTCC
+    building_block_id: BB1_118
+  - index: 118
+    codon: AAAACTCG
+    building_block_id: BB1_119
+  - index: 119
+    codon: AAAACTCT
+    building_block_id: BB1_120
+  - index: 120
+    codon: AAAACTGA
+    building_block_id: BB1_121
+  - index: 121
+    codon: AAAACTGC
+    building_block_id: BB1_122
+  - index: 122
+    codon: AAAACTGG
+    building_block_id: BB1_123
+  - index: 123
+    codon: AAAACTGT
+    building_block_id: BB1_124
+  - index: 124
+    codon: AAAACTTA
+    building_block_id: BB1_125
+  - index: 125
+    codon: AAAACTTC
+    building_block_id: BB1_126
+  - index: 126
+    codon: AAAACTTG
+    building_block_id: BB1_127
+  - index: 127
+    codon: AAAACTTT
+    building_block_id: BB1_128
+  - index: 128
+    codon: AAAAGAAA
+    building_block_id: BB1_129
+  - index: 129
+    codon: AAAAGAAC
+    building_block_id: BB1_130
+  - index: 130
+    codon: AAAAGAAG
+    building_block_id: BB1_131
+  - index: 131
+    codon: AAAAGAAT
+    building_block_id: BB1_132
+  - index: 132
+    codon: AAAAGACA
+    building_block_id: BB1_133
+  - index: 133
+    codon: AAAAGACC
+    building_block_id: BB1_134
+  - index: 134
+    codon: AAAAGACG
+    building_block_id: BB1_135
+  - index: 135
+    codon: AAAAGACT
+    building_block_id: BB1_136
+  - index: 136
+    codon: AAAAGAGA
+    building_block_id: BB1_137
+  - index: 137
+    codon: AAAAGAGC
+    building_block_id: BB1_138
+  - index: 138
+    codon: AAAAGAGG
+    building_block_id: BB1_139
+  - index: 139
+    codon: AAAAGAGT
+    building_block_id: BB1_140
+  - index: 140
+    codon: AAAAGATA
+    building_block_id: BB1_141
+  - index: 141
+    codon: AAAAGATC
+    building_block_id: BB1_142
+  - index: 142
+    codon: AAAAGATG
+    building_block_id: BB1_143
+  - index: 143
+    codon: AAAAGATT
+    building_block_id: BB1_144
+  - index: 144
+    codon: AAAAGCAA
+    building_block_id: BB1_145
+  - index: 145
+    codon: AAAAGCAC
+    building_block_id: BB1_146
+  - index: 146
+    codon: AAAAGCAG
+    building_block_id: BB1_147
+  - index: 147
+    codon: AAAAGCAT
+    building_block_id: BB1_148
+  - index: 148
+    codon: AAAAGCCA
+    building_block_id: BB1_149
+  - index: 149
+    codon: AAAAGCCC
+    building_block_id: BB1_150
+  - index: 150
+    codon: AAAAGCCG
+    building_block_id: BB1_151
+  - index: 151
+    codon: AAAAGCCT
+    building_block_id: BB1_152
+  - index: 152
+    codon: AAAAGCGA
+    building_block_id: BB1_153
+  - index: 153
+    codon: AAAAGCGC
+    building_block_id: BB1_154
+  - index: 154
+    codon: AAAAGCGG
+    building_block_id: BB1_155
+  - index: 155
+    codon: AAAAGCGT
+    building_block_id: BB1_156
+  - index: 156
+    codon: AAAAGCTA
+    building_block_id: BB1_157
+  - index: 157
+    codon: AAAAGCTC
+    building_block_id: BB1_158
+  - index: 158
+    codon: AAAAGCTG
+    building_block_id: BB1_159
+  - index: 159
+    codon: AAAAGCTT
+    building_block_id: BB1_160
+  - index: 160
+    codon: AAAAGGAA
+    building_block_id: BB1_161
+  - index: 161
+    codon: AAAAGGAC
+    building_block_id: BB1_162
+  - index: 162
+    codon: AAAAGGAG
+    building_block_id: BB1_163
+  - index: 163
+    codon: AAAAGGAT
+    building_block_id: BB1_164
+  - index: 164
+    codon: AAAAGGCA
+    building_block_id: BB1_165
+  - index: 165
+    codon: AAAAGGCC
+    building_block_id: BB1_166
+  - index: 166
+    codon: AAAAGGCG
+    building_block_id: BB1_167
+  - index: 167
+    codon: AAAAGGCT
+    building_block_id: BB1_168
+  - index: 168
+    codon: AAAAGGGA
+    building_block_id: BB1_169
+  - index: 169
+    codon: AAAAGGGC
+    building_block_id: BB1_170
+  - index: 170
+    codon: AAAAGGGG
+    building_block_id: BB1_171
+  - index: 171
+    codon: AAAAGGGT
+    building_block_id: BB1_172
+  - index: 172
+    codon: AAAAGGTA
+    building_block_id: BB1_173
+  - index: 173
+    codon: AAAAGGTC
+    building_block_id: BB1_174
+  - index: 174
+    codon: AAAAGGTG
+    building_block_id: BB1_175
+  - index: 175
+    codon: AAAAGGTT
+    building_block_id: BB1_176
+  - index: 176
+    codon: AAAAGTAA
+    building_block_id: BB1_177
+  - index: 177
+    codon: AAAAGTAC
+    building_block_id: BB1_178
+  - index: 178
+    codon: AAAAGTAG
+    building_block_id: BB1_179
+  - index: 179
+    codon: AAAAGTAT
+    building_block_id: BB1_180
+  - index: 180
+    codon: AAAAGTCA
+    building_block_id: BB1_181
+  - index: 181
+    codon: AAAAGTCC
+    building_block_id: BB1_182
+  - index: 182
+    codon: AAAAGTCG
+    building_block_id: BB1_183
+  - index: 183
+    codon: AAAAGTCT
+    building_block_id: BB1_184
+  - index: 184
+    codon: AAAAGTGA
+    building_block_id: BB1_185
+  - index: 185
+    codon: AAAAGTGC
+    building_block_id: BB1_186
+  - index: 186
+    codon: AAAAGTGG
+    building_block_id: BB1_187
+  - index: 187
+    codon: AAAAGTGT
+    building_block_id: BB1_188
+  - index: 188
+    codon: AAAAGTTA
+    building_block_id: BB1_189
+  - index: 189
+    codon: AAAAGTTC
+    building_block_id: BB1_190
+  - index: 190
+    codon: AAAAGTTG
+    building_block_id: BB1_191
+  - index: 191
+    codon: AAAAGTTT
+    building_block_id: BB1_192
+  - index: 192
+    codon: AAAATAAA
+    building_block_id: BB1_193
+  - index: 193
+    codon: AAAATAAC
+    building_block_id: BB1_194
+  - index: 194
+    codon: AAAATAAG
+    building_block_id: BB1_195
+  - index: 195
+    codon: AAAATAAT
+    building_block_id: BB1_196
+  - index: 196
+    codon: AAAATACA
+    building_block_id: BB1_197
+  - index: 197
+    codon: AAAATACC
+    building_block_id: BB1_198
+  - index: 198
+    codon: AAAATACG
+    building_block_id: BB1_199
+  - index: 199
+    codon: AAAATACT
+    building_block_id: BB1_200
+  - index: 200
+    codon: AAAATAGA
+    building_block_id: BB1_201
+  - index: 201
+    codon: AAAATAGC
+    building_block_id: BB1_202
+  - index: 202
+    codon: AAAATAGG
+    building_block_id: BB1_203
+  - index: 203
+    codon: AAAATAGT
+    building_block_id: BB1_204
+  - index: 204
+    codon: AAAATATA
+    building_block_id: BB1_205
+  - index: 205
+    codon: AAAATATC
+    building_block_id: BB1_206
+  - index: 206
+    codon: AAAATATG
+    building_block_id: BB1_207
+  - index: 207
+    codon: AAAATATT
+    building_block_id: BB1_208
+  - index: 208
+    codon: AAAATCAA
+    building_block_id: BB1_209
+  - index: 209
+    codon: AAAATCAC
+    building_block_id: BB1_210
+  - index: 210
+    codon: AAAATCAG
+    building_block_id: BB1_211
+  - index: 211
+    codon: AAAATCAT
+    building_block_id: BB1_212
+  - index: 212
+    codon: AAAATCCA
+    building_block_id: BB1_213
+  - index: 213
+    codon: AAAATCCC
+    building_block_id: BB1_214
+  - index: 214
+    codon: AAAATCCG
+    building_block_id: BB1_215
+  - index: 215
+    codon: AAAATCCT
+    building_block_id: BB1_216
+  - index: 216
+    codon: AAAATCGA
+    building_block_id: BB1_217
+  - index: 217
+    codon: AAAATCGC
+    building_block_id: BB1_218
+  - index: 218
+    codon: AAAATCGG
+    building_block_id: BB1_219
+  - index: 219
+    codon: AAAATCGT
+    building_block_id: BB1_220
+  - index: 220
+    codon: AAAATCTA
+    building_block_id: BB1_221
+  - index: 221
+    codon: AAAATCTC
+    building_block_id: BB1_222
+  - index: 222
+    codon: AAAATCTG
+    building_block_id: BB1_223
+  - index: 223
+    codon: AAAATCTT
+    building_block_id: BB1_224
+  - index: 224
+    codon: AAAATGAA
+    building_block_id: BB1_225
+  - index: 225
+    codon: AAAATGAC
+    building_block_id: BB1_226
+  - index: 226
+    codon: AAAATGAG
+    building_block_id: BB1_227
+  - index: 227
+    codon: AAAATGAT
+    building_block_id: BB1_228
+  - index: 228
+    codon: AAAATGCA
+    building_block_id: BB1_229
+  - index: 229
+    codon: AAAATGCC
+    building_block_id: BB1_230
+  - index: 230
+    codon: AAAATGCG
+    building_block_id: BB1_231
+  - index: 231
+    codon: AAAATGCT
+    building_block_id: BB1_232
+  - index: 232
+    codon: AAAATGGA
+    building_block_id: BB1_233
+  - index: 233
+    codon: AAAATGGC
+    building_block_id: BB1_234
+  - index: 234
+    codon: AAAATGGG
+    building_block_id: BB1_235
+  - index: 235
+    codon: AAAATGGT
+    building_block_id: BB1_236
+  - index: 236
+    codon: AAAATGTA
+    building_block_id: BB1_237
+  - index: 237
+    codon: AAAATGTC
+    building_block_id: BB1_238
+  - index: 238
+    codon: AAAATGTG
+    building_block_id: BB1_239
+  - index: 239
+    codon: AAAATGTT
+    building_block_id: BB1_240
+  - index: 240
+    codon: AAAATTAA
+    building_block_id: BB1_241
+  - index: 241
+    codon: AAAATTAC
+    building_block_id: BB1_242
+  - index: 242
+    codon: AAAATTAG
+    building_block_id: BB1_243
+  - index: 243
+    codon: AAAATTAT
+    building_block_id: BB1_244
+  - index: 244
+    codon: AAAATTCA
+    building_block_id: BB1_245
+  - index: 245
+    codon: AAAATTCC
+    building_block_id: BB1_246
+  - index: 246
+    codon: AAAATTCG
+    building_block_id: BB1_247
+  - index: 247
+    codon: AAAATTCT
+    building_block_id: BB1_248
+  - index: 248
+    codon: AAAATTGA
+    building_block_id: BB1_249
+  - index: 249
+    codon: AAAATTGC
+    building_block_id: BB1_250
+  - index: 250
+    codon: AAAATTGG
+    building_block_id: BB1_251
+  - index: 251
+    codon: AAAATTGT
+    building_block_id: BB1_252
+  - index: 252
+    codon: AAAATTTA
+    building_block_id: BB1_253
+  - index: 253
+    codon: AAAATTTC
+    building_block_id: BB1_254
+  - index: 254
+    codon: AAAATTTG
+    building_block_id: BB1_255
+  - index: 255
+    codon: AAAATTTT
+    building_block_id: BB1_256
+  - index: 256
+    codon: AAACAAAA
+    building_block_id: BB1_257
+  - index: 257
+    codon: AAACAAAC
+    building_block_id: BB1_258
+  - index: 258
+    codon: AAACAAAG
+    building_block_id: BB1_259
+  - index: 259
+    codon: AAACAAAT
+    building_block_id: BB1_260
+  - index: 260
+    codon: AAACAACA
+    building_block_id: BB1_261
+  - index: 261
+    codon: AAACAACC
+    building_block_id: BB1_262
+  - index: 262
+    codon: AAACAACG
+    building_block_id: BB1_263
+  - index: 263
+    codon: AAACAACT
+    building_block_id: BB1_264
+  - index: 264
+    codon: AAACAAGA
+    building_block_id: BB1_265
+  - index: 265
+    codon: AAACAAGC
+    building_block_id: BB1_266
+  - index: 266
+    codon: AAACAAGG
+    building_block_id: BB1_267
+  - index: 267
+    codon: AAACAAGT
+    building_block_id: BB1_268
+  - index: 268
+    codon: AAACAATA
+    building_block_id: BB1_269
+  - index: 269
+    codon: AAACAATC
+    building_block_id: BB1_270
+  - index: 270
+    codon: AAACAATG
+    building_block_id: BB1_271
+  - index: 271
+    codon: AAACAATT
+    building_block_id: BB1_272
+  - index: 272
+    codon: AAACACAA
+    building_block_id: BB1_273
+  - index: 273
+    codon: AAACACAC
+    building_block_id: BB1_274
+  - index: 274
+    codon: AAACACAG
+    building_block_id: BB1_275
+  - index: 275
+    codon: AAACACAT
+    building_block_id: BB1_276
+  - index: 276
+    codon: AAACACCA
+    building_block_id: BB1_277
+  - index: 277
+    codon: AAACACCC
+    building_block_id: BB1_278
+  - index: 278
+    codon: AAACACCG
+    building_block_id: BB1_279
+  - index: 279
+    codon: AAACACCT
+    building_block_id: BB1_280
+  - index: 280
+    codon: AAACACGA
+    building_block_id: BB1_281
+  - index: 281
+    codon: AAACACGC
+    building_block_id: BB1_282
+  - index: 282
+    codon: AAACACGG
+    building_block_id: BB1_283
+  - index: 283
+    codon: AAACACGT
+    building_block_id: BB1_284
+  - index: 284
+    codon: AAACACTA
+    building_block_id: BB1_285
+  - index: 285
+    codon: AAACACTC
+    building_block_id: BB1_286
+  - index: 286
+    codon: AAACACTG
+    building_block_id: BB1_287
+  - index: 287
+    codon: AAACACTT
+    building_block_id: BB1_288
+  - index: 288
+    codon: AAACAGAA
+    building_block_id: BB1_289
+  - index: 289
+    codon: AAACAGAC
+    building_block_id: BB1_290
+  - index: 290
+    codon: AAACAGAG
+    building_block_id: BB1_291
+  - index: 291
+    codon: AAACAGAT
+    building_block_id: BB1_292
+  - index: 292
+    codon: AAACAGCA
+    building_block_id: BB1_293
+  - index: 293
+    codon: AAACAGCC
+    building_block_id: BB1_294
+  - index: 294
+    codon: AAACAGCG
+    building_block_id: BB1_295
+  - index: 295
+    codon: AAACAGCT
+    building_block_id: BB1_296
+  - index: 296
+    codon: AAACAGGA
+    building_block_id: BB1_297
+  - index: 297
+    codon: AAACAGGC
+    building_block_id: BB1_298
+  - index: 298
+    codon: AAACAGGG
+    building_block_id: BB1_299
+  - index: 299
+    codon: AAACAGGT
+    building_block_id: BB1_300
+  - index: 300
+    codon: AAACAGTA
+    building_block_id: BB1_301
+  - index: 301
+    codon: AAACAGTC
+    building_block_id: BB1_302
+  - index: 302
+    codon: AAACAGTG
+    building_block_id: BB1_303
+  - index: 303
+    codon: AAACAGTT
+    building_block_id: BB1_304
+  - index: 304
+    codon: AAACATAA
+    building_block_id: BB1_305
+  - index: 305
+    codon: AAACATAC
+    building_block_id: BB1_306
+  - index: 306
+    codon: AAACATAG
+    building_block_id: BB1_307
+  - index: 307
+    codon: AAACATAT
+    building_block_id: BB1_308
+  - index: 308
+    codon: AAACATCA
+    building_block_id: BB1_309
+  - index: 309
+    codon: AAACATCC
+    building_block_id: BB1_310
+  - index: 310
+    codon: AAACATCG
+    building_block_id: BB1_311
+  - index: 311
+    codon: AAACATCT
+    building_block_id: BB1_312
+  - index: 312
+    codon: AAACATGA
+    building_block_id: BB1_313
+  - index: 313
+    codon: AAACATGC
+    building_block_id: BB1_314
+  - index: 314
+    codon: AAACATGG
+    building_block_id: BB1_315
+  - index: 315
+    codon: AAACATGT
+    building_block_id: BB1_316
+  - index: 316
+    codon: AAACATTA
+    building_block_id: BB1_317
+  - index: 317
+    codon: AAACATTC
+    building_block_id: BB1_318
+  - index: 318
+    codon: AAACATTG
+    building_block_id: BB1_319
+  - index: 319
+    codon: AAACATTT
+    building_block_id: BB1_320
+  - index: 320
+    codon: AAACCAAA
+    building_block_id: BB1_321
+  - index: 321
+    codon: AAACCAAC
+    building_block_id: BB1_322
+  - index: 322
+    codon: AAACCAAG
+    building_block_id: BB1_323
+  - index: 323
+    codon: AAACCAAT
+    building_block_id: BB1_324
+  - index: 324
+    codon: AAACCACA
+    building_block_id: BB1_325
+  - index: 325
+    codon: AAACCACC
+    building_block_id: BB1_326
+  - index: 326
+    codon: AAACCACG
+    building_block_id: BB1_327
+  - index: 327
+    codon: AAACCACT
+    building_block_id: BB1_328
+  - index: 328
+    codon: AAACCAGA
+    building_block_id: BB1_329
+  - index: 329
+    codon: AAACCAGC
+    building_block_id: BB1_330
+  - index: 330
+    codon: AAACCAGG
+    building_block_id: BB1_331
+  - index: 331
+    codon: AAACCAGT
+    building_block_id: BB1_332
+  - index: 332
+    codon: AAACCATA
+    building_block_id: BB1_333
+  - index: 333
+    codon: AAACCATC
+    building_block_id: BB1_334
+  - index: 334
+    codon: AAACCATG
+    building_block_id: BB1_335
+  - index: 335
+    codon: AAACCATT
+    building_block_id: BB1_336
+  - index: 336
+    codon: AAACCCAA
+    building_block_id: BB1_337
+  - index: 337
+    codon: AAACCCAC
+    building_block_id: BB1_338
+  - index: 338
+    codon: AAACCCAG
+    building_block_id: BB1_339
+  - index: 339
+    codon: AAACCCAT
+    building_block_id: BB1_340
+  - index: 340
+    codon: AAACCCCA
+    building_block_id: BB1_341
+  - index: 341
+    codon: AAACCCCC
+    building_block_id: BB1_342
+  - index: 342
+    codon: AAACCCCG
+    building_block_id: BB1_343
+  - index: 343
+    codon: AAACCCCT
+    building_block_id: BB1_344
+  - index: 344
+    codon: AAACCCGA
+    building_block_id: BB1_345
+  - index: 345
+    codon: AAACCCGC
+    building_block_id: BB1_346
+  - index: 346
+    codon: AAACCCGG
+    building_block_id: BB1_347
+  - index: 347
+    codon: AAACCCGT
+    building_block_id: BB1_348
+  - index: 348
+    codon: AAACCCTA
+    building_block_id: BB1_349
+  - index: 349
+    codon: AAACCCTC
+    building_block_id: BB1_350
+  - index: 350
+    codon: AAACCCTG
+    building_block_id: BB1_351
+  - index: 351
+    codon: AAACCCTT
+    building_block_id: BB1_352
+  - index: 352
+    codon: AAACCGAA
+    building_block_id: BB1_353
+  - index: 353
+    codon: AAACCGAC
+    building_block_id: BB1_354
+  - index: 354
+    codon: AAACCGAG
+    building_block_id: BB1_355
+  - index: 355
+    codon: AAACCGAT
+    building_block_id: BB1_356
+  - index: 356
+    codon: AAACCGCA
+    building_block_id: BB1_357
+  - index: 357
+    codon: AAACCGCC
+    building_block_id: BB1_358
+  - index: 358
+    codon: AAACCGCG
+    building_block_id: BB1_359
+  - index: 359
+    codon: AAACCGCT
+    building_block_id: BB1_360
+  - index: 360
+    codon: AAACCGGA
+    building_block_id: BB1_361
+  - index: 361
+    codon: AAACCGGC
+    building_block_id: BB1_362
+  - index: 362
+    codon: AAACCGGG
+    building_block_id: BB1_363
+  - index: 363
+    codon: AAACCGGT
+    building_block_id: BB1_364
+  - index: 364
+    codon: AAACCGTA
+    building_block_id: BB1_365
+  - index: 365
+    codon: AAACCGTC
+    building_block_id: BB1_366
+  - index: 366
+    codon: AAACCGTG
+    building_block_id: BB1_367
+  - index: 367
+    codon: AAACCGTT
+    building_block_id: BB1_368
+  - index: 368
+    codon: AAACCTAA
+    building_block_id: BB1_369
+  - index: 369
+    codon: AAACCTAC
+    building_block_id: BB1_370
+  - index: 370
+    codon: AAACCTAG
+    building_block_id: BB1_371
+  - index: 371
+    codon: AAACCTAT
+    building_block_id: BB1_372
+  - index: 372
+    codon: AAACCTCA
+    building_block_id: BB1_373
+  - index: 373
+    codon: AAACCTCC
+    building_block_id: BB1_374
+  - index: 374
+    codon: AAACCTCG
+    building_block_id: BB1_375
+  - index: 375
+    codon: AAACCTCT
+    building_block_id: BB1_376
+  - index: 376
+    codon: AAACCTGA
+    building_block_id: BB1_377
+  - index: 377
+    codon: AAACCTGC
+    building_block_id: BB1_378
+  - index: 378
+    codon: AAACCTGG
+    building_block_id: BB1_379
+  - index: 379
+    codon: AAACCTGT
+    building_block_id: BB1_380
+  - index: 380
+    codon: AAACCTTA
+    building_block_id: BB1_381
+  - index: 381
+    codon: AAACCTTC
+    building_block_id: BB1_382
+  - index: 382
+    codon: AAACCTTG
+    building_block_id: BB1_383
+  - index: 383
+    codon: AAACCTTT
+    building_block_id: BB1_384
+  - index: 384
+    codon: AAACGAAA
+    building_block_id: BB1_385
+  - index: 385
+    codon: AAACGAAC
+    building_block_id: BB1_386
+  - index: 386
+    codon: AAACGAAG
+    building_block_id: BB1_387
+  - index: 387
+    codon: AAACGAAT
+    building_block_id: BB1_388
+  - index: 388
+    codon: AAACGACA
+    building_block_id: BB1_389
+  - index: 389
+    codon: AAACGACC
+    building_block_id: BB1_390
+  - index: 390
+    codon: AAACGACG
+    building_block_id: BB1_391
+  - index: 391
+    codon: AAACGACT
+    building_block_id: BB1_392
+  - index: 392
+    codon: AAACGAGA
+    building_block_id: BB1_393
+  - index: 393
+    codon: AAACGAGC
+    building_block_id: BB1_394
+  - index: 394
+    codon: AAACGAGG
+    building_block_id: BB1_395
+  - index: 395
+    codon: AAACGAGT
+    building_block_id: BB1_396
+  - index: 396
+    codon: AAACGATA
+    building_block_id: BB1_397
+  - index: 397
+    codon: AAACGATC
+    building_block_id: BB1_398
+  - index: 398
+    codon: AAACGATG
+    building_block_id: BB1_399
+  - index: 399
+    codon: AAACGATT
+    building_block_id: BB1_400
+  - index: 400
+    codon: AAACGCAA
+    building_block_id: BB1_401
+  - index: 401
+    codon: AAACGCAC
+    building_block_id: BB1_402
+  - index: 402
+    codon: AAACGCAG
+    building_block_id: BB1_403
+  - index: 403
+    codon: AAACGCAT
+    building_block_id: BB1_404
+  - index: 404
+    codon: AAACGCCA
+    building_block_id: BB1_405
+  - index: 405
+    codon: AAACGCCC
+    building_block_id: BB1_406
+  - index: 406
+    codon: AAACGCCG
+    building_block_id: BB1_407
+  - index: 407
+    codon: AAACGCCT
+    building_block_id: BB1_408
+  - index: 408
+    codon: AAACGCGA
+    building_block_id: BB1_409
+  - index: 409
+    codon: AAACGCGC
+    building_block_id: BB1_410
+  - index: 410
+    codon: AAACGCGG
+    building_block_id: BB1_411
+  - index: 411
+    codon: AAACGCGT
+    building_block_id: BB1_412
+  - index: 412
+    codon: AAACGCTA
+    building_block_id: BB1_413
+  - index: 413
+    codon: AAACGCTC
+    building_block_id: BB1_414
+  - index: 414
+    codon: AAACGCTG
+    building_block_id: BB1_415
+  - index: 415
+    codon: AAACGCTT
+    building_block_id: BB1_416
+  - index: 416
+    codon: AAACGGAA
+    building_block_id: BB1_417
+  - index: 417
+    codon: AAACGGAC
+    building_block_id: BB1_418
+  - index: 418
+    codon: AAACGGAG
+    building_block_id: BB1_419
+  - index: 419
+    codon: AAACGGAT
+    building_block_id: BB1_420
+  - index: 420
+    codon: AAACGGCA
+    building_block_id: BB1_421
+  - index: 421
+    codon: AAACGGCC
+    building_block_id: BB1_422
+  - index: 422
+    codon: AAACGGCG
+    building_block_id: BB1_423
+  - index: 423
+    codon: AAACGGCT
+    building_block_id: BB1_424
+  - index: 424
+    codon: AAACGGGA
+    building_block_id: BB1_425
+  - index: 425
+    codon: AAACGGGC
+    building_block_id: BB1_426
+  - index: 426
+    codon: AAACGGGG
+    building_block_id: BB1_427
+  - index: 427
+    codon: AAACGGGT
+    building_block_id: BB1_428
+  - index: 428
+    codon: AAACGGTA
+    building_block_id: BB1_429
+  - index: 429
+    codon: AAACGGTC
+    building_block_id: BB1_430
+  - index: 430
+    codon: AAACGGTG
+    building_block_id: BB1_431
+  - index: 431
+    codon: AAACGGTT
+    building_block_id: BB1_432
+  - index: 432
+    codon: AAACGTAA
+    building_block_id: BB1_433
+  - index: 433
+    codon: AAACGTAC
+    building_block_id: BB1_434
+  - index: 434
+    codon: AAACGTAG
+    building_block_id: BB1_435
+  - index: 435
+    codon: AAACGTAT
+    building_block_id: BB1_436
+  - index: 436
+    codon: AAACGTCA
+    building_block_id: BB1_437
+  - index: 437
+    codon: AAACGTCC
+    building_block_id: BB1_438
+  - index: 438
+    codon: AAACGTCG
+    building_block_id: BB1_439
+  - index: 439
+    codon: AAACGTCT
+    building_block_id: BB1_440
+  - index: 440
+    codon: AAACGTGA
+    building_block_id: BB1_441
+  - index: 441
+    codon: AAACGTGC
+    building_block_id: BB1_442
+  - index: 442
+    codon: AAACGTGG
+    building_block_id: BB1_443
+  - index: 443
+    codon: AAACGTGT
+    building_block_id: BB1_444
+  - index: 444
+    codon: AAACGTTA
+    building_block_id: BB1_445
+  - index: 445
+    codon: AAACGTTC
+    building_block_id: BB1_446
+  - index: 446
+    codon: AAACGTTG
+    building_block_id: BB1_447
+  - index: 447
+    codon: AAACGTTT
+    building_block_id: BB1_448
+  - index: 448
+    codon: AAACTAAA
+    building_block_id: BB1_449
+  - index: 449
+    codon: AAACTAAC
+    building_block_id: BB1_450
+  - index: 450
+    codon: AAACTAAG
+    building_block_id: BB1_451
+  - index: 451
+    codon: AAACTAAT
+    building_block_id: BB1_452
+  - index: 452
+    codon: AAACTACA
+    building_block_id: BB1_453
+  - index: 453
+    codon: AAACTACC
+    building_block_id: BB1_454
+  - index: 454
+    codon: AAACTACG
+    building_block_id: BB1_455
+  - index: 455
+    codon: AAACTACT
+    building_block_id: BB1_456
+  - index: 456
+    codon: AAACTAGA
+    building_block_id: BB1_457
+  - index: 457
+    codon: AAACTAGC
+    building_block_id: BB1_458
+  - index: 458
+    codon: AAACTAGG
+    building_block_id: BB1_459
+  - index: 459
+    codon: AAACTAGT
+    building_block_id: BB1_460
+  - index: 460
+    codon: AAACTATA
+    building_block_id: BB1_461
+  - index: 461
+    codon: AAACTATC
+    building_block_id: BB1_462
+  - index: 462
+    codon: AAACTATG
+    building_block_id: BB1_463
+  - index: 463
+    codon: AAACTATT
+    building_block_id: BB1_464
+  - index: 464
+    codon: AAACTCAA
+    building_block_id: BB1_465
+  - index: 465
+    codon: AAACTCAC
+    building_block_id: BB1_466
+  - index: 466
+    codon: AAACTCAG
+    building_block_id: BB1_467
+  - index: 467
+    codon: AAACTCAT
+    building_block_id: BB1_468
+  - index: 468
+    codon: AAACTCCA
+    building_block_id: BB1_469
+  - index: 469
+    codon: AAACTCCC
+    building_block_id: BB1_470
+  - index: 470
+    codon: AAACTCCG
+    building_block_id: BB1_471
+  - index: 471
+    codon: AAACTCCT
+    building_block_id: BB1_472
+  - index: 472
+    codon: AAACTCGA
+    building_block_id: BB1_473
+  - index: 473
+    codon: AAACTCGC
+    building_block_id: BB1_474
+  - index: 474
+    codon: AAACTCGG
+    building_block_id: BB1_475
+  - index: 475
+    codon: AAACTCGT
+    building_block_id: BB1_476
+  - index: 476
+    codon: AAACTCTA
+    building_block_id: BB1_477
+  - index: 477
+    codon: AAACTCTC
+    building_block_id: BB1_478
+  - index: 478
+    codon: AAACTCTG
+    building_block_id: BB1_479
+  - index: 479
+    codon: AAACTCTT
+    building_block_id: BB1_480
+  - index: 480
+    codon: AAACTGAA
+    building_block_id: BB1_481
+  - index: 481
+    codon: AAACTGAC
+    building_block_id: BB1_482
+  - index: 482
+    codon: AAACTGAG
+    building_block_id: BB1_483
+  - index: 483
+    codon: AAACTGAT
+    building_block_id: BB1_484
+  - index: 484
+    codon: AAACTGCA
+    building_block_id: BB1_485
+  - index: 485
+    codon: AAACTGCC
+    building_block_id: BB1_486
+  - index: 486
+    codon: AAACTGCG
+    building_block_id: BB1_487
+  - index: 487
+    codon: AAACTGCT
+    building_block_id: BB1_488
+  - index: 488
+    codon: AAACTGGA
+    building_block_id: BB1_489
+  - index: 489
+    codon: AAACTGGC
+    building_block_id: BB1_490
+  - index: 490
+    codon: AAACTGGG
+    building_block_id: BB1_491
+  - index: 491
+    codon: AAACTGGT
+    building_block_id: BB1_492
+  - index: 492
+    codon: AAACTGTA
+    building_block_id: BB1_493
+  - index: 493
+    codon: AAACTGTC
+    building_block_id: BB1_494
+  - index: 494
+    codon: AAACTGTG
+    building_block_id: BB1_495
+  - index: 495
+    codon: AAACTGTT
+    building_block_id: BB1_496
+  - index: 496
+    codon: AAACTTAA
+    building_block_id: BB1_497
+  - index: 497
+    codon: AAACTTAC
+    building_block_id: BB1_498
+  - index: 498
+    codon: AAACTTAG
+    building_block_id: BB1_499
+  - index: 499
+    codon: AAACTTAT
+    building_block_id: BB1_500
+  - index: 500
+    codon: AAACTTCA
+    building_block_id: BB1_501
+  - index: 501
+    codon: AAACTTCC
+    building_block_id: BB1_502
+  - index: 502
+    codon: AAACTTCG
+    building_block_id: BB1_503
+  - index: 503
+    codon: AAACTTCT
+    building_block_id: BB1_504
+  - index: 504
+    codon: AAACTTGA
+    building_block_id: BB1_505
+  - index: 505
+    codon: AAACTTGC
+    building_block_id: BB1_506
+  - index: 506
+    codon: AAACTTGG
+    building_block_id: BB1_507
+  - index: 507
+    codon: AAACTTGT
+    building_block_id: BB1_508
+  - index: 508
+    codon: AAACTTTA
+    building_block_id: BB1_509
+  - index: 509
+    codon: AAACTTTC
+    building_block_id: BB1_510
+  - index: 510
+    codon: AAACTTTG
+    building_block_id: BB1_511
+  - index: 511
+    codon: AAACTTTT
+    building_block_id: BB1_512
+  - index: 512
+    codon: AAAGAAAA
+    building_block_id: BB1_513
+  - index: 513
+    codon: AAAGAAAC
+    building_block_id: BB1_514
+  - index: 514
+    codon: AAAGAAAG
+    building_block_id: BB1_515
+  - index: 515
+    codon: AAAGAAAT
+    building_block_id: BB1_516
+  - index: 516
+    codon: AAAGAACA
+    building_block_id: BB1_517
+  - index: 517
+    codon: AAAGAACC
+    building_block_id: BB1_518
+  - index: 518
+    codon: AAAGAACG
+    building_block_id: BB1_519
+  - index: 519
+    codon: AAAGAACT
+    building_block_id: BB1_520
+  - index: 520
+    codon: AAAGAAGA
+    building_block_id: BB1_521
+  - index: 521
+    codon: AAAGAAGC
+    building_block_id: BB1_522
+  - index: 522
+    codon: AAAGAAGG
+    building_block_id: BB1_523
+  - index: 523
+    codon: AAAGAAGT
+    building_block_id: BB1_524
+  - index: 524
+    codon: AAAGAATA
+    building_block_id: BB1_525
+  - index: 525
+    codon: AAAGAATC
+    building_block_id: BB1_526
+  - index: 526
+    codon: AAAGAATG
+    building_block_id: BB1_527
+  - index: 527
+    codon: AAAGAATT
+    building_block_id: BB1_528
+  - index: 528
+    codon: AAAGACAA
+    building_block_id: BB1_529
+  - index: 529
+    codon: AAAGACAC
+    building_block_id: BB1_530
+  - index: 530
+    codon: AAAGACAG
+    building_block_id: BB1_531
+  - index: 531
+    codon: AAAGACAT
+    building_block_id: BB1_532
+  - index: 532
+    codon: AAAGACCA
+    building_block_id: BB1_533
+  - index: 533
+    codon: AAAGACCC
+    building_block_id: BB1_534
+  - index: 534
+    codon: AAAGACCG
+    building_block_id: BB1_535
+  - index: 535
+    codon: AAAGACCT
+    building_block_id: BB1_536
+  - index: 536
+    codon: AAAGACGA
+    building_block_id: BB1_537
+  - index: 537
+    codon: AAAGACGC
+    building_block_id: BB1_538
+  - index: 538
+    codon: AAAGACGG
+    building_block_id: BB1_539
+  - index: 539
+    codon: AAAGACGT
+    building_block_id: BB1_540
+  - index: 540
+    codon: AAAGACTA
+    building_block_id: BB1_541
+  - index: 541
+    codon: AAAGACTC
+    building_block_id: BB1_542
+  - index: 542
+    codon: AAAGACTG
+    building_block_id: BB1_543
+  - index: 543
+    codon: AAAGACTT
+    building_block_id: BB1_544
+  - index: 544
+    codon: AAAGAGAA
+    building_block_id: BB1_545
+  - index: 545
+    codon: AAAGAGAC
+    building_block_id: BB1_546
+  - index: 546
+    codon: AAAGAGAG
+    building_block_id: BB1_547
+  - index: 547
+    codon: AAAGAGAT
+    building_block_id: BB1_548
+  - index: 548
+    codon: AAAGAGCA
+    building_block_id: BB1_549
+  - index: 549
+    codon: AAAGAGCC
+    building_block_id: BB1_550
+  - index: 550
+    codon: AAAGAGCG
+    building_block_id: BB1_551
+  - index: 551
+    codon: AAAGAGCT
+    building_block_id: BB1_552
+  - index: 552
+    codon: AAAGAGGA
+    building_block_id: BB1_553
+  - index: 553
+    codon: AAAGAGGC
+    building_block_id: BB1_554
+  - index: 554
+    codon: AAAGAGGG
+    building_block_id: BB1_555
+  - index: 555
+    codon: AAAGAGGT
+    building_block_id: BB1_556
+  - index: 556
+    codon: AAAGAGTA
+    building_block_id: BB1_557
+  - index: 557
+    codon: AAAGAGTC
+    building_block_id: BB1_558
+  - index: 558
+    codon: AAAGAGTG
+    building_block_id: BB1_559
+  - index: 559
+    codon: AAAGAGTT
+    building_block_id: BB1_560
+  - index: 560
+    codon: AAAGATAA
+    building_block_id: BB1_561
+  - index: 561
+    codon: AAAGATAC
+    building_block_id: BB1_562
+  - index: 562
+    codon: AAAGATAG
+    building_block_id: BB1_563
+  - index: 563
+    codon: AAAGATAT
+    building_block_id: BB1_564
+  - index: 564
+    codon: AAAGATCA
+    building_block_id: BB1_565
+  - index: 565
+    codon: AAAGATCC
+    building_block_id: BB1_566
+  - index: 566
+    codon: AAAGATCG
+    building_block_id: BB1_567
+  - index: 567
+    codon: AAAGATCT
+    building_block_id: BB1_568
+  - index: 568
+    codon: AAAGATGA
+    building_block_id: BB1_569
+  - index: 569
+    codon: AAAGATGC
+    building_block_id: BB1_570
+  - index: 570
+    codon: AAAGATGG
+    building_block_id: BB1_571
+  - index: 571
+    codon: AAAGATGT
+    building_block_id: BB1_572
+  - index: 572
+    codon: AAAGATTA
+    building_block_id: BB1_573
+  - index: 573
+    codon: AAAGATTC
+    building_block_id: BB1_574
+  - index: 574
+    codon: AAAGATTG
+    building_block_id: BB1_575
+  - index: 575
+    codon: AAAGATTT
+    building_block_id: BB1_576
+  - index: 576
+    codon: AAAGCAAA
+    building_block_id: BB1_577
+  - index: 577
+    codon: AAAGCAAC
+    building_block_id: BB1_578
+  - index: 578
+    codon: AAAGCAAG
+    building_block_id: BB1_579
+  - index: 579
+    codon: AAAGCAAT
+    building_block_id: BB1_580
+  - index: 580
+    codon: AAAGCACA
+    building_block_id: BB1_581
+  - index: 581
+    codon: AAAGCACC
+    building_block_id: BB1_582
+  - index: 582
+    codon: AAAGCACG
+    building_block_id: BB1_583
+  - index: 583
+    codon: AAAGCACT
+    building_block_id: BB1_584
+  - index: 584
+    codon: AAAGCAGA
+    building_block_id: BB1_585
+  - index: 585
+    codon: AAAGCAGC
+    building_block_id: BB1_586
+  - index: 586
+    codon: AAAGCAGG
+    building_block_id: BB1_587
+  - index: 587
+    codon: AAAGCAGT
+    building_block_id: BB1_588
+  - index: 588
+    codon: AAAGCATA
+    building_block_id: BB1_589
+  - index: 589
+    codon: AAAGCATC
+    building_block_id: BB1_590
+  - index: 590
+    codon: AAAGCATG
+    building_block_id: BB1_591
+  - index: 591
+    codon: AAAGCATT
+    building_block_id: BB1_592
+  - index: 592
+    codon: AAAGCCAA
+    building_block_id: BB1_593
+  - index: 593
+    codon: AAAGCCAC
+    building_block_id: BB1_594
+  - index: 594
+    codon: AAAGCCAG
+    building_block_id: BB1_595
+  - index: 595
+    codon: AAAGCCAT
+    building_block_id: BB1_596
+  - index: 596
+    codon: AAAGCCCA
+    building_block_id: BB1_597
+  - index: 597
+    codon: AAAGCCCC
+    building_block_id: BB1_598
+  - index: 598
+    codon: AAAGCCCG
+    building_block_id: BB1_599
+  - index: 599
+    codon: AAAGCCCT
+    building_block_id: BB1_600
+  - index: 600
+    codon: AAAGCCGA
+    building_block_id: BB1_601
+  - index: 601
+    codon: AAAGCCGC
+    building_block_id: BB1_602
+  - index: 602
+    codon: AAAGCCGG
+    building_block_id: BB1_603
+  - index: 603
+    codon: AAAGCCGT
+    building_block_id: BB1_604
+  - index: 604
+    codon: AAAGCCTA
+    building_block_id: BB1_605
+  - index: 605
+    codon: AAAGCCTC
+    building_block_id: BB1_606
+  - index: 606
+    codon: AAAGCCTG
+    building_block_id: BB1_607
+  - index: 607
+    codon: AAAGCCTT
+    building_block_id: BB1_608
+  - index: 608
+    codon: AAAGCGAA
+    building_block_id: BB1_609
+  - index: 609
+    codon: AAAGCGAC
+    building_block_id: BB1_610
+  - index: 610
+    codon: AAAGCGAG
+    building_block_id: BB1_611
+  - index: 611
+    codon: AAAGCGAT
+    building_block_id: BB1_612
+  - index: 612
+    codon: AAAGCGCA
+    building_block_id: BB1_613
+  - index: 613
+    codon: AAAGCGCC
+    building_block_id: BB1_614
+  - index: 614
+    codon: AAAGCGCG
+    building_block_id: BB1_615
+  - index: 615
+    codon: AAAGCGCT
+    building_block_id: BB1_616
+  - index: 616
+    codon: AAAGCGGA
+    building_block_id: BB1_617
+  - index: 617
+    codon: AAAGCGGC
+    building_block_id: BB1_618
+  - index: 618
+    codon: AAAGCGGG
+    building_block_id: BB1_619
+  - index: 619
+    codon: AAAGCGGT
+    building_block_id: BB1_620
+  - index: 620
+    codon: AAAGCGTA
+    building_block_id: BB1_621
+  - index: 621
+    codon: AAAGCGTC
+    building_block_id: BB1_622
+  - index: 622
+    codon: AAAGCGTG
+    building_block_id: BB1_623
+  - index: 623
+    codon: AAAGCGTT
+    building_block_id: BB1_624
+  - index: 624
+    codon: AAAGCTAA
+    building_block_id: BB1_625
+  - index: 625
+    codon: AAAGCTAC
+    building_block_id: BB1_626
+  - index: 626
+    codon: AAAGCTAG
+    building_block_id: BB1_627
+  - index: 627
+    codon: AAAGCTAT
+    building_block_id: BB1_628
+  - index: 628
+    codon: AAAGCTCA
+    building_block_id: BB1_629
+  - index: 629
+    codon: AAAGCTCC
+    building_block_id: BB1_630
+  - index: 630
+    codon: AAAGCTCG
+    building_block_id: BB1_631
+  - index: 631
+    codon: AAAGCTCT
+    building_block_id: BB1_632
+  - index: 632
+    codon: AAAGCTGA
+    building_block_id: BB1_633
+  - index: 633
+    codon: AAAGCTGC
+    building_block_id: BB1_634
+  - index: 634
+    codon: AAAGCTGG
+    building_block_id: BB1_635
+  - index: 635
+    codon: AAAGCTGT
+    building_block_id: BB1_636
+  - index: 636
+    codon: AAAGCTTA
+    building_block_id: BB1_637
+  - index: 637
+    codon: AAAGCTTC
+    building_block_id: BB1_638
+  - index: 638
+    codon: AAAGCTTG
+    building_block_id: BB1_639
+  - index: 639
+    codon: AAAGCTTT
+    building_block_id: BB1_640
+  - index: 640
+    codon: AAAGGAAA
+    building_block_id: BB1_641
+  - index: 641
+    codon: AAAGGAAC
+    building_block_id: BB1_642
+  - index: 642
+    codon: AAAGGAAG
+    building_block_id: BB1_643
+  - index: 643
+    codon: AAAGGAAT
+    building_block_id: BB1_644
+  - index: 644
+    codon: AAAGGACA
+    building_block_id: BB1_645
+  - index: 645
+    codon: AAAGGACC
+    building_block_id: BB1_646
+  - index: 646
+    codon: AAAGGACG
+    building_block_id: BB1_647
+  - index: 647
+    codon: AAAGGACT
+    building_block_id: BB1_648
+  - index: 648
+    codon: AAAGGAGA
+    building_block_id: BB1_649
+  - index: 649
+    codon: AAAGGAGC
+    building_block_id: BB1_650
+  - index: 650
+    codon: AAAGGAGG
+    building_block_id: BB1_651
+  - index: 651
+    codon: AAAGGAGT
+    building_block_id: BB1_652
+  - index: 652
+    codon: AAAGGATA
+    building_block_id: BB1_653
+  - index: 653
+    codon: AAAGGATC
+    building_block_id: BB1_654
+  - index: 654
+    codon: AAAGGATG
+    building_block_id: BB1_655
+  - index: 655
+    codon: AAAGGATT
+    building_block_id: BB1_656
+  - index: 656
+    codon: AAAGGCAA
+    building_block_id: BB1_657
+  - index: 657
+    codon: AAAGGCAC
+    building_block_id: BB1_658
+  - index: 658
+    codon: AAAGGCAG
+    building_block_id: BB1_659
+  - index: 659
+    codon: AAAGGCAT
+    building_block_id: BB1_660
+  - index: 660
+    codon: AAAGGCCA
+    building_block_id: BB1_661
+  - index: 661
+    codon: AAAGGCCC
+    building_block_id: BB1_662
+  - index: 662
+    codon: AAAGGCCG
+    building_block_id: BB1_663
+  - index: 663
+    codon: AAAGGCCT
+    building_block_id: BB1_664
+  - index: 664
+    codon: AAAGGCGA
+    building_block_id: BB1_665
+  - index: 665
+    codon: AAAGGCGC
+    building_block_id: BB1_666
+  - index: 666
+    codon: AAAGGCGG
+    building_block_id: BB1_667
+  - index: 667
+    codon: AAAGGCGT
+    building_block_id: BB1_668
+  - index: 668
+    codon: AAAGGCTA
+    building_block_id: BB1_669
+  - index: 669
+    codon: AAAGGCTC
+    building_block_id: BB1_670
+  - index: 670
+    codon: AAAGGCTG
+    building_block_id: BB1_671
+  - index: 671
+    codon: AAAGGCTT
+    building_block_id: BB1_672
+  - index: 672
+    codon: AAAGGGAA
+    building_block_id: BB1_673
+  - index: 673
+    codon: AAAGGGAC
+    building_block_id: BB1_674
+  - index: 674
+    codon: AAAGGGAG
+    building_block_id: BB1_675
+  - index: 675
+    codon: AAAGGGAT
+    building_block_id: BB1_676
+  - index: 676
+    codon: AAAGGGCA
+    building_block_id: BB1_677
+  - index: 677
+    codon: AAAGGGCC
+    building_block_id: BB1_678
+  - index: 678
+    codon: AAAGGGCG
+    building_block_id: BB1_679
+  - index: 679
+    codon: AAAGGGCT
+    building_block_id: BB1_680
+  - index: 680
+    codon: AAAGGGGA
+    building_block_id: BB1_681
+  - index: 681
+    codon: AAAGGGGC
+    building_block_id: BB1_682
+  - index: 682
+    codon: AAAGGGGG
+    building_block_id: BB1_683
+  - index: 683
+    codon: AAAGGGGT
+    building_block_id: BB1_684
+  - index: 684
+    codon: AAAGGGTA
+    building_block_id: BB1_685
+  - index: 685
+    codon: AAAGGGTC
+    building_block_id: BB1_686
+  - index: 686
+    codon: AAAGGGTG
+    building_block_id: BB1_687
+  - index: 687
+    codon: AAAGGGTT
+    building_block_id: BB1_688
+  - index: 688
+    codon: AAAGGTAA
+    building_block_id: BB1_689
+  - index: 689
+    codon: AAAGGTAC
+    building_block_id: BB1_690
+  - index: 690
+    codon: AAAGGTAG
+    building_block_id: BB1_691
+  - index: 691
+    codon: AAAGGTAT
+    building_block_id: BB1_692
+  - index: 692
+    codon: AAAGGTCA
+    building_block_id: BB1_693
+  - index: 693
+    codon: AAAGGTCC
+    building_block_id: BB1_694
+  - index: 694
+    codon: AAAGGTCG
+    building_block_id: BB1_695
+  - index: 695
+    codon: AAAGGTCT
+    building_block_id: BB1_696
+  - index: 696
+    codon: AAAGGTGA
+    building_block_id: BB1_697
+  - index: 697
+    codon: AAAGGTGC
+    building_block_id: BB1_698
+  - index: 698
+    codon: AAAGGTGG
+    building_block_id: BB1_699
+  - index: 699
+    codon: AAAGGTGT
+    building_block_id: BB1_700
+  - index: 700
+    codon: AAAGGTTA
+    building_block_id: BB1_701
+  - index: 701
+    codon: AAAGGTTC
+    building_block_id: BB1_702
+  - index: 702
+    codon: AAAGGTTG
+    building_block_id: BB1_703
+  - index: 703
+    codon: AAAGGTTT
+    building_block_id: BB1_704
+  - index: 704
+    codon: AAAGTAAA
+    building_block_id: BB1_705
+  - index: 705
+    codon: AAAGTAAC
+    building_block_id: BB1_706
+  - index: 706
+    codon: AAAGTAAG
+    building_block_id: BB1_707
+  - index: 707
+    codon: AAAGTAAT
+    building_block_id: BB1_708
+  - index: 708
+    codon: AAAGTACA
+    building_block_id: BB1_709
+  - index: 709
+    codon: AAAGTACC
+    building_block_id: BB1_710
+  - index: 710
+    codon: AAAGTACG
+    building_block_id: BB1_711
+  - index: 711
+    codon: AAAGTACT
+    building_block_id: BB1_712
+  - index: 712
+    codon: AAAGTAGA
+    building_block_id: BB1_713
+  - index: 713
+    codon: AAAGTAGC
+    building_block_id: BB1_714
+  - index: 714
+    codon: AAAGTAGG
+    building_block_id: BB1_715
+  - index: 715
+    codon: AAAGTAGT
+    building_block_id: BB1_716
+  - index: 716
+    codon: AAAGTATA
+    building_block_id: BB1_717
+  - index: 717
+    codon: AAAGTATC
+    building_block_id: BB1_718
+  - index: 718
+    codon: AAAGTATG
+    building_block_id: BB1_719
+  - index: 719
+    codon: AAAGTATT
+    building_block_id: BB1_720
+  - index: 720
+    codon: AAAGTCAA
+    building_block_id: BB1_721
+  - index: 721
+    codon: AAAGTCAC
+    building_block_id: BB1_722
+  - index: 722
+    codon: AAAGTCAG
+    building_block_id: BB1_723
+  - index: 723
+    codon: AAAGTCAT
+    building_block_id: BB1_724
+  - index: 724
+    codon: AAAGTCCA
+    building_block_id: BB1_725
+  - index: 725
+    codon: AAAGTCCC
+    building_block_id: BB1_726
+  - index: 726
+    codon: AAAGTCCG
+    building_block_id: BB1_727
+  - index: 727
+    codon: AAAGTCCT
+    building_block_id: BB1_728
+  - index: 728
+    codon: AAAGTCGA
+    building_block_id: BB1_729
+  - index: 729
+    codon: AAAGTCGC
+    building_block_id: BB1_730
+  - index: 730
+    codon: AAAGTCGG
+    building_block_id: BB1_731
+  - index: 731
+    codon: AAAGTCGT
+    building_block_id: BB1_732
+  - index: 732
+    codon: AAAGTCTA
+    building_block_id: BB1_733
+  - index: 733
+    codon: AAAGTCTC
+    building_block_id: BB1_734
+  - index: 734
+    codon: AAAGTCTG
+    building_block_id: BB1_735
+  - index: 735
+    codon: AAAGTCTT
+    building_block_id: BB1_736
+  - index: 736
+    codon: AAAGTGAA
+    building_block_id: BB1_737
+  - index: 737
+    codon: AAAGTGAC
+    building_block_id: BB1_738
+  - index: 738
+    codon: AAAGTGAG
+    building_block_id: BB1_739
+  - index: 739
+    codon: AAAGTGAT
+    building_block_id: BB1_740
+  - index: 740
+    codon: AAAGTGCA
+    building_block_id: BB1_741
+  - index: 741
+    codon: AAAGTGCC
+    building_block_id: BB1_742
+  - index: 742
+    codon: AAAGTGCG
+    building_block_id: BB1_743
+  - index: 743
+    codon: AAAGTGCT
+    building_block_id: BB1_744
+  - index: 744
+    codon: AAAGTGGA
+    building_block_id: BB1_745
+  - index: 745
+    codon: AAAGTGGC
+    building_block_id: BB1_746
+  - index: 746
+    codon: AAAGTGGG
+    building_block_id: BB1_747
+  - index: 747
+    codon: AAAGTGGT
+    building_block_id: BB1_748
+  - index: 748
+    codon: AAAGTGTA
+    building_block_id: BB1_749
+  - index: 749
+    codon: AAAGTGTC
+    building_block_id: BB1_750
+  - index: 750
+    codon: AAAGTGTG
+    building_block_id: BB1_751
+  - index: 751
+    codon: AAAGTGTT
+    building_block_id: BB1_752
+  - index: 752
+    codon: AAAGTTAA
+    building_block_id: BB1_753
+  - index: 753
+    codon: AAAGTTAC
+    building_block_id: BB1_754
+  - index: 754
+    codon: AAAGTTAG
+    building_block_id: BB1_755
+  - index: 755
+    codon: AAAGTTAT
+    building_block_id: BB1_756
+  - index: 756
+    codon: AAAGTTCA
+    building_block_id: BB1_757
+  - index: 757
+    codon: AAAGTTCC
+    building_block_id: BB1_758
+  - index: 758
+    codon: AAAGTTCG
+    building_block_id: BB1_759
+  - index: 759
+    codon: AAAGTTCT
+    building_block_id: BB1_760
+  - index: 760
+    codon: AAAGTTGA
+    building_block_id: BB1_761
+  - index: 761
+    codon: AAAGTTGC
+    building_block_id: BB1_762
+  - index: 762
+    codon: AAAGTTGG
+    building_block_id: BB1_763
+  - index: 763
+    codon: AAAGTTGT
+    building_block_id: BB1_764
+  - index: 764
+    codon: AAAGTTTA
+    building_block_id: BB1_765
+  - index: 765
+    codon: AAAGTTTC
+    building_block_id: BB1_766
+  - index: 766
+    codon: AAAGTTTG
+    building_block_id: BB1_767
+  - index: 767
+    codon: AAAGTTTT
+    building_block_id: BB1_768
+  - index: 768
+    codon: AAATAAAA
+    building_block_id: BB1_769
+  - index: 769
+    codon: AAATAAAC
+    building_block_id: BB1_770
+  - index: 770
+    codon: AAATAAAG
+    building_block_id: BB1_771
+  - index: 771
+    codon: AAATAAAT
+    building_block_id: BB1_772
+  - index: 772
+    codon: AAATAACA
+    building_block_id: BB1_773
+  - index: 773
+    codon: AAATAACC
+    building_block_id: BB1_774
+  - index: 774
+    codon: AAATAACG
+    building_block_id: BB1_775
+  - index: 775
+    codon: AAATAACT
+    building_block_id: BB1_776
+  - index: 776
+    codon: AAATAAGA
+    building_block_id: BB1_777
+  - index: 777
+    codon: AAATAAGC
+    building_block_id: BB1_778
+  - index: 778
+    codon: AAATAAGG
+    building_block_id: BB1_779
+  - index: 779
+    codon: AAATAAGT
+    building_block_id: BB1_780
+  - index: 780
+    codon: AAATAATA
+    building_block_id: BB1_781
+  - index: 781
+    codon: AAATAATC
+    building_block_id: BB1_782
+  - index: 782
+    codon: AAATAATG
+    building_block_id: BB1_783
+  - index: 783
+    codon: AAATAATT
+    building_block_id: BB1_784
+  - index: 784
+    codon: AAATACAA
+    building_block_id: BB1_785
+  - index: 785
+    codon: AAATACAC
+    building_block_id: BB1_786
+  - index: 786
+    codon: AAATACAG
+    building_block_id: BB1_787
+  - index: 787
+    codon: AAATACAT
+    building_block_id: BB1_788
+  - index: 788
+    codon: AAATACCA
+    building_block_id: BB1_789
+  - index: 789
+    codon: AAATACCC
+    building_block_id: BB1_790
+  - index: 790
+    codon: AAATACCG
+    building_block_id: BB1_791
+  - index: 791
+    codon: AAATACCT
+    building_block_id: BB1_792
+  - index: 792
+    codon: AAATACGA
+    building_block_id: BB1_793
+  - index: 793
+    codon: AAATACGC
+    building_block_id: BB1_794
+  - index: 794
+    codon: AAATACGG
+    building_block_id: BB1_795
+  - index: 795
+    codon: AAATACGT
+    building_block_id: BB1_796
+  - index: 796
+    codon: AAATACTA
+    building_block_id: BB1_797
+  - index: 797
+    codon: AAATACTC
+    building_block_id: BB1_798
+  - index: 798
+    codon: AAATACTG
+    building_block_id: BB1_799
+  - index: 799
+    codon: AAATACTT
+    building_block_id: BB1_800
+  - index: 800
+    codon: AAATAGAA
+    building_block_id: BB1_801
+  - index: 801
+    codon: AAATAGAC
+    building_block_id: BB1_802
+  - index: 802
+    codon: AAATAGAG
+    building_block_id: BB1_803
+  - index: 803
+    codon: AAATAGAT
+    building_block_id: BB1_804
+  - index: 804
+    codon: AAATAGCA
+    building_block_id: BB1_805
+  - index: 805
+    codon: AAATAGCC
+    building_block_id: BB1_806
+  - index: 806
+    codon: AAATAGCG
+    building_block_id: BB1_807
+  - index: 807
+    codon: AAATAGCT
+    building_block_id: BB1_808
+  - index: 808
+    codon: AAATAGGA
+    building_block_id: BB1_809
+  - index: 809
+    codon: AAATAGGC
+    building_block_id: BB1_810
+  - index: 810
+    codon: AAATAGGG
+    building_block_id: BB1_811
+  - index: 811
+    codon: AAATAGGT
+    building_block_id: BB1_812
+  - index: 812
+    codon: AAATAGTA
+    building_block_id: BB1_813
+  - index: 813
+    codon: AAATAGTC
+    building_block_id: BB1_814
+  - index: 814
+    codon: AAATAGTG
+    building_block_id: BB1_815
+  - index: 815
+    codon: AAATAGTT
+    building_block_id: BB1_816
+  - index: 816
+    codon: AAATATAA
+    building_block_id: BB1_817
+  - index: 817
+    codon: AAATATAC
+    building_block_id: BB1_818
+  - index: 818
+    codon: AAATATAG
+    building_block_id: BB1_819
+  - index: 819
+    codon: AAATATAT
+    building_block_id: BB1_820
+  - index: 820
+    codon: AAATATCA
+    building_block_id: BB1_821
+  - index: 821
+    codon: AAATATCC
+    building_block_id: BB1_822
+  - index: 822
+    codon: AAATATCG
+    building_block_id: BB1_823
+  - index: 823
+    codon: AAATATCT
+    building_block_id: BB1_824
+  - index: 824
+    codon: AAATATGA
+    building_block_id: BB1_825
+  - index: 825
+    codon: AAATATGC
+    building_block_id: BB1_826
+  - index: 826
+    codon: AAATATGG
+    building_block_id: BB1_827
+  - index: 827
+    codon: AAATATGT
+    building_block_id: BB1_828
+  - index: 828
+    codon: AAATATTA
+    building_block_id: BB1_829
+  - index: 829
+    codon: AAATATTC
+    building_block_id: BB1_830
+  - index: 830
+    codon: AAATATTG
+    building_block_id: BB1_831
+  - index: 831
+    codon: AAATATTT
+    building_block_id: BB1_832
+  - index: 832
+    codon: AAATCAAA
+    building_block_id: BB1_833
+  - index: 833
+    codon: AAATCAAC
+    building_block_id: BB1_834
+  - index: 834
+    codon: AAATCAAG
+    building_block_id: BB1_835
+  - index: 835
+    codon: AAATCAAT
+    building_block_id: BB1_836
+  - index: 836
+    codon: AAATCACA
+    building_block_id: BB1_837
+  - index: 837
+    codon: AAATCACC
+    building_block_id: BB1_838
+  - index: 838
+    codon: AAATCACG
+    building_block_id: BB1_839
+  - index: 839
+    codon: AAATCACT
+    building_block_id: BB1_840
+  - index: 840
+    codon: AAATCAGA
+    building_block_id: BB1_841
+  - index: 841
+    codon: AAATCAGC
+    building_block_id: BB1_842
+  - index: 842
+    codon: AAATCAGG
+    building_block_id: BB1_843
+  - index: 843
+    codon: AAATCAGT
+    building_block_id: BB1_844
+  - index: 844
+    codon: AAATCATA
+    building_block_id: BB1_845
+  - index: 845
+    codon: AAATCATC
+    building_block_id: BB1_846
+  - index: 846
+    codon: AAATCATG
+    building_block_id: BB1_847
+  - index: 847
+    codon: AAATCATT
+    building_block_id: BB1_848
+  - index: 848
+    codon: AAATCCAA
+    building_block_id: BB1_849
+  - index: 849
+    codon: AAATCCAC
+    building_block_id: BB1_850
+  - index: 850
+    codon: AAATCCAG
+    building_block_id: BB1_851
+  - index: 851
+    codon: AAATCCAT
+    building_block_id: BB1_852
+  - index: 852
+    codon: AAATCCCA
+    building_block_id: BB1_853
+  - index: 853
+    codon: AAATCCCC
+    building_block_id: BB1_854
+  - index: 854
+    codon: AAATCCCG
+    building_block_id: BB1_855
+  - index: 855
+    codon: AAATCCCT
+    building_block_id: BB1_856
+  - index: 856
+    codon: AAATCCGA
+    building_block_id: BB1_857
+  - index: 857
+    codon: AAATCCGC
+    building_block_id: BB1_858
+  - index: 858
+    codon: AAATCCGG
+    building_block_id: BB1_859
+  - index: 859
+    codon: AAATCCGT
+    building_block_id: BB1_860
+  - index: 860
+    codon: AAATCCTA
+    building_block_id: BB1_861
+  - index: 861
+    codon: AAATCCTC
+    building_block_id: BB1_862
+  - index: 862
+    codon: AAATCCTG
+    building_block_id: BB1_863
+  - index: 863
+    codon: AAATCCTT
+    building_block_id: BB1_864
+  - index: 864
+    codon: AAATCGAA
+    building_block_id: BB1_865
+  - index: 865
+    codon: AAATCGAC
+    building_block_id: BB1_866
+  - index: 866
+    codon: AAATCGAG
+    building_block_id: BB1_867
+  - index: 867
+    codon: AAATCGAT
+    building_block_id: BB1_868
+  - index: 868
+    codon: AAATCGCA
+    building_block_id: BB1_869
+  - index: 869
+    codon: AAATCGCC
+    building_block_id: BB1_870
+  - index: 870
+    codon: AAATCGCG
+    building_block_id: BB1_871
+  - index: 871
+    codon: AAATCGCT
+    building_block_id: BB1_872
+  - index: 872
+    codon: AAATCGGA
+    building_block_id: BB1_873
+  - index: 873
+    codon: AAATCGGC
+    building_block_id: BB1_874
+  - index: 874
+    codon: AAATCGGG
+    building_block_id: BB1_875
+  - index: 875
+    codon: AAATCGGT
+    building_block_id: BB1_876
+  - index: 876
+    codon: AAATCGTA
+    building_block_id: BB1_877
+  - index: 877
+    codon: AAATCGTC
+    building_block_id: BB1_878
+  - index: 878
+    codon: AAATCGTG
+    building_block_id: BB1_879
+  - index: 879
+    codon: AAATCGTT
+    building_block_id: BB1_880
+  - index: 880
+    codon: AAATCTAA
+    building_block_id: BB1_881
+  - index: 881
+    codon: AAATCTAC
+    building_block_id: BB1_882
+  - index: 882
+    codon: AAATCTAG
+    building_block_id: BB1_883
+  - index: 883
+    codon: AAATCTAT
+    building_block_id: BB1_884
+  - index: 884
+    codon: AAATCTCA
+    building_block_id: BB1_885
+  - index: 885
+    codon: AAATCTCC
+    building_block_id: BB1_886
+  - index: 886
+    codon: AAATCTCG
+    building_block_id: BB1_887
+  - index: 887
+    codon: AAATCTCT
+    building_block_id: BB1_888
+  - index: 888
+    codon: AAATCTGA
+    building_block_id: BB1_889
+  - index: 889
+    codon: AAATCTGC
+    building_block_id: BB1_890
+  - index: 890
+    codon: AAATCTGG
+    building_block_id: BB1_891
+  - index: 891
+    codon: AAATCTGT
+    building_block_id: BB1_892
+  - index: 892
+    codon: AAATCTTA
+    building_block_id: BB1_893
+  - index: 893
+    codon: AAATCTTC
+    building_block_id: BB1_894
+  - index: 894
+    codon: AAATCTTG
+    building_block_id: BB1_895
+  - index: 895
+    codon: AAATCTTT
+    building_block_id: BB1_896
+  - index: 896
+    codon: AAATGAAA
+    building_block_id: BB1_897
+  - index: 897
+    codon: AAATGAAC
+    building_block_id: BB1_898
+  - index: 898
+    codon: AAATGAAG
+    building_block_id: BB1_899
+  - index: 899
+    codon: AAATGAAT
+    building_block_id: BB1_900
+  - index: 900
+    codon: AAATGACA
+    building_block_id: BB1_901
+  - index: 901
+    codon: AAATGACC
+    building_block_id: BB1_902
+  - index: 902
+    codon: AAATGACG
+    building_block_id: BB1_903
+  - index: 903
+    codon: AAATGACT
+    building_block_id: BB1_904
+  - index: 904
+    codon: AAATGAGA
+    building_block_id: BB1_905
+  - index: 905
+    codon: AAATGAGC
+    building_block_id: BB1_906
+  - index: 906
+    codon: AAATGAGG
+    building_block_id: BB1_907
+  - index: 907
+    codon: AAATGAGT
+    building_block_id: BB1_908
+  - index: 908
+    codon: AAATGATA
+    building_block_id: BB1_909
+  - index: 909
+    codon: AAATGATC
+    building_block_id: BB1_910
+  - index: 910
+    codon: AAATGATG
+    building_block_id: BB1_911
+  - index: 911
+    codon: AAATGATT
+    building_block_id: BB1_912
+  - index: 912
+    codon: AAATGCAA
+    building_block_id: BB1_913
+  - index: 913
+    codon: AAATGCAC
+    building_block_id: BB1_914
+  - index: 914
+    codon: AAATGCAG
+    building_block_id: BB1_915
+  - index: 915
+    codon: AAATGCAT
+    building_block_id: BB1_916
+  - index: 916
+    codon: AAATGCCA
+    building_block_id: BB1_917
+  - index: 917
+    codon: AAATGCCC
+    building_block_id: BB1_918
+  - index: 918
+    codon: AAATGCCG
+    building_block_id: BB1_919
+  - index: 919
+    codon: AAATGCCT
+    building_block_id: BB1_920
+  - index: 920
+    codon: AAATGCGA
+    building_block_id: BB1_921
+  - index: 921
+    codon: AAATGCGC
+    building_block_id: BB1_922
+  - index: 922
+    codon: AAATGCGG
+    building_block_id: BB1_923
+  - index: 923
+    codon: AAATGCGT
+    building_block_id: BB1_924
+  - index: 924
+    codon: AAATGCTA
+    building_block_id: BB1_925
+  - index: 925
+    codon: AAATGCTC
+    building_block_id: BB1_926
+  - index: 926
+    codon: AAATGCTG
+    building_block_id: BB1_927
+  - index: 927
+    codon: AAATGCTT
+    building_block_id: BB1_928
+  - index: 928
+    codon: AAATGGAA
+    building_block_id: BB1_929
+  - index: 929
+    codon: AAATGGAC
+    building_block_id: BB1_930
+  - index: 930
+    codon: AAATGGAG
+    building_block_id: BB1_931
+  - index: 931
+    codon: AAATGGAT
+    building_block_id: BB1_932
+  - index: 932
+    codon: AAATGGCA
+    building_block_id: BB1_933
+  - index: 933
+    codon: AAATGGCC
+    building_block_id: BB1_934
+  - index: 934
+    codon: AAATGGCG
+    building_block_id: BB1_935
+  - index: 935
+    codon: AAATGGCT
+    building_block_id: BB1_936
+  - index: 936
+    codon: AAATGGGA
+    building_block_id: BB1_937
+  - index: 937
+    codon: AAATGGGC
+    building_block_id: BB1_938
+  - index: 938
+    codon: AAATGGGG
+    building_block_id: BB1_939
+  - index: 939
+    codon: AAATGGGT
+    building_block_id: BB1_940
+  - index: 940
+    codon: AAATGGTA
+    building_block_id: BB1_941
+  - index: 941
+    codon: AAATGGTC
+    building_block_id: BB1_942
+  - index: 942
+    codon: AAATGGTG
+    building_block_id: BB1_943
+  - index: 943
+    codon: AAATGGTT
+    building_block_id: BB1_944
+  - index: 944
+    codon: AAATGTAA
+    building_block_id: BB1_945
+  - index: 945
+    codon: AAATGTAC
+    building_block_id: BB1_946
+  - index: 946
+    codon: AAATGTAG
+    building_block_id: BB1_947
+  - index: 947
+    codon: AAATGTAT
+    building_block_id: BB1_948
+  - index: 948
+    codon: AAATGTCA
+    building_block_id: BB1_949
+  - index: 949
+    codon: AAATGTCC
+    building_block_id: BB1_950
+  - index: 950
+    codon: AAATGTCG
+    building_block_id: BB1_951
+  - index: 951
+    codon: AAATGTCT
+    building_block_id: BB1_952
+  - index: 952
+    codon: AAATGTGA
+    building_block_id: BB1_953
+  - index: 953
+    codon: AAATGTGC
+    building_block_id: BB1_954
+  - index: 954
+    codon: AAATGTGG
+    building_block_id: BB1_955
+  - index: 955
+    codon: AAATGTGT
+    building_block_id: BB1_956
+  - index: 956
+    codon: AAATGTTA
+    building_block_id: BB1_957
+  - index: 957
+    codon: AAATGTTC
+    building_block_id: BB1_958
+  - index: 958
+    codon: AAATGTTG
+    building_block_id: BB1_959
+  - index: 959
+    codon: AAATGTTT
+    building_block_id: BB1_960
+  - index: 960
+    codon: AAATTAAA
+    building_block_id: BB1_961
+  - index: 961
+    codon: AAATTAAC
+    building_block_id: BB1_962
+  - index: 962
+    codon: AAATTAAG
+    building_block_id: BB1_963
+  - index: 963
+    codon: AAATTAAT
+    building_block_id: BB1_964
+  - index: 964
+    codon: AAATTACA
+    building_block_id: BB1_965
+  - index: 965
+    codon: AAATTACC
+    building_block_id: BB1_966
+  - index: 966
+    codon: AAATTACG
+    building_block_id: BB1_967
+  - index: 967
+    codon: AAATTACT
+    building_block_id: BB1_968
+  - index: 968
+    codon: AAATTAGA
+    building_block_id: BB1_969
+  - index: 969
+    codon: AAATTAGC
+    building_block_id: BB1_970
+  - index: 970
+    codon: AAATTAGG
+    building_block_id: BB1_971
+  - index: 971
+    codon: AAATTAGT
+    building_block_id: BB1_972
+  - index: 972
+    codon: AAATTATA
+    building_block_id: BB1_973
+  - index: 973
+    codon: AAATTATC
+    building_block_id: BB1_974
+  - index: 974
+    codon: AAATTATG
+    building_block_id: BB1_975
+  - index: 975
+    codon: AAATTATT
+    building_block_id: BB1_976
+  - index: 976
+    codon: AAATTCAA
+    building_block_id: BB1_977
+  - index: 977
+    codon: AAATTCAC
+    building_block_id: BB1_978
+  - index: 978
+    codon: AAATTCAG
+    building_block_id: BB1_979
+  - index: 979
+    codon: AAATTCAT
+    building_block_id: BB1_980
+  - index: 980
+    codon: AAATTCCA
+    building_block_id: BB1_981
+  - index: 981
+    codon: AAATTCCC
+    building_block_id: BB1_982
+  - index: 982
+    codon: AAATTCCG
+    building_block_id: BB1_983
+  - index: 983
+    codon: AAATTCCT
+    building_block_id: BB1_984
+  - index: 984
+    codon: AAATTCGA
+    building_block_id: BB1_985
+  - index: 985
+    codon: AAATTCGC
+    building_block_id: BB1_986
+  - index: 986
+    codon: AAATTCGG
+    building_block_id: BB1_987
+  - index: 987
+    codon: AAATTCGT
+    building_block_id: BB1_988
+  - index: 988
+    codon: AAATTCTA
+    building_block_id: BB1_989
+  - index: 989
+    codon: AAATTCTC
+    building_block_id: BB1_990
+  - index: 990
+    codon: AAATTCTG
+    building_block_id: BB1_991
+  - index: 991
+    codon: AAATTCTT
+    building_block_id: BB1_992
+  - index: 992
+    codon: AAATTGAA
+    building_block_id: BB1_993
+  - index: 993
+    codon: AAATTGAC
+    building_block_id: BB1_994
+  - index: 994
+    codon: AAATTGAG
+    building_block_id: BB1_995
+  - index: 995
+    codon: AAATTGAT
+    building_block_id: BB1_996
+  - index: 996
+    codon: AAATTGCA
+    building_block_id: BB1_997
+  - index: 997
+    codon: AAATTGCC
+    building_block_id: BB1_998
+  - index: 998
+    codon: AAATTGCG
+    building_block_id: BB1_999
+  - index: 999
+    codon: AAATTGCT
+    building_block_id: BB1_1000
+  B1:
+  - index: 0
+    codon: AGCTACAA
+    building_block_id: BB2_001
+  - index: 1
+    codon: AGCTACAC
+    building_block_id: BB2_002
+  - index: 2
+    codon: AGCTACAG
+    building_block_id: BB2_003
+  - index: 3
+    codon: AGCTACAT
+    building_block_id: BB2_004
+  - index: 4
+    codon: AGCTACCA
+    building_block_id: BB2_005
+  - index: 5
+    codon: AGCTACCC
+    building_block_id: BB2_006
+  - index: 6
+    codon: AGCTACCG
+    building_block_id: BB2_007
+  - index: 7
+    codon: AGCTACCT
+    building_block_id: BB2_008
+  - index: 8
+    codon: AGCTACGA
+    building_block_id: BB2_009
+  - index: 9
+    codon: AGCTACGC
+    building_block_id: BB2_010
+  - index: 10
+    codon: AGCTACGG
+    building_block_id: BB2_011
+  - index: 11
+    codon: AGCTACGT
+    building_block_id: BB2_012
+  - index: 12
+    codon: AGCTACTA
+    building_block_id: BB2_013
+  - index: 13
+    codon: AGCTACTC
+    building_block_id: BB2_014
+  - index: 14
+    codon: AGCTACTG
+    building_block_id: BB2_015
+  - index: 15
+    codon: AGCTACTT
+    building_block_id: BB2_016
+  - index: 16
+    codon: AGCTAGAA
+    building_block_id: BB2_017
+  - index: 17
+    codon: AGCTAGAC
+    building_block_id: BB2_018
+  - index: 18
+    codon: AGCTAGAG
+    building_block_id: BB2_019
+  - index: 19
+    codon: AGCTAGAT
+    building_block_id: BB2_020
+  - index: 20
+    codon: AGCTAGCA
+    building_block_id: BB2_021
+  - index: 21
+    codon: AGCTAGCC
+    building_block_id: BB2_022
+  - index: 22
+    codon: AGCTAGCG
+    building_block_id: BB2_023
+  - index: 23
+    codon: AGCTAGCT
+    building_block_id: BB2_024
+  - index: 24
+    codon: AGCTAGGA
+    building_block_id: BB2_025
+  - index: 25
+    codon: AGCTAGGC
+    building_block_id: BB2_026
+  - index: 26
+    codon: AGCTAGGG
+    building_block_id: BB2_027
+  - index: 27
+    codon: AGCTAGGT
+    building_block_id: BB2_028
+  - index: 28
+    codon: AGCTAGTA
+    building_block_id: BB2_029
+  - index: 29
+    codon: AGCTAGTC
+    building_block_id: BB2_030
+  - index: 30
+    codon: AGCTAGTG
+    building_block_id: BB2_031
+  - index: 31
+    codon: AGCTAGTT
+    building_block_id: BB2_032
+  - index: 32
+    codon: AGCTATAA
+    building_block_id: BB2_033
+  - index: 33
+    codon: AGCTATAC
+    building_block_id: BB2_034
+  - index: 34
+    codon: AGCTATAG
+    building_block_id: BB2_035
+  - index: 35
+    codon: AGCTATAT
+    building_block_id: BB2_036
+  - index: 36
+    codon: AGCTATCA
+    building_block_id: BB2_037
+  - index: 37
+    codon: AGCTATCC
+    building_block_id: BB2_038
+  - index: 38
+    codon: AGCTATCG
+    building_block_id: BB2_039
+  - index: 39
+    codon: AGCTATCT
+    building_block_id: BB2_040
+  - index: 40
+    codon: AGCTATGA
+    building_block_id: BB2_041
+  - index: 41
+    codon: AGCTATGC
+    building_block_id: BB2_042
+  - index: 42
+    codon: AGCTATGG
+    building_block_id: BB2_043
+  - index: 43
+    codon: AGCTATGT
+    building_block_id: BB2_044
+  - index: 44
+    codon: AGCTATTA
+    building_block_id: BB2_045
+  - index: 45
+    codon: AGCTATTC
+    building_block_id: BB2_046
+  - index: 46
+    codon: AGCTATTG
+    building_block_id: BB2_047
+  - index: 47
+    codon: AGCTATTT
+    building_block_id: BB2_048
+  - index: 48
+    codon: AGCTCAAA
+    building_block_id: BB2_049
+  - index: 49
+    codon: AGCTCAAC
+    building_block_id: BB2_050
+  - index: 50
+    codon: AGCTCAAG
+    building_block_id: BB2_051
+  - index: 51
+    codon: AGCTCAAT
+    building_block_id: BB2_052
+  - index: 52
+    codon: AGCTCACA
+    building_block_id: BB2_053
+  - index: 53
+    codon: AGCTCACC
+    building_block_id: BB2_054
+  - index: 54
+    codon: AGCTCACG
+    building_block_id: BB2_055
+  - index: 55
+    codon: AGCTCACT
+    building_block_id: BB2_056
+  - index: 56
+    codon: AGCTCAGA
+    building_block_id: BB2_057
+  - index: 57
+    codon: AGCTCAGC
+    building_block_id: BB2_058
+  - index: 58
+    codon: AGCTCAGG
+    building_block_id: BB2_059
+  - index: 59
+    codon: AGCTCAGT
+    building_block_id: BB2_060
+  - index: 60
+    codon: AGCTCATA
+    building_block_id: BB2_061
+  - index: 61
+    codon: AGCTCATC
+    building_block_id: BB2_062
+  - index: 62
+    codon: AGCTCATG
+    building_block_id: BB2_063
+  - index: 63
+    codon: AGCTCATT
+    building_block_id: BB2_064
+  - index: 64
+    codon: AGCTCCAA
+    building_block_id: BB2_065
+  - index: 65
+    codon: AGCTCCAC
+    building_block_id: BB2_066
+  - index: 66
+    codon: AGCTCCAG
+    building_block_id: BB2_067
+  - index: 67
+    codon: AGCTCCAT
+    building_block_id: BB2_068
+  - index: 68
+    codon: AGCTCCCA
+    building_block_id: BB2_069
+  - index: 69
+    codon: AGCTCCCC
+    building_block_id: BB2_070
+  - index: 70
+    codon: AGCTCCCG
+    building_block_id: BB2_071
+  - index: 71
+    codon: AGCTCCCT
+    building_block_id: BB2_072
+  - index: 72
+    codon: AGCTCCGA
+    building_block_id: BB2_073
+  - index: 73
+    codon: AGCTCCGC
+    building_block_id: BB2_074
+  - index: 74
+    codon: AGCTCCGG
+    building_block_id: BB2_075
+  - index: 75
+    codon: AGCTCCGT
+    building_block_id: BB2_076
+  - index: 76
+    codon: AGCTCCTA
+    building_block_id: BB2_077
+  - index: 77
+    codon: AGCTCCTC
+    building_block_id: BB2_078
+  - index: 78
+    codon: AGCTCCTG
+    building_block_id: BB2_079
+  - index: 79
+    codon: AGCTCCTT
+    building_block_id: BB2_080
+  - index: 80
+    codon: AGCTCGAA
+    building_block_id: BB2_081
+  - index: 81
+    codon: AGCTCGAC
+    building_block_id: BB2_082
+  - index: 82
+    codon: AGCTCGAG
+    building_block_id: BB2_083
+  - index: 83
+    codon: AGCTCGAT
+    building_block_id: BB2_084
+  - index: 84
+    codon: AGCTCGCA
+    building_block_id: BB2_085
+  - index: 85
+    codon: AGCTCGCC
+    building_block_id: BB2_086
+  - index: 86
+    codon: AGCTCGCG
+    building_block_id: BB2_087
+  - index: 87
+    codon: AGCTCGCT
+    building_block_id: BB2_088
+  - index: 88
+    codon: AGCTCGGA
+    building_block_id: BB2_089
+  - index: 89
+    codon: AGCTCGGC
+    building_block_id: BB2_090
+  - index: 90
+    codon: AGCTCGGG
+    building_block_id: BB2_091
+  - index: 91
+    codon: AGCTCGGT
+    building_block_id: BB2_092
+  - index: 92
+    codon: AGCTCGTA
+    building_block_id: BB2_093
+  - index: 93
+    codon: AGCTCGTC
+    building_block_id: BB2_094
+  - index: 94
+    codon: AGCTCGTG
+    building_block_id: BB2_095
+  - index: 95
+    codon: AGCTCGTT
+    building_block_id: BB2_096
+  - index: 96
+    codon: AGCTCTAA
+    building_block_id: BB2_097
+  - index: 97
+    codon: AGCTCTAC
+    building_block_id: BB2_098
+  - index: 98
+    codon: AGCTCTAG
+    building_block_id: BB2_099
+  - index: 99
+    codon: AGCTCTAT
+    building_block_id: BB2_100
+  - index: 100
+    codon: AGCTCTCA
+    building_block_id: BB2_101
+  - index: 101
+    codon: AGCTCTCC
+    building_block_id: BB2_102
+  - index: 102
+    codon: AGCTCTCG
+    building_block_id: BB2_103
+  - index: 103
+    codon: AGCTCTCT
+    building_block_id: BB2_104
+  - index: 104
+    codon: AGCTCTGA
+    building_block_id: BB2_105
+  - index: 105
+    codon: AGCTCTGC
+    building_block_id: BB2_106
+  - index: 106
+    codon: AGCTCTGG
+    building_block_id: BB2_107
+  - index: 107
+    codon: AGCTCTGT
+    building_block_id: BB2_108
+  - index: 108
+    codon: AGCTCTTA
+    building_block_id: BB2_109
+  - index: 109
+    codon: AGCTCTTC
+    building_block_id: BB2_110
+  - index: 110
+    codon: AGCTCTTG
+    building_block_id: BB2_111
+  - index: 111
+    codon: AGCTCTTT
+    building_block_id: BB2_112
+  - index: 112
+    codon: AGCTGAAA
+    building_block_id: BB2_113
+  - index: 113
+    codon: AGCTGAAC
+    building_block_id: BB2_114
+  - index: 114
+    codon: AGCTGAAG
+    building_block_id: BB2_115
+  - index: 115
+    codon: AGCTGAAT
+    building_block_id: BB2_116
+  - index: 116
+    codon: AGCTGACA
+    building_block_id: BB2_117
+  - index: 117
+    codon: AGCTGACC
+    building_block_id: BB2_118
+  - index: 118
+    codon: AGCTGACG
+    building_block_id: BB2_119
+  - index: 119
+    codon: AGCTGACT
+    building_block_id: BB2_120
+  - index: 120
+    codon: AGCTGAGA
+    building_block_id: BB2_121
+  - index: 121
+    codon: AGCTGAGC
+    building_block_id: BB2_122
+  - index: 122
+    codon: AGCTGAGG
+    building_block_id: BB2_123
+  - index: 123
+    codon: AGCTGAGT
+    building_block_id: BB2_124
+  - index: 124
+    codon: AGCTGATA
+    building_block_id: BB2_125
+  - index: 125
+    codon: AGCTGATC
+    building_block_id: BB2_126
+  - index: 126
+    codon: AGCTGATG
+    building_block_id: BB2_127
+  - index: 127
+    codon: AGCTGATT
+    building_block_id: BB2_128
+  - index: 128
+    codon: AGCTGCAA
+    building_block_id: BB2_129
+  - index: 129
+    codon: AGCTGCAC
+    building_block_id: BB2_130
+  - index: 130
+    codon: AGCTGCAG
+    building_block_id: BB2_131
+  - index: 131
+    codon: AGCTGCAT
+    building_block_id: BB2_132
+  - index: 132
+    codon: AGCTGCCA
+    building_block_id: BB2_133
+  - index: 133
+    codon: AGCTGCCC
+    building_block_id: BB2_134
+  - index: 134
+    codon: AGCTGCCG
+    building_block_id: BB2_135
+  - index: 135
+    codon: AGCTGCCT
+    building_block_id: BB2_136
+  - index: 136
+    codon: AGCTGCGA
+    building_block_id: BB2_137
+  - index: 137
+    codon: AGCTGCGC
+    building_block_id: BB2_138
+  - index: 138
+    codon: AGCTGCGG
+    building_block_id: BB2_139
+  - index: 139
+    codon: AGCTGCGT
+    building_block_id: BB2_140
+  - index: 140
+    codon: AGCTGCTA
+    building_block_id: BB2_141
+  - index: 141
+    codon: AGCTGCTC
+    building_block_id: BB2_142
+  - index: 142
+    codon: AGCTGCTG
+    building_block_id: BB2_143
+  - index: 143
+    codon: AGCTGCTT
+    building_block_id: BB2_144
+  - index: 144
+    codon: AGCTGGAA
+    building_block_id: BB2_145
+  - index: 145
+    codon: AGCTGGAC
+    building_block_id: BB2_146
+  - index: 146
+    codon: AGCTGGAG
+    building_block_id: BB2_147
+  - index: 147
+    codon: AGCTGGAT
+    building_block_id: BB2_148
+  - index: 148
+    codon: AGCTGGCA
+    building_block_id: BB2_149
+  - index: 149
+    codon: AGCTGGCC
+    building_block_id: BB2_150
+  - index: 150
+    codon: AGCTGGCG
+    building_block_id: BB2_151
+  - index: 151
+    codon: AGCTGGCT
+    building_block_id: BB2_152
+  - index: 152
+    codon: AGCTGGGA
+    building_block_id: BB2_153
+  - index: 153
+    codon: AGCTGGGC
+    building_block_id: BB2_154
+  - index: 154
+    codon: AGCTGGGG
+    building_block_id: BB2_155
+  - index: 155
+    codon: AGCTGGGT
+    building_block_id: BB2_156
+  - index: 156
+    codon: AGCTGGTA
+    building_block_id: BB2_157
+  - index: 157
+    codon: AGCTGGTC
+    building_block_id: BB2_158
+  - index: 158
+    codon: AGCTGGTG
+    building_block_id: BB2_159
+  - index: 159
+    codon: AGCTGGTT
+    building_block_id: BB2_160
+  - index: 160
+    codon: AGCTGTAA
+    building_block_id: BB2_161
+  - index: 161
+    codon: AGCTGTAC
+    building_block_id: BB2_162
+  - index: 162
+    codon: AGCTGTAG
+    building_block_id: BB2_163
+  - index: 163
+    codon: AGCTGTAT
+    building_block_id: BB2_164
+  - index: 164
+    codon: AGCTGTCA
+    building_block_id: BB2_165
+  - index: 165
+    codon: AGCTGTCC
+    building_block_id: BB2_166
+  - index: 166
+    codon: AGCTGTCG
+    building_block_id: BB2_167
+  - index: 167
+    codon: AGCTGTCT
+    building_block_id: BB2_168
+  - index: 168
+    codon: AGCTGTGA
+    building_block_id: BB2_169
+  - index: 169
+    codon: AGCTGTGC
+    building_block_id: BB2_170
+  - index: 170
+    codon: AGCTGTGG
+    building_block_id: BB2_171
+  - index: 171
+    codon: AGCTGTGT
+    building_block_id: BB2_172
+  - index: 172
+    codon: AGCTGTTA
+    building_block_id: BB2_173
+  - index: 173
+    codon: AGCTGTTC
+    building_block_id: BB2_174
+  - index: 174
+    codon: AGCTGTTG
+    building_block_id: BB2_175
+  - index: 175
+    codon: AGCTGTTT
+    building_block_id: BB2_176
+  - index: 176
+    codon: AGCTTAAA
+    building_block_id: BB2_177
+  - index: 177
+    codon: AGCTTAAC
+    building_block_id: BB2_178
+  - index: 178
+    codon: AGCTTAAG
+    building_block_id: BB2_179
+  - index: 179
+    codon: AGCTTAAT
+    building_block_id: BB2_180
+  - index: 180
+    codon: AGCTTACA
+    building_block_id: BB2_181
+  - index: 181
+    codon: AGCTTACC
+    building_block_id: BB2_182
+  - index: 182
+    codon: AGCTTACG
+    building_block_id: BB2_183
+  - index: 183
+    codon: AGCTTACT
+    building_block_id: BB2_184
+  - index: 184
+    codon: AGCTTAGA
+    building_block_id: BB2_185
+  - index: 185
+    codon: AGCTTAGC
+    building_block_id: BB2_186
+  - index: 186
+    codon: AGCTTAGG
+    building_block_id: BB2_187
+  - index: 187
+    codon: AGCTTAGT
+    building_block_id: BB2_188
+  - index: 188
+    codon: AGCTTATA
+    building_block_id: BB2_189
+  - index: 189
+    codon: AGCTTATC
+    building_block_id: BB2_190
+  - index: 190
+    codon: AGCTTATG
+    building_block_id: BB2_191
+  - index: 191
+    codon: AGCTTATT
+    building_block_id: BB2_192
+  - index: 192
+    codon: AGCTTCAA
+    building_block_id: BB2_193
+  - index: 193
+    codon: AGCTTCAC
+    building_block_id: BB2_194
+  - index: 194
+    codon: AGCTTCAG
+    building_block_id: BB2_195
+  - index: 195
+    codon: AGCTTCAT
+    building_block_id: BB2_196
+  - index: 196
+    codon: AGCTTCCA
+    building_block_id: BB2_197
+  - index: 197
+    codon: AGCTTCCC
+    building_block_id: BB2_198
+  - index: 198
+    codon: AGCTTCCG
+    building_block_id: BB2_199
+  - index: 199
+    codon: AGCTTCCT
+    building_block_id: BB2_200
+  - index: 200
+    codon: AGCTTCGA
+    building_block_id: BB2_201
+  - index: 201
+    codon: AGCTTCGC
+    building_block_id: BB2_202
+  - index: 202
+    codon: AGCTTCGG
+    building_block_id: BB2_203
+  - index: 203
+    codon: AGCTTCGT
+    building_block_id: BB2_204
+  - index: 204
+    codon: AGCTTCTA
+    building_block_id: BB2_205
+  - index: 205
+    codon: AGCTTCTC
+    building_block_id: BB2_206
+  - index: 206
+    codon: AGCTTCTG
+    building_block_id: BB2_207
+  - index: 207
+    codon: AGCTTCTT
+    building_block_id: BB2_208
+  - index: 208
+    codon: AGCTTGAA
+    building_block_id: BB2_209
+  - index: 209
+    codon: AGCTTGAC
+    building_block_id: BB2_210
+  - index: 210
+    codon: AGCTTGAG
+    building_block_id: BB2_211
+  - index: 211
+    codon: AGCTTGAT
+    building_block_id: BB2_212
+  - index: 212
+    codon: AGCTTGCA
+    building_block_id: BB2_213
+  - index: 213
+    codon: AGCTTGCC
+    building_block_id: BB2_214
+  - index: 214
+    codon: AGCTTGCG
+    building_block_id: BB2_215
+  - index: 215
+    codon: AGCTTGCT
+    building_block_id: BB2_216
+  - index: 216
+    codon: AGCTTGGA
+    building_block_id: BB2_217
+  - index: 217
+    codon: AGCTTGGC
+    building_block_id: BB2_218
+  - index: 218
+    codon: AGCTTGGG
+    building_block_id: BB2_219
+  - index: 219
+    codon: AGCTTGGT
+    building_block_id: BB2_220
+  - index: 220
+    codon: AGCTTGTA
+    building_block_id: BB2_221
+  - index: 221
+    codon: AGCTTGTC
+    building_block_id: BB2_222
+  - index: 222
+    codon: AGCTTGTG
+    building_block_id: BB2_223
+  - index: 223
+    codon: AGCTTGTT
+    building_block_id: BB2_224
+  - index: 224
+    codon: AGCTTTAA
+    building_block_id: BB2_225
+  - index: 225
+    codon: AGCTTTAC
+    building_block_id: BB2_226
+  - index: 226
+    codon: AGCTTTAG
+    building_block_id: BB2_227
+  - index: 227
+    codon: AGCTTTAT
+    building_block_id: BB2_228
+  - index: 228
+    codon: AGCTTTCA
+    building_block_id: BB2_229
+  - index: 229
+    codon: AGCTTTCC
+    building_block_id: BB2_230
+  - index: 230
+    codon: AGCTTTCG
+    building_block_id: BB2_231
+  - index: 231
+    codon: AGCTTTCT
+    building_block_id: BB2_232
+  - index: 232
+    codon: AGCTTTGA
+    building_block_id: BB2_233
+  - index: 233
+    codon: AGCTTTGC
+    building_block_id: BB2_234
+  - index: 234
+    codon: AGCTTTGG
+    building_block_id: BB2_235
+  - index: 235
+    codon: AGCTTTGT
+    building_block_id: BB2_236
+  - index: 236
+    codon: AGCTTTTA
+    building_block_id: BB2_237
+  - index: 237
+    codon: AGCTTTTC
+    building_block_id: BB2_238
+  - index: 238
+    codon: AGCTTTTG
+    building_block_id: BB2_239
+  - index: 239
+    codon: AGCTTTTT
+    building_block_id: BB2_240
+  - index: 240
+    codon: AGGAAAAA
+    building_block_id: BB2_241
+  - index: 241
+    codon: AGGAAAAC
+    building_block_id: BB2_242
+  - index: 242
+    codon: AGGAAAAG
+    building_block_id: BB2_243
+  - index: 243
+    codon: AGGAAAAT
+    building_block_id: BB2_244
+  - index: 244
+    codon: AGGAAACA
+    building_block_id: BB2_245
+  - index: 245
+    codon: AGGAAACC
+    building_block_id: BB2_246
+  - index: 246
+    codon: AGGAAACG
+    building_block_id: BB2_247
+  - index: 247
+    codon: AGGAAACT
+    building_block_id: BB2_248
+  - index: 248
+    codon: AGGAAAGA
+    building_block_id: BB2_249
+  - index: 249
+    codon: AGGAAAGC
+    building_block_id: BB2_250
+  - index: 250
+    codon: AGGAAAGG
+    building_block_id: BB2_251
+  - index: 251
+    codon: AGGAAAGT
+    building_block_id: BB2_252
+  - index: 252
+    codon: AGGAAATA
+    building_block_id: BB2_253
+  - index: 253
+    codon: AGGAAATC
+    building_block_id: BB2_254
+  - index: 254
+    codon: AGGAAATG
+    building_block_id: BB2_255
+  - index: 255
+    codon: AGGAAATT
+    building_block_id: BB2_256
+  - index: 256
+    codon: AGGAACAA
+    building_block_id: BB2_257
+  - index: 257
+    codon: AGGAACAC
+    building_block_id: BB2_258
+  - index: 258
+    codon: AGGAACAG
+    building_block_id: BB2_259
+  - index: 259
+    codon: AGGAACAT
+    building_block_id: BB2_260
+  - index: 260
+    codon: AGGAACCA
+    building_block_id: BB2_261
+  - index: 261
+    codon: AGGAACCC
+    building_block_id: BB2_262
+  - index: 262
+    codon: AGGAACCG
+    building_block_id: BB2_263
+  - index: 263
+    codon: AGGAACCT
+    building_block_id: BB2_264
+  - index: 264
+    codon: AGGAACGA
+    building_block_id: BB2_265
+  - index: 265
+    codon: AGGAACGC
+    building_block_id: BB2_266
+  - index: 266
+    codon: AGGAACGG
+    building_block_id: BB2_267
+  - index: 267
+    codon: AGGAACGT
+    building_block_id: BB2_268
+  - index: 268
+    codon: AGGAACTA
+    building_block_id: BB2_269
+  - index: 269
+    codon: AGGAACTC
+    building_block_id: BB2_270
+  - index: 270
+    codon: AGGAACTG
+    building_block_id: BB2_271
+  - index: 271
+    codon: AGGAACTT
+    building_block_id: BB2_272
+  - index: 272
+    codon: AGGAAGAA
+    building_block_id: BB2_273
+  - index: 273
+    codon: AGGAAGAC
+    building_block_id: BB2_274
+  - index: 274
+    codon: AGGAAGAG
+    building_block_id: BB2_275
+  - index: 275
+    codon: AGGAAGAT
+    building_block_id: BB2_276
+  - index: 276
+    codon: AGGAAGCA
+    building_block_id: BB2_277
+  - index: 277
+    codon: AGGAAGCC
+    building_block_id: BB2_278
+  - index: 278
+    codon: AGGAAGCG
+    building_block_id: BB2_279
+  - index: 279
+    codon: AGGAAGCT
+    building_block_id: BB2_280
+  - index: 280
+    codon: AGGAAGGA
+    building_block_id: BB2_281
+  - index: 281
+    codon: AGGAAGGC
+    building_block_id: BB2_282
+  - index: 282
+    codon: AGGAAGGG
+    building_block_id: BB2_283
+  - index: 283
+    codon: AGGAAGGT
+    building_block_id: BB2_284
+  - index: 284
+    codon: AGGAAGTA
+    building_block_id: BB2_285
+  - index: 285
+    codon: AGGAAGTC
+    building_block_id: BB2_286
+  - index: 286
+    codon: AGGAAGTG
+    building_block_id: BB2_287
+  - index: 287
+    codon: AGGAAGTT
+    building_block_id: BB2_288
+  - index: 288
+    codon: AGGAATAA
+    building_block_id: BB2_289
+  - index: 289
+    codon: AGGAATAC
+    building_block_id: BB2_290
+  - index: 290
+    codon: AGGAATAG
+    building_block_id: BB2_291
+  - index: 291
+    codon: AGGAATAT
+    building_block_id: BB2_292
+  - index: 292
+    codon: AGGAATCA
+    building_block_id: BB2_293
+  - index: 293
+    codon: AGGAATCC
+    building_block_id: BB2_294
+  - index: 294
+    codon: AGGAATCG
+    building_block_id: BB2_295
+  - index: 295
+    codon: AGGAATCT
+    building_block_id: BB2_296
+  - index: 296
+    codon: AGGAATGA
+    building_block_id: BB2_297
+  - index: 297
+    codon: AGGAATGC
+    building_block_id: BB2_298
+  - index: 298
+    codon: AGGAATGG
+    building_block_id: BB2_299
+  - index: 299
+    codon: AGGAATGT
+    building_block_id: BB2_300
+  - index: 300
+    codon: AGGAATTA
+    building_block_id: BB2_301
+  - index: 301
+    codon: AGGAATTC
+    building_block_id: BB2_302
+  - index: 302
+    codon: AGGAATTG
+    building_block_id: BB2_303
+  - index: 303
+    codon: AGGAATTT
+    building_block_id: BB2_304
+  - index: 304
+    codon: AGGACAAA
+    building_block_id: BB2_305
+  - index: 305
+    codon: AGGACAAC
+    building_block_id: BB2_306
+  - index: 306
+    codon: AGGACAAG
+    building_block_id: BB2_307
+  - index: 307
+    codon: AGGACAAT
+    building_block_id: BB2_308
+  - index: 308
+    codon: AGGACACA
+    building_block_id: BB2_309
+  - index: 309
+    codon: AGGACACC
+    building_block_id: BB2_310
+  - index: 310
+    codon: AGGACACG
+    building_block_id: BB2_311
+  - index: 311
+    codon: AGGACACT
+    building_block_id: BB2_312
+  - index: 312
+    codon: AGGACAGA
+    building_block_id: BB2_313
+  - index: 313
+    codon: AGGACAGC
+    building_block_id: BB2_314
+  - index: 314
+    codon: AGGACAGG
+    building_block_id: BB2_315
+  - index: 315
+    codon: AGGACAGT
+    building_block_id: BB2_316
+  - index: 316
+    codon: AGGACATA
+    building_block_id: BB2_317
+  - index: 317
+    codon: AGGACATC
+    building_block_id: BB2_318
+  - index: 318
+    codon: AGGACATG
+    building_block_id: BB2_319
+  - index: 319
+    codon: AGGACATT
+    building_block_id: BB2_320
+  - index: 320
+    codon: AGGACCAA
+    building_block_id: BB2_321
+  - index: 321
+    codon: AGGACCAC
+    building_block_id: BB2_322
+  - index: 322
+    codon: AGGACCAG
+    building_block_id: BB2_323
+  - index: 323
+    codon: AGGACCAT
+    building_block_id: BB2_324
+  - index: 324
+    codon: AGGACCCA
+    building_block_id: BB2_325
+  - index: 325
+    codon: AGGACCCC
+    building_block_id: BB2_326
+  - index: 326
+    codon: AGGACCCG
+    building_block_id: BB2_327
+  - index: 327
+    codon: AGGACCCT
+    building_block_id: BB2_328
+  - index: 328
+    codon: AGGACCGA
+    building_block_id: BB2_329
+  - index: 329
+    codon: AGGACCGC
+    building_block_id: BB2_330
+  - index: 330
+    codon: AGGACCGG
+    building_block_id: BB2_331
+  - index: 331
+    codon: AGGACCGT
+    building_block_id: BB2_332
+  - index: 332
+    codon: AGGACCTA
+    building_block_id: BB2_333
+  - index: 333
+    codon: AGGACCTC
+    building_block_id: BB2_334
+  - index: 334
+    codon: AGGACCTG
+    building_block_id: BB2_335
+  - index: 335
+    codon: AGGACCTT
+    building_block_id: BB2_336
+  - index: 336
+    codon: AGGACGAA
+    building_block_id: BB2_337
+  - index: 337
+    codon: AGGACGAC
+    building_block_id: BB2_338
+  - index: 338
+    codon: AGGACGAG
+    building_block_id: BB2_339
+  - index: 339
+    codon: AGGACGAT
+    building_block_id: BB2_340
+  - index: 340
+    codon: AGGACGCA
+    building_block_id: BB2_341
+  - index: 341
+    codon: AGGACGCC
+    building_block_id: BB2_342
+  - index: 342
+    codon: AGGACGCG
+    building_block_id: BB2_343
+  - index: 343
+    codon: AGGACGCT
+    building_block_id: BB2_344
+  - index: 344
+    codon: AGGACGGA
+    building_block_id: BB2_345
+  - index: 345
+    codon: AGGACGGC
+    building_block_id: BB2_346
+  - index: 346
+    codon: AGGACGGG
+    building_block_id: BB2_347
+  - index: 347
+    codon: AGGACGGT
+    building_block_id: BB2_348
+  - index: 348
+    codon: AGGACGTA
+    building_block_id: BB2_349
+  - index: 349
+    codon: AGGACGTC
+    building_block_id: BB2_350
+  - index: 350
+    codon: AGGACGTG
+    building_block_id: BB2_351
+  - index: 351
+    codon: AGGACGTT
+    building_block_id: BB2_352
+  - index: 352
+    codon: AGGACTAA
+    building_block_id: BB2_353
+  - index: 353
+    codon: AGGACTAC
+    building_block_id: BB2_354
+  - index: 354
+    codon: AGGACTAG
+    building_block_id: BB2_355
+  - index: 355
+    codon: AGGACTAT
+    building_block_id: BB2_356
+  - index: 356
+    codon: AGGACTCA
+    building_block_id: BB2_357
+  - index: 357
+    codon: AGGACTCC
+    building_block_id: BB2_358
+  - index: 358
+    codon: AGGACTCG
+    building_block_id: BB2_359
+  - index: 359
+    codon: AGGACTCT
+    building_block_id: BB2_360
+  - index: 360
+    codon: AGGACTGA
+    building_block_id: BB2_361
+  - index: 361
+    codon: AGGACTGC
+    building_block_id: BB2_362
+  - index: 362
+    codon: AGGACTGG
+    building_block_id: BB2_363
+  - index: 363
+    codon: AGGACTGT
+    building_block_id: BB2_364
+  - index: 364
+    codon: AGGACTTA
+    building_block_id: BB2_365
+  - index: 365
+    codon: AGGACTTC
+    building_block_id: BB2_366
+  - index: 366
+    codon: AGGACTTG
+    building_block_id: BB2_367
+  - index: 367
+    codon: AGGACTTT
+    building_block_id: BB2_368
+  - index: 368
+    codon: AGGAGAAA
+    building_block_id: BB2_369
+  - index: 369
+    codon: AGGAGAAC
+    building_block_id: BB2_370
+  - index: 370
+    codon: AGGAGAAG
+    building_block_id: BB2_371
+  - index: 371
+    codon: AGGAGAAT
+    building_block_id: BB2_372
+  - index: 372
+    codon: AGGAGACA
+    building_block_id: BB2_373
+  - index: 373
+    codon: AGGAGACC
+    building_block_id: BB2_374
+  - index: 374
+    codon: AGGAGACG
+    building_block_id: BB2_375
+  - index: 375
+    codon: AGGAGACT
+    building_block_id: BB2_376
+  - index: 376
+    codon: AGGAGAGA
+    building_block_id: BB2_377
+  - index: 377
+    codon: AGGAGAGC
+    building_block_id: BB2_378
+  - index: 378
+    codon: AGGAGAGG
+    building_block_id: BB2_379
+  - index: 379
+    codon: AGGAGAGT
+    building_block_id: BB2_380
+  - index: 380
+    codon: AGGAGATA
+    building_block_id: BB2_381
+  - index: 381
+    codon: AGGAGATC
+    building_block_id: BB2_382
+  - index: 382
+    codon: AGGAGATG
+    building_block_id: BB2_383
+  - index: 383
+    codon: AGGAGATT
+    building_block_id: BB2_384
+  - index: 384
+    codon: AGGAGCAA
+    building_block_id: BB2_385
+  - index: 385
+    codon: AGGAGCAC
+    building_block_id: BB2_386
+  - index: 386
+    codon: AGGAGCAG
+    building_block_id: BB2_387
+  - index: 387
+    codon: AGGAGCAT
+    building_block_id: BB2_388
+  - index: 388
+    codon: AGGAGCCA
+    building_block_id: BB2_389
+  - index: 389
+    codon: AGGAGCCC
+    building_block_id: BB2_390
+  - index: 390
+    codon: AGGAGCCG
+    building_block_id: BB2_391
+  - index: 391
+    codon: AGGAGCCT
+    building_block_id: BB2_392
+  - index: 392
+    codon: AGGAGCGA
+    building_block_id: BB2_393
+  - index: 393
+    codon: AGGAGCGC
+    building_block_id: BB2_394
+  - index: 394
+    codon: AGGAGCGG
+    building_block_id: BB2_395
+  - index: 395
+    codon: AGGAGCGT
+    building_block_id: BB2_396
+  - index: 396
+    codon: AGGAGCTA
+    building_block_id: BB2_397
+  - index: 397
+    codon: AGGAGCTC
+    building_block_id: BB2_398
+  - index: 398
+    codon: AGGAGCTG
+    building_block_id: BB2_399
+  - index: 399
+    codon: AGGAGCTT
+    building_block_id: BB2_400
+  - index: 400
+    codon: AGGAGGAA
+    building_block_id: BB2_401
+  - index: 401
+    codon: AGGAGGAC
+    building_block_id: BB2_402
+  - index: 402
+    codon: AGGAGGAG
+    building_block_id: BB2_403
+  - index: 403
+    codon: AGGAGGAT
+    building_block_id: BB2_404
+  - index: 404
+    codon: AGGAGGCA
+    building_block_id: BB2_405
+  - index: 405
+    codon: AGGAGGCC
+    building_block_id: BB2_406
+  - index: 406
+    codon: AGGAGGCG
+    building_block_id: BB2_407
+  - index: 407
+    codon: AGGAGGCT
+    building_block_id: BB2_408
+  - index: 408
+    codon: AGGAGGGA
+    building_block_id: BB2_409
+  - index: 409
+    codon: AGGAGGGC
+    building_block_id: BB2_410
+  - index: 410
+    codon: AGGAGGGG
+    building_block_id: BB2_411
+  - index: 411
+    codon: AGGAGGGT
+    building_block_id: BB2_412
+  - index: 412
+    codon: AGGAGGTA
+    building_block_id: BB2_413
+  - index: 413
+    codon: AGGAGGTC
+    building_block_id: BB2_414
+  - index: 414
+    codon: AGGAGGTG
+    building_block_id: BB2_415
+  - index: 415
+    codon: AGGAGGTT
+    building_block_id: BB2_416
+  - index: 416
+    codon: AGGAGTAA
+    building_block_id: BB2_417
+  - index: 417
+    codon: AGGAGTAC
+    building_block_id: BB2_418
+  - index: 418
+    codon: AGGAGTAG
+    building_block_id: BB2_419
+  - index: 419
+    codon: AGGAGTAT
+    building_block_id: BB2_420
+  - index: 420
+    codon: AGGAGTCA
+    building_block_id: BB2_421
+  - index: 421
+    codon: AGGAGTCC
+    building_block_id: BB2_422
+  - index: 422
+    codon: AGGAGTCG
+    building_block_id: BB2_423
+  - index: 423
+    codon: AGGAGTCT
+    building_block_id: BB2_424
+  - index: 424
+    codon: AGGAGTGA
+    building_block_id: BB2_425
+  - index: 425
+    codon: AGGAGTGC
+    building_block_id: BB2_426
+  - index: 426
+    codon: AGGAGTGG
+    building_block_id: BB2_427
+  - index: 427
+    codon: AGGAGTGT
+    building_block_id: BB2_428
+  - index: 428
+    codon: AGGAGTTA
+    building_block_id: BB2_429
+  - index: 429
+    codon: AGGAGTTC
+    building_block_id: BB2_430
+  - index: 430
+    codon: AGGAGTTG
+    building_block_id: BB2_431
+  - index: 431
+    codon: AGGAGTTT
+    building_block_id: BB2_432
+  - index: 432
+    codon: AGGATAAA
+    building_block_id: BB2_433
+  - index: 433
+    codon: AGGATAAC
+    building_block_id: BB2_434
+  - index: 434
+    codon: AGGATAAG
+    building_block_id: BB2_435
+  - index: 435
+    codon: AGGATAAT
+    building_block_id: BB2_436
+  - index: 436
+    codon: AGGATACA
+    building_block_id: BB2_437
+  - index: 437
+    codon: AGGATACC
+    building_block_id: BB2_438
+  - index: 438
+    codon: AGGATACG
+    building_block_id: BB2_439
+  - index: 439
+    codon: AGGATACT
+    building_block_id: BB2_440
+  - index: 440
+    codon: AGGATAGA
+    building_block_id: BB2_441
+  - index: 441
+    codon: AGGATAGC
+    building_block_id: BB2_442
+  - index: 442
+    codon: AGGATAGG
+    building_block_id: BB2_443
+  - index: 443
+    codon: AGGATAGT
+    building_block_id: BB2_444
+  - index: 444
+    codon: AGGATATA
+    building_block_id: BB2_445
+  - index: 445
+    codon: AGGATATC
+    building_block_id: BB2_446
+  - index: 446
+    codon: AGGATATG
+    building_block_id: BB2_447
+  - index: 447
+    codon: AGGATATT
+    building_block_id: BB2_448
+  - index: 448
+    codon: AGGATCAA
+    building_block_id: BB2_449
+  - index: 449
+    codon: AGGATCAC
+    building_block_id: BB2_450
+  - index: 450
+    codon: AGGATCAG
+    building_block_id: BB2_451
+  - index: 451
+    codon: AGGATCAT
+    building_block_id: BB2_452
+  - index: 452
+    codon: AGGATCCA
+    building_block_id: BB2_453
+  - index: 453
+    codon: AGGATCCC
+    building_block_id: BB2_454
+  - index: 454
+    codon: AGGATCCG
+    building_block_id: BB2_455
+  - index: 455
+    codon: AGGATCCT
+    building_block_id: BB2_456
+  - index: 456
+    codon: AGGATCGA
+    building_block_id: BB2_457
+  - index: 457
+    codon: AGGATCGC
+    building_block_id: BB2_458
+  - index: 458
+    codon: AGGATCGG
+    building_block_id: BB2_459
+  - index: 459
+    codon: AGGATCGT
+    building_block_id: BB2_460
+  - index: 460
+    codon: AGGATCTA
+    building_block_id: BB2_461
+  - index: 461
+    codon: AGGATCTC
+    building_block_id: BB2_462
+  - index: 462
+    codon: AGGATCTG
+    building_block_id: BB2_463
+  - index: 463
+    codon: AGGATCTT
+    building_block_id: BB2_464
+  - index: 464
+    codon: AGGATGAA
+    building_block_id: BB2_465
+  - index: 465
+    codon: AGGATGAC
+    building_block_id: BB2_466
+  - index: 466
+    codon: AGGATGAG
+    building_block_id: BB2_467
+  - index: 467
+    codon: AGGATGAT
+    building_block_id: BB2_468
+  - index: 468
+    codon: AGGATGCA
+    building_block_id: BB2_469
+  - index: 469
+    codon: AGGATGCC
+    building_block_id: BB2_470
+  - index: 470
+    codon: AGGATGCG
+    building_block_id: BB2_471
+  - index: 471
+    codon: AGGATGCT
+    building_block_id: BB2_472
+  - index: 472
+    codon: AGGATGGA
+    building_block_id: BB2_473
+  - index: 473
+    codon: AGGATGGC
+    building_block_id: BB2_474
+  - index: 474
+    codon: AGGATGGG
+    building_block_id: BB2_475
+  - index: 475
+    codon: AGGATGGT
+    building_block_id: BB2_476
+  - index: 476
+    codon: AGGATGTA
+    building_block_id: BB2_477
+  - index: 477
+    codon: AGGATGTC
+    building_block_id: BB2_478
+  - index: 478
+    codon: AGGATGTG
+    building_block_id: BB2_479
+  - index: 479
+    codon: AGGATGTT
+    building_block_id: BB2_480
+  - index: 480
+    codon: AGGATTAA
+    building_block_id: BB2_481
+  - index: 481
+    codon: AGGATTAC
+    building_block_id: BB2_482
+  - index: 482
+    codon: AGGATTAG
+    building_block_id: BB2_483
+  - index: 483
+    codon: AGGATTAT
+    building_block_id: BB2_484
+  - index: 484
+    codon: AGGATTCA
+    building_block_id: BB2_485
+  - index: 485
+    codon: AGGATTCC
+    building_block_id: BB2_486
+  - index: 486
+    codon: AGGATTCG
+    building_block_id: BB2_487
+  - index: 487
+    codon: AGGATTCT
+    building_block_id: BB2_488
+  - index: 488
+    codon: AGGATTGA
+    building_block_id: BB2_489
+  - index: 489
+    codon: AGGATTGC
+    building_block_id: BB2_490
+  - index: 490
+    codon: AGGATTGG
+    building_block_id: BB2_491
+  - index: 491
+    codon: AGGATTGT
+    building_block_id: BB2_492
+  - index: 492
+    codon: AGGATTTA
+    building_block_id: BB2_493
+  - index: 493
+    codon: AGGATTTC
+    building_block_id: BB2_494
+  - index: 494
+    codon: AGGATTTG
+    building_block_id: BB2_495
+  - index: 495
+    codon: AGGATTTT
+    building_block_id: BB2_496
+  - index: 496
+    codon: AGGCAAAA
+    building_block_id: BB2_497
+  - index: 497
+    codon: AGGCAAAC
+    building_block_id: BB2_498
+  - index: 498
+    codon: AGGCAAAG
+    building_block_id: BB2_499
+  - index: 499
+    codon: AGGCAAAT
+    building_block_id: BB2_500
+  - index: 500
+    codon: AGGCAACA
+    building_block_id: BB2_501
+  - index: 501
+    codon: AGGCAACC
+    building_block_id: BB2_502
+  - index: 502
+    codon: AGGCAACG
+    building_block_id: BB2_503
+  - index: 503
+    codon: AGGCAACT
+    building_block_id: BB2_504
+  - index: 504
+    codon: AGGCAAGA
+    building_block_id: BB2_505
+  - index: 505
+    codon: AGGCAAGC
+    building_block_id: BB2_506
+  - index: 506
+    codon: AGGCAAGG
+    building_block_id: BB2_507
+  - index: 507
+    codon: AGGCAAGT
+    building_block_id: BB2_508
+  - index: 508
+    codon: AGGCAATA
+    building_block_id: BB2_509
+  - index: 509
+    codon: AGGCAATC
+    building_block_id: BB2_510
+  - index: 510
+    codon: AGGCAATG
+    building_block_id: BB2_511
+  - index: 511
+    codon: AGGCAATT
+    building_block_id: BB2_512
+  - index: 512
+    codon: AGGCACAA
+    building_block_id: BB2_513
+  - index: 513
+    codon: AGGCACAC
+    building_block_id: BB2_514
+  - index: 514
+    codon: AGGCACAG
+    building_block_id: BB2_515
+  - index: 515
+    codon: AGGCACAT
+    building_block_id: BB2_516
+  - index: 516
+    codon: AGGCACCA
+    building_block_id: BB2_517
+  - index: 517
+    codon: AGGCACCC
+    building_block_id: BB2_518
+  - index: 518
+    codon: AGGCACCG
+    building_block_id: BB2_519
+  - index: 519
+    codon: AGGCACCT
+    building_block_id: BB2_520
+  - index: 520
+    codon: AGGCACGA
+    building_block_id: BB2_521
+  - index: 521
+    codon: AGGCACGC
+    building_block_id: BB2_522
+  - index: 522
+    codon: AGGCACGG
+    building_block_id: BB2_523
+  - index: 523
+    codon: AGGCACGT
+    building_block_id: BB2_524
+  - index: 524
+    codon: AGGCACTA
+    building_block_id: BB2_525
+  - index: 525
+    codon: AGGCACTC
+    building_block_id: BB2_526
+  - index: 526
+    codon: AGGCACTG
+    building_block_id: BB2_527
+  - index: 527
+    codon: AGGCACTT
+    building_block_id: BB2_528
+  - index: 528
+    codon: AGGCAGAA
+    building_block_id: BB2_529
+  - index: 529
+    codon: AGGCAGAC
+    building_block_id: BB2_530
+  - index: 530
+    codon: AGGCAGAG
+    building_block_id: BB2_531
+  - index: 531
+    codon: AGGCAGAT
+    building_block_id: BB2_532
+  - index: 532
+    codon: AGGCAGCA
+    building_block_id: BB2_533
+  - index: 533
+    codon: AGGCAGCC
+    building_block_id: BB2_534
+  - index: 534
+    codon: AGGCAGCG
+    building_block_id: BB2_535
+  - index: 535
+    codon: AGGCAGCT
+    building_block_id: BB2_536
+  - index: 536
+    codon: AGGCAGGA
+    building_block_id: BB2_537
+  - index: 537
+    codon: AGGCAGGC
+    building_block_id: BB2_538
+  - index: 538
+    codon: AGGCAGGG
+    building_block_id: BB2_539
+  - index: 539
+    codon: AGGCAGGT
+    building_block_id: BB2_540
+  - index: 540
+    codon: AGGCAGTA
+    building_block_id: BB2_541
+  - index: 541
+    codon: AGGCAGTC
+    building_block_id: BB2_542
+  - index: 542
+    codon: AGGCAGTG
+    building_block_id: BB2_543
+  - index: 543
+    codon: AGGCAGTT
+    building_block_id: BB2_544
+  - index: 544
+    codon: AGGCATAA
+    building_block_id: BB2_545
+  - index: 545
+    codon: AGGCATAC
+    building_block_id: BB2_546
+  - index: 546
+    codon: AGGCATAG
+    building_block_id: BB2_547
+  - index: 547
+    codon: AGGCATAT
+    building_block_id: BB2_548
+  - index: 548
+    codon: AGGCATCA
+    building_block_id: BB2_549
+  - index: 549
+    codon: AGGCATCC
+    building_block_id: BB2_550
+  - index: 550
+    codon: AGGCATCG
+    building_block_id: BB2_551
+  - index: 551
+    codon: AGGCATCT
+    building_block_id: BB2_552
+  - index: 552
+    codon: AGGCATGA
+    building_block_id: BB2_553
+  - index: 553
+    codon: AGGCATGC
+    building_block_id: BB2_554
+  - index: 554
+    codon: AGGCATGG
+    building_block_id: BB2_555
+  - index: 555
+    codon: AGGCATGT
+    building_block_id: BB2_556
+  - index: 556
+    codon: AGGCATTA
+    building_block_id: BB2_557
+  - index: 557
+    codon: AGGCATTC
+    building_block_id: BB2_558
+  - index: 558
+    codon: AGGCATTG
+    building_block_id: BB2_559
+  - index: 559
+    codon: AGGCATTT
+    building_block_id: BB2_560
+  - index: 560
+    codon: AGGCCAAA
+    building_block_id: BB2_561
+  - index: 561
+    codon: AGGCCAAC
+    building_block_id: BB2_562
+  - index: 562
+    codon: AGGCCAAG
+    building_block_id: BB2_563
+  - index: 563
+    codon: AGGCCAAT
+    building_block_id: BB2_564
+  - index: 564
+    codon: AGGCCACA
+    building_block_id: BB2_565
+  - index: 565
+    codon: AGGCCACC
+    building_block_id: BB2_566
+  - index: 566
+    codon: AGGCCACG
+    building_block_id: BB2_567
+  - index: 567
+    codon: AGGCCACT
+    building_block_id: BB2_568
+  - index: 568
+    codon: AGGCCAGA
+    building_block_id: BB2_569
+  - index: 569
+    codon: AGGCCAGC
+    building_block_id: BB2_570
+  - index: 570
+    codon: AGGCCAGG
+    building_block_id: BB2_571
+  - index: 571
+    codon: AGGCCAGT
+    building_block_id: BB2_572
+  - index: 572
+    codon: AGGCCATA
+    building_block_id: BB2_573
+  - index: 573
+    codon: AGGCCATC
+    building_block_id: BB2_574
+  - index: 574
+    codon: AGGCCATG
+    building_block_id: BB2_575
+  - index: 575
+    codon: AGGCCATT
+    building_block_id: BB2_576
+  - index: 576
+    codon: AGGCCCAA
+    building_block_id: BB2_577
+  - index: 577
+    codon: AGGCCCAC
+    building_block_id: BB2_578
+  - index: 578
+    codon: AGGCCCAG
+    building_block_id: BB2_579
+  - index: 579
+    codon: AGGCCCAT
+    building_block_id: BB2_580
+  - index: 580
+    codon: AGGCCCCA
+    building_block_id: BB2_581
+  - index: 581
+    codon: AGGCCCCC
+    building_block_id: BB2_582
+  - index: 582
+    codon: AGGCCCCG
+    building_block_id: BB2_583
+  - index: 583
+    codon: AGGCCCCT
+    building_block_id: BB2_584
+  - index: 584
+    codon: AGGCCCGA
+    building_block_id: BB2_585
+  - index: 585
+    codon: AGGCCCGC
+    building_block_id: BB2_586
+  - index: 586
+    codon: AGGCCCGG
+    building_block_id: BB2_587
+  - index: 587
+    codon: AGGCCCGT
+    building_block_id: BB2_588
+  - index: 588
+    codon: AGGCCCTA
+    building_block_id: BB2_589
+  - index: 589
+    codon: AGGCCCTC
+    building_block_id: BB2_590
+  - index: 590
+    codon: AGGCCCTG
+    building_block_id: BB2_591
+  - index: 591
+    codon: AGGCCCTT
+    building_block_id: BB2_592
+  - index: 592
+    codon: AGGCCGAA
+    building_block_id: BB2_593
+  - index: 593
+    codon: AGGCCGAC
+    building_block_id: BB2_594
+  - index: 594
+    codon: AGGCCGAG
+    building_block_id: BB2_595
+  - index: 595
+    codon: AGGCCGAT
+    building_block_id: BB2_596
+  - index: 596
+    codon: AGGCCGCA
+    building_block_id: BB2_597
+  - index: 597
+    codon: AGGCCGCC
+    building_block_id: BB2_598
+  - index: 598
+    codon: AGGCCGCG
+    building_block_id: BB2_599
+  - index: 599
+    codon: AGGCCGCT
+    building_block_id: BB2_600
+  - index: 600
+    codon: AGGCCGGA
+    building_block_id: BB2_601
+  - index: 601
+    codon: AGGCCGGC
+    building_block_id: BB2_602
+  - index: 602
+    codon: AGGCCGGG
+    building_block_id: BB2_603
+  - index: 603
+    codon: AGGCCGGT
+    building_block_id: BB2_604
+  - index: 604
+    codon: AGGCCGTA
+    building_block_id: BB2_605
+  - index: 605
+    codon: AGGCCGTC
+    building_block_id: BB2_606
+  - index: 606
+    codon: AGGCCGTG
+    building_block_id: BB2_607
+  - index: 607
+    codon: AGGCCGTT
+    building_block_id: BB2_608
+  - index: 608
+    codon: AGGCCTAA
+    building_block_id: BB2_609
+  - index: 609
+    codon: AGGCCTAC
+    building_block_id: BB2_610
+  - index: 610
+    codon: AGGCCTAG
+    building_block_id: BB2_611
+  - index: 611
+    codon: AGGCCTAT
+    building_block_id: BB2_612
+  - index: 612
+    codon: AGGCCTCA
+    building_block_id: BB2_613
+  - index: 613
+    codon: AGGCCTCC
+    building_block_id: BB2_614
+  - index: 614
+    codon: AGGCCTCG
+    building_block_id: BB2_615
+  - index: 615
+    codon: AGGCCTCT
+    building_block_id: BB2_616
+  - index: 616
+    codon: AGGCCTGA
+    building_block_id: BB2_617
+  - index: 617
+    codon: AGGCCTGC
+    building_block_id: BB2_618
+  - index: 618
+    codon: AGGCCTGG
+    building_block_id: BB2_619
+  - index: 619
+    codon: AGGCCTGT
+    building_block_id: BB2_620
+  - index: 620
+    codon: AGGCCTTA
+    building_block_id: BB2_621
+  - index: 621
+    codon: AGGCCTTC
+    building_block_id: BB2_622
+  - index: 622
+    codon: AGGCCTTG
+    building_block_id: BB2_623
+  - index: 623
+    codon: AGGCCTTT
+    building_block_id: BB2_624
+  - index: 624
+    codon: AGGCGAAA
+    building_block_id: BB2_625
+  - index: 625
+    codon: AGGCGAAC
+    building_block_id: BB2_626
+  - index: 626
+    codon: AGGCGAAG
+    building_block_id: BB2_627
+  - index: 627
+    codon: AGGCGAAT
+    building_block_id: BB2_628
+  - index: 628
+    codon: AGGCGACA
+    building_block_id: BB2_629
+  - index: 629
+    codon: AGGCGACC
+    building_block_id: BB2_630
+  - index: 630
+    codon: AGGCGACG
+    building_block_id: BB2_631
+  - index: 631
+    codon: AGGCGACT
+    building_block_id: BB2_632
+  - index: 632
+    codon: AGGCGAGA
+    building_block_id: BB2_633
+  - index: 633
+    codon: AGGCGAGC
+    building_block_id: BB2_634
+  - index: 634
+    codon: AGGCGAGG
+    building_block_id: BB2_635
+  - index: 635
+    codon: AGGCGAGT
+    building_block_id: BB2_636
+  - index: 636
+    codon: AGGCGATA
+    building_block_id: BB2_637
+  - index: 637
+    codon: AGGCGATC
+    building_block_id: BB2_638
+  - index: 638
+    codon: AGGCGATG
+    building_block_id: BB2_639
+  - index: 639
+    codon: AGGCGATT
+    building_block_id: BB2_640
+  - index: 640
+    codon: AGGCGCAA
+    building_block_id: BB2_641
+  - index: 641
+    codon: AGGCGCAC
+    building_block_id: BB2_642
+  - index: 642
+    codon: AGGCGCAG
+    building_block_id: BB2_643
+  - index: 643
+    codon: AGGCGCAT
+    building_block_id: BB2_644
+  - index: 644
+    codon: AGGCGCCA
+    building_block_id: BB2_645
+  - index: 645
+    codon: AGGCGCCC
+    building_block_id: BB2_646
+  - index: 646
+    codon: AGGCGCCG
+    building_block_id: BB2_647
+  - index: 647
+    codon: AGGCGCCT
+    building_block_id: BB2_648
+  - index: 648
+    codon: AGGCGCGA
+    building_block_id: BB2_649
+  - index: 649
+    codon: AGGCGCGC
+    building_block_id: BB2_650
+  - index: 650
+    codon: AGGCGCGG
+    building_block_id: BB2_651
+  - index: 651
+    codon: AGGCGCGT
+    building_block_id: BB2_652
+  - index: 652
+    codon: AGGCGCTA
+    building_block_id: BB2_653
+  - index: 653
+    codon: AGGCGCTC
+    building_block_id: BB2_654
+  - index: 654
+    codon: AGGCGCTG
+    building_block_id: BB2_655
+  - index: 655
+    codon: AGGCGCTT
+    building_block_id: BB2_656
+  - index: 656
+    codon: AGGCGGAA
+    building_block_id: BB2_657
+  - index: 657
+    codon: AGGCGGAC
+    building_block_id: BB2_658
+  - index: 658
+    codon: AGGCGGAG
+    building_block_id: BB2_659
+  - index: 659
+    codon: AGGCGGAT
+    building_block_id: BB2_660
+  - index: 660
+    codon: AGGCGGCA
+    building_block_id: BB2_661
+  - index: 661
+    codon: AGGCGGCC
+    building_block_id: BB2_662
+  - index: 662
+    codon: AGGCGGCG
+    building_block_id: BB2_663
+  - index: 663
+    codon: AGGCGGCT
+    building_block_id: BB2_664
+  - index: 664
+    codon: AGGCGGGA
+    building_block_id: BB2_665
+  - index: 665
+    codon: AGGCGGGC
+    building_block_id: BB2_666
+  - index: 666
+    codon: AGGCGGGG
+    building_block_id: BB2_667
+  - index: 667
+    codon: AGGCGGGT
+    building_block_id: BB2_668
+  - index: 668
+    codon: AGGCGGTA
+    building_block_id: BB2_669
+  - index: 669
+    codon: AGGCGGTC
+    building_block_id: BB2_670
+  - index: 670
+    codon: AGGCGGTG
+    building_block_id: BB2_671
+  - index: 671
+    codon: AGGCGGTT
+    building_block_id: BB2_672
+  - index: 672
+    codon: AGGCGTAA
+    building_block_id: BB2_673
+  - index: 673
+    codon: AGGCGTAC
+    building_block_id: BB2_674
+  - index: 674
+    codon: AGGCGTAG
+    building_block_id: BB2_675
+  - index: 675
+    codon: AGGCGTAT
+    building_block_id: BB2_676
+  - index: 676
+    codon: AGGCGTCA
+    building_block_id: BB2_677
+  - index: 677
+    codon: AGGCGTCC
+    building_block_id: BB2_678
+  - index: 678
+    codon: AGGCGTCG
+    building_block_id: BB2_679
+  - index: 679
+    codon: AGGCGTCT
+    building_block_id: BB2_680
+  - index: 680
+    codon: AGGCGTGA
+    building_block_id: BB2_681
+  - index: 681
+    codon: AGGCGTGC
+    building_block_id: BB2_682
+  - index: 682
+    codon: AGGCGTGG
+    building_block_id: BB2_683
+  - index: 683
+    codon: AGGCGTGT
+    building_block_id: BB2_684
+  - index: 684
+    codon: AGGCGTTA
+    building_block_id: BB2_685
+  - index: 685
+    codon: AGGCGTTC
+    building_block_id: BB2_686
+  - index: 686
+    codon: AGGCGTTG
+    building_block_id: BB2_687
+  - index: 687
+    codon: AGGCGTTT
+    building_block_id: BB2_688
+  - index: 688
+    codon: AGGCTAAA
+    building_block_id: BB2_689
+  - index: 689
+    codon: AGGCTAAC
+    building_block_id: BB2_690
+  - index: 690
+    codon: AGGCTAAG
+    building_block_id: BB2_691
+  - index: 691
+    codon: AGGCTAAT
+    building_block_id: BB2_692
+  - index: 692
+    codon: AGGCTACA
+    building_block_id: BB2_693
+  - index: 693
+    codon: AGGCTACC
+    building_block_id: BB2_694
+  - index: 694
+    codon: AGGCTACG
+    building_block_id: BB2_695
+  - index: 695
+    codon: AGGCTACT
+    building_block_id: BB2_696
+  - index: 696
+    codon: AGGCTAGA
+    building_block_id: BB2_697
+  - index: 697
+    codon: AGGCTAGC
+    building_block_id: BB2_698
+  - index: 698
+    codon: AGGCTAGG
+    building_block_id: BB2_699
+  - index: 699
+    codon: AGGCTAGT
+    building_block_id: BB2_700
+  - index: 700
+    codon: AGGCTATA
+    building_block_id: BB2_701
+  - index: 701
+    codon: AGGCTATC
+    building_block_id: BB2_702
+  - index: 702
+    codon: AGGCTATG
+    building_block_id: BB2_703
+  - index: 703
+    codon: AGGCTATT
+    building_block_id: BB2_704
+  - index: 704
+    codon: AGGCTCAA
+    building_block_id: BB2_705
+  - index: 705
+    codon: AGGCTCAC
+    building_block_id: BB2_706
+  - index: 706
+    codon: AGGCTCAG
+    building_block_id: BB2_707
+  - index: 707
+    codon: AGGCTCAT
+    building_block_id: BB2_708
+  - index: 708
+    codon: AGGCTCCA
+    building_block_id: BB2_709
+  - index: 709
+    codon: AGGCTCCC
+    building_block_id: BB2_710
+  - index: 710
+    codon: AGGCTCCG
+    building_block_id: BB2_711
+  - index: 711
+    codon: AGGCTCCT
+    building_block_id: BB2_712
+  - index: 712
+    codon: AGGCTCGA
+    building_block_id: BB2_713
+  - index: 713
+    codon: AGGCTCGC
+    building_block_id: BB2_714
+  - index: 714
+    codon: AGGCTCGG
+    building_block_id: BB2_715
+  - index: 715
+    codon: AGGCTCGT
+    building_block_id: BB2_716
+  - index: 716
+    codon: AGGCTCTA
+    building_block_id: BB2_717
+  - index: 717
+    codon: AGGCTCTC
+    building_block_id: BB2_718
+  - index: 718
+    codon: AGGCTCTG
+    building_block_id: BB2_719
+  - index: 719
+    codon: AGGCTCTT
+    building_block_id: BB2_720
+  - index: 720
+    codon: AGGCTGAA
+    building_block_id: BB2_721
+  - index: 721
+    codon: AGGCTGAC
+    building_block_id: BB2_722
+  - index: 722
+    codon: AGGCTGAG
+    building_block_id: BB2_723
+  - index: 723
+    codon: AGGCTGAT
+    building_block_id: BB2_724
+  - index: 724
+    codon: AGGCTGCA
+    building_block_id: BB2_725
+  - index: 725
+    codon: AGGCTGCC
+    building_block_id: BB2_726
+  - index: 726
+    codon: AGGCTGCG
+    building_block_id: BB2_727
+  - index: 727
+    codon: AGGCTGCT
+    building_block_id: BB2_728
+  - index: 728
+    codon: AGGCTGGA
+    building_block_id: BB2_729
+  - index: 729
+    codon: AGGCTGGC
+    building_block_id: BB2_730
+  - index: 730
+    codon: AGGCTGGG
+    building_block_id: BB2_731
+  - index: 731
+    codon: AGGCTGGT
+    building_block_id: BB2_732
+  - index: 732
+    codon: AGGCTGTA
+    building_block_id: BB2_733
+  - index: 733
+    codon: AGGCTGTC
+    building_block_id: BB2_734
+  - index: 734
+    codon: AGGCTGTG
+    building_block_id: BB2_735
+  - index: 735
+    codon: AGGCTGTT
+    building_block_id: BB2_736
+  - index: 736
+    codon: AGGCTTAA
+    building_block_id: BB2_737
+  - index: 737
+    codon: AGGCTTAC
+    building_block_id: BB2_738
+  - index: 738
+    codon: AGGCTTAG
+    building_block_id: BB2_739
+  - index: 739
+    codon: AGGCTTAT
+    building_block_id: BB2_740
+  - index: 740
+    codon: AGGCTTCA
+    building_block_id: BB2_741
+  - index: 741
+    codon: AGGCTTCC
+    building_block_id: BB2_742
+  - index: 742
+    codon: AGGCTTCG
+    building_block_id: BB2_743
+  - index: 743
+    codon: AGGCTTCT
+    building_block_id: BB2_744
+  - index: 744
+    codon: AGGCTTGA
+    building_block_id: BB2_745
+  - index: 745
+    codon: AGGCTTGC
+    building_block_id: BB2_746
+  - index: 746
+    codon: AGGCTTGG
+    building_block_id: BB2_747
+  - index: 747
+    codon: AGGCTTGT
+    building_block_id: BB2_748
+  - index: 748
+    codon: AGGCTTTA
+    building_block_id: BB2_749
+  - index: 749
+    codon: AGGCTTTC
+    building_block_id: BB2_750
+  - index: 750
+    codon: AGGCTTTG
+    building_block_id: BB2_751
+  - index: 751
+    codon: AGGCTTTT
+    building_block_id: BB2_752
+  - index: 752
+    codon: AGGGAAAA
+    building_block_id: BB2_753
+  - index: 753
+    codon: AGGGAAAC
+    building_block_id: BB2_754
+  - index: 754
+    codon: AGGGAAAG
+    building_block_id: BB2_755
+  - index: 755
+    codon: AGGGAAAT
+    building_block_id: BB2_756
+  - index: 756
+    codon: AGGGAACA
+    building_block_id: BB2_757
+  - index: 757
+    codon: AGGGAACC
+    building_block_id: BB2_758
+  - index: 758
+    codon: AGGGAACG
+    building_block_id: BB2_759
+  - index: 759
+    codon: AGGGAACT
+    building_block_id: BB2_760
+  - index: 760
+    codon: AGGGAAGA
+    building_block_id: BB2_761
+  - index: 761
+    codon: AGGGAAGC
+    building_block_id: BB2_762
+  - index: 762
+    codon: AGGGAAGG
+    building_block_id: BB2_763
+  - index: 763
+    codon: AGGGAAGT
+    building_block_id: BB2_764
+  - index: 764
+    codon: AGGGAATA
+    building_block_id: BB2_765
+  - index: 765
+    codon: AGGGAATC
+    building_block_id: BB2_766
+  - index: 766
+    codon: AGGGAATG
+    building_block_id: BB2_767
+  - index: 767
+    codon: AGGGAATT
+    building_block_id: BB2_768
+  - index: 768
+    codon: AGGGACAA
+    building_block_id: BB2_769
+  - index: 769
+    codon: AGGGACAC
+    building_block_id: BB2_770
+  - index: 770
+    codon: AGGGACAG
+    building_block_id: BB2_771
+  - index: 771
+    codon: AGGGACAT
+    building_block_id: BB2_772
+  - index: 772
+    codon: AGGGACCA
+    building_block_id: BB2_773
+  - index: 773
+    codon: AGGGACCC
+    building_block_id: BB2_774
+  - index: 774
+    codon: AGGGACCG
+    building_block_id: BB2_775
+  - index: 775
+    codon: AGGGACCT
+    building_block_id: BB2_776
+  - index: 776
+    codon: AGGGACGA
+    building_block_id: BB2_777
+  - index: 777
+    codon: AGGGACGC
+    building_block_id: BB2_778
+  - index: 778
+    codon: AGGGACGG
+    building_block_id: BB2_779
+  - index: 779
+    codon: AGGGACGT
+    building_block_id: BB2_780
+  - index: 780
+    codon: AGGGACTA
+    building_block_id: BB2_781
+  - index: 781
+    codon: AGGGACTC
+    building_block_id: BB2_782
+  - index: 782
+    codon: AGGGACTG
+    building_block_id: BB2_783
+  - index: 783
+    codon: AGGGACTT
+    building_block_id: BB2_784
+  - index: 784
+    codon: AGGGAGAA
+    building_block_id: BB2_785
+  - index: 785
+    codon: AGGGAGAC
+    building_block_id: BB2_786
+  - index: 786
+    codon: AGGGAGAG
+    building_block_id: BB2_787
+  - index: 787
+    codon: AGGGAGAT
+    building_block_id: BB2_788
+  - index: 788
+    codon: AGGGAGCA
+    building_block_id: BB2_789
+  - index: 789
+    codon: AGGGAGCC
+    building_block_id: BB2_790
+  - index: 790
+    codon: AGGGAGCG
+    building_block_id: BB2_791
+  - index: 791
+    codon: AGGGAGCT
+    building_block_id: BB2_792
+  - index: 792
+    codon: AGGGAGGA
+    building_block_id: BB2_793
+  - index: 793
+    codon: AGGGAGGC
+    building_block_id: BB2_794
+  - index: 794
+    codon: AGGGAGGG
+    building_block_id: BB2_795
+  - index: 795
+    codon: AGGGAGGT
+    building_block_id: BB2_796
+  - index: 796
+    codon: AGGGAGTA
+    building_block_id: BB2_797
+  - index: 797
+    codon: AGGGAGTC
+    building_block_id: BB2_798
+  - index: 798
+    codon: AGGGAGTG
+    building_block_id: BB2_799
+  - index: 799
+    codon: AGGGAGTT
+    building_block_id: BB2_800
+  - index: 800
+    codon: AGGGATAA
+    building_block_id: BB2_801
+  - index: 801
+    codon: AGGGATAC
+    building_block_id: BB2_802
+  - index: 802
+    codon: AGGGATAG
+    building_block_id: BB2_803
+  - index: 803
+    codon: AGGGATAT
+    building_block_id: BB2_804
+  - index: 804
+    codon: AGGGATCA
+    building_block_id: BB2_805
+  - index: 805
+    codon: AGGGATCC
+    building_block_id: BB2_806
+  - index: 806
+    codon: AGGGATCG
+    building_block_id: BB2_807
+  - index: 807
+    codon: AGGGATCT
+    building_block_id: BB2_808
+  - index: 808
+    codon: AGGGATGA
+    building_block_id: BB2_809
+  - index: 809
+    codon: AGGGATGC
+    building_block_id: BB2_810
+  - index: 810
+    codon: AGGGATGG
+    building_block_id: BB2_811
+  - index: 811
+    codon: AGGGATGT
+    building_block_id: BB2_812
+  - index: 812
+    codon: AGGGATTA
+    building_block_id: BB2_813
+  - index: 813
+    codon: AGGGATTC
+    building_block_id: BB2_814
+  - index: 814
+    codon: AGGGATTG
+    building_block_id: BB2_815
+  - index: 815
+    codon: AGGGATTT
+    building_block_id: BB2_816
+  - index: 816
+    codon: AGGGCAAA
+    building_block_id: BB2_817
+  - index: 817
+    codon: AGGGCAAC
+    building_block_id: BB2_818
+  - index: 818
+    codon: AGGGCAAG
+    building_block_id: BB2_819
+  - index: 819
+    codon: AGGGCAAT
+    building_block_id: BB2_820
+  - index: 820
+    codon: AGGGCACA
+    building_block_id: BB2_821
+  - index: 821
+    codon: AGGGCACC
+    building_block_id: BB2_822
+  - index: 822
+    codon: AGGGCACG
+    building_block_id: BB2_823
+  - index: 823
+    codon: AGGGCACT
+    building_block_id: BB2_824
+  - index: 824
+    codon: AGGGCAGA
+    building_block_id: BB2_825
+  - index: 825
+    codon: AGGGCAGC
+    building_block_id: BB2_826
+  - index: 826
+    codon: AGGGCAGG
+    building_block_id: BB2_827
+  - index: 827
+    codon: AGGGCAGT
+    building_block_id: BB2_828
+  - index: 828
+    codon: AGGGCATA
+    building_block_id: BB2_829
+  - index: 829
+    codon: AGGGCATC
+    building_block_id: BB2_830
+  - index: 830
+    codon: AGGGCATG
+    building_block_id: BB2_831
+  - index: 831
+    codon: AGGGCATT
+    building_block_id: BB2_832
+  - index: 832
+    codon: AGGGCCAA
+    building_block_id: BB2_833
+  - index: 833
+    codon: AGGGCCAC
+    building_block_id: BB2_834
+  - index: 834
+    codon: AGGGCCAG
+    building_block_id: BB2_835
+  - index: 835
+    codon: AGGGCCAT
+    building_block_id: BB2_836
+  - index: 836
+    codon: AGGGCCCA
+    building_block_id: BB2_837
+  - index: 837
+    codon: AGGGCCCC
+    building_block_id: BB2_838
+  - index: 838
+    codon: AGGGCCCG
+    building_block_id: BB2_839
+  - index: 839
+    codon: AGGGCCCT
+    building_block_id: BB2_840
+  - index: 840
+    codon: AGGGCCGA
+    building_block_id: BB2_841
+  - index: 841
+    codon: AGGGCCGC
+    building_block_id: BB2_842
+  - index: 842
+    codon: AGGGCCGG
+    building_block_id: BB2_843
+  - index: 843
+    codon: AGGGCCGT
+    building_block_id: BB2_844
+  - index: 844
+    codon: AGGGCCTA
+    building_block_id: BB2_845
+  - index: 845
+    codon: AGGGCCTC
+    building_block_id: BB2_846
+  - index: 846
+    codon: AGGGCCTG
+    building_block_id: BB2_847
+  - index: 847
+    codon: AGGGCCTT
+    building_block_id: BB2_848
+  - index: 848
+    codon: AGGGCGAA
+    building_block_id: BB2_849
+  - index: 849
+    codon: AGGGCGAC
+    building_block_id: BB2_850
+  - index: 850
+    codon: AGGGCGAG
+    building_block_id: BB2_851
+  - index: 851
+    codon: AGGGCGAT
+    building_block_id: BB2_852
+  - index: 852
+    codon: AGGGCGCA
+    building_block_id: BB2_853
+  - index: 853
+    codon: AGGGCGCC
+    building_block_id: BB2_854
+  - index: 854
+    codon: AGGGCGCG
+    building_block_id: BB2_855
+  - index: 855
+    codon: AGGGCGCT
+    building_block_id: BB2_856
+  - index: 856
+    codon: AGGGCGGA
+    building_block_id: BB2_857
+  - index: 857
+    codon: AGGGCGGC
+    building_block_id: BB2_858
+  - index: 858
+    codon: AGGGCGGG
+    building_block_id: BB2_859
+  - index: 859
+    codon: AGGGCGGT
+    building_block_id: BB2_860
+  - index: 860
+    codon: AGGGCGTA
+    building_block_id: BB2_861
+  - index: 861
+    codon: AGGGCGTC
+    building_block_id: BB2_862
+  - index: 862
+    codon: AGGGCGTG
+    building_block_id: BB2_863
+  - index: 863
+    codon: AGGGCGTT
+    building_block_id: BB2_864
+  - index: 864
+    codon: AGGGCTAA
+    building_block_id: BB2_865
+  - index: 865
+    codon: AGGGCTAC
+    building_block_id: BB2_866
+  - index: 866
+    codon: AGGGCTAG
+    building_block_id: BB2_867
+  - index: 867
+    codon: AGGGCTAT
+    building_block_id: BB2_868
+  - index: 868
+    codon: AGGGCTCA
+    building_block_id: BB2_869
+  - index: 869
+    codon: AGGGCTCC
+    building_block_id: BB2_870
+  - index: 870
+    codon: AGGGCTCG
+    building_block_id: BB2_871
+  - index: 871
+    codon: AGGGCTCT
+    building_block_id: BB2_872
+  - index: 872
+    codon: AGGGCTGA
+    building_block_id: BB2_873
+  - index: 873
+    codon: AGGGCTGC
+    building_block_id: BB2_874
+  - index: 874
+    codon: AGGGCTGG
+    building_block_id: BB2_875
+  - index: 875
+    codon: AGGGCTGT
+    building_block_id: BB2_876
+  - index: 876
+    codon: AGGGCTTA
+    building_block_id: BB2_877
+  - index: 877
+    codon: AGGGCTTC
+    building_block_id: BB2_878
+  - index: 878
+    codon: AGGGCTTG
+    building_block_id: BB2_879
+  - index: 879
+    codon: AGGGCTTT
+    building_block_id: BB2_880
+  - index: 880
+    codon: AGGGGAAA
+    building_block_id: BB2_881
+  - index: 881
+    codon: AGGGGAAC
+    building_block_id: BB2_882
+  - index: 882
+    codon: AGGGGAAG
+    building_block_id: BB2_883
+  - index: 883
+    codon: AGGGGAAT
+    building_block_id: BB2_884
+  - index: 884
+    codon: AGGGGACA
+    building_block_id: BB2_885
+  - index: 885
+    codon: AGGGGACC
+    building_block_id: BB2_886
+  - index: 886
+    codon: AGGGGACG
+    building_block_id: BB2_887
+  - index: 887
+    codon: AGGGGACT
+    building_block_id: BB2_888
+  - index: 888
+    codon: AGGGGAGA
+    building_block_id: BB2_889
+  - index: 889
+    codon: AGGGGAGC
+    building_block_id: BB2_890
+  - index: 890
+    codon: AGGGGAGG
+    building_block_id: BB2_891
+  - index: 891
+    codon: AGGGGAGT
+    building_block_id: BB2_892
+  - index: 892
+    codon: AGGGGATA
+    building_block_id: BB2_893
+  - index: 893
+    codon: AGGGGATC
+    building_block_id: BB2_894
+  - index: 894
+    codon: AGGGGATG
+    building_block_id: BB2_895
+  - index: 895
+    codon: AGGGGATT
+    building_block_id: BB2_896
+  - index: 896
+    codon: AGGGGCAA
+    building_block_id: BB2_897
+  - index: 897
+    codon: AGGGGCAC
+    building_block_id: BB2_898
+  - index: 898
+    codon: AGGGGCAG
+    building_block_id: BB2_899
+  - index: 899
+    codon: AGGGGCAT
+    building_block_id: BB2_900
+  - index: 900
+    codon: AGGGGCCA
+    building_block_id: BB2_901
+  - index: 901
+    codon: AGGGGCCC
+    building_block_id: BB2_902
+  - index: 902
+    codon: AGGGGCCG
+    building_block_id: BB2_903
+  - index: 903
+    codon: AGGGGCCT
+    building_block_id: BB2_904
+  - index: 904
+    codon: AGGGGCGA
+    building_block_id: BB2_905
+  - index: 905
+    codon: AGGGGCGC
+    building_block_id: BB2_906
+  - index: 906
+    codon: AGGGGCGG
+    building_block_id: BB2_907
+  - index: 907
+    codon: AGGGGCGT
+    building_block_id: BB2_908
+  - index: 908
+    codon: AGGGGCTA
+    building_block_id: BB2_909
+  - index: 909
+    codon: AGGGGCTC
+    building_block_id: BB2_910
+  - index: 910
+    codon: AGGGGCTG
+    building_block_id: BB2_911
+  - index: 911
+    codon: AGGGGCTT
+    building_block_id: BB2_912
+  - index: 912
+    codon: AGGGGGAA
+    building_block_id: BB2_913
+  - index: 913
+    codon: AGGGGGAC
+    building_block_id: BB2_914
+  - index: 914
+    codon: AGGGGGAG
+    building_block_id: BB2_915
+  - index: 915
+    codon: AGGGGGAT
+    building_block_id: BB2_916
+  - index: 916
+    codon: AGGGGGCA
+    building_block_id: BB2_917
+  - index: 917
+    codon: AGGGGGCC
+    building_block_id: BB2_918
+  - index: 918
+    codon: AGGGGGCG
+    building_block_id: BB2_919
+  - index: 919
+    codon: AGGGGGCT
+    building_block_id: BB2_920
+  - index: 920
+    codon: AGGGGGGA
+    building_block_id: BB2_921
+  - index: 921
+    codon: AGGGGGGC
+    building_block_id: BB2_922
+  - index: 922
+    codon: AGGGGGGG
+    building_block_id: BB2_923
+  - index: 923
+    codon: AGGGGGGT
+    building_block_id: BB2_924
+  - index: 924
+    codon: AGGGGGTA
+    building_block_id: BB2_925
+  - index: 925
+    codon: AGGGGGTC
+    building_block_id: BB2_926
+  - index: 926
+    codon: AGGGGGTG
+    building_block_id: BB2_927
+  - index: 927
+    codon: AGGGGGTT
+    building_block_id: BB2_928
+  - index: 928
+    codon: AGGGGTAA
+    building_block_id: BB2_929
+  - index: 929
+    codon: AGGGGTAC
+    building_block_id: BB2_930
+  - index: 930
+    codon: AGGGGTAG
+    building_block_id: BB2_931
+  - index: 931
+    codon: AGGGGTAT
+    building_block_id: BB2_932
+  - index: 932
+    codon: AGGGGTCA
+    building_block_id: BB2_933
+  - index: 933
+    codon: AGGGGTCC
+    building_block_id: BB2_934
+  - index: 934
+    codon: AGGGGTCG
+    building_block_id: BB2_935
+  - index: 935
+    codon: AGGGGTCT
+    building_block_id: BB2_936
+  - index: 936
+    codon: AGGGGTGA
+    building_block_id: BB2_937
+  - index: 937
+    codon: AGGGGTGC
+    building_block_id: BB2_938
+  - index: 938
+    codon: AGGGGTGG
+    building_block_id: BB2_939
+  - index: 939
+    codon: AGGGGTGT
+    building_block_id: BB2_940
+  - index: 940
+    codon: AGGGGTTA
+    building_block_id: BB2_941
+  - index: 941
+    codon: AGGGGTTC
+    building_block_id: BB2_942
+  - index: 942
+    codon: AGGGGTTG
+    building_block_id: BB2_943
+  - index: 943
+    codon: AGGGGTTT
+    building_block_id: BB2_944
+  - index: 944
+    codon: AGGGTAAA
+    building_block_id: BB2_945
+  - index: 945
+    codon: AGGGTAAC
+    building_block_id: BB2_946
+  - index: 946
+    codon: AGGGTAAG
+    building_block_id: BB2_947
+  - index: 947
+    codon: AGGGTAAT
+    building_block_id: BB2_948
+  - index: 948
+    codon: AGGGTACA
+    building_block_id: BB2_949
+  - index: 949
+    codon: AGGGTACC
+    building_block_id: BB2_950
+  - index: 950
+    codon: AGGGTACG
+    building_block_id: BB2_951
+  - index: 951
+    codon: AGGGTACT
+    building_block_id: BB2_952
+  - index: 952
+    codon: AGGGTAGA
+    building_block_id: BB2_953
+  - index: 953
+    codon: AGGGTAGC
+    building_block_id: BB2_954
+  - index: 954
+    codon: AGGGTAGG
+    building_block_id: BB2_955
+  - index: 955
+    codon: AGGGTAGT
+    building_block_id: BB2_956
+  - index: 956
+    codon: AGGGTATA
+    building_block_id: BB2_957
+  - index: 957
+    codon: AGGGTATC
+    building_block_id: BB2_958
+  - index: 958
+    codon: AGGGTATG
+    building_block_id: BB2_959
+  - index: 959
+    codon: AGGGTATT
+    building_block_id: BB2_960
+  - index: 960
+    codon: AGGGTCAA
+    building_block_id: BB2_961
+  - index: 961
+    codon: AGGGTCAC
+    building_block_id: BB2_962
+  - index: 962
+    codon: AGGGTCAG
+    building_block_id: BB2_963
+  - index: 963
+    codon: AGGGTCAT
+    building_block_id: BB2_964
+  - index: 964
+    codon: AGGGTCCA
+    building_block_id: BB2_965
+  - index: 965
+    codon: AGGGTCCC
+    building_block_id: BB2_966
+  - index: 966
+    codon: AGGGTCCG
+    building_block_id: BB2_967
+  - index: 967
+    codon: AGGGTCCT
+    building_block_id: BB2_968
+  - index: 968
+    codon: AGGGTCGA
+    building_block_id: BB2_969
+  - index: 969
+    codon: AGGGTCGC
+    building_block_id: BB2_970
+  - index: 970
+    codon: AGGGTCGG
+    building_block_id: BB2_971
+  - index: 971
+    codon: AGGGTCGT
+    building_block_id: BB2_972
+  - index: 972
+    codon: AGGGTCTA
+    building_block_id: BB2_973
+  - index: 973
+    codon: AGGGTCTC
+    building_block_id: BB2_974
+  - index: 974
+    codon: AGGGTCTG
+    building_block_id: BB2_975
+  - index: 975
+    codon: AGGGTCTT
+    building_block_id: BB2_976
+  - index: 976
+    codon: AGGGTGAA
+    building_block_id: BB2_977
+  - index: 977
+    codon: AGGGTGAC
+    building_block_id: BB2_978
+  - index: 978
+    codon: AGGGTGAG
+    building_block_id: BB2_979
+  - index: 979
+    codon: AGGGTGAT
+    building_block_id: BB2_980
+  - index: 980
+    codon: AGGGTGCA
+    building_block_id: BB2_981
+  - index: 981
+    codon: AGGGTGCC
+    building_block_id: BB2_982
+  - index: 982
+    codon: AGGGTGCG
+    building_block_id: BB2_983
+  - index: 983
+    codon: AGGGTGCT
+    building_block_id: BB2_984
+  - index: 984
+    codon: AGGGTGGA
+    building_block_id: BB2_985
+  - index: 985
+    codon: AGGGTGGC
+    building_block_id: BB2_986
+  - index: 986
+    codon: AGGGTGGG
+    building_block_id: BB2_987
+  - index: 987
+    codon: AGGGTGGT
+    building_block_id: BB2_988
+  - index: 988
+    codon: AGGGTGTA
+    building_block_id: BB2_989
+  - index: 989
+    codon: AGGGTGTC
+    building_block_id: BB2_990
+  - index: 990
+    codon: AGGGTGTG
+    building_block_id: BB2_991
+  - index: 991
+    codon: AGGGTGTT
+    building_block_id: BB2_992
+  - index: 992
+    codon: AGGGTTAA
+    building_block_id: BB2_993
+  - index: 993
+    codon: AGGGTTAC
+    building_block_id: BB2_994
+  - index: 994
+    codon: AGGGTTAG
+    building_block_id: BB2_995
+  - index: 995
+    codon: AGGGTTAT
+    building_block_id: BB2_996
+  - index: 996
+    codon: AGGGTTCA
+    building_block_id: BB2_997
+  - index: 997
+    codon: AGGGTTCC
+    building_block_id: BB2_998
+  - index: 998
+    codon: AGGGTTCG
+    building_block_id: BB2_999
+  - index: 999
+    codon: AGGGTTCT
+    building_block_id: BB2_1000
+library:
+  products: []
+  educts: []
+  reactions: []
+  bb_edges: []
+  other_edges: []
+  building_blocks:
+  - B0
+  - B1
+catalog:
+  compounds: {}
+  reactions: {}
