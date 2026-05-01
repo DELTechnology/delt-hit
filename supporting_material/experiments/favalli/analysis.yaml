@@ -1,43 +1,46 @@
+# TODO(Jörg): confirm which numeric selection indices correspond to protein vs no_protein
+# for each lane before using these enrichment results in the manuscript.
+# Current assignment (1_1/2_1/3_1 = no_protein, 4_1/5_1/6_1 = protein) is a placeholder.
 experiments:
   - name: his_pure_protein_vs_no_protein
-    save_dir: JP-1/analysis
+    save_dir: lane-1/analysis
     selections:
-      - name: JPAG_2025_1
-        counts_path: JP-1/selections/JPAG_2025_1/counts.txt
+      - name: 1_1
+        counts_path: lane-1/selections/1_1/counts.txt
         group: no_protein
-      - name: JPAG_2025_2
-        counts_path: JP-1/selections/JPAG_2025_2/counts.txt
+      - name: 2_1
+        counts_path: lane-1/selections/2_1/counts.txt
         group: no_protein
-      - name: JPAG_2025_3
-        counts_path: JP-1/selections/JPAG_2025_3/counts.txt
+      - name: 3_1
+        counts_path: lane-1/selections/3_1/counts.txt
         group: no_protein
-      - name: JPAG_2025_19
-        counts_path: JP-1/selections/JPAG_2025_19/counts.txt
+      - name: 4_1
+        counts_path: lane-1/selections/4_1/counts.txt
         group: protein
-      - name: JPAG_2025_20
-        counts_path: JP-1/selections/JPAG_2025_20/counts.txt
+      - name: 5_1
+        counts_path: lane-1/selections/5_1/counts.txt
         group: protein
-      - name: JPAG_2025_21
-        counts_path: JP-1/selections/JPAG_2025_21/counts.txt
+      - name: 6_1
+        counts_path: lane-1/selections/6_1/counts.txt
         group: protein
   - name: dyna_protein_vs_no_protein
-    save_dir: JP-1/analysis
+    save_dir: lane-1/analysis
     selections:
-      - name: JPAG_2025_4
-        counts_path: JP-1/selections/JPAG_2025_4/counts.txt
+      - name: 1_1
+        counts_path: lane-1/selections/1_1/counts.txt
         group: no_protein
-      - name: JPAG_2025_5
-        counts_path: JP-1/selections/JPAG_2025_5/counts.txt
+      - name: 2_1
+        counts_path: lane-1/selections/2_1/counts.txt
         group: no_protein
-      - name: JPAG_2025_6
-        counts_path: JP-1/selections/JPAG_2025_6/counts.txt
+      - name: 3_1
+        counts_path: lane-1/selections/3_1/counts.txt
         group: no_protein
-      - name: JPAG_2025_19
-        counts_path: JP-1/selections/JPAG_2025_19/counts.txt
+      - name: 4_1
+        counts_path: lane-1/selections/4_1/counts.txt
         group: protein
-      - name: JPAG_2025_20
-        counts_path: JP-1/selections/JPAG_2025_20/counts.txt
+      - name: 5_1
+        counts_path: lane-1/selections/5_1/counts.txt
         group: protein
-      - name: JPAG_2025_21
-        counts_path: JP-1/selections/JPAG_2025_21/counts.txt
+      - name: 6_1
+        counts_path: lane-1/selections/6_1/counts.txt
         group: protein
