@@ -1,0 +1,19 @@
+{
+  "dataset_name": "synthetic_2cycle_100bbpc_100m_err=0",
+  "dataset_dir": "/tmp/60653988/delt-hit-benchmarks/60653988/synthetic_2cycle_100bbpc_100m_err=0/data/synthetic_2cycle_100bbpc_100m_err=0",
+  "expected_compounds": 10000,
+  "expected_reads": 100000000,
+  "tool": "delt",
+  "output_dir": "/tmp/60653988/delt-hit-benchmarks/60653988/synthetic_2cycle_100bbpc_100m_err=0/tools/delt/synthetic_2cycle_100bbpc_100m_err=0/synthetic_2cycle_100bbpc_100m_err=0",
+  "timings": {
+    "demultiplex_s": 275.9304444090012,
+    "count_aggregation_s": 40.60487225299585,
+    "total_s": 316.53531666199706
+  },
+  "counts_match": true,
+  "expected_rows": 10000,
+  "observed_rows": 10000,
+  "expected_total_reads": 100000000,
+  "observed_total_reads": 100000000,
+  "mismatch_examples": []
+}

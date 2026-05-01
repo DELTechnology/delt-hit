@@ -1,0 +1,121 @@
+{
+  "dataset_name": "synthetic_4cycle_10bbpc_10m_err=0",
+  "dataset_dir": "/tmp/60653977/delt-hit-benchmarks/60653977/synthetic_4cycle_10bbpc_10m_err=0/data/synthetic_4cycle_10bbpc_10m_err=0",
+  "expected_compounds": 10000,
+  "expected_reads": 10000000,
+  "tool": "deli",
+  "output_dir": "/tmp/60653977/delt-hit-benchmarks/60653977/synthetic_4cycle_10bbpc_10m_err=0/runtime/synthetic_4cycle_10bbpc_10m_err=0/deli",
+  "timings": {
+    "decode_run_s": 302.713765282002,
+    "decode_collect_s": 1.477793665995705,
+    "decode_count_s": 4.35568885000248,
+    "total_s": 308.54724779800017
+  },
+  "counts_match": false,
+  "expected_rows": 10000,
+  "observed_rows": 10000,
+  "expected_total_reads": 10000000,
+  "observed_total_reads": 9960938,
+  "mismatch_examples": [
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "expected": 1000,
+      "observed": 997
+    },
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        2
+      ],
+      "expected": 1000,
+      "observed": 996
+    },
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        3
+      ],
+      "expected": 1000,
+      "observed": 996
+    },
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        4
+      ],
+      "expected": 1000,
+      "observed": 996
+    },
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        5
+      ],
+      "expected": 1000,
+      "observed": 996
+    },
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        6
+      ],
+      "expected": 1000,
+      "observed": 996
+    },
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        7
+      ],
+      "expected": 1000,
+      "observed": 996
+    },
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        8
+      ],
+      "expected": 1000,
+      "observed": 996
+    },
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        9
+      ],
+      "expected": 1000,
+      "observed": 996
+    },
+    {
+      "codes": [
+        1,
+        1,
+        1,
+        10
+      ],
+      "expected": 1000,
+      "observed": 996
+    }
+  ]
+}

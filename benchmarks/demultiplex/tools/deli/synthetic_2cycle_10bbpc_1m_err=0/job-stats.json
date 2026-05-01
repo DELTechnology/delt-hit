@@ -1,0 +1,18 @@
+{
+  "job_id": "60653959",
+  "state": "COMPLETED",
+  "start": "2026-05-01T07:08:00",
+  "end": "2026-05-01T07:08:55",
+  "elapsed": "00:00:55",
+  "elapsed_s": 55,
+  "elapsed_raw_s": 55,
+  "ncpus": 12,
+  "nnodes": 1,
+  "cpu_time_raw_s": 660,
+  "node": "dna072",
+  "exit_code": "0:0",
+  "peak_rss_bytes": 358248448,
+  "peak_vmsize_bytes": 0,
+  "avg_rss_bytes": 358248448,
+  "cpu_efficiency": 1.0
+}
