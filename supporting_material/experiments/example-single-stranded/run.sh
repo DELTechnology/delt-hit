@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR" || exit
+cd supporting_material/experiments/example-single-stranded || exit
 
 delt-hit init --excel_path example-single-stranded.xlsx
 
