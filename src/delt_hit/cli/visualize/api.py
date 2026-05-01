@@ -8,11 +8,23 @@ from delt_hit.cli.library.api import (
     close_figure,
     prepare_graph_bundle,
     save_figure_outputs,
-    save_graph_visualizations,
+    visualize_reaction_graph,
     visualize_reaction_schemes,
     visualize_smiles,
 )
 from delt_hit.utils import read_yaml
+
+
+def save_graph_visualizations(*, graph_bundle: dict, save_dir: Path, dpi: int = 300) -> None:
+    """Write the standard reaction graph visualizations to disk."""
+    for graph, filename in [
+        (graph_bundle['bb_G'], 'reaction_graph_building_blocks'),
+        (graph_bundle['add_G'], 'reaction_graph_additional'),
+        (graph_bundle['G'], 'reaction_graph'),
+    ]:
+        ax = visualize_reaction_graph(graph)
+        save_figure_outputs(ax.figure, save_dir / filename, dpi=dpi)
+        close_figure(ax.figure)
 
 
 class Visualize:
