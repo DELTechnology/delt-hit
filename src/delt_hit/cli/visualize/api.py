@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
+from tqdm import tqdm
 
 from delt_hit.cli.helper import get_library_dir, get_named_library_path
 from delt_hit.cli.library.api import (
@@ -69,12 +70,12 @@ class Visualize:
             building_blocks_dir = visualization_dir / "building_blocks"
             building_blocks_dir.mkdir(parents=True, exist_ok=True)
 
-            for bb_name in building_block_names:
+            for bb_name in tqdm(building_block_names, desc="Building block families"):
                 whitelist = cfg['whitelists'][bb_name]
                 bb_dir = building_blocks_dir / bb_name
                 bb_dir.mkdir(parents=True, exist_ok=True)
 
-                for entry in whitelist:
+                for entry in tqdm(whitelist, desc=f"{bb_name} panels", leave=False):
                     smiles = entry['smiles']
                     if pd.isna(smiles):
                         continue
@@ -94,7 +95,7 @@ class Visualize:
             compounds_dir = visualization_dir / "compounds"
             compounds_dir.mkdir(parents=True, exist_ok=True)
 
-            for name, entry in compound_entries.items():
+            for name, entry in tqdm(compound_entries.items(), desc="Compound panels"):
                 smiles = entry.get('smiles')
                 if pd.isna(smiles):
                     continue
@@ -139,7 +140,7 @@ class Visualize:
         library_dir.mkdir(parents=True, exist_ok=True)
 
         smiles = legend_df["smiles"].tolist()
-        for i, smiles_value in enumerate(smiles):
+        for i, smiles_value in tqdm(enumerate(smiles), total=len(smiles), desc=f"{library_name} panels"):
             legend = legends[i] if legends is not None else str(i)
             ax = visualize_smiles(
                 smiles=[smiles_value],
