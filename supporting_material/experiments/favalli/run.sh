@@ -20,6 +20,7 @@ delt-hit demultiplex qc --config_path=$CONFIG_PATH
 delt-hit demultiplex process --config_path=$CONFIG_PATH
 delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True
 
+# TODO: check with Jörg what selections to compare
 delt-hit analyse enrichment \
   --config_path=analysis.yaml \
   --name=protein_vs_no_protein \
