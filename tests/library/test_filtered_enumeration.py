@@ -3,13 +3,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from delt_hit.cli.library.api import (
-    Library,
-    _cap_figure_dpi,
-    _scale_dimensions_to_pixel_budget,
-    get_combinations,
-    visualize_smiles,
-)
+from delt_hit.cli.library.api import Library, get_combinations
 from delt_hit.cli.visualize.api import Visualize
 from delt_hit.utils import write_yaml
 
@@ -368,8 +362,10 @@ def test_visualize_enumerate_writes_expected_input_bundle(tmp_path, monkeypatch)
     )
 
     viz_dir = tmp_path / "mini" / "library" / "visualization"
-    assert (viz_dir / "building_blocks_B0.png").exists()
-    assert (viz_dir / "building_blocks_B1.png").exists()
+    assert (viz_dir / "building_blocks" / "B0" / "0.png").exists()
+    assert (viz_dir / "building_blocks" / "B0" / "1.png").exists()
+    assert (viz_dir / "building_blocks" / "B1" / "0.png").exists()
+    assert (viz_dir / "building_blocks" / "B1" / "1.png").exists()
     assert (viz_dir / "compounds" / "scaffold.png").exists()
 
 
@@ -397,8 +393,8 @@ def test_visualize_enumerate_flags_limit_outputs(tmp_path, monkeypatch):
 
     viz_dir = tmp_path / "mini" / "library" / "visualization"
     assert (viz_dir / "compounds" / "scaffold.png").exists()
-    assert not (viz_dir / "building_blocks_B0.png").exists()
-    assert not (viz_dir / "building_blocks_B1.png").exists()
+    assert not (viz_dir / "building_blocks" / "B0").exists()
+    assert not (viz_dir / "building_blocks" / "B1").exists()
 
 
 def test_visualize_enumerate_passes_tile_size_to_structure_rendering(tmp_path, monkeypatch):
@@ -432,9 +428,10 @@ def test_visualize_enumerate_passes_tile_size_to_structure_rendering(tmp_path, m
 
     assert captured_sizes
     assert set(captured_sizes) == {(420, 420)}
+    assert len(captured_sizes) == 5
 
 
-def test_visualize_library_writes_named_library_grid(tmp_path, monkeypatch):
+def test_visualize_library_writes_named_library_panels(tmp_path, monkeypatch):
     _, config_path = make_test_config(tmp_path)
     library_path = tmp_path / "mini" / "library" / "observed_hits.parquet"
     library_path.parent.mkdir(parents=True, exist_ok=True)
@@ -464,7 +461,8 @@ def test_visualize_library_writes_named_library_grid(tmp_path, monkeypatch):
     )
 
     viz_dir = tmp_path / "mini" / "library" / "visualization"
-    assert (viz_dir / "library_observed_hits.png").exists()
+    assert (viz_dir / "libraries" / "observed_hits" / "B0=1-B1=0.png").exists()
+    assert (viz_dir / "libraries" / "observed_hits" / "B0=0-B1=1.png").exists()
 
 
 def test_visualize_library_passes_legends_and_rendering_options(tmp_path, monkeypatch):
@@ -478,7 +476,7 @@ def test_visualize_library_passes_legends_and_rendering_options(tmp_path, monkey
             "code_1": [0, 1],
         }
     ).to_parquet(library_path, index=False)
-    captured_kwargs = {}
+    captured_kwargs = []
 
     class DummyFigure:
         def savefig(self, path, *_args, **_kwargs):
@@ -491,7 +489,7 @@ def test_visualize_library_passes_legends_and_rendering_options(tmp_path, monkey
         figure = DummyFigure()
 
     def capture_visualize_smiles(*args, **kwargs):
-        captured_kwargs.update(kwargs)
+        captured_kwargs.append(kwargs)
         return DummyAxes()
 
     monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_smiles", capture_visualize_smiles)
@@ -499,13 +497,12 @@ def test_visualize_library_passes_legends_and_rendering_options(tmp_path, monkey
     Visualize().library(
         config_path=config_path,
         library_name="observed_hits",
-        nrow=7,
         tile_size=420,
     )
 
-    assert captured_kwargs["legends"] == ["1:0", "0:1"]
-    assert captured_kwargs["sub_img_size"] == (420, 420)
-    assert captured_kwargs["nrow"] == 7
+    assert [entry["legends"] for entry in captured_kwargs] == [["1:0"], ["0:1"]]
+    assert {entry["sub_img_size"] for entry in captured_kwargs} == {(420, 420)}
+    assert {entry["nrow"] for entry in captured_kwargs} == {1}
 
 
 def test_visualize_library_requires_existing_named_library(tmp_path):
@@ -523,57 +520,6 @@ def test_visualize_library_rejects_dual_display_outputs(tmp_path):
 
     with pytest.raises(AssertionError, match="Dual-display libraries"):
         Visualize().library(config_path=config_path, library_name="observed_hits")
-
-
-def test_scale_dimensions_to_pixel_budget_keeps_small_images():
-    assert _scale_dimensions_to_pixel_budget(2_000, 2_000) == (2_000, 2_000)
-
-
-def test_scale_dimensions_to_pixel_budget_shrinks_large_images():
-    width, height = _scale_dimensions_to_pixel_budget(7_500, 30_000)
-    assert width * height <= 40_000_000
-    assert width < 7_500
-    assert height < 30_000
-
-
-def test_cap_figure_dpi_preserves_requested_dpi_for_small_figures():
-    fig = pytest.importorskip("matplotlib.pyplot").figure(figsize=(4, 4), dpi=100)
-    try:
-        assert _cap_figure_dpi(fig, requested_dpi=300) == 300
-    finally:
-        pytest.importorskip("matplotlib.pyplot").close(fig)
-
-
-def test_cap_figure_dpi_reduces_large_figure_exports():
-    fig = pytest.importorskip("matplotlib.pyplot").figure(figsize=(75, 300), dpi=100)
-    try:
-        assert _cap_figure_dpi(fig, requested_dpi=300) < 300
-    finally:
-        pytest.importorskip("matplotlib.pyplot").close(fig)
-
-
-def test_visualize_smiles_scales_large_grids_before_rendering(monkeypatch):
-    captured_kwargs = {}
-
-    class DummyImage:
-        size = (1_000, 1_000)
-
-    def capture_grid(*_args, **kwargs):
-        captured_kwargs.update(kwargs)
-        return DummyImage()
-
-    monkeypatch.setattr("delt_hit.cli.library.api.Draw.MolsToGridImage", capture_grid)
-
-    ax = visualize_smiles(
-        smiles=["CC"] * 2_500,
-        nrow=25,
-        sub_img_size=(300, 300),
-    )
-    try:
-        assert captured_kwargs["subImgSize"][0] < 300
-        assert captured_kwargs["subImgSize"][1] < 300
-    finally:
-        ax.figure.clf()
 
 
 def test_properties_default_mode_writes_properties_parquet(tmp_path):

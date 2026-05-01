@@ -20,7 +20,6 @@ class Visualize:
         *,
         config_path: Path,
         building_block_ids: list[str] | None = None,
-        nrow: int = 25,
         dpi: int = 300,
         tile_size: int = 300,
         graph: bool = False,
@@ -33,12 +32,11 @@ class Visualize:
         Args:
             config_path: Path to the YAML config file.
             building_block_ids: Optional subset of building block IDs to consider.
-            nrow: Number of molecules per row in structure grids.
             dpi: Raster DPI used when exporting PNGs.
             tile_size: Pixel width and height used by RDKit for each molecule tile.
             graph: Whether to save reaction graph visualizations.
             reactions: Whether to save reaction scheme panels from SMIRKS.
-            building_blocks: Whether to save building block structure grids.
+            building_blocks: Whether to save building block structure panels.
             compounds: Whether to save configured compound structure grids.
         """
         if not any([graph, reactions, building_blocks, compounds]):
@@ -68,23 +66,28 @@ class Visualize:
             if building_block_ids:
                 building_block_names = [name for name in building_block_names if name in building_block_ids]
 
+            building_blocks_dir = visualization_dir / "building_blocks"
+            building_blocks_dir.mkdir(parents=True, exist_ok=True)
+
             for bb_name in building_block_names:
                 whitelist = cfg['whitelists'][bb_name]
-                smiles = [entry['smiles'] for entry in whitelist if not pd.isna(entry['smiles'])]
-                legends = [f"{bb_name}:{entry['index']}" for entry in whitelist if not pd.isna(entry['smiles'])]
+                bb_dir = building_blocks_dir / bb_name
+                bb_dir.mkdir(parents=True, exist_ok=True)
 
-                if not smiles:
-                    continue
+                for entry in whitelist:
+                    smiles = entry['smiles']
+                    if pd.isna(smiles):
+                        continue
 
-                ax = visualize_smiles(
-                    smiles=smiles,
-                    legends=legends,
-                    title=f'{bb_name} Building Blocks',
-                    nrow=nrow,
-                    sub_img_size=(tile_size, tile_size),
-                )
-                save_figure_outputs(ax.figure, visualization_dir / f"building_blocks_{bb_name}", dpi=dpi)
-                close_figure(ax.figure)
+                    ax = visualize_smiles(
+                        smiles=[smiles],
+                        legends=[f"{bb_name}:{entry['index']}"],
+                        title=f'{bb_name} Building Blocks',
+                        nrow=1,
+                        sub_img_size=(tile_size, tile_size),
+                    )
+                    save_figure_outputs(ax.figure, bb_dir / str(entry['index']), dpi=dpi)
+                    close_figure(ax.figure)
 
         if compounds:
             compound_entries = cfg['catalog'].get('compounds', {})
@@ -110,16 +113,14 @@ class Visualize:
         *,
         config_path: Path,
         library_name: str,
-        nrow: int = 25,
         dpi: int = 300,
         tile_size: int = 300,
     ):
-        """Generate a structure grid for a named library parquet.
+        """Generate one structure panel per entry for a named library parquet.
 
         Args:
             config_path: Path to the YAML config file.
             library_name: Named library parquet stem inside the experiment library dir.
-            nrow: Number of molecules per row in the structure grid.
             dpi: Raster DPI used when exporting PNGs.
             tile_size: Pixel width and height used by RDKit for each molecule tile.
         """
@@ -128,22 +129,28 @@ class Visualize:
 
         df = pd.read_parquet(lib_path)
         assert "smiles" in df.columns, "Dual-display libraries with `smiles_a`/`smiles_b` are not supported by `visualize library`"
-        smiles = df["smiles"].dropna().tolist()
         legend_df = df.loc[df["smiles"].notna()]
         legends = build_code_legends(legend_df)
+        filenames = build_code_filenames(legend_df)
 
         visualization_dir = get_library_dir(config_path) / "visualization"
         visualization_dir.mkdir(parents=True, exist_ok=True)
+        library_dir = visualization_dir / "libraries" / library_name
+        library_dir.mkdir(parents=True, exist_ok=True)
 
-        ax = visualize_smiles(
-            smiles=smiles,
-            legends=legends,
-            title=library_name,
-            nrow=nrow,
-            sub_img_size=(tile_size, tile_size),
-        )
-        save_figure_outputs(ax.figure, visualization_dir / f"library_{library_name}", dpi=dpi)
-        close_figure(ax.figure)
+        smiles = legend_df["smiles"].tolist()
+        for i, smiles_value in enumerate(smiles):
+            legend = legends[i] if legends is not None else str(i)
+            ax = visualize_smiles(
+                smiles=[smiles_value],
+                legends=[legend],
+                title=library_name,
+                nrow=1,
+                sub_img_size=(tile_size, tile_size),
+            )
+            filename = filenames[i] if filenames is not None else str(i)
+            save_figure_outputs(ax.figure, library_dir / filename, dpi=dpi)
+            close_figure(ax.figure)
 
 
 def build_code_legends(data: pd.DataFrame) -> list[str] | None:
@@ -153,3 +160,17 @@ def build_code_legends(data: pd.DataFrame) -> list[str] | None:
     if not code_columns:
         return None
     return data[code_columns].astype(str).agg(":".join, axis=1).tolist()
+
+
+def build_code_filenames(data: pd.DataFrame) -> list[str] | None:
+    """Build per-entry filenames from ``code_*`` columns when available."""
+    code_columns = [col for col in data.columns if col.startswith("code_")]
+    code_columns = sorted(code_columns, key=lambda name: int(name.split("_", maxsplit=1)[1]))
+    if not code_columns:
+        return None
+
+    filenames = []
+    for _, row in data[code_columns].iterrows():
+        parts = [f"B{col.split('_', maxsplit=1)[1]}={row[col]}" for col in code_columns]
+        filenames.append("-".join(parts))
+    return filenames
