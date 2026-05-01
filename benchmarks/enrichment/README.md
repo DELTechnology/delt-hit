@@ -18,7 +18,7 @@ count variation. It does not model sequencing corruption.
 ## Generate A Synthetic Enrichment Dataset
 
 ```bash
-./.venv/bin/python benchmarks/enrichment/generate_synthetic_enrichment.py \
+pixi run python benchmarks/enrichment/generate_synthetic_enrichment.py \
   --building-blocks-per-cycle 100 \
   --positive-low 50 \
   --positive-medium 25 \
@@ -47,7 +47,7 @@ the exact parameter values used for that run.
 
 ```bash
 module load r-light/4.4.1
-./.venv/bin/python benchmarks/enrichment/compare_synthetic_enrichment.py \
+pixi run python benchmarks/enrichment/compare_synthetic_enrichment.py \
   --dataset-dir target/synthetic_enrichment/synthetic_enrichment_default \
   --top-k 100
 ```
@@ -78,11 +78,11 @@ The report is relative rather than threshold-based. The main questions are:
 Minimal run:
 
 ```bash
-./.venv/bin/python benchmarks/enrichment/generate_synthetic_enrichment.py \
+pixi run python benchmarks/enrichment/generate_synthetic_enrichment.py \
   --output-dir target/synthetic_enrichment \
   --experiment-name synthetic_enrichment_default
 
-./.venv/bin/python benchmarks/enrichment/compare_synthetic_enrichment.py \
+pixi run python benchmarks/enrichment/compare_synthetic_enrichment.py \
   --dataset-dir target/synthetic_enrichment/synthetic_enrichment_default \
   --top-k 100
 ```

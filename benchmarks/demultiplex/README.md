@@ -4,7 +4,7 @@
 
 The benchmark commands below assume these environments already exist:
 
-- DELT-Hit: [`.venv`](../../.venv)
+- DELT-Hit: the project Pixi environment, invoked with `pixi run ...`
 - DELi: [`other_tools/DELi/.venv`](../../other_tools/DELi/.venv)
 
 ## Dataset Matrix
@@ -75,7 +75,7 @@ READS=10000
 ERR=0
 DATASET="synthetic_${CYCLES}cycle_${BBPC}bbpc_${DEPTH}_err=${ERR}"
 
-python benchmarks/demultiplex/generate_synthetic_fastq.py \
+pixi run python benchmarks/demultiplex/generate_synthetic_fastq.py \
   --num-cycles "$CYCLES" \
   --building-blocks-per-cycle "$BBPC" \
   --num-reads-per-compound "$READS" \
@@ -87,14 +87,14 @@ python benchmarks/demultiplex/generate_synthetic_fastq.py \
 Prepare DELi inputs for that dataset:
 
 ```bash
-python benchmarks/demultiplex/converter/create_deli_inputs.py \
+pixi run python benchmarks/demultiplex/converter/create_deli_inputs.py \
   --dataset-name "$DATASET"
 ```
 
 Prepare DELT-Hit inputs for that dataset:
 
 ```bash
-python benchmarks/demultiplex/converter/create_delt_inputs.py \
+pixi run python benchmarks/demultiplex/converter/create_delt_inputs.py \
   --dataset-name "$DATASET" \
   --num-cores 11
 ```
@@ -102,7 +102,7 @@ python benchmarks/demultiplex/converter/create_delt_inputs.py \
 Run the benchmark for that dataset:
 
 ```bash
-python benchmarks/demultiplex/run_split_timing.py \
+pixi run python benchmarks/demultiplex/run_split_timing.py \
   --dataset-name "$DATASET" \
   --tool both
 ```
@@ -114,7 +114,7 @@ Use the converter scripts in [`benchmarks/demultiplex/converter`](./converter).
 ### DELi
 
 ```bash
-python benchmarks/demultiplex/converter/create_deli_inputs.py \
+pixi run python benchmarks/demultiplex/converter/create_deli_inputs.py \
   --dataset-name synthetic_4cycle_10bbpc_100m_err=0
 ```
 
@@ -126,7 +126,7 @@ Prepared inputs are written to:
 ### DELT-Hit
 
 ```bash
-python benchmarks/demultiplex/converter/create_delt_inputs.py \
+pixi run python benchmarks/demultiplex/converter/create_delt_inputs.py \
   --dataset-name synthetic_4cycle_10bbpc_100m_err=0 \
   --num-cores 11
 ```
@@ -161,7 +161,7 @@ It writes the canonical machine-readable report to:
 ### DELi Only
 
 ```bash
-python benchmarks/demultiplex/run_split_timing.py \
+pixi run python benchmarks/demultiplex/run_split_timing.py \
   --dataset-name synthetic_4cycle_10bbpc_100m_err=0 \
   --tool deli
 ```
@@ -169,7 +169,7 @@ python benchmarks/demultiplex/run_split_timing.py \
 ### DELT-Hit Only
 
 ```bash
-python benchmarks/demultiplex/run_split_timing.py \
+pixi run python benchmarks/demultiplex/run_split_timing.py \
   --dataset-name synthetic_4cycle_10bbpc_100m_err=0 \
   --tool delt
 ```
@@ -309,7 +309,7 @@ For DELi:
 For DELT-Hit:
 
 - execution of the prepared `demultiplex.sh`
-- `delt_hit demultiplex process`
+- `pixi run delt-hit demultiplex process`
 
 Each run also compares the observed output against `expected_counts.tsv` and records whether counts match.
 
@@ -379,7 +379,7 @@ deli \
 bash -e \
   "$DELT_EXP_DIR/demultiplex/cutadapt_input_files/demultiplex.sh"
 
-python -m delt_hit.cli.main \
+pixi run delt-hit \
   demultiplex process \
   --config_path "$DELT_DIR/config.yaml"
 ```

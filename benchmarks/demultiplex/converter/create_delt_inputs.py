@@ -19,7 +19,7 @@ DATA_ROOT = BENCHMARKS_ROOT / "data"
 TOOLS_ROOT = BENCHMARKS_ROOT / "tools"
 TOOL_ROOT = TOOLS_ROOT / "delt"
 DEFAULT_DATASET_NAME = "synthetic_2cycle_10bbpc_1m"
-DELT_HIT_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
+DELT_HIT_CMD = ["pixi", "run", "delt-hit"]
 
 
 def read_manifest(dataset_dir: Path) -> dict:
@@ -155,11 +155,8 @@ def main(*, dataset_name: str = DEFAULT_DATASET_NAME, num_cores: int = 1, data_d
     with config_path.open("w") as handle:
         yaml.safe_dump(config, handle, sort_keys=False)
 
-    env = os.environ.copy()
-    env["PATH"] = f"{PROJECT_ROOT / '.venv' / 'bin'}:{env['PATH']}"
     run_command(
-        [DELT_HIT_PYTHON, "-m", "delt_hit.cli.main", "demultiplex", "prepare", "--config_path", config_path],
-        env=env,
+        [*DELT_HIT_CMD, "demultiplex", "prepare", "--config_path", config_path],
     )
 
     print(f"Wrote DELT-Hit config to {config_path}")
