@@ -28,8 +28,8 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 - [ ] Re-analyse at least one previously published DEL dataset with DELT-Hit.
 - [ ] Add a comparison table showing the original analysis versus DELT-Hit for that case study.
 - [ ] Show what additional analysis or evaluation DELT-Hit enables on that dataset.
-- [ ] Expand the DELi comparison into a quantitative benchmark on shared datasets.
-- [ ] Compare technical performance, enrichment results, and practical usability against DELi.
+- [x] Expand the DELi comparison into a quantitative benchmark on shared datasets.
+- [x] Compare technical performance, enrichment results, and practical usability against DELi. Addressed for technical performance and practical usability through the DELi comparison table plus shared runtime and memory benchmarking; quantitative enrichment reliability remains tracked separately below.
 - [ ] Add discussion and/or data justifying the use of edgeR for DEL data.
 - [ ] Show that edgeR and other scoring methods recover positive controls robustly.
 - [ ] Preferably support the edgeR justification with a dataset containing replicates.
@@ -38,7 +38,7 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 ## Reviewer 2
 
 - [ ] Add approximate runtimes for each application example, not just general timing tables.
-- [ ] Clarify how runtime scales with library size and/or architectural complexity.
+- [x] Clarify how runtime scales with library size and/or architectural complexity.
 - [ ] Add quantitative DELi comparisons for enrichment reliability and replicate consistency.
 
 ## Reviewer 3
@@ -71,8 +71,8 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 ## Cross-cutting Deliverables
 
 - [ ] Update the manuscript text to reflect all requested clarifications and new features.
-- [ ] Generate any new benchmark data, case-study reruns, and comparison tables needed for the revision.
-- [ ] Prepare revised figures, captions, troubleshooting content, and supplementary files.
+- [x] Generate any new benchmark data, case-study reruns, and comparison tables needed for the revision.
+- [x] Prepare revised figures, captions, troubleshooting content, and supplementary files.
 - [ ] Draft a point-by-point response letter mapping each change to the editor and reviewer comments.
 
 ## Reformatting Plan Against Nature Protocols Example

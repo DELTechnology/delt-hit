@@ -1,0 +1,87 @@
+\subsection{Comparison of DELT-Hit and DELi}
+
+Table~\ref{tab:delt-deli-comparison} summarizes the currently documented open-source functionality of DELT-Hit and DELi across demultiplexing, enumeration, hit identification, and practical workflow usability. The comparison is based on the local DELT-Hit and DELi repositories, the DELT-Hit changelog and CLI documentation, and the shared synthetic benchmark runbooks included with this revision. The goal of the table is to document scope and workflow differences relevant to the reviewer request; it is therefore a functionality and infrastructure comparison rather than a stand-alone quantitative performance benchmark.
+
+\begin{longtable}{p{2.7cm}p{5.1cm}p{5.1cm}}
+\caption{Comparison of currently documented DELT-Hit and DELi functionality across shared DEL analysis tasks. Benchmark-specific observations are described as such and should not be interpreted as universal statements beyond the inspected shared benchmark setup.}
+\label{tab:delt-deli-comparison} \\
+\toprule
+\textbf{Area} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Area} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\midrule
+\endhead
+
+\multicolumn{3}{l}{\textbf{Demultiplexing}} \\
+\midrule
+Core approach & Uses a Cutadapt-based demultiplexing pipeline prepared from the DELT-Hit configuration and processed into per-selection \texttt{counts.txt} tables & Uses an internal decode pipeline driven by barcode schemas and decode settings \\
+Input definition & Barcode structure, constants, selections, and building-block codons are authored in the Excel workbook and compiled into \texttt{config.yaml} & Barcode regions are defined explicitly in \texttt{barcode\_schema} plus decode settings YAML \\
+Error handling & Region-level \texttt{max\_error\_rate} and \texttt{indels} settings are passed through the prepared demultiplex workflow & Section-specific error correction modes such as Hamming or Levenshtein are built into the decode model \\
+Stage-wise execution & Provides \texttt{demultiplex prepare}, \texttt{run}, \texttt{process}, \texttt{report}, and \texttt{qc}, making individual stages easy to inspect or rerun & Exposes decode settings directly and keeps decode behavior close to the barcode model \\
+Dual-display and strand handling & Includes explicit dual-display-aware parsing and reverse-complement/complement codon handling needed for B-sheet style inputs & The inspected local materials do not foreground comparable strand-aware dual-display validation workflows \\
+Benchmarking support & Repository includes synthetic FASTQ generation, DELi/DELT-Hit input converters, split-timing runs, worker/chunk-size sweeps, and runtime or memory plotting & Participates in the same shared benchmark setup through converted DELi inputs and reusable decode settings \\
+Shared-benchmark observation & Current DELT-Hit benchmark docs report correct counts on the inspected synthetic error datasets & The local benchmark README documents count-loss modes on synthetic \texttt{err=1} datasets and advises caution for correctness-critical use on those benchmark cases until resolved upstream \\
+\addlinespace
+\multicolumn{3}{l}{\textbf{Enumeration}} \\
+\midrule
+Primary input style & One Excel workbook converted to \texttt{config.yaml} & JSON library definitions plus CSV building-block files, usually under a DELi data directory \\
+Library definition & Spreadsheet sheets define reaction graphs, building blocks, compounds, reactions, barcode structure, constants, and selections in one authoring artifact & Library JSON defines \texttt{bb\_sets}, reactions, and optional fields such as \texttt{barcode\_schema}, scaffold, linker, and doped compounds \\
+Reaction topology & Builds a NetworkX reaction graph from building-block rows and \texttt{reaction\_graph} edges & Uses an explicit reaction DAG or tree built from ordered reaction steps and prior products \\
+Intermediate chemistry steps & Supports additional non-building-block transformations through the reaction-graph representation & Supports intermediate steps naturally as reaction steps whose reactants are prior products or static reagents \\
+Dual-display support & Recent DELT-Hit updates add explicit dual-display support across parsing, enumeration, and visualization & The inspected local materials emphasize explicit library-definition workflows more than reviewer-oriented dual-display outputs \\
+Filtered enumeration & Can enumerate only observed barcode combinations from \texttt{counts.txt} using \texttt{--counts\_path}, \texttt{--top\_n}, and \texttt{--library\_name} & The inspected local docs do not present an equivalent counts-driven filtered-enumeration workflow \\
+Named downstream libraries & Named filtered libraries can be passed directly into downstream property generation and visualization commands & Enumeration is explicit and reusable, but the inspected workflow is less centered on named downstream artifact bundles \\
+Single-compound lookup & No clean public single-compound enumeration primitive is exposed & Provides first-class single-compound lookup from decoded building-block identifiers \\
+Decode-to-structure mapping & Uses \texttt{code\_*} columns and current 1-based indexing, which aligns well with DELT-Hit count tables but remains spreadsheet-order dependent & Decoded building-block identifiers match the stable IDs used in building-block CSV files \\
+Output style & Writes Parquet library outputs plus visualization-oriented library folders & Writes explicit DEL and building-block identifier based enumeration outputs \\
+\addlinespace
+\multicolumn{3}{l}{\textbf{Hit identification}} \\
+\midrule
+Main methods & Supports counts-based enrichment and \texttt{edgeR}-based enrichment from DELT-Hit-generated count tables & Local DELi materials describe analysis and enrichment support, but the inspected repository materials emphasize decoding and library utilities more strongly than an end-to-end hit workflow \\
+Replicate-aware comparisons & Configuration supports grouping selections into analysis comparisons and recommends \texttt{edgeR} when replicates are available & This note avoids stronger claims about replicate modeling than what is clearly documented in the inspected local materials \\
+Quality-control framing & Includes demultiplex reports, QC plots, replicate-correlation framing in the manuscript, and organized per-analysis output folders & The inspected local materials do not foreground an equivalent manuscript-ready QC workflow \\
+Downstream result organization & Writes per-analysis counts and \texttt{edgeR} artifacts, normalized tables, hit tables, and structured output folders that feed directly into reporting & Provides decoded and analyzed outputs, but the practical report-generation path appears less centralized in the inspected materials \\
+Interactive review & Includes a dashboard for interactive inspection of selection count tables & No direct equivalent is highlighted as a core DELi feature in the inspected local repository materials \\
+\addlinespace
+\multicolumn{3}{l}{\textbf{Workflow, outputs, and usability}} \\
+\midrule
+Authoring model & Excel-driven authoring is approachable for experimental users and keeps experiment design, barcode setup, chemistry, and analysis metadata in one source artifact & JSON and CSV definitions are more modular, reusable, and version-control-friendly \\
+Reviewer-facing chemistry outputs & The new \texttt{visualize enumerate} workflow exports reaction graphs, reaction schemes, per-building-block structure panels, and configured compound structure panels & The inspected local materials do not present an equivalent reviewer-oriented chemistry-visualization workflow as a core feature \\
+Library-member export & The new \texttt{visualize library} workflow exports named-library members as one-structure-per-file PNGs with filenames derived from DEL code combinations & No comparable built-in per-member export workflow is highlighted in the inspected local repository materials \\
+Integrated downstream artifacts & Integrates enumeration, property generation, Morgan or BERT-style representations, and visualization-oriented outputs in one CLI family & Is strong on explicit library modeling, while downstream property and representation generation are less central in the inspected workflow \\
+Output organization & Recent updates reorganize visualization and library outputs into cleaner per-library folders that map directly onto filtered or named enumerations & Keeps definitions and decode settings modular, which is advantageous for reuse and code review \\
+Benchmark and supporting-material workflows & Includes synthetic demultiplex and enrichment benchmarking helpers, converter scripts, runbooks, and reviewer-oriented example workflows & Participates in the shared benchmark setup through converted inputs and reusable decode settings \\
+\bottomrule
+\end{longtable}
+
+The synthetic demultiplex benchmark documented in the shared runbook uses generated FASTQ datasets to compare DELT-Hit and DELi on the canonical 2-, 3-, and 4-cycle libraries with 10 building blocks per cycle across 1M, 10M, 100M, and 1000M reads, and additionally includes an extended 2-cycle runtime sweep with 10, 100, and 1000 building blocks per cycle. The reported outputs focus on end-to-end runtime and peak resident memory for the shared benchmark setup. Figure~\ref{fig:delt-deli-runtime-cycles} summarizes cycle-wise runtime scaling, Figure~\ref{fig:delt-deli-runtime-2cycle-bbpc} shows the extended 2-cycle runtime sweep, and Figure~\ref{fig:delt-deli-memory-cycles} summarizes peak RSS scaling.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.32\textwidth]{../../benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_runtime.png}\hfill
+\includegraphics[width=0.32\textwidth]{../../benchmarks/demultiplex/plots/synthetic_3cycle_10bbpc_runtime.png}\hfill
+\includegraphics[width=0.32\textwidth]{../../benchmarks/demultiplex/plots/synthetic_4cycle_10bbpc_runtime.png}
+\caption{Cycle-wise runtime scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads.}
+\label{fig:delt-deli-runtime-cycles}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{../../benchmarks/demultiplex/plots/synthetic_2cycle_bbpc_comparison_runtime.png}
+\caption{Runtime scaling for the extended 2-cycle synthetic benchmark across 10, 100, and 1000 building blocks per cycle.}
+\label{fig:delt-deli-runtime-2cycle-bbpc}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.32\textwidth]{../../benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_peak_rss.png}\hfill
+\includegraphics[width=0.32\textwidth]{../../benchmarks/demultiplex/plots/synthetic_3cycle_10bbpc_peak_rss.png}\hfill
+\includegraphics[width=0.32\textwidth]{../../benchmarks/demultiplex/plots/synthetic_4cycle_10bbpc_peak_rss.png}
+\caption{Cycle-wise peak RSS scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads.}
+\label{fig:delt-deli-memory-cycles}
+\end{figure}
+
+Within this benchmark setup, DELT-Hit demonstrates more favorable run-time and memory complexity than DELi.

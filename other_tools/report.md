@@ -1,8 +1,8 @@
-# DELT-Hit and DELi comparison for library enumeration
+# DELT-Hit and DELi comparison
 
 ## Scope
 
-This report compares DELT-Hit and DELi for the specific task of library enumeration: obtaining the chemical structure of each encoded compound from library definitions, building blocks, and reaction definitions. It also covers broader usability and framework-design observations because the enumeration configuration is tightly coupled to decoding and analysis in both tools.
+This report compares DELT-Hit and DELi across the end-to-end analysis steps that are most relevant to the reviewer request: demultiplexing, enumeration, hit identification, and practical workflow usability. The earlier version of this note focused mostly on enumeration; this update broadens the comparison to include the latest DELT-Hit functionality documented in `CHANGELOG.md`, `README.md`, and the benchmark runbooks.
 
 The analysis is based on the local repositories:
 
@@ -11,46 +11,69 @@ The analysis is based on the local repositories:
 
 ## Executive summary
 
-DELT-Hit is currently strongest as an integrated Excel-driven workflow. A single workbook can define the experiment, 
-barcode structure, building blocks, reaction catalog, demultiplexing inputs, enumeration inputs, downstream properties,
-and analysis. This is approachable for users who think in spreadsheets and want one artifact to configure a full run.
+DELT-Hit is strongest as an integrated end-to-end workflow. A single Excel workbook can define barcode structure, building blocks, reactions, demultiplexing inputs, enumeration settings, downstream properties, and analysis comparisons. Recent additions expand that workflow with explicit dual-display support, filtered enumeration from observed counts, reviewer-friendly visualization commands, and benchmark infrastructure for shared DELT-Hit versus DELi comparisons.
 
-DELi is stronger as a library-definition and enumeration model. It separates library JSON, building-block CSV files,
-reaction definitions, barcode schemas, and optional reusable data directories. 
-Its enumeration model is explicit: a library owns ordered building-block sets and a reaction tree; a decoded compound
-maps directly from `library_id + bb_ids` to a generated SMILES.
+DELi is strongest as an explicit library-definition and decoding/enumeration model. It separates library JSON, building-block CSV files, barcode schemas, reaction definitions, and reusable data directories. Its chemistry model is more declarative and its decoding stack already exposes concepts such as barcode-schema sections, UMI handling, tool compounds, and stable building-block identifiers.
 
-For robust enumeration, DELT-Hit would benefit from keeping its integrated workflow but extracting the chemistry model
-into explicit, validated concepts: library definitions, building-block sets, reaction steps, named products, 
-static compounds, branch/subset rules, ambiguity policies, and structured enumeration outputs.
+For the reviewer response, the most balanced framing is that DELT-Hit now offers the broader manuscript-facing end-to-end workflow, while DELi remains stronger in some internals of library-definition structure and decoding model expressiveness. The updated comparison should therefore emphasize complementary strengths instead of presenting either tool as universally superior.
 
-## 1:1 comparison
+## Reviewer-facing comparison
+
+### Demultiplexing
 
 | Area | DELT-Hit | DELi |
 |---|---|---|
-| Main scope | End-to-end DEL analysis workflow: Excel config, demultiplexing, enumeration, properties, representations, enrichment, dashboard | DEL definition, decoding, enumeration, UMI counting, analysis utilities |
+| Core approach | Uses a `cutadapt`-based demultiplexing pipeline prepared from the DELT-Hit config and then processed into `counts.txt` tables | Uses an internal decode pipeline driven by DELi barcode schemas and decode settings |
+| Input definition | Barcode structure, constants, selections, and building-block codons are authored in the Excel workbook and compiled into `config.yaml` | Barcode regions are defined explicitly in `barcode_schema` plus decode settings YAML |
+| Error handling | Region-level `max_error_rate` and `indels` settings are passed through the prepared demultiplex workflow | Section-specific error correction modes such as Hamming or Levenshtein are built into the decode model |
+| Flexible input preparation | DELT-Hit supports `demultiplex prepare`, `run`, `process`, `report`, and `qc`, making it easy to inspect or rerun stages independently | DELi exposes decode settings directly and keeps decode behavior close to the barcode model |
+| Dual-display and strand handling | Recent DELT-Hit updates add explicit dual-display-aware parsing plus reverse-complement/complement codon handling needed for B-sheet style inputs | DELi has an explicit barcode-schema model but the benchmark docs inspected here do not foreground comparable strand-aware dual-display validation |
+| Benchmarking support | Repository includes synthetic FASTQ generation, DELi/DELT-Hit input converters, split-timing runs, worker/chunk-size sweeps, and runtime/memory plotting | Benchmarks can be run on the same synthetic datasets through converted DELi inputs |
+| Benchmark-specific caveat | Current DELT-Hit benchmark docs report correct counts on the inspected synthetic error datasets | The local DELi benchmark README documents known count-loss modes on synthetic `err=1` datasets and advises against treating DELi as correctness-critical for those benchmark cases until resolved upstream |
+
+### Enumeration
+
+| Area | DELT-Hit | DELi |
+|---|---|---|
 | Primary input style | One Excel workbook converted to `config.yaml` | JSON library definitions plus CSV building-block files, usually under a DELi data directory |
 | Library definition | Excel sheets: `reaction_graph`, `B*`, `compounds`, `reactions`, `structure`, `constant`, `selection` | Library JSON: `bb_sets`, `reactions`, optional `barcode_schema`, `scaffold`, `linker`, `doped` |
-| Building blocks | Each `B*` Excel sheet has `codon`, `smiles`, `educt`, `reaction`, `product` | One CSV per BB set/cycle with `id`, optional `tag`, `smiles`, optional `subset_id` |
-| Reaction definition | Flat catalog in the `reactions` sheet with `name`, `smirks`; graph edges decide how reactions connect | Reaction steps in JSON with `rxn_smarts`, `reactants`, optional `step_id`, `pick_fragment`, multiple-product flags |
+| Reaction definition | Flat catalog in the `reactions` sheet with `name`, `smirks`; graph edges decide how reactions connect | Reaction steps in JSON with `rxn_smarts`, `reactants`, optional `step_id`, `pick_fragment`, and multiple-product controls |
 | Reaction topology | NetworkX graph assembled from building-block rows and `reaction_graph` | Explicit reaction DAG/tree built from dependencies via `product_<step_id>` references |
-| Intermediate non-BB steps | Supported via `reaction_graph` if connected correctly to products | Supported naturally as reaction steps whose reactants are prior products/static reagents |
-| Branching chemistry | Possible but implicit; invalid multi-terminal combinations are skipped | More explicit support through reaction trees, BB subsets, pooled reactants, and branch validation |
-| Static reagents/scaffolds | `compounds` sheet supplies named SMILES; referenced by graph edges | Literal SMILES in `reactants`, or reserved `scaffold`, `linker`, `truncated_linker` fields |
-| Enumeration output | Parquet: `library.parquet` with `code_*` and final `smiles` | CSV/iterator: `DEL_ID`, `SMILES`, `LIB_ID`, `BB*_ID`, `BB*_SMILES` |
-| Single-compound enumeration | Not exposed as a clean public primitive | First-class: `enumerate_by_bb_ids([...])` |
-| Decode-to-structure mapping | Current local code uses 1-based building-block indices and `code_1`, `code_2`, etc.; mapping is numeric and spreadsheet-order dependent | Natural: decoded `bb_ids` are the same stable IDs used by building-block CSVs |
-| Demultiplexing | Uses `cutadapt`; Excel `structure` and `whitelists` define regions | Built-in decode pipeline using barcode schemas, library tags, BB tags, UMI handling |
-| Barcode schema | Spreadsheet `structure`, `selection`, `constant`, `B*` codons | JSON `barcode_schema` with reserved `library`, `bb1`, `bb2`, `umi`, etc. |
-| Error correction | Region-level `max_error_rate`, `indels` passed to cutadapt | Barcode section error correction modes, e.g. hamming/levenshtein |
-| UMI support | Not prominent in inspected enumeration/count path | Built into decoding/counting model |
-| Tool/doped compounds | Not obvious in inspected path | Explicit support for tool compounds and doped compounds |
-| Chemical validation | RDKit reaction application during enumeration | RDKit reaction parsing/application, product ambiguity handling, BB SMILES validation |
-| Property calculation | Built-in RDKit descriptors via `library properties` | Enumeration gives structures; analysis utilities exist, but property pipeline is less central |
-| Representations/fingerprints | Built-in Morgan fingerprints; current `bert` branch calls Morgan in inspected code | Not the main focus in enumeration API |
-| Dashboard | Has dashboard CLI | No direct equivalent as a core feature |
-| Configuration ergonomics | Easier for users who prefer Excel; one workbook contains everything | Better for version control, reuse, and validation; less friendly for spreadsheet-only users |
-| Reusability | Config generated per experiment; chemistry and sequencing details are coupled | Strong separation: reusable library JSON, BB CSVs, reaction files, selection/decode configs |
+| Intermediate non-BB steps | Supported via `reaction_graph` if connected correctly to products | Supported naturally as reaction steps whose reactants are prior products or static reagents |
+| Dual-display support | Recent DELT-Hit updates add explicit dual-display support across parsing, enumeration, and visualization | DELi supports flexible library definitions, but the local materials inspected here emphasize single-library JSON/CSV workflows rather than DELT-Hit-style dual-display reviewer outputs |
+| Filtered enumeration | DELT-Hit can enumerate only observed barcode combinations from `counts.txt` using `--counts_path`, `--top_n`, and `--library_name` | DELi enumeration is explicit and reusable, but the inspected local docs do not present an equivalent counts-driven filtered enumeration workflow |
+| Named filtered outputs | DELT-Hit named-library support lets downstream property generation target filtered enumerations directly | DELi enumerates compounds cleanly but the inspected workflow is less centered on named downstream artifact bundles |
+| Single-compound lookup | Not exposed as a clean public primitive | First-class: `enumerate_by_bb_ids([...])` |
+| Decode-to-structure mapping | Uses `code_*` columns and current 1-based indexing; convenient for DELT-Hit counts joins but still spreadsheet-order dependent | Decoded `bb_ids` are the same stable IDs used by building-block CSVs |
+| Enumeration output | Parquet outputs plus visualization-oriented library folders | CSV/iterator outputs centered on explicit DEL and building-block identifiers |
+
+### Hit identification
+
+| Area | DELT-Hit | DELi |
+|---|---|---|
+| Main methods | Supports counts-based enrichment and `edgeR`-based enrichment from DELT-Hit-generated count tables | Local DELi materials describe analysis/enrichment support, but the inspected repo materials emphasize decoding and library utilities more strongly than a DELT-Hit-style end-to-end hit workflow |
+| Replicate-aware comparisons | DELT-Hit config supports grouping selections into analysis comparisons and recommends `edgeR` when replicates are available | DELi includes analysis utilities, but this note avoids stronger claims about replicate modeling than what is clearly documented locally |
+| QC framing | DELT-Hit includes demultiplex reports, QC plots, replicate correlation framing in the manuscript, and organized per-analysis output folders | DELi analysis utilities exist, but the inspected local materials do not foreground an equivalent manuscript-ready QC workflow |
+| Downstream outputs | DELT-Hit writes per-analysis counts and `edgeR` artifacts, normalized tables, hit tables, and structured output folders that feed directly into reporting | DELi provides decoded and analyzed outputs, but the practical report-generation path appears less centralized in the inspected materials |
+| Interactive review | DELT-Hit includes a dashboard for interactive inspection of selection count tables | No direct equivalent is highlighted as a core DELi feature in the inspected local repo materials |
+
+### Workflow, outputs, and usability
+
+| Area | DELT-Hit | DELi |
+|---|---|---|
+| Authoring model | Excel-driven authoring is approachable for experimental users and keeps experiment design, barcode setup, chemistry, and analysis metadata in one source artifact | JSON/CSV-based definitions are more modular, reusable, and version-control-friendly |
+| Visualization outputs | New `visualize enumerate` workflow exports reaction graphs, reaction schemes, per-building-block structure panels, and configured compound structure panels | The inspected DELi materials do not present an equivalent reviewer-oriented chemistry-visualization workflow as a core feature |
+| Library-member export | New `visualize library` workflow exports named-library members as one-structure-per-file PNGs with filenames derived from DEL code combinations | No comparable built-in per-member export workflow is highlighted in the inspected DELi repo materials |
+| Downstream chemistry artifacts | DELT-Hit integrates enumeration, property generation, Morgan/BERT-style representations, and visualization-oriented outputs in one CLI family | DELi is strong on explicit library modeling; downstream property and representation generation are less central in the inspected workflow |
+| Output organization | Recent DELT-Hit changes reorganize visualization and library outputs into cleaner per-library folders that map directly onto filtered or named enumerations | DELi keeps definitions and decode settings modular, which is advantageous for reuse and code review |
+| Benchmark and supporting-material workflows | DELT-Hit now includes synthetic demultiplex and enrichment benchmarking helpers, converter scripts, runbooks, and reviewer-oriented example workflows | DELi participates in the shared benchmark setup through converted inputs and reusable decode settings |
+
+## Take-home points for the manuscript table
+
+- DELT-Hit now has enough breadth to support a four-section comparison table rather than an enumeration-only comparison.
+- The cleanest DELT-Hit strengths to emphasize are end-to-end integration, dual-display support, counts-driven filtered enumeration, reviewer-friendly visualization outputs, and benchmark infrastructure.
+- The cleanest DELi strengths to preserve are explicit JSON/CSV library definitions, stable building-block identifiers, barcode-schema-driven decoding, and a more declarative reaction-step model.
+- Benchmark-specific limitations documented in the local DELi benchmark README should be described carefully as observations from the shared synthetic benchmark setup, not as global claims about all DELi use cases.
 
 ## DELT-Hit enumeration model
 
@@ -625,4 +648,3 @@ This keeps what is good in DELT-Hit: integrated workflow, spreadsheet accessibil
 6. Add structured failure outputs for enumeration.
 7. Create a new optional `reaction_steps` sheet/schema while keeping current `reaction_graph` support as a compatibility layer.
 8. Write migration examples showing how current `reaction_graph` libraries map to explicit `reaction_steps`.
-
