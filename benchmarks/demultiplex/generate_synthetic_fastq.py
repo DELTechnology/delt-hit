@@ -77,12 +77,27 @@ def generate_distance_three_tags(*, count: int, length: int, offset: int = 0) ->
     raise ValueError(f"Unable to generate {count} tags with minimum Hamming distance 3 and length {length}")
 
 
-def make_building_blocks(*, num_cycles: int, building_blocks_per_cycle: int) -> list[list[dict[str, object]]]:
+def make_building_blocks(
+    *,
+    num_cycles: int,
+    building_blocks_per_cycle: int,
+    num_errors: int,
+) -> list[list[dict[str, object]]]:
     building_blocks_by_cycle: list[list[dict[str, object]]] = []
     for cycle in range(1, num_cycles + 1):
         cycle_rows: list[dict[str, object]] = []
         offset = (cycle - 1) * 10_000
-        tags = generate_distance_three_tags(count=building_blocks_per_cycle, length=TAG_LENGTH, offset=offset % (4**TAG_LENGTH))
+        if num_errors > 0:
+            tags = generate_distance_three_tags(
+                count=building_blocks_per_cycle,
+                length=TAG_LENGTH,
+                offset=offset % (4**TAG_LENGTH),
+            )
+        else:
+            tags = [
+                int_to_dna(offset + tag_idx, TAG_LENGTH)
+                for tag_idx in range(building_blocks_per_cycle)
+            ]
         for code, tag in enumerate(tags, start=1):
             cycle_rows.append(
                 {
@@ -216,7 +231,7 @@ def write_manifest(
         "num_reads_per_compound": num_reads_per_compound,
         "num_errors": num_errors,
         "errors_in_bb_only": errors_in_bb_only,
-        "barcode_min_hamming_distance": DEFAULT_BARCODE_MIN_HAMMING_DISTANCE,
+        "barcode_min_hamming_distance": DEFAULT_BARCODE_MIN_HAMMING_DISTANCE if num_errors > 0 else 0,
         "expected_compounds": expected_compounds(
             num_cycles=num_cycles,
             building_blocks_per_cycle=building_blocks_per_cycle,
@@ -336,6 +351,7 @@ def main(
     building_blocks_by_cycle = make_building_blocks(
         num_cycles=num_cycles,
         building_blocks_per_cycle=building_blocks_per_cycle,
+        num_errors=num_errors,
     )
     write_building_blocks(building_blocks_path, building_blocks_by_cycle)
     compound_count = write_expected_counts(
