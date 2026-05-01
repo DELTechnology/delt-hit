@@ -1,11 +1,12 @@
 from pathlib import Path
+import sys
 
 import pandas as pd
 from loguru import logger
 
 
 base_dir = Path(__file__).resolve().parent
-lane = "lane-2"
+lane = sys.argv[1] if len(sys.argv) > 1 else "lane-1"
 published_dir = base_dir / "published"
 selections_dir = base_dir / lane / "selections"
 

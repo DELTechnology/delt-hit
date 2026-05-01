@@ -1,6 +1,6 @@
 experiment:
-  name: campaign-dual
-  fastq_path: campaign-dual.fastq.gz
+  name: campaign
+  fastq_path: campaign.fastq.gz
   save_dir: ./
   num_cores: 11
 selections:
