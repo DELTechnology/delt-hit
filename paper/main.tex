@@ -520,118 +520,11 @@ TROUBLESHOOTING: While the tool supports some basic input validation it is helpf
   \item Excel file was saved with the latest changes before running the command
 \end{itemize}
 
-\subsubsection{Phase 2: Chemical library enumeration and analysis • TIMING 10 min - 2 h}
-This phase generates all possible chemical structures from your building block combinations and calculates molecular properties for downstream analysis. Library enumeration requires advanced knowledge of the SMARTS/SMIRKS language. While we provide common reaction patterns observed in DNA encoded libraries, library specific tweaks are often necessary.
-
-
-\paragraph{Step 4 \textbar{} Enumerate library compounds from building blocks}
-
-Generate all possible chemical structures by combining building blocks according to the defined reaction schemes:
-
-
-\begin{lstlisting}
-delt-hit library enumerate --config_path=/path/to/config.yaml --graph_only=True  # produce reaction graph only for inspection
-delt-hit library enumerate --config_path=/path/to/config.yaml
-\end{lstlisting}
-Those commands:
-
-\begin{itemize}
-  \item Construct a reaction graph from your building blocks and reactions
-  \item Enumerates all valid compound combinations
-  \item Validates chemical structures
-  \item Saves the complete library catalog
-\end{itemize}
-Expected outputs:
-
-\begin{itemize}
-  \item library.parquet: Complete compound catalog with SMILES and barcode mappings
-  \item reaction\_graph.png: Visual representation of synthetic schema
-  \item additional\_reactions\_graph.png: Visualizes the additional reactions from the reaction\_graph sheet
-  \item building\_block\_reactions\_graph.png: Visualizes the reactions derived from the building block sheets B0, B1, etc.
-\end{itemize}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/image2.png}
-\caption{Complete reaction graph for a DEL with two building blocks (violet), reactions (green), products (red) and starting compounds (blue).}
-\label{fig:figure2}
-\end{figure}
-Performance: Enumeration speed is approximately 1’000-10’000 compounds/second depending on reaction complexity. For a 1 million compound library, expect 2-10 minutes of processing time depending on the machine.
-
-TROUBLESHOOTING:
-
-\begin{itemize}
-  \item Check that all reaction SMIRKS are valid and specific enough to produce a single product
-  \item Ensure reactant and product names match between building blocks and compounds sheets
-  \item Re-run enumeration in debugging mode to visualize the reaction graphs that fail: delt-hit library enumerate --config\_path=/path/to/config.yaml --debug=invalid
-\end{itemize}
-
-\paragraph{Step 5 \textbar{} Calculate molecular properties and descriptors}
-
-Compute comprehensive molecular descriptors for drug-likeness assessment and chemical space characterization:
-
-
-\begin{lstlisting}
-delt-hit library properties --config_path=/path/to/config.yaml
-\end{lstlisting}
-Computed properties include:
-
-\begin{itemize}
-  \item Lipinski descriptors: Molecular weight (MW), partition coefficient (LogP), hydrogen bond donors (HBD), hydrogen bond acceptors (HBA)
-  \item Topological indices: Topological polar surface area (TPSA), rotatable bonds
-  \item Structural complexity metrics: Number of aromatic rings, heavy atom count, formal charge
-  \item Drug-likeness scores: Quantitative estimate of drug-likeness (QED), fraction of sp³ carbons
-\end{itemize}
-Expected outputs:
-
-\begin{itemize}
-  \item properties/properties.parquet: Library catalog augmented with molecular descriptors
-  \item properties/prop\_*.png: Distribution plots for each calculated property
-\end{itemize}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/image3.png}
-\caption{Exemplary plot for the molecular weight distribution of library members.}
-\label{fig:figure3}
-\end{figure}
-Performance note: Property calculation processes approximately 600-1000 compounds/second. For a 1 million compound library, expect 15-30 minutes processing time.
-
-
-\paragraph{Step 6 \textbar{} Generate molecular representations for machine learning}
-
-Create standardized chemical representations compatible with machine learning frameworks:
-
-
-\begin{lstlisting}
-# Morgan fingerprints for similarity analysis
-# ~600-1000 compounds/s
-delt-hit library represent --method=morgan --config_path=/path/to/config.yaml
-
-# BERT embeddings for deep learning applications
-# ~600-1000 compounds/s
-delt-hit library represent --method=bert --config_path=/path/to/config.yaml
-\end{lstlisting}
-Available representation methods:
-
-\begin{itemize}
-  \item morgan: Morgan circular fingerprints (2048-bit vectors) for similarity searching and clustering
-  \item bert: Transformer-based molecular embeddings (768-dimensional vectors) for deep learning
-\end{itemize}
-Expected outputs:
-
-\begin{itemize}
-  \item representations/morgan.npz: Sparse matrix of Morgan fingerprints
-  \item representations/bert.npz: Dense matrix of BERT embeddings
-\end{itemize}
-Note: These representations are compatible with scikit-learn, PyTorch, and TensorFlow for downstream machine learning applications.
-
-
-\subsubsection{Phase 3: Sequence processing and demultiplexing • TIMING 30 min - 4 h}
+\subsubsection{Phase 2: Sequence processing and demultiplexing • TIMING 30 min - 4 h}
 This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
 
 
-\paragraph{Step 7 \textbar{} Configure demultiplexing parameters}
+\paragraph{Step 4 \textbar{} Configure demultiplexing parameters}
 
 The demultiplexing parameters defined in your Excel file control how sequence reads are processed by cutadapt. Key parameters include:
 
@@ -642,7 +535,7 @@ The demultiplexing parameters defined in your Excel file control how sequence re
 As mentioned earlier, we recommend requiring exact matches for selection barcodes (max\_error\_rate = 0, indels = FALSE) to ensure accurate multiplexing, while allowing higher error rates for constant regions depending on their length.
 
 
-\paragraph{Step 8 \textbar{} Prepare and execute sequence demultiplexing}
+\paragraph{Step 5 \textbar{} Prepare and execute sequence demultiplexing}
 
 Generate the demultiplexing scripts with its dependencies and execute the analysis:
 
@@ -672,7 +565,7 @@ Expected outputs:
   \item demultiplex/cutadapt\_output\_files/reads\_with\_adapters.gz: Intermediate files with extracted barcodes
 \end{itemize}
 
-\paragraph{Step 9 \textbar{} Process demultiplexing results and generate count tables}
+\paragraph{Step 6 \textbar{} Process demultiplexing results and generate count tables}
 
 After demultiplexing completes, aggregate the results into count tables for each selection:
 
@@ -699,7 +592,7 @@ Expected outputs:
   \item NOTE: alternatively, counts can be saved as \{selection\_name\}\_counts.txt by using the flag --as\_files=True. To save the counts sorted by codon ids instead of observed counts, set the flag --sort\_by\_counts=False.
 \end{itemize}
 
-\paragraph{Step 10 \textbar{} Generate quality control reports}
+\paragraph{Step 7 \textbar{} Generate quality control reports}
 
 Assess demultiplexing quality with comprehensive statistics and visualizations:
 
@@ -745,11 +638,11 @@ TROUBLESHOOTING: Low read retention (\textless{}50\%) may indicate:
   \item Poor library quality
 \end{itemize}
 
-\subsubsection{Phase 4: Data visualization and interpretation • TIMING 15-60 min}
+\subsubsection{Phase 3: Data visualization and interpretation • TIMING 15-60 min}
 The interactive dashboard provides real-time exploration of raw count data and experimental metadata.
 
 
-\paragraph{Step 11 \textbar{} Launch interactive analysis dashboard}
+\paragraph{Step 8 \textbar{} Launch interactive analysis dashboard}
 
 Visualize demultiplexing results and explore count distributions:
 
@@ -787,6 +680,84 @@ Using the dashboard:
 Note: The dashboard displays raw counts from the demultiplexing step. For statistical comparisons and hit identification, use the enrichment analysis results from Phase 5. The dashboard command accepts counts provided as a .txt file. Users can therefore perform their own custom normalization and simply point the dashboard to the resulting normalized counts.txt file for visualization by using --counts\_path and --selection\_name with the dashboard command.
 
 CRITICAL: The default folder hierarchy as produced by delt-hit process needs to be used or if a custom counts.txt is provided the user needs to pass the selection name with as specified in the selection sheet as well.
+
+
+\subsubsection{Phase 4: Selection-centric enumeration and analysis • TIMING 10 min - 2 h}
+This phase generates all possible chemical structures from your building block combinations and calculates molecular properties for downstream analysis. Library enumeration requires advanced knowledge of the SMARTS/SMIRKS language. While we provide common reaction patterns observed in DNA encoded libraries, library specific tweaks are often necessary.
+
+
+\paragraph{Step 9 \textbar{} Enumerate library compounds from building blocks}
+
+Generate all possible chemical structures by combining building blocks according to the defined reaction schemes:
+
+
+\begin{lstlisting}
+delt-hit library enumerate --config_path=/path/to/config.yaml --graph_only=True  # produce reaction graph only for inspection
+delt-hit library enumerate --config_path=/path/to/config.yaml
+\end{lstlisting}
+Those commands:
+
+\begin{itemize}
+  \item Construct a reaction graph from your building blocks and reactions
+  \item Enumerates all valid compound combinations
+  \item Validates chemical structures
+  \item Saves the complete library catalog
+\end{itemize}
+Expected outputs:
+
+\begin{itemize}
+  \item library.parquet: Complete compound catalog with SMILES and barcode mappings
+  \item reaction\_graph.png: Visual representation of synthetic schema
+  \item additional\_reactions\_graph.png: Visualizes the additional reactions from the reaction\_graph sheet
+  \item building\_block\_reactions\_graph.png: Visualizes the reactions derived from the building block sheets B0, B1, etc.
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/image2.png}
+\caption{Complete reaction graph for a DEL with two building blocks (violet), reactions (green), products (red) and starting compounds (blue).}
+\label{fig:figure2}
+\end{figure}
+Performance: Enumeration speed is approximately 1’000-10’000 compounds/second depending on reaction complexity. For a 1 million compound library, expect 2-10 minutes of processing time depending on the machine.
+
+TROUBLESHOOTING:
+
+\begin{itemize}
+  \item Check that all reaction SMIRKS are valid and specific enough to produce a single product
+  \item Ensure reactant and product names match between building blocks and compounds sheets
+  \item Re-run enumeration in debugging mode to visualize the reaction graphs that fail: delt-hit library enumerate --config\_path=/path/to/config.yaml --debug=invalid
+\end{itemize}
+
+\paragraph{Step 10 \textbar{} Calculate molecular properties and descriptors}
+
+Compute comprehensive molecular descriptors for drug-likeness assessment and chemical space characterization:
+
+
+\begin{lstlisting}
+delt-hit library properties --config_path=/path/to/config.yaml
+\end{lstlisting}
+Computed properties include:
+
+\begin{itemize}
+  \item Lipinski descriptors: Molecular weight (MW), partition coefficient (LogP), hydrogen bond donors (HBD), hydrogen bond acceptors (HBA)
+  \item Topological indices: Topological polar surface area (TPSA), rotatable bonds
+  \item Structural complexity metrics: Number of aromatic rings, heavy atom count, formal charge
+  \item Drug-likeness scores: Quantitative estimate of drug-likeness (QED), fraction of sp³ carbons
+\end{itemize}
+Expected outputs:
+
+\begin{itemize}
+  \item properties/properties.parquet: Library catalog augmented with molecular descriptors
+  \item properties/prop\_*.png: Distribution plots for each calculated property
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/image3.png}
+\caption{Exemplary plot for the molecular weight distribution of library members.}
+\label{fig:figure3}
+\end{figure}
+Performance note: Property calculation processes approximately 600-1000 compounds/second. For a 1 million compound library, expect 15-30 minutes processing time.
 
 
 \subsubsection{Phase 5: Statistical analysis and hit identification • TIMING 10-30 min}
@@ -905,6 +876,39 @@ TROUBLESHOOTING: If no hits are identified:
 \end{itemize}
 
 \input{tables/table12}
+
+
+\subsubsection{Phase 6: Full library enumeration and machine learning representations • TIMING 1 h - 8 h}
+This phase performs full library enumeration and generates molecular representations for downstream machine learning applications. These steps are optional and only required for ML workflows.
+
+\paragraph{Step 14 \textbar{} Generate molecular representations for machine learning}
+
+Create standardized chemical representations compatible with machine learning frameworks:
+
+
+\begin{lstlisting}
+# Morgan fingerprints for similarity analysis
+# ~600-1000 compounds/s
+delt-hit library represent --method=morgan --config_path=/path/to/config.yaml
+
+# BERT embeddings for deep learning applications
+# ~600-1000 compounds/s
+delt-hit library represent --method=bert --config_path=/path/to/config.yaml
+\end{lstlisting}
+Available representation methods:
+
+\begin{itemize}
+  \item morgan: Morgan circular fingerprints (2048-bit vectors) for similarity searching and clustering
+  \item bert: Transformer-based molecular embeddings (768-dimensional vectors) for deep learning
+\end{itemize}
+Expected outputs:
+
+\begin{itemize}
+  \item representations/morgan.npz: Sparse matrix of Morgan fingerprints
+  \item representations/bert.npz: Dense matrix of BERT embeddings
+\end{itemize}
+Note: These representations are compatible with scikit-learn, PyTorch, and TensorFlow for downstream machine learning applications.
+
 
 \subsection{Troubleshooting}
 This section provides solutions to common issues encountered during DELT-Hit analysis.
