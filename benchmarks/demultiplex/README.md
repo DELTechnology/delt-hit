@@ -120,8 +120,8 @@ pixi run python benchmarks/demultiplex/converter/create_deli_inputs.py \
 
 Prepared inputs are written to:
 
-- repo-local `benchmarks/demultiplex/tools/deli/<dataset>/` for prepared DELi inputs and `timing.json`
-- scratch-local `$DATA_DIR/tools/deli/<dataset>/` for generated DELi inputs during node execution
+- repo-local `benchmarks/demultiplex/tools/deli/<dataset>/` for cached DELi benchmark configuration files plus `timing.json`
+- scratch-local `$DATA_DIR/tools/deli/<dataset>/` for generated DELi library/input assets during node execution
 
 ### DELT-Hit
 
@@ -133,8 +133,8 @@ pixi run python benchmarks/demultiplex/converter/create_delt_inputs.py \
 
 Prepared inputs are written to:
 
-- repo-local `benchmarks/demultiplex/tools/delt/<dataset>/` for prepared DELT-Hit inputs and `timing.json`
-- scratch-local `$DATA_DIR/tools/delt/<dataset>/` for generated DELT-Hit inputs during node execution
+- repo-local `benchmarks/demultiplex/tools/delt/<dataset>/` for cached DELT-Hit benchmark configuration files plus `timing.json`
+- scratch-local `$DATA_DIR/tools/delt/<dataset>/` for generated DELT-Hit demultiplex inputs during node execution
 
 Use `--num-cores 11` when preparing DELT-Hit inputs inside a Slurm job with `12` CPUs so one core remains outside the tool's configured worker count.
 
