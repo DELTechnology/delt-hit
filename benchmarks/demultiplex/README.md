@@ -5,7 +5,7 @@
 The benchmark commands below assume these environments already exist:
 
 - DELT-Hit: the project Pixi environment, invoked with `pixi run ...`
-- DELi: [`other_tools/DELi/.venv`](../../other_tools/DELi/.venv)
+- DELi: installed and available on `PATH` as `deli`
 
 ## Dataset Matrix
 
@@ -378,8 +378,6 @@ mkdir -p "$ROOT/.tmp/mpl" "$ROOT/.tmp/fontconfig"
 export MPLCONFIGDIR="$ROOT/.tmp/mpl"
 export XDG_CACHE_HOME="$ROOT/.tmp"
 export FC_CACHEDIR="$ROOT/.tmp/fontconfig"
-export PATH="$ROOT/other_tools/DELi/.venv/bin:$PATH"
-
 deli \
   --config-file "$DELI_DIR/deli_config" \
   decode run \
