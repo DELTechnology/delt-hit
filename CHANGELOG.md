@@ -5,6 +5,7 @@
 ### Added
 - New `visualize enumerate` CLI workflow for reviewer-friendly chemistry outputs, including reaction graphs, reaction schemes, per-building-block structure panels, and configured compound structure panels.
 - New `visualize library` CLI workflow for exporting named-library members as individual structure PNGs with filenames derived from their DEL code combinations (for example `B0=1-B1=0.png`).
+- Explicit dual-display DEL support across library parsing, enumeration, and visualization workflows, including strand-aware building-block validation and dual-display combination handling.
 - Filtered library enumeration from observed `counts.txt` inputs with `--counts_path`, `--top_n`, and `--library_name`, plus named-library support for downstream property generation.
 - Synthetic benchmarking utilities for demultiplexing and enrichment, including FASTQ generation, DELT/DELi input converters, runtime plotting, worker/chunk-size sweeps, and large-library benchmark matrices.
 - Additional experiment templates and supporting-material runs for Favalli and related comparison workflows.
