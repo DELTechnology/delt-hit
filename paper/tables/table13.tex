@@ -2,21 +2,21 @@
 \centering
 \caption{Common issues and solutions}
 \label{tab:table13}
-\begin{tabular}{lll}
+\begin{tabular}{p{2.4cm}p{3.2cm}p{4.0cm}p{5.0cm}}
 \toprule
-Problem & Possible Cause & Solution \\
+Step & Problem & Possible Cause & Solution \\
 \midrule
-command not found: conda & Conda is not installed or not initialized in the shell environment. & Install Conda as described in Step 1 of the protocol and make sure Conda is initialized in your terminal session. On Mac this typically is done by \textasciitilde\{\}/miniconda3/bin/activate and Windows with \textasciitilde\{\}/miniconda3/etc/profile.d/conda.sh \\
-Command fails with unrecognized arguments & Trailing spaces after \textbackslash\{\} when using multiline commands; Mistyped the command & Ensure that multiline commands do not have trailing spaces and ensure that the delt-hit commands are correctly typed. You can find more information for each command by typing delt-hit \textless{}cmd\textgreater{} --help \\
-Demultiplexing fails No such file or directory: '.../input.fastq.gz' & Trailing whitespaces in the file name in as defined in the excel sheet experiment & Remove and whitespaces and spaces in the file name and regenerate the config file with the delt-hit init command \\
-Low demultiplexing efficiency (\textless{}50\%) & Incorrect barcode sequences, inverted barcode sequences & Increase max\_error\_rate parameters; validate barcode sequences against sequencing data; check for adapter contamination \\
-qc/report.txt does not open & Text Editor does not support the encoding. & To show the content use the terminal and the cat command: cat qc/report.txt \\
-R script failures & Missing R packages, R not available in environment & Reinstall R into conda environment; Reinstall R packages using BiocManager; verify R installation with which R; check R version (4.1+ required) \\
-Empty hit lists & Stringent statistical thresholds & Adjust FDR cutoffs (try 0.1 or 0.2 for exploratory analysis); check replicate consistency \\
-Chemical structure errors & Invalid SMILES, incorrect reaction SMIRKS & Validate building block structures using RDKit; check reaction definitions; test reactions with small building block subset; run enumeration in debug mode \\
-"Command not found" errors & Conda environment not activated & Run conda activate delt-hit before executing DELT-Hit commands \\
-Permission denied for shell scripts & Executable permission not set & Run chmod u+x \textless{}script\_name.sh\textgreater{} before executing shell scripts \\
-Poor replicate correlation & Batch effects, technical variability & Review selection protocol for consistency; check for contamination \\
+Experimental setup & command not found: conda & Conda is not installed or not initialized in the shell environment. & Install Conda as described in the Experimental setup section and make sure Conda is initialized in your terminal session. On Mac this typically is done by \textasciitilde\{\}/miniconda3/bin/activate and Windows with \textasciitilde\{\}/miniconda3/etc/profile.d/conda.sh \\
+9 & Command fails with unrecognized arguments & Trailing spaces after \textbackslash\{\} when using multiline commands; Mistyped the command & Ensure that multiline commands do not have trailing spaces and ensure that the delt-hit commands are correctly typed. You can find more information for each command by typing delt-hit \textless{}cmd\textgreater{} --help \\
+9 & Demultiplexing fails No such file or directory: '.../input.fastq.gz' & Trailing whitespaces in the file name in as defined in the excel sheet experiment & Remove any whitespaces and spaces in the file name and regenerate the config file with the delt-hit init command \\
+13 & Low demultiplexing efficiency (\textless{}50\%) & Incorrect barcode sequences, inverted barcode sequences & Increase max\_error\_rate parameters; validate barcode sequences against sequencing data; check for adapter contamination \\
+13 & qc/report.txt does not open & Text Editor does not support the encoding. & To show the content use the terminal and the cat command: cat qc/report.txt \\
+Experimental setup / 18 & R script failures & Missing R packages, R not available in environment & Reinstall R into conda environment; reinstall R packages using BiocManager; verify R installation with which R; check R version (4.1+ required) \\
+18 & Empty hit lists & Stringent statistical thresholds & Adjust FDR cutoffs (try 0.1 or 0.2 for exploratory analysis); check replicate consistency \\
+15 & Chemical structure errors & Invalid SMILES, incorrect reaction SMIRKS & Validate building block structures using RDKit; check reaction definitions; test reactions with a small building block subset; run enumeration in debug mode \\
+Experimental setup & "Command not found" errors & Conda environment not activated & Run conda activate delt-hit before executing DELT-Hit commands \\
+11 & Permission denied for shell scripts & Executable permission not set & Run chmod u+x \textless{}script\_name.sh\textgreater{} before executing shell scripts \\
+18 & Poor replicate correlation & Batch effects, technical variability & Review selection protocol for consistency; check for contamination \\
 \bottomrule
 \end{tabular}
 \end{table}

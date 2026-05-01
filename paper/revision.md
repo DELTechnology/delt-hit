@@ -11,15 +11,15 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 - [x] Add a sentence to the Abstract describing the required skill set or experience level. Added in `paper/main.tex`.
 - [x] Add a sentence to the Abstract describing how long the protocol takes. Added in `paper/main.tex` with placeholder timing `[X-Y] h` still to be finalized.
 - [x] Add a software link in the Abstract. Added in `paper/main.tex`.
-- [ ] Rework the Technical Overview section to match Nature Protocols format, moving content into Experimental Design and/or Materials > Software as needed.
-- [ ] Reformat the Procedure as one continuously numbered sequence.
-- [ ] Limit the Procedure hierarchy to one subheading level.
+- [x] Rework the Technical Overview section to match Nature Protocols format, moving content into Experimental Design and/or Materials > Software as needed.
+- [x] Reformat the Procedure as one continuously numbered sequence.
+- [x] Limit the Procedure hierarchy to one subheading level.
 - [ ] Format options within steps as `A`, `B`, `C`, and sub-steps within options as roman numerals.
 - [ ] Move optional branches that break linear flow into boxes and refer to them from the main Procedure.
-- [ ] Ensure explanatory text sits either inside numbered steps or in callouts such as `CRITICAL STEP` or `CAUTION`.
-- [ ] Add Procedure step numbers to the Timing section.
-- [ ] Add the word `Troubleshooting` after each relevant Procedure step.
-- [ ] Add a `Step` column to the Troubleshooting table.
+- [x] Ensure explanatory text sits either inside numbered steps or in callouts such as `CRITICAL STEP` or `CAUTION`.
+- [x] Add Procedure step numbers to the Timing section.
+- [x] Add the word `Troubleshooting` after each relevant Procedure step.
+- [x] Add a `Step` column to the Troubleshooting table.
 - [ ] Check all figures against Nature Protocols image requirements and confirm that all figures are new.
 - [ ] Prepare supplementary information in the required Nature Protocols format, including SI inventory, Extended Data, Supplementary Figures PDF, and Source Data files.
 

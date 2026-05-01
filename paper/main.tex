@@ -34,6 +34,9 @@
   citecolor=blue,
 }
 
+\newcommand{\protocolstep}[2]{\par\medskip\noindent\textbf{#1 \textbar{} #2}\par}
+\newcommand{\setupitem}[1]{\par\medskip\noindent\textbf{#1}\par}
+
 \title{An end-to-end computational framework for DNA-encoded chemical library analysis}
 \author{Adriano Martinelli+*, Alice Lessing+, Gary Hoppeler, Andreas Gloger, Louise Plais,, Jörg Scheuermann*\\
 \small Institute of Pharmaceutical Sciences, Department of Chemistry and Applied Biosciences, ETH Zurich 8083 Zurich, Switzerland\\
@@ -55,22 +58,6 @@ Key Points
   \item Validated algorithms: Integrates proven bioinformatics tools (Cutadapt for sequence processing, edgeR for statistical analysis) with specialized DEL-specific optimizations, error handling, and quality control metrics
   \item Flexible and robust design: Modular architecture accommodates diverse library formats, custom reaction templates, and building block definitions
   \item Machine learning ecosystem integration: Generates standardized, analysis-ready datasets compatible with downstream machine learning workflows for advanced hit prediction, structure-activity relationship analysis, and virtual screening applications
-\end{itemize}
-
-\subsection{Technical Overview}
-DELT-Hit is implemented as a Python package organized into five core modules:
-
-\begin{itemize}
-  \item init: Project initialization and configuration management with Excel template support
-  \item demultiplex: Sequence processing and demultiplexing with adaptive error correction
-  \item qc: Quality control plot generation and statistical summaries
-  \item report: Comprehensive reporting with sequence mapping statistics
-  \item library: Chemical structure reconstruction and molecular property calculation
-  \item enumerate: SMILES construction from reaction steps and building blocks
-  \item properties: Molecular descriptor computation and distribution visualization
-  \item represent: Chemical representation generation for downstream machine learning
-  \item dashboard: Interactive data exploration and real-time visualization interface
-  \item analyse: Statistical analysis and hit ranking with multiple enrichment methods
 \end{itemize}
 
 \subsection{Introduction}
@@ -220,7 +207,7 @@ Operating systems:
 \end{itemize}
 
 \subsubsection{Software dependencies}
-Core requirements:
+DELT-Hit is implemented as a Python package organized into the modules \texttt{init}, \texttt{demultiplex}, \texttt{qc}, \texttt{report}, \texttt{library}, \texttt{enumerate}, \texttt{properties}, \texttt{represent}, \texttt{dashboard}, and \texttt{analyse}. Core requirements:
 
 \begin{itemize}
   \item Python 3.12 or higher with pip package manager
@@ -261,11 +248,11 @@ The provided example dataset is based on a toy library based on the architecture
 
 \input{tables/table2}
 
-\subsubsection{Software installation}
+\subsubsection{Experimental setup}
 The following installation procedure needs to be performed once before running the DELT-Hit protocol and is executed entirely from the command line. All subsequent analyses are likewise performed via terminal-based commands within the same software environment.
 
 
-\paragraph{Step 1: Install Git version control system}
+\setupitem{Install Git version control system}
 
 Git is required to download the DELT-Hit package from the GitHub repository.
 
@@ -300,7 +287,7 @@ git --version
 # Expected output: git version 2.x.x or higher
 \end{lstlisting}
 
-\paragraph{Step 2: Environment setup with Conda}
+\setupitem{Environment setup with Conda}
 
 We recommend using Miniconda package manager to create an isolated environment ensuring proper dependency management. This step only needs to be performed once.
 
@@ -319,10 +306,10 @@ conda install pygraphviz -y
 # Install DELT-Hit package
 pip install git+https://git@github.com/DELTechnology/delt-hit.git
 \end{lstlisting}
-Note: You will need to activate the delt-hit environment (conda activate delt-hit) each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with conda during installation such that the conda command is available when opening a new terminal window. Should you not be able to activate conda after the installation please refer to the Troubleshooting section for help.
+CRITICAL STEP: You will need to activate the delt-hit environment (conda activate delt-hit) each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with conda during installation such that the conda command is available when opening a new terminal window. Should you not be able to activate conda after the installation please refer to the Troubleshooting section for help.
 
 
-\paragraph{Step 3: R environment configuration}
+\setupitem{R environment configuration}
 
 Statistical analysis components require R with specific Bioconductor packages. This configuration only needs to be performed once.
 
@@ -341,7 +328,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install(c("edgeR", "limma"))
 \end{lstlisting}
 
-\paragraph{Step 4: Installation verification}
+\setupitem{Installation verification}
 
 Verify that all components are correctly installed:
 
@@ -364,21 +351,16 @@ The configuration file defines library structure, experimental design, and analy
 In this phase, we will create a YAML configuration file from an Excel spreadsheet that contains all the information about your DEL library and experimental design.
 
 
-\paragraph{Step 1 \textbar{} Prepare Excel configuration file}
+\protocolstep{1}{Create the experiment sheet}
 
-Create an Excel file with multiple sheets defining your experiment. Each sheet contains specific information required for the analysis. The following sections describe the required sheets and their format. For convenience, users can start from the template provided in Table 3.
-
-
-\subparagraph{1.1 Create the experiment sheet}
-
-This sheet contains basic experiment parameters including experiment name, file paths, and computational resources.
+Create an Excel file with multiple sheets defining your experiment. Each sheet contains specific information required for the analysis. The following sections describe the required sheets and their format. For convenience, users can start from the template provided in Table 3. The experiment sheet contains basic experiment parameters including experiment name, file paths, and computational resources.
 
 
 \input{tables/table3}
 CRITICAL STEP: Use absolute paths or paths relative to your working directory for fastq\_path and save\_dir and ensure there are no trailing whitespaces.
 
 
-\subparagraph{1.2 Create the selections sheet}
+\protocolstep{2}{Create the selections sheet}
 
 This sheet defines the experimental design including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes an experimental setting (for example a different protein target or experimental condition like controls) and is identified by a unique combination of S0 and S1 primers to demultiplex the sequencing data into the individual experiments.
 
@@ -403,7 +385,7 @@ Optional columns:
   \item other columns can be added up to the users discretion
 \end{itemize}
 
-\subparagraph{1.3 Create the structure sheet}
+\protocolstep{3}{Create the structure sheet}
 
 This sheet defines the DNA construct architecture and error tolerance for demultiplexing.
 
@@ -429,7 +411,7 @@ Column descriptions:
 CRITICAL STEP: Selection barcodes should require perfect matches (max\_error\_rate = 0, indels = FALSE) to ensure accurate multiplexing, while constant regions can tolerate higher error rates depending on their length.
 
 
-\subparagraph{1.4 Create the constant sheet}
+\protocolstep{4}{Create the constant sheet}
 
 This sheet contains the DNA sequences for all constant regions defined in the structure sheet.
 
@@ -438,14 +420,9 @@ This sheet contains the DNA sequences for all constant regions defined in the st
 Note: The name column must match the constant region names defined in the structure sheet.
 
 
-\paragraph{Step 2 \textbar{} Define chemical building blocks and reactions}
+\protocolstep{5}{Create building block sheets (B0, B1, etc.)}
 
-DELT-Hit supports libraries with an arbitrary number of building blocks. For each building block region defined in the structure sheet, the user must define the used DNA codons in a sheet named according to the structure sheet (i.e. B0, B1, ..., BN). To enable library enumeration and property calculation, users must define the chemical structure of the building blocks and reactions used in the library synthesis as well.
-
-
-\subparagraph{2.1 Create building block sheets (B0, B1, etc.)}
-
-For each building block position defined in your structure sheet, create a separate sheet containing all building blocks for that position.
+DELT-Hit supports libraries with an arbitrary number of building blocks. For each building block region defined in the structure sheet, the user must define the used DNA codons in a sheet named according to the structure sheet (i.e. B0, B1, ..., BN). To enable library enumeration and property calculation, users must define the chemical structure of the building blocks and reactions used in the library synthesis as well. For each building block position defined in your structure sheet, create a separate sheet containing all building blocks for that position.
 
 
 \input{tables/table7}
@@ -463,7 +440,7 @@ Required columns for library enumeration:
   \item product: Name of the product formed
 \end{itemize}
 
-\subparagraph{2.2 Create the reactions sheet}
+\protocolstep{6}{Create the reactions sheet}
 
 Only required for library enumeration. Define all chemical reactions used during library synthesis using SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS must be adapted to the building blocks used to yield a single product for each transformation. If a reaction is used several times throughout library synthesis, these must be defined as individual reactions. Table 9 demonstrates this with two amide-bond forming reactions (ABF1 and ABF2)
 
@@ -472,14 +449,14 @@ Only required for library enumeration. Define all chemical reactions used during
 Note: The name column must match the reaction names used in the building block sheets.
 
 
-\subparagraph{2.3 Create the compounds sheet}
+\protocolstep{7}{Create the compounds sheet}
 
 Only required for library enumeration. Define any additional chemical compounds (scaffolds, reagents) used in the reactions.
 
 
 \input{tables/table9}
 
-\paragraph{2.4 Create the additional reaction steps}
+\protocolstep{8}{Create the additional reaction steps}
 
 Only required for advanced library enumeration. If the synthesis of the library requires additional reaction steps, for example for conversion of precursor molecules or deprotection steps before reactions, those can be described in the sheet reaction\_graph. A reaction is defined by at most two educts that react through a reaction to a new product. For each additional reaction step you want to add, include a new row with the corresponding compound names and reaction names from the reactions and compounds sheet.
 
@@ -492,7 +469,7 @@ scaffold\_1 + scaffold\_2 -\textgreater{} SR -\textgreater{} scaffold\_1A + scaf
 
 \input{tables/table11}
 
-\paragraph{Step 3 \textbar{} Generate configuration file}
+\protocolstep{9}{Generate the configuration file}
 
 Once your Excel file is complete with all required sheets, generate the YAML configuration file:
 
@@ -514,7 +491,7 @@ Configuration created at /path/to/results/experiments/experiment-1/config.yaml
 \end{lstlisting}
 CRITICAL STEP: Review the generated YAML file to verify all information was parsed correctly. The YAML file will be used for all subsequent analysis steps.
 
-TROUBLESHOOTING: While the tool supports some basic input validation it is helpful to check the following if the command fails:
+\textbf{Troubleshooting.} While the tool supports some basic input validation it is helpful to check the following if the command fails:
 
 \begin{itemize}
   \item All building blocks are present in the configuration file
@@ -526,7 +503,7 @@ TROUBLESHOOTING: While the tool supports some basic input validation it is helpf
 This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
 
 
-\paragraph{Step 4 \textbar{} Configure demultiplexing parameters}
+\protocolstep{10}{Configure demultiplexing parameters}
 
 The demultiplexing parameters defined in your Excel file control how sequence reads are processed by cutadapt. Key parameters include:
 
@@ -537,7 +514,7 @@ The demultiplexing parameters defined in your Excel file control how sequence re
 As mentioned earlier, we recommend requiring exact matches for selection barcodes (max\_error\_rate = 0, indels = FALSE) to ensure accurate multiplexing, while allowing higher error rates for constant regions depending on their length.
 
 
-\paragraph{Step 5 \textbar{} Prepare and execute sequence demultiplexing}
+\protocolstep{11}{Prepare and execute sequence demultiplexing}
 
 Generate the demultiplexing scripts with its dependencies and execute the analysis:
 
@@ -567,7 +544,7 @@ Expected outputs:
   \item demultiplex/cutadapt\_output\_files/reads\_with\_adapters.gz: Intermediate files with extracted barcodes
 \end{itemize}
 
-\paragraph{Step 6 \textbar{} Process demultiplexing results and generate count tables}
+\protocolstep{12}{Process demultiplexing results and generate count tables}
 
 After demultiplexing completes, aggregate the results into count tables for each selection:
 
@@ -594,7 +571,7 @@ Expected outputs:
   \item NOTE: alternatively, counts can be saved as \{selection\_name\}\_counts.txt by using the flag --as\_files=True. To save the counts sorted by codon ids instead of observed counts, set the flag --sort\_by\_counts=False.
 \end{itemize}
 
-\paragraph{Step 7 \textbar{} Generate quality control reports}
+\protocolstep{13}{Generate quality control reports}
 
 Assess demultiplexing quality with comprehensive statistics and visualizations:
 
@@ -632,7 +609,7 @@ Quality assessment criteria:
   \item Read retention: \textgreater{}70\% of input reads should be successfully assigned
   \item Barcode coverage: Most building blocks should have \textgreater{}0 reads
 \end{itemize}
-TROUBLESHOOTING: Low read retention (\textless{}50\%) may indicate:
+\textbf{Troubleshooting.} Low read retention (\textless{}50\%) may indicate:
 
 \begin{itemize}
   \item Incorrect barcode sequences in configuration
@@ -644,7 +621,7 @@ TROUBLESHOOTING: Low read retention (\textless{}50\%) may indicate:
 The interactive dashboard provides real-time exploration of raw count data and experimental metadata.
 
 
-\paragraph{Step 8 \textbar{} Launch interactive analysis dashboard}
+\protocolstep{14}{Launch the interactive analysis dashboard}
 
 Visualize demultiplexing results and explore count distributions:
 
@@ -681,14 +658,14 @@ Using the dashboard:
 \end{itemize}
 Note: The dashboard displays raw counts from the demultiplexing step. For statistical comparisons and hit identification, use the enrichment analysis results from Phase 5. The dashboard command accepts counts provided as a .txt file. Users can therefore perform their own custom normalization and simply point the dashboard to the resulting normalized counts.txt file for visualization by using --counts\_path and --selection\_name with the dashboard command.
 
-CRITICAL: The default folder hierarchy as produced by delt-hit process needs to be used or if a custom counts.txt is provided the user needs to pass the selection name with as specified in the selection sheet as well.
+CRITICAL STEP: The default folder hierarchy as produced by delt-hit process needs to be used or if a custom counts.txt is provided the user needs to pass the selection name with as specified in the selection sheet as well.
 
 
 \subsubsection{Phase 4: Selection-centric enumeration and analysis • TIMING 10 min - 2 h}
 This phase generates chemical structures and calculates molecular properties for the top enriched compounds identified in a given selection. Library enumeration requires advanced knowledge of the SMARTS/SMIRKS language. While we provide common reaction patterns observed in DNA encoded libraries, library specific tweaks are often necessary.
 
 
-\paragraph{Step 9 \textbar{} Enumerate top compounds from a selection}
+\protocolstep{15}{Enumerate top compounds from a selection}
 
 Generate chemical structures for the top enriched compounds identified in a given selection. First visualize the reaction graph to verify the library architecture, then enumerate the top hits:
 
@@ -727,7 +704,7 @@ Expected outputs:
 \end{figure}
 Performance: Enumeration speed is approximately 1’000-10’000 compounds/second depending on reaction complexity. For a 1 million compound library, expect 2-10 minutes of processing time depending on the machine.
 
-TROUBLESHOOTING:
+\textbf{Troubleshooting.}
 
 \begin{itemize}
   \item Check that all reaction SMIRKS are valid and specific enough to produce a single product
@@ -735,7 +712,7 @@ TROUBLESHOOTING:
   \item Re-run enumeration in debugging mode to visualize the reaction graphs that fail: delt-hit library enumerate --config\_path=/path/to/config.yaml --debug=invalid
 \end{itemize}
 
-\paragraph{Step 10 \textbar{} Visualize and calculate molecular properties of top hits}
+\protocolstep{16}{Visualize and calculate molecular properties of top hits}
 
 Visualize the enumerated top hits and compute comprehensive molecular descriptors for drug-likeness assessment and chemical space characterization of the selected compounds:
 
@@ -772,7 +749,7 @@ Performance note: Property calculation processes approximately 600-1000 compound
 This phase identifies enriched library members by comparing selection conditions using established statistical methods.
 
 
-\paragraph{Step 12 \textbar{} Define statistical comparisons}
+\protocolstep{17}{Define statistical comparisons}
 
 From the information in the selections sheet, create a new dedicated configuration yaml file to specify which selections to compare.
 
@@ -805,7 +782,7 @@ experiments:
       group: protein
 \end{lstlisting}
 
-\paragraph{Step 13 \textbar{} Perform enrichment analysis with statistical methods}
+\protocolstep{18}{Perform enrichment analysis with statistical methods}
 
 DELT-Hit supports two statistical approaches for identifying enriched compounds. Both methods generate an Rscript that can be executed and/or further modified by the user.
 
@@ -871,7 +848,7 @@ Interpreting results:
 \end{itemize}
 CRITICAL STEP: Always examine replicate correlation plots to verify data quality before interpreting hit lists. Poor correlation may indicate technical problems or batch effects.
 
-TROUBLESHOOTING: If no hits are identified:
+\textbf{Troubleshooting.} If no hits are identified:
 
 \begin{itemize}
   \item Check that experimental groups are correctly assigned
@@ -889,7 +866,7 @@ TROUBLESHOOTING: If no hits are identified:
 \subsubsection{Phase 6: Full library enumeration and machine learning representations • TIMING 1 h - 8 h}
 This phase performs full library enumeration and generates molecular representations for downstream machine learning applications. These steps are optional and only required for ML workflows.
 
-\paragraph{Step 12 \textbar{} Enumerate the full library}
+\protocolstep{19}{Enumerate the full library}
 
 Enumerate all library members for downstream machine learning tasks:
 
@@ -897,7 +874,7 @@ Enumerate all library members for downstream machine learning tasks:
 delt-hit library enumerate --config_path=$CONFIG_PATH
 \end{lstlisting}
 
-\paragraph{Step 13 \textbar{} Calculate molecular properties for the full library}
+\protocolstep{20}{Calculate molecular properties for the full library}
 
 Calculate molecular properties for all library members:
 
@@ -905,7 +882,7 @@ Calculate molecular properties for all library members:
 delt-hit library properties --config_path=$CONFIG_PATH
 \end{lstlisting}
 
-\paragraph{Step 14 \textbar{} Generate molecular representations for machine learning}
+\protocolstep{21}{Generate molecular representations for machine learning}
 
 Create standardized chemical representations compatible with machine learning frameworks:
 
