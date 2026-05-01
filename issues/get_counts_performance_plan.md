@@ -150,9 +150,9 @@ This means the serial path gets both the isal decompression speedup and the C-le
 ### 4. Build and smoke-test
 
 ```bash
-uv run python setup.py build_ext --inplace
+pixi run python setup.py build_ext --inplace
 
-uv run python -c "
+pixi run python -c "
 from delt_hit.demultiplex._parse import parse_chunk
 chunk = b'r1?S0.GAT.2?B1.GCC.5\nr2?S0.GAT.2?B1.GCC.5\n'
 print(parse_chunk(chunk))
@@ -165,7 +165,7 @@ print(parse_chunk(chunk))
 ### 5. Correctness check against Python implementation
 
 ```bash
-uv run python - <<'EOF'
+pixi run python - <<'EOF'
 from delt_hit.demultiplex._parse import parse_chunk
 from delt_hit.demultiplex.postprocess import _count_bytes_chunk, _iter_byte_chunks
 from pathlib import Path
@@ -195,7 +195,7 @@ Update `tests/benchmark_get_counts.py` to add a third timing row:
 Run with:
 
 ```bash
-uv run python tests/benchmark_get_counts.py
+pixi run python tests/benchmark_get_counts.py
 ```
 
 ---

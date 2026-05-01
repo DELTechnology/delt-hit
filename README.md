@@ -5,103 +5,54 @@ Welcome to `delt-hit`! An end-to-end computational framework for DNA-encoded che
 ## 🚀 Installation
 
 This guide provides instructions for setting up `delt-hit` for both regular users and developers.
-
-### Prerequisites
-
-Before you begin, make sure you have the following installed:
-
-#### 1. Conda
-
-We recommend using the [Miniconda](https://docs.anaconda.com/miniconda) package manager to create an isolated
-environment for this project. This ensures that all dependencies are managed correctly.
-
-- [Download and install Miniconda](https://docs.anaconda.com/miniconda#latest-miniconda-installer-links) for your
-  operating system.
-- After installation, you should be able to use the `conda` command in your terminal.
-
-#### 2. R Environment
-
-Some analysis features in `delt-hit` (like enrichment analysis with `edgeR`) depend on R.
-
-- **Install R:** Download and install R from the [Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/).
-- **Install R Packages:** Once R is installed, open an R console and run the following commands to install the required
-  packages:
-    ```R
-    # Install tidyverse and GGally from CRAN
-    install.packages(c("tidyverse", "GGally"))
-
-    # Install BiocManager
-    if (!require("BiocManager", quietly = TRUE))
-        install.packages("BiocManager")
-
-    # Install edgeR and limma from Bioconductor
-    BiocManager::install(c("edgeR", "limma"))
-    ```
+Use either **[Pixi](https://pixi.sh/latest/)** (recommended) or **[Conda](https://docs.anaconda.com/miniconda)** to manage the environment.
 
 ### 🧑‍🔬 User Installation
 
-This is the recommended way for most users.
+Clone the repository:
 
-1. **Create and activate a Conda environment:**
-   ```bash
-   conda create -n delt-hit python=3.12 -y
-   conda activate delt-hit
-   ```
-   > 💡 Always activate this environment (`conda activate delt-hit`) before using `delt-hit`.
+```bash
+git clone https://github.com/DELTechnology/delt-hit.git
+cd delt-hit
+```
 
-2. **Install `delt-hit`:**
-   Install the package directly from GitHub using `pip`:
-   ```bash
-   conda install pygraphviz -y
-   pip install git+https://github.com/DELTechnology/delt-hit.git
-   ```
-   > **Note:** The `delt-hit` package is under active development. To get the latest version of `cutadapt` required by
-   this package, please run `pip install git+https://github.com/marcelm/cutadapt.git` (this command can be ignored once
-   Cutadapt 4.10 is released).
+#### Option A: Pixi (recommended)
 
-3. **Verify Installation:**
-   Check that the CLI is working:
-   ```bash
-   delt-hit --help
-   ```
-   You should see a list of available commands.
+```bash
+pixi install
+pixi run delt-hit --help
+```
+
+#### Option B: Conda
+
+```bash
+conda create -n delt-hit python=3.12 -y
+conda activate delt-hit
+conda install pygraphviz -y
+pip install .
+delt-hit --help
+```
+
+#### R dependencies (optional)
+
+Required only for enrichment analysis with `edgeR`:
+
+```R
+install.packages(c("tidyverse", "GGally"))
+if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+BiocManager::install(c("edgeR", "limma"))
+```
 
 ### 👩‍💻 Developer Installation
 
-If you want to contribute to the development of `delt-hit`, follow these steps.
+Same as the user installation above, but pass the `-e` flag to install in editable mode with dev dependencies:
 
-1. **Configure SSH for GitHub:**
-   Make sure you have
-   an [SSH key added to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
-   to clone the repository.
-
-2. **Clone the Repository:**
-   ```bash
-   git clone git@github.com:DELTechnology/delt-hit.git
-   cd delt-hit
-   ```
-
-3. **Create and activate the Conda environment:**
-   ```bash
-   conda create -n delt-dev python=3.12 -y
-   conda activate delt-dev
-   ```
-
-4. **Install in Editable Mode:**
-   Install the package with all development and testing dependencies:
-   ```bash
-   pip install -e ".[dev,test]"
-   ```
-   > 🔧 This "editable" install means that any changes you make to the source code will be immediately reflected when you
-   run the `delt-hit` command.
-
-5. **(Optional) Install `pigz` for parallel processing:**
-   For faster demultiplexing on macOS, install `pigz` using [Homebrew](https://brew.sh/):
-   ```bash
-   brew install pigz
-   ```
+- **Pixi:** `pixi install -e dev`
+- **Conda:** `pip install -e ".[dev,test]"` instead of `pip install .`
 
 ## 🧪 Example Workflow
+
+A complete end-to-end example is available in [`supporting_material/experiments/example-single-stranded/`](supporting_material/experiments/example-single-stranded/); see [`supporting_material/README.md`](supporting_material/README.md) for full instructions.
 
 Here is a typical workflow for using `delt-hit`:
 
@@ -125,25 +76,25 @@ Here is a typical workflow for using `delt-hit`:
    ```yaml
    experiments:
    - name: protein_vs_no_protein
-     save_dir: experiments/template/analysis
+     save_dir: campaign/analysis
      selections:
        - name: AG24_4
-         counts_path: experiments/template/selections/AG24_4/counts.txt
+         counts_path: campaign/selections/AG24_4/counts.txt
          group: no_protein
        - name: AG24_5
-         counts_path: experiments/template/selections/AG24_5/counts.txt
+         counts_path: campaign/selections/AG24_5/counts.txt
          group: no_protein
        - name: AG24_6
-         counts_path: experiments/template/selections/AG24_6/counts.txt
+         counts_path: campaign/selections/AG24_6/counts.txt
          group: no_protein
        - name: AG24_13
-         counts_path: experiments/template/selections/AG24_13/counts.txt
+         counts_path: campaign/selections/AG24_13/counts.txt
          group: protein
        - name: AG24_14
-         counts_path: experiments/template/selections/AG24_14/counts.txt
+         counts_path: campaign/selections/AG24_14/counts.txt
          group: protein
        - name: AG24_15
-         counts_path: experiments/template/selections/AG24_15/counts.txt
+         counts_path: campaign/selections/AG24_15/counts.txt
          group: protein
      ```
 
