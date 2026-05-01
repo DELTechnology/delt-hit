@@ -302,7 +302,7 @@ After the Slurm jobs finish, collect the corresponding Slurm accounting metrics 
 `job-stats.json` files next to each `timing.json`:
 
 ```bash
-uv run python benchmarks/demultiplex/collect_job_stats.py
+pixi run python benchmarks/demultiplex/collect_job_stats.py
 ```
 
 ## What `run_split_timing.py` Measures
@@ -325,7 +325,7 @@ Each run also compares the observed output against `expected_counts.tsv` and rec
 To generate the `job-stats.json` files required by the peak-memory plots, run:
 
 ```bash
-uv run python benchmarks/demultiplex/collect_job_stats.py
+pixi run python benchmarks/demultiplex/collect_job_stats.py
 ```
 
 This queries `sacct` for completed jobs whose Slurm job name matches
@@ -339,11 +339,11 @@ This queries `sacct` for completed jobs whose Slurm job name matches
 After the timing runs are available under `benchmarks/demultiplex/tools`, generate the current runtime plots with:
 
 ```bash
-uv run python benchmarks/demultiplex/plot_benchmark_runtimes.py
+pixi run python benchmarks/demultiplex/plot_benchmark_runtimes.py
 
-uv run python  benchmarks/demultiplex/plot_2cycle_bbpc_comparison.py
+pixi run python  benchmarks/demultiplex/plot_2cycle_bbpc_comparison.py
 
-uv run python benchmarks/demultiplex/plot_peak_memory.py
+pixi run python benchmarks/demultiplex/plot_peak_memory.py
 ```
 
 This writes:
