@@ -23,7 +23,7 @@ If `campaign.fastq.gz` is not present locally, download it from figshare first:
 
 ```bash
 cd supporting_material/experiments/example-single-stranded
-bash download-from-figshare.sh
+bash download.sh
 ```
 
 Then run the workflow commands listed in `run.sh`:
