@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run python3
+#!/usr/bin/env python3
 """Plot peak RSS memory usage for DELi and DELT-Hit across synthetic libraries."""
 
 from __future__ import annotations

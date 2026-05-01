@@ -4,14 +4,15 @@
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \citation{ref1,ref2,ref3,ref4,ref5,ref6,ref7,ref8,ref9}
 \citation{ref4,ref10}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \citation{ref11}
 \citation{ref11,ref7}
+\citation{ref7,ref8,ref9,ref12}
 \citation{ref13}
 \citation{ref14}
 \citation{ref11}
 \citation{ref15,ref16,ref17,ref18,ref19,ref20,ref21,ref22,ref23,ref24,ref25,ref26,ref27,ref28}
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.1}Introduction}{2}{subsection.0.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.1.1}Development of the protocol}{2}{subsubsection.0.1.1}\protected@file@percent }
+\citation{ref29}
 \citation{ref29}
 \citation{ref29}
 \citation{ref29}
@@ -19,109 +20,110 @@
 \citation{ref33,ref34}
 \citation{ref35}
 \citation{ref36}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Development of the protocol}{2}{subsection.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Overview of the procedure}{2}{subsection.1.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces DELT-Hit is organized into analysis modules (blue) that align with the wet-lab DEL workflow (green). DEL synthesis (A) proceeds through iterative cycles of building block addition and encoding. Libraries are then screened in affinity-based selection experiments (B), after which retained DNA tags are PCR-amplified and sequenced. DELT-Hit uses Cutadapt\cite  {ref29} to demultiplex sequencing reads (C) with user-defined error tolerances and produces count matrices for combinations of selection and building block codes. In parallel, library compounds can be enumerated in silico (D) from building block structures and reaction SMIRKS definitions, and molecular properties can be calculated (E). DELT-Hit then combines count data and chemical information for hit analysis (F), quality control, enrichment ranking, and interactive data exploration. The workflow also exports molecular representations, including Morgan fingerprints and BERT embeddings, for downstream machine-learning analyses.}}{3}{figure.caption.2}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:figure1}{{1}{3}{DELT-Hit is organized into analysis modules (blue) that align with the wet-lab DEL workflow (green). DEL synthesis (A) proceeds through iterative cycles of building block addition and encoding. Libraries are then screened in affinity-based selection experiments (B), after which retained DNA tags are PCR-amplified and sequenced. DELT-Hit uses Cutadapt\cite {ref29} to demultiplex sequencing reads (C) with user-defined error tolerances and produces count matrices for combinations of selection and building block codes. In parallel, library compounds can be enumerated in silico (D) from building block structures and reaction SMIRKS definitions, and molecular properties can be calculated (E). DELT-Hit then combines count data and chemical information for hit analysis (F), quality control, enrichment ranking, and interactive data exploration. The workflow also exports molecular representations, including Morgan fingerprints and BERT embeddings, for downstream machine-learning analyses}{figure.caption.2}{}}
 \citation{ref37}
 \citation{ref38}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.1.2}Overview of the procedure}{3}{subsubsection.0.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.1.3}Applications of the method}{3}{subsubsection.0.1.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces DELT-Hit is organized in several modules (blue rectangles) which integrate seamlessly with the wet-lab DEL workflow (green rectangles). The synthesis of the DEL (A.) from selected building blocks is done over iterative cycles of building block addition and encoding. DELs are then interrogated in affinity-based selection experiments (B.) against relevant biological targets. Whilst non-binding library members are washed away, DNA-encoded small molecules bound to the target can be selectively eluted. The coding information of selection eluates is then amplified by PCR and sequenced through next-generation sequencing. To reveal the identities of the selected compounds, DELT-Hit uses cutadapt\cite  {ref29} to demultiplex the obtained sequencing data (C.), allowing for user-specified error rates. The obtained counts matrix tabulates sequence counts for all combinations of codes and enables resolution between different selection experiments through distinct selection codes. In parallel, in silico enumeration of library compounds (D.) can be performed using SMILES to represent building block structures and customizable reaction SMIRKS to define the coupling steps. Properties and molecular descriptors for the compounds comprised within the in silico libraries can be computed (E.) to assess drug-likeness and overall library properties. Importantly, DELT-Hit can already be used to guide library planning and building block selection through its library enumeration (D.) and property calculation (E.) modules by generating prospective libraries in silico and analysing their chemical properties. Hit analysis by DELT-Hit (F.) integrates the sequencing data within the counts matrix and the molecular information generated through library enumeration and property calculation. DELT-Hit also enables an assessment of data quality, through quality control metrics giving insight into retention of reads during demultiplexing, barcode coverage and reproducibility between replicates. To evaluate hits, library members can be ranked according to their enrichment, using several ranking methods such as edgeR and counts and the dashboard provides an intuitive visualisation of selection fingerprints and enables their interactive exploration. Finally, DELT-Hit provides the obtained enrichment data and representations of library compounds as Morgan fingerprints and BERT embeddings in a format ready for downstream machine learning applications.}}{4}{figure.caption.1}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:figure1}{{1}{4}{DELT-Hit is organized in several modules (blue rectangles) which integrate seamlessly with the wet-lab DEL workflow (green rectangles). The synthesis of the DEL (A.) from selected building blocks is done over iterative cycles of building block addition and encoding. DELs are then interrogated in affinity-based selection experiments (B.) against relevant biological targets. Whilst non-binding library members are washed away, DNA-encoded small molecules bound to the target can be selectively eluted. The coding information of selection eluates is then amplified by PCR and sequenced through next-generation sequencing. To reveal the identities of the selected compounds, DELT-Hit uses cutadapt\cite {ref29} to demultiplex the obtained sequencing data (C.), allowing for user-specified error rates. The obtained counts matrix tabulates sequence counts for all combinations of codes and enables resolution between different selection experiments through distinct selection codes. In parallel, in silico enumeration of library compounds (D.) can be performed using SMILES to represent building block structures and customizable reaction SMIRKS to define the coupling steps. Properties and molecular descriptors for the compounds comprised within the in silico libraries can be computed (E.) to assess drug-likeness and overall library properties. Importantly, DELT-Hit can already be used to guide library planning and building block selection through its library enumeration (D.) and property calculation (E.) modules by generating prospective libraries in silico and analysing their chemical properties. Hit analysis by DELT-Hit (F.) integrates the sequencing data within the counts matrix and the molecular information generated through library enumeration and property calculation. DELT-Hit also enables an assessment of data quality, through quality control metrics giving insight into retention of reads during demultiplexing, barcode coverage and reproducibility between replicates. To evaluate hits, library members can be ranked according to their enrichment, using several ranking methods such as edgeR and counts and the dashboard provides an intuitive visualisation of selection fingerprints and enables their interactive exploration. Finally, DELT-Hit provides the obtained enrichment data and representations of library compounds as Morgan fingerprints and BERT embeddings in a format ready for downstream machine learning applications}{figure.caption.1}{}}
 \citation{ref39}
 \citation{ref40}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.1.4}Limitations}{5}{subsubsection.0.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Applications of the method}{4}{subsection.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Limitations}{4}{subsection.1.4}\protected@file@percent }
 \citation{ref41}
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.2}Comparison with other methods}{6}{subsection.0.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.3}Experimental design}{6}{subsection.0.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.3.1}Input requirements}{6}{subsubsection.0.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.3.2}Library architecture considerations}{7}{subsubsection.0.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.3.3}Library chemistry and reaction definition}{7}{subsubsection.0.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.3.4}Quality control parameters}{7}{subsubsection.0.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.4}Materials}{7}{subsection.0.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.4.1}Equipment}{7}{subsubsection.0.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.4.2}Software dependencies}{8}{subsubsection.0.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.4.3}Input file preparation}{8}{subsubsection.0.4.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Input file specifications and sources}}{8}{table.caption.2}\protected@file@percent }
-\newlabel{tab:table1}{{1}{8}{Input file specifications and sources}{table.caption.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Comparison with other methods}{5}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Experimental design}{5}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Input requirements}{5}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Library architecture considerations}{6}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Library chemistry and reaction definition}{6}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Quality control parameters}{6}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Materials}{6}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Equipment}{6}{subsection.4.1}\protected@file@percent }
 \citation{ref37}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Tutorial datasets for protocol validation}}{9}{table.caption.3}\protected@file@percent }
-\newlabel{tab:table2}{{2}{9}{Tutorial datasets for protocol validation}{table.caption.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.4.4}Experimental setup}{9}{subsubsection.0.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.5}Procedure}{10}{subsection.0.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.5.1}Phase 1: Project initialization and configuration • TIMING 30-60 min}{10}{subsubsection.0.5.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Experiment configuration parameters}}{11}{table.caption.4}\protected@file@percent }
-\newlabel{tab:table3}{{3}{11}{Experiment configuration parameters}{table.caption.4}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Selection experimental design}}{11}{table.caption.5}\protected@file@percent }
-\newlabel{tab:table4}{{4}{11}{Selection experimental design}{table.caption.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces DNA sequence structure definition}}{12}{table.caption.6}\protected@file@percent }
-\newlabel{tab:table5}{{5}{12}{DNA sequence structure definition}{table.caption.6}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Constant DNA region sequences}}{12}{table.caption.7}\protected@file@percent }
-\newlabel{tab:table6}{{6}{12}{Constant DNA region sequences}{table.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Software dependencies}{7}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Input file preparation}{7}{subsection.4.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Input file specifications and sources}}{7}{table.caption.3}\protected@file@percent }
+\newlabel{tab:table1}{{1}{7}{Input file specifications and sources}{table.caption.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Tutorial datasets for protocol validation}}{8}{table.caption.4}\protected@file@percent }
+\newlabel{tab:table2}{{2}{8}{Tutorial datasets for protocol validation}{table.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Experimental setup}{8}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Procedure}{9}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Phase 1: Project initialization and configuration • TIMING 30-60 min}{9}{subsection.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Experiment configuration parameters}}{10}{table.caption.5}\protected@file@percent }
+\newlabel{tab:table3}{{3}{10}{Experiment configuration parameters}{table.caption.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Selection experimental design}}{10}{table.caption.6}\protected@file@percent }
+\newlabel{tab:table4}{{4}{10}{Selection experimental design}{table.caption.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces DNA sequence structure definition}}{11}{table.caption.7}\protected@file@percent }
+\newlabel{tab:table5}{{5}{11}{DNA sequence structure definition}{table.caption.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Constant DNA region sequences}}{11}{table.caption.8}\protected@file@percent }
+\newlabel{tab:table6}{{6}{11}{Constant DNA region sequences}{table.caption.8}{}}
 \citation{ref34}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Building block definition sheet (example for B0)}}{13}{table.caption.8}\protected@file@percent }
-\newlabel{tab:table7}{{7}{13}{Building block definition sheet (example for B0)}{table.caption.8}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Reaction SMIRKS templates}}{13}{table.caption.9}\protected@file@percent }
-\newlabel{tab:table8}{{8}{13}{Reaction SMIRKS templates}{table.caption.9}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Compound definitions}}{13}{table.caption.10}\protected@file@percent }
-\newlabel{tab:table9}{{9}{13}{Compound definitions}{table.caption.10}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Additional reaction step definitions}}{14}{table.caption.11}\protected@file@percent }
-\newlabel{tab:table10}{{10}{14}{Additional reaction step definitions}{table.caption.11}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.5.2}Phase 2: Sequence processing and demultiplexing • TIMING 30 min - 4 h}{14}{subsubsection.0.5.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Example report for a poor selection with only 37\% read retention. Report highlights the problematic region where more than 10\% of the reads are lost (not mapped to codons).}}{17}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:figure4}{{2}{17}{Example report for a poor selection with only 37\% read retention. Report highlights the problematic region where more than 10\% of the reads are lost (not mapped to codons)}{figure.caption.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors. (TOP) Stacked barplot for the assigned counts to the different selection codons of S0. (BOTTOM) Stacked barplot for read assignment to constant region C0, in orange are the number of reads that were mapped to this region with 1 error, in blue the number of reads that were mapped with 0 errors.}}{17}{figure.caption.13}\protected@file@percent }
-\newlabel{fig:figure5}{{3}{17}{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors. (TOP) Stacked barplot for the assigned counts to the different selection codons of S0. (BOTTOM) Stacked barplot for read assignment to constant region C0, in orange are the number of reads that were mapped to this region with 1 error, in blue the number of reads that were mapped with 0 errors}{figure.caption.13}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.5.3}Phase 3: Data visualization and interpretation • TIMING 15-60 min}{18}{subsubsection.0.5.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Interactive dashboard interface. The dashboard provides interactive visualization of count data with filtering capabilities (not shown). The top panel shows experimental metadata (not shown), while the main panel displays count distributions and allows exploration of specific compounds.}}{18}{figure.caption.14}\protected@file@percent }
-\newlabel{fig:figure6}{{4}{18}{Interactive dashboard interface. The dashboard provides interactive visualization of count data with filtering capabilities (not shown). The top panel shows experimental metadata (not shown), while the main panel displays count distributions and allows exploration of specific compounds}{figure.caption.14}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.5.4}Phase 4: Selection-centric enumeration and analysis • TIMING 10 min - 2 h}{19}{subsubsection.0.5.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Complete reaction graph for a DEL with two building blocks (violet), reactions (green), products (red) and starting compounds (blue).}}{20}{figure.caption.15}\protected@file@percent }
-\newlabel{fig:figure2}{{5}{20}{Complete reaction graph for a DEL with two building blocks (violet), reactions (green), products (red) and starting compounds (blue)}{figure.caption.15}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Exemplary plot for the molecular weight distribution of library members.}}{21}{figure.caption.16}\protected@file@percent }
-\newlabel{fig:figure3}{{6}{21}{Exemplary plot for the molecular weight distribution of library members}{figure.caption.16}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.5.5}Phase 5: Statistical analysis and hit identification • TIMING 10-30 min}{21}{subsubsection.0.5.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.5.6}Phase 6: Full library enumeration and machine learning representations • TIMING 1 h - 8 h}{23}{subsubsection.0.5.6}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Hit identification by edgeR. Shown compounds are for FDR\textless {}0.05 and sorted by logFC to identify the top hits.}}{24}{table.caption.17}\protected@file@percent }
-\newlabel{tab:table12}{{11}{24}{Hit identification by edgeR. Shown compounds are for FDR\textless {}0.05 and sorted by logFC to identify the top hits}{table.caption.17}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.6}Troubleshooting}{24}{subsection.0.6}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Common issues and solutions}}{25}{table.caption.18}\protected@file@percent }
-\newlabel{tab:table13}{{12}{25}{Common issues and solutions}{table.caption.18}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.6.1}Performance optimization guidelines}{26}{subsubsection.0.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.6.2}Quality control thresholds}{26}{subsubsection.0.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.7}Timing}{26}{subsection.0.7}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces Timing estimates for different dataset sizes}}{26}{table.caption.19}\protected@file@percent }
-\newlabel{tab:table14}{{13}{26}{Timing estimates for different dataset sizes}{table.caption.19}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.8}Anticipated results}{27}{subsection.0.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.8.1}Output file structure}{27}{subsubsection.0.8.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.8.2}Chemical library characterization}{29}{subsubsection.0.8.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.8.3}Demultiplexing performance}{29}{subsubsection.0.8.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.8.4}Statistical analysis outputs}{30}{subsubsection.0.8.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.8.5}Integration capabilities and downstream applications}{30}{subsubsection.0.8.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.9}Data and code availability}{31}{subsection.0.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {0.9.1}Software access and documentation}{31}{subsubsection.0.9.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.10}Author contributions}{31}{subsection.0.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.11}Competing interests}{31}{subsection.0.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.12}Acknowledgments}{31}{subsection.0.12}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Building block definition sheet (example for B0)}}{12}{table.caption.9}\protected@file@percent }
+\newlabel{tab:table7}{{7}{12}{Building block definition sheet (example for B0)}{table.caption.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Reaction SMIRKS templates}}{12}{table.caption.10}\protected@file@percent }
+\newlabel{tab:table8}{{8}{12}{Reaction SMIRKS templates}{table.caption.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Compound definitions}}{12}{table.caption.11}\protected@file@percent }
+\newlabel{tab:table9}{{9}{12}{Compound definitions}{table.caption.11}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Additional reaction step definitions}}{13}{table.caption.12}\protected@file@percent }
+\newlabel{tab:table10}{{10}{13}{Additional reaction step definitions}{table.caption.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Phase 2: Sequence processing and demultiplexing • TIMING 30 min - 4 h}{13}{subsection.5.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Example report for a poor selection with only 37\% read retention. Report highlights the problematic region where more than 10\% of the reads are lost (not mapped to codons).}}{15}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:figure4}{{2}{15}{Example report for a poor selection with only 37\% read retention. Report highlights the problematic region where more than 10\% of the reads are lost (not mapped to codons)}{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors. (TOP) Stacked barplot for the assigned counts to the different selection codons of S0. (BOTTOM) Stacked barplot for read assignment to constant region C0, in orange are the number of reads that were mapped to this region with 1 error, in blue the number of reads that were mapped with 0 errors.}}{16}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:figure5}{{3}{16}{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors. (TOP) Stacked barplot for the assigned counts to the different selection codons of S0. (BOTTOM) Stacked barplot for read assignment to constant region C0, in orange are the number of reads that were mapped to this region with 1 error, in blue the number of reads that were mapped with 0 errors}{figure.caption.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Phase 3: Data visualization and interpretation • TIMING 15-60 min}{16}{subsection.5.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Interactive dashboard interface. The dashboard provides interactive visualization of count data with filtering capabilities (not shown). The top panel shows experimental metadata (not shown), while the main panel displays count distributions and allows exploration of specific compounds.}}{17}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:figure6}{{4}{17}{Interactive dashboard interface. The dashboard provides interactive visualization of count data with filtering capabilities (not shown). The top panel shows experimental metadata (not shown), while the main panel displays count distributions and allows exploration of specific compounds}{figure.caption.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Phase 4: Selection-centric enumeration and analysis • TIMING 10 min - 2 h}{17}{subsection.5.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Complete reaction graph for a DEL with two building blocks (violet), reactions (green), products (red) and starting compounds (blue).}}{19}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:figure2}{{5}{19}{Complete reaction graph for a DEL with two building blocks (violet), reactions (green), products (red) and starting compounds (blue)}{figure.caption.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Phase 5: Statistical analysis and hit identification • TIMING 10-30 min}{19}{subsection.5.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Exemplary plot for the molecular weight distribution of library members.}}{20}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:figure3}{{6}{20}{Exemplary plot for the molecular weight distribution of library members}{figure.caption.17}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Hit identification by edgeR. Shown compounds are for FDR\textless {}0.05 and sorted by logFC to identify the top hits.}}{23}{table.caption.18}\protected@file@percent }
+\newlabel{tab:table12}{{11}{23}{Hit identification by edgeR. Shown compounds are for FDR\textless {}0.05 and sorted by logFC to identify the top hits}{table.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Phase 6: Full library enumeration and machine learning representations • TIMING 1 h - 8 h}{23}{subsection.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Troubleshooting}{24}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Performance optimization guidelines}{24}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Quality control thresholds}{24}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Timing}{24}{section.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Common issues and solutions}}{25}{table.caption.19}\protected@file@percent }
+\newlabel{tab:table13}{{12}{25}{Common issues and solutions}{table.caption.19}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces Timing estimates for different dataset sizes}}{26}{table.caption.20}\protected@file@percent }
+\newlabel{tab:table14}{{13}{26}{Timing estimates for different dataset sizes}{table.caption.20}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Anticipated results}{26}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Output file structure}{26}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Chemical library characterization}{28}{subsection.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Demultiplexing performance}{28}{subsection.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}Statistical analysis outputs}{29}{subsection.8.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5}Integration capabilities and downstream applications}{29}{subsection.8.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Data and code availability}{30}{section.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Software access and documentation}{30}{subsection.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10}Author contributions}{30}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11}Competing interests}{30}{section.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {12}Acknowledgments}{30}{section.12}\protected@file@percent }
 \citation{ref37}
 \citation{ref38}
-\@writefile{toc}{\contentsline {section}{Supplementary Information}{32}{section*.20}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {.1}Analysis of published datasets}{32}{subsection.Alph0.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Supplementary Information}{31}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {.1}Analysis of published datasets}{31}{subsection.Alph0.1}\protected@file@percent }
 \gdef \LT@i {\LT@entry 
     {1}{88.82234pt}\LT@entry 
     {1}{157.10922pt}\LT@entry 
     {1}{157.10922pt}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {.2}Comparison of DELT-Hit and DELi}{33}{subsection.Alph0.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces Comparison of currently documented DELT-Hit and DELi functionality across shared DEL analysis tasks. Benchmark-specific observations are described as such and should not be interpreted as universal statements beyond the inspected shared benchmark setup.}}{33}{table.14}\protected@file@percent }
-\newlabel{tab:delt-deli-comparison}{{14}{33}{Comparison of currently documented DELT-Hit and DELi functionality across shared DEL analysis tasks. Benchmark-specific observations are described as such and should not be interpreted as universal statements beyond the inspected shared benchmark setup}{table.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {.2}Comparison of DELT-Hit and DELi}{32}{subsection.Alph0.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces Comparison of currently documented DELT-Hit and DELi functionality across shared DEL analysis tasks. Benchmark-specific observations are described as such and should not be interpreted as universal statements beyond the inspected shared benchmark setup.}}{32}{table.14}\protected@file@percent }
+\newlabel{tab:delt-deli-comparison}{{14}{32}{Comparison of currently documented DELT-Hit and DELi functionality across shared DEL analysis tasks. Benchmark-specific observations are described as such and should not be interpreted as universal statements beyond the inspected shared benchmark setup}{table.14}{}}
 \bibstyle{unsrt}
 \bibdata{references}
 \bibcite{ref1}{{1}{}{{}}{{}}}
 \bibcite{ref2}{{2}{}{{}}{{}}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Cycle-wise runtime scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads.}}{36}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:delt-deli-runtime-cycles}{{7}{36}{Cycle-wise runtime scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads}{figure.caption.21}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Runtime scaling for the extended 2-cycle synthetic benchmark across 10, 100, and 1000 building blocks per cycle.}}{37}{figure.caption.22}\protected@file@percent }
-\newlabel{fig:delt-deli-runtime-2cycle-bbpc}{{8}{37}{Runtime scaling for the extended 2-cycle synthetic benchmark across 10, 100, and 1000 building blocks per cycle}{figure.caption.22}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Cycle-wise peak RSS scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads.}}{37}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:delt-deli-memory-cycles}{{9}{37}{Cycle-wise peak RSS scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads}{figure.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Cycle-wise runtime scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads.}}{35}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:delt-deli-runtime-cycles}{{7}{35}{Cycle-wise runtime scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads}{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Runtime scaling for the extended 2-cycle synthetic benchmark across 10, 100, and 1000 building blocks per cycle.}}{36}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:delt-deli-runtime-2cycle-bbpc}{{8}{36}{Runtime scaling for the extended 2-cycle synthetic benchmark across 10, 100, and 1000 building blocks per cycle}{figure.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Cycle-wise peak RSS scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads.}}{36}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:delt-deli-memory-cycles}{{9}{36}{Cycle-wise peak RSS scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads}{figure.caption.24}{}}
 \bibcite{ref3}{{3}{}{{}}{{}}}
 \bibcite{ref4}{{4}{}{{}}{{}}}
 \bibcite{ref5}{{5}{}{{}}{{}}}
@@ -131,34 +133,35 @@
 \bibcite{ref9}{{9}{}{{}}{{}}}
 \bibcite{ref10}{{10}{}{{}}{{}}}
 \bibcite{ref11}{{11}{}{{}}{{}}}
-\bibcite{ref13}{{12}{}{{}}{{}}}
-\bibcite{ref14}{{13}{}{{}}{{}}}
-\bibcite{ref15}{{14}{}{{}}{{}}}
-\bibcite{ref16}{{15}{}{{}}{{}}}
-\bibcite{ref17}{{16}{}{{}}{{}}}
-\bibcite{ref18}{{17}{}{{}}{{}}}
-\bibcite{ref19}{{18}{}{{}}{{}}}
-\bibcite{ref20}{{19}{}{{}}{{}}}
-\bibcite{ref21}{{20}{}{{}}{{}}}
-\bibcite{ref22}{{21}{}{{}}{{}}}
-\bibcite{ref23}{{22}{}{{}}{{}}}
-\bibcite{ref24}{{23}{}{{}}{{}}}
-\bibcite{ref25}{{24}{}{{}}{{}}}
-\bibcite{ref26}{{25}{}{{}}{{}}}
-\bibcite{ref27}{{26}{}{{}}{{}}}
-\bibcite{ref28}{{27}{}{{}}{{}}}
-\bibcite{ref29}{{28}{}{{}}{{}}}
-\bibcite{ref30}{{29}{}{{}}{{}}}
-\bibcite{ref31}{{30}{}{{}}{{}}}
-\bibcite{ref32}{{31}{}{{}}{{}}}
-\bibcite{ref33}{{32}{}{{}}{{}}}
-\bibcite{ref34}{{33}{}{{}}{{}}}
-\bibcite{ref35}{{34}{}{{}}{{}}}
-\bibcite{ref36}{{35}{}{{}}{{}}}
-\bibcite{ref37}{{36}{}{{}}{{}}}
-\bibcite{ref38}{{37}{}{{}}{{}}}
-\bibcite{ref39}{{38}{}{{}}{{}}}
-\bibcite{ref40}{{39}{}{{}}{{}}}
-\bibcite{ref41}{{40}{}{{}}{{}}}
+\bibcite{ref12}{{12}{}{{}}{{}}}
+\bibcite{ref13}{{13}{}{{}}{{}}}
+\bibcite{ref14}{{14}{}{{}}{{}}}
+\bibcite{ref15}{{15}{}{{}}{{}}}
+\bibcite{ref16}{{16}{}{{}}{{}}}
+\bibcite{ref17}{{17}{}{{}}{{}}}
+\bibcite{ref18}{{18}{}{{}}{{}}}
+\bibcite{ref19}{{19}{}{{}}{{}}}
+\bibcite{ref20}{{20}{}{{}}{{}}}
+\bibcite{ref21}{{21}{}{{}}{{}}}
+\bibcite{ref22}{{22}{}{{}}{{}}}
+\bibcite{ref23}{{23}{}{{}}{{}}}
+\bibcite{ref24}{{24}{}{{}}{{}}}
+\bibcite{ref25}{{25}{}{{}}{{}}}
+\bibcite{ref26}{{26}{}{{}}{{}}}
+\bibcite{ref27}{{27}{}{{}}{{}}}
+\bibcite{ref28}{{28}{}{{}}{{}}}
+\bibcite{ref29}{{29}{}{{}}{{}}}
+\bibcite{ref30}{{30}{}{{}}{{}}}
+\bibcite{ref31}{{31}{}{{}}{{}}}
+\bibcite{ref32}{{32}{}{{}}{{}}}
+\bibcite{ref33}{{33}{}{{}}{{}}}
+\bibcite{ref34}{{34}{}{{}}{{}}}
+\bibcite{ref35}{{35}{}{{}}{{}}}
+\bibcite{ref36}{{36}{}{{}}{{}}}
+\bibcite{ref37}{{37}{}{{}}{{}}}
+\bibcite{ref38}{{38}{}{{}}{{}}}
+\bibcite{ref39}{{39}{}{{}}{{}}}
+\bibcite{ref40}{{40}{}{{}}{{}}}
+\bibcite{ref41}{{41}{}{{}}{{}}}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\gdef \@abspage@last{40}
+\gdef \@abspage@last{39}

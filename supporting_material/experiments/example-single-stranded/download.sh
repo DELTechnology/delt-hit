@@ -2,7 +2,7 @@ ARTICLE_ID=31198468
 FILE_ID=61487743
 OUT=campaign.fastq.gz
 
-uv run python - <<'PY'
+pixi run python - <<'PY'
 import requests
 
 article_id = "31198468"

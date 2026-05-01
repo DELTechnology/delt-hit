@@ -21,7 +21,7 @@
 - Demultiplex and library inputs were made more flexible, including support for simpler input files, direct `counts.txt` enumeration inputs, and cleaner tool output.
 - Chemical property generation and CLI/docs now better describe named libraries, property output structure, and enumeration behavior.
 - Benchmark orchestration was streamlined with dedicated benchmark folders, reusable run scripts, configurable loops, estimated iteration controls, and result-copyback helpers.
-- The project environment was modernized by switching to `pixi`/`uv`-style lockfiles and cleaning out older dependency setup files.
+- The project environment was modernized by switching to Pixi-managed lockfiles and cleaning out older dependency setup files.
 
 ### Documented
 - Expanded CLI, benchmarking, z-score, chemical-property, DELi-option, and enumeration-improvement documentation.
