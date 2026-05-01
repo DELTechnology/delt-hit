@@ -197,6 +197,53 @@ def create_config_cards(config):
     return cards
 
 
+def resolve_selection_name(
+    counts_path: Path,
+    selections: dict,
+    selection_name: str | None = None,
+) -> str:
+    """Resolve the selection id associated with a counts file.
+
+    Supports both ``.../selections/<selection>/counts.txt`` and
+    ``.../selections/<selection>_counts.txt`` layouts.
+
+    Args:
+        counts_path: Path to the counts file.
+        selections: Mapping of configured selection ids.
+        selection_name: Optional explicit selection id override.
+
+    Returns:
+        A valid selection id from ``selections``.
+
+    Raises:
+        ValueError: If the selection id cannot be resolved.
+    """
+    available = list(selections)
+    candidates: list[str] = []
+
+    if selection_name:
+        candidates.append(selection_name)
+
+    parent_name = counts_path.parent.name
+    if parent_name not in candidates:
+        candidates.append(parent_name)
+
+    stem = counts_path.stem
+    if stem.endswith("_counts"):
+        stem = stem[: -len("_counts")]
+    if stem not in candidates:
+        candidates.append(stem)
+
+    for candidate in candidates:
+        if candidate in selections:
+            return candidate
+
+    raise ValueError(
+        f"Could not determine selection for counts file {counts_path}. "
+        f"Tried {candidates}; available selections: {available}"
+    )
+
+
 def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | None = None):
     """Start the interactive dashboard server.
 
@@ -209,8 +256,12 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
     config = read_yaml(config_path)
     counts_df = pd.read_csv(counts_path, sep='\t')
 
-    selection_name = selection_name or counts_path.parent.name
-    (_, selection), = list(filter(lambda x: x[0] == selection_name, config['selections'].items()))
+    selection_name = resolve_selection_name(
+        counts_path=counts_path,
+        selections=config['selections'],
+        selection_name=selection_name,
+    )
+    selection = config['selections'][selection_name]
     config['selections'] = {selection_name: selection}
 
     available_codes = get_available_codes(counts_df)
