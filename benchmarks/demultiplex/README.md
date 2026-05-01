@@ -180,28 +180,28 @@ For the full experiment matrix, define the dataset families once and reuse them 
 
 ```bash
 CANONICAL_DATASETS=(
-#  synthetic_2cycle_10bbpc_1m
-#  synthetic_2cycle_10bbpc_10m
-#  synthetic_2cycle_10bbpc_100m
+  synthetic_2cycle_10bbpc_1m
+  synthetic_2cycle_10bbpc_10m
+  synthetic_2cycle_10bbpc_100m
   synthetic_2cycle_10bbpc_1000m
-#  synthetic_3cycle_10bbpc_1m
-#  synthetic_3cycle_10bbpc_10m
-#  synthetic_3cycle_10bbpc_100m
+  synthetic_3cycle_10bbpc_1m
+  synthetic_3cycle_10bbpc_10m
+  synthetic_3cycle_10bbpc_100m
   synthetic_3cycle_10bbpc_1000m
-#  synthetic_4cycle_10bbpc_1m
-#  synthetic_4cycle_10bbpc_10m
-#  synthetic_4cycle_10bbpc_100m
+  synthetic_4cycle_10bbpc_1m
+  synthetic_4cycle_10bbpc_10m
+  synthetic_4cycle_10bbpc_100m
   synthetic_4cycle_10bbpc_1000m
 )
 
 LARGE_2CYCLE_DATASETS=(
-#  synthetic_2cycle_100bbpc_1m
-#  synthetic_2cycle_100bbpc_10m
-#  synthetic_2cycle_100bbpc_100m
+  synthetic_2cycle_100bbpc_1m
+  synthetic_2cycle_100bbpc_10m
+  synthetic_2cycle_100bbpc_100m
   synthetic_2cycle_100bbpc_1000m
-#  synthetic_2cycle_1000bbpc_1m
-#  synthetic_2cycle_1000bbpc_10m
-#  synthetic_2cycle_1000bbpc_100m
+  synthetic_2cycle_1000bbpc_1m
+  synthetic_2cycle_1000bbpc_10m
+  synthetic_2cycle_1000bbpc_100m
   synthetic_2cycle_1000bbpc_1000m
 )
 
@@ -221,7 +221,7 @@ dataset_time_limit() {
     *_1m) echo "04:00:00" ;;
     *_10m) echo "08:00:00" ;;
     *_100m) echo "12:00:00" ;;
-    *_1000m) echo "12:00:00" ;;
+    *_1000m) echo "24:00:00" ;;
     *) echo "Unknown dataset size for $1" >&2; return 1 ;;
   esac
 }
@@ -275,7 +275,7 @@ TMPDIR="${TMPDIR:?TMPDIR must be set for Slurm benchmark jobs}"
 DATA_ROOT="$TMPDIR/delt-hit-benchmarks/${SLURM_JOB_ID}/${DATASET}"
 mkdir -p "$DATA_ROOT"
 
-./.venv/bin/python benchmarks/demultiplex/generate_synthetic_fastq.py \
+pixi run python benchmarks/demultiplex/generate_synthetic_fastq.py \
   --num-cycles "$CYCLES" \
   --building-blocks-per-cycle "$BBPC" \
   --num-reads-per-compound "$READS" \
@@ -283,16 +283,16 @@ mkdir -p "$DATA_ROOT"
   --output-dir "$DATA_ROOT/data" \
   --dataset-name "$DATASET"
 
-./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
+pixi run python benchmarks/demultiplex/converter/create_deli_inputs.py \
   --dataset-name "$DATASET" \
   --data-dir "$DATA_ROOT"
 
-./.venv/bin/python benchmarks/demultiplex/converter/create_delt_inputs.py \
+pixi run python benchmarks/demultiplex/converter/create_delt_inputs.py \
   --dataset-name "$DATASET" \
   --data-dir "$DATA_ROOT" \
   --num-cores 11
 
-./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
+pixi run python benchmarks/demultiplex/run_split_timing.py \
   --dataset-name "$DATASET" \
   --data-dir "$DATA_ROOT" \
   --tool "$TOOL"
