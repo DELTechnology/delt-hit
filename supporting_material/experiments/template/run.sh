@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+cd /Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/template || exit
 delt-hit init --excel_path template.xlsx
 
 CONFIG_PATH=campaign/config.yaml
@@ -18,7 +19,7 @@ delt-hit visualize enumerate --config_path=$CONFIG_PATH
 
 delt-hit library enumerate \
   --config_path=$CONFIG_PATH \
-  --counts_path=campaign/selections/AG24_4/counts.txt \
+  --counts_path=campaign/selections/AG24_4_counts.txt \
   --top_n=1000 \
   --library_name=AG24_4_top_hits
 
@@ -27,7 +28,7 @@ delt-hit library properties --config_path=$CONFIG_PATH --library_name=AG24_4_top
 
 delt-hit dashboard \
   --config_path=$CONFIG_PATH \
-  --counts_path=campaign/selections/AG24_4/counts.txt
+  --counts_path=campaign/selections/AG24_4_counts.txt
 
 delt-hit analyse enrichment \
   --config_path=analysis.yaml \
