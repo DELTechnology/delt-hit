@@ -23,6 +23,51 @@ def validate_config(config: dict):
         AssertionError: If the library reactions are not all present in the catalog.
     """
     assert set(config['catalog']['reactions']) >= set(config['library']['reactions']), f'All reactions in library must be present in the `reactions` sheet'
+    validate_dual_display_structure(config)
+
+
+def validate_dual_display_structure(config: dict):
+    """Validate the explicit strand contract for dual-display libraries."""
+    structure = config['structure']
+    building_blocks = [entry for entry in structure if entry['type'] == 'building_block']
+    strand_values = [entry.get('strand') for entry in building_blocks]
+    has_any_strand = any(not pd.isna(value) for value in strand_values)
+
+    if not has_any_strand:
+        return
+
+    assert all(not pd.isna(value) for value in strand_values), (
+        "Dual-display libraries require `strand` for every building_block row in `structure`"
+    )
+    assert set(strand_values) == {'A', 'B'}, (
+        "Dual-display libraries require both strands `A` and `B` in `structure`"
+    )
+    validate_dual_display_branch_educts(config)
+
+
+def validate_dual_display_branch_educts(config: dict):
+    """Validate that dual-display building blocks consume educts from their own strand branch."""
+    strand_by_building_block = {
+        entry['name']: entry['strand']
+        for entry in config['structure']
+        if entry['type'] == 'building_block'
+    }
+    compounds = set(config['catalog']['compounds'])
+    products_by_strand = {'A': set(), 'B': set()}
+    building_blocks_by_strand = {'A': set(), 'B': set()}
+
+    for building_block, strand in strand_by_building_block.items():
+        building_blocks_by_strand[strand].add(building_block)
+        for entry in config['whitelists'][building_block]:
+            products_by_strand[strand].add(entry['product'])
+
+    for building_block, strand in strand_by_building_block.items():
+        allowed_educts = compounds | building_blocks_by_strand[strand] | products_by_strand[strand]
+        for entry in config['whitelists'][building_block]:
+            assert entry['educt'] in allowed_educts, (
+                f"Dual-display building block {building_block} on strand {strand} has educt "
+                f"{entry['educt']} outside the {strand}-strand branch"
+            )
 
 def config_from_excel(path: Path):
     """Load a full configuration from an Excel workbook.
@@ -131,6 +176,15 @@ def structure_from_excel(path: Path):
     structure = pd.read_excel(path, sheet_name='structure')
     assert structure.name.str.match(r'^[SCB]').all(), "Structure `name` must start with 'S', 'B', or 'C' depending on type"
     assert structure.type.isin(['selection', 'building_block', 'constant']).all(), "Structure `type` must be one of 'selection', 'building_block', or 'constant'"
+    if 'strand' in structure.columns:
+        structure['strand'] = structure['strand'].where(structure['strand'].notna(), None)
+        non_building_block = structure['type'] != 'building_block'
+        assert structure.loc[non_building_block, 'strand'].isna().all(), (
+            "Structure `strand` is only valid for rows with `type == 'building_block'`"
+        )
+        building_block_rows = structure['type'] == 'building_block'
+        strand_values = structure.loc[building_block_rows, 'strand'].dropna()
+        assert strand_values.isin(['A', 'B']).all(), "Structure `strand` must be either 'A' or 'B'"
     return structure.to_dict('records')
 
 def selections_from_excel(path: Path):

@@ -37,3 +37,8 @@ Example usage:
 uv run python supporting_material/experiments/favalli/compare_selection.py
 uv run python supporting_material/experiments/pure-del/compare_selection.py
 ```
+
+## Open Questions
+
+### Pure-DEL
+- Counts for Lane 1/2 are identical, why?

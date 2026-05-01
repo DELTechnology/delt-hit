@@ -68,16 +68,27 @@ class Library:
 
         building_block_names = sorted(graph_bundle['building_blocks'])
 
-        df = enumerate_library_dataframe(
-            cfg=cfg,
-            graph_bundle=graph_bundle,
-            building_block_names=building_block_names,
-            counts_path=counts_path,
-            top_n=top_n,
-            debug=debug,
-            errors=errors,
-            save_dir=lib_path.parent,
-        )
+        if is_dual_display_library(cfg, building_block_names):
+            df = enumerate_dual_display(
+                cfg=cfg,
+                building_block_names=building_block_names,
+                counts_path=counts_path,
+                top_n=top_n,
+                debug=debug,
+                errors=errors,
+                save_dir=lib_path.parent,
+            )
+        else:
+            df = enumerate_single_strand(
+                cfg=cfg,
+                graph_bundle=graph_bundle,
+                building_block_names=building_block_names,
+                counts_path=counts_path,
+                top_n=top_n,
+                debug=debug,
+                errors=errors,
+                save_dir=lib_path.parent,
+            )
         df.to_parquet(lib_path, index=False)
 
     def properties(self, *, config_path: Path, library_name: str | None = None,
@@ -102,6 +113,7 @@ class Library:
         save_dir.mkdir(parents=True, exist_ok=True)
 
         df = pd.read_parquet(lib_path)
+        assert 'smiles' in df.columns, "Dual-display libraries with `smiles_a`/`smiles_b` are not supported by `library properties`"
         df = self.compute_properties(data=df)
         df.to_parquet(save_dir / 'properties.parquet', index=False)
 
@@ -185,6 +197,7 @@ class Library:
 
         lib_path = library_path or get_library_path(config_path)
         df = pd.read_parquet(lib_path)
+        assert 'smiles' in df.columns, "Dual-display libraries with `smiles_a`/`smiles_b` are not supported by `library represent`"
         smiles = df.smiles
 
         match method:
@@ -348,6 +361,12 @@ def get_combinations(*,
     )
 
 
+def get_code_column_name(building_block_name: str) -> str:
+    """Return the canonical code column for a building-block family."""
+    assert building_block_name.startswith('B'), f"Building block name must start with 'B', got {building_block_name}"
+    return f"code_{building_block_name[1:]}"
+
+
 def load_filtered_combinations(*,
                                cfg: dict,
                                building_block_names: list[str],
@@ -359,7 +378,7 @@ def load_filtered_combinations(*,
 
     df = pd.read_csv(counts_path, sep=None, engine='python')
 
-    code_columns = [f'code_{i}' for i in range(len(building_block_names))]
+    code_columns = [get_code_column_name(name) for name in building_block_names]
     assert all(name in df.columns for name in code_columns), (
         "Filtered enumeration expects the same `code_*` columns produced by demultiplex counts files. "
         f"Missing one or more required columns from {code_columns}."
@@ -373,7 +392,7 @@ def load_filtered_combinations(*,
         combination = []
         for bb_idx, bb_name in enumerate(building_block_names):
             whitelist = cfg['whitelists'][bb_name]
-            raw_value = row[f'code_{bb_idx}']
+            raw_value = row[get_code_column_name(bb_name)]
 
             assert not pd.isna(raw_value), f"Missing value for {bb_name} at row {row_idx}"
 
@@ -389,6 +408,22 @@ def load_filtered_combinations(*,
         combinations.append(tuple(combination))
 
     return combinations
+
+
+def is_dual_display_library(cfg: dict, building_block_names: list[str]) -> bool:
+    """Return whether the config declares an explicit dual-display library."""
+    strand_by_building_block = get_building_block_strands(cfg)
+    return bool(strand_by_building_block) and all(name in strand_by_building_block for name in building_block_names)
+
+
+def get_building_block_strands(cfg: dict) -> dict[str, str]:
+    """Extract explicit strand assignments for building-block regions."""
+    structure = cfg['structure']
+    return {
+        entry['name']: entry['strand']
+        for entry in structure
+        if entry.get('type') == 'building_block' and entry.get('strand') is not None
+    }
 
 
 def get_reaction_graph(steps: list,
@@ -491,28 +526,31 @@ def save_graph_visualizations(*, graph_bundle: dict, save_dir: Path, dpi: int = 
         close_figure(ax.figure)
 
 
-def enumerate_library_dataframe(*,
-                                cfg: dict,
-                                graph_bundle: dict,
-                                building_block_names: list[str],
-                                counts_path: Path | None = None,
-                                top_n: int | None = None,
-                                debug: str = 'False',
-                                errors: str = 'raise',
-                                save_dir: Path | None = None) -> pd.DataFrame:
-    """Enumerate a library and return it as a dataframe."""
+def enumerate_single_strand(*,
+                            cfg: dict,
+                            graph_bundle: dict,
+                            building_block_names: list[str],
+                            combinations: list[tuple[dict, ...]] | None = None,
+                            counts_path: Path | None = None,
+                            top_n: int | None = None,
+                            debug: str = 'False',
+                            errors: str = 'raise',
+                            save_dir: Path | None = None) -> pd.DataFrame:
+    """Enumerate a single-display library and return it as a dataframe."""
     reactions = graph_bundle['reactions']
     products = graph_bundle['products']
     compounds = graph_bundle['compounds']
     add_G = graph_bundle['add_G']
     G = graph_bundle['G']
-
-    combs = get_combinations(
-        cfg=cfg,
-        building_block_names=building_block_names,
-        counts_path=counts_path,
-        top_n=top_n,
-    )
+    if combinations is None:
+        combs = get_combinations(
+            cfg=cfg,
+            building_block_names=building_block_names,
+            counts_path=counts_path,
+            top_n=top_n,
+        )
+    else:
+        combs = combinations
 
     library = []
     logger.info('Starting enumeration of library...')
@@ -580,15 +618,154 @@ def enumerate_library_dataframe(*,
             if errors == 'ignore':
                 continue
 
-        smiles = g.nodes[terminal]['smiles']
-        record = {f'code_{j}': c['index'] for j, c in enumerate(comb)}
-        record['smiles'] = smiles
+        record = {get_code_column_name(bb_name): c['index'] for bb_name, c in zip(building_block_names, comb)}
+        record['smiles'] = g.nodes[terminal]['smiles']
         library.append(record)
 
     df = pd.DataFrame(library)
     if 'smiles' in df.columns:
         df = df[df.smiles.notna()]
     return df
+
+
+def enumerate_dual_display(*,
+                           cfg: dict,
+                           building_block_names: list[str],
+                           counts_path: Path | None = None,
+                           top_n: int | None = None,
+                           debug: str = 'False',
+                           errors: str = 'raise',
+                           save_dir: Path | None = None) -> pd.DataFrame:
+    """Enumerate both strands independently, then pair their products."""
+    strand_by_building_block = get_building_block_strands(cfg)
+    strand_a_names = [name for name in building_block_names if strand_by_building_block[name] == 'A']
+    strand_b_names = [name for name in building_block_names if strand_by_building_block[name] == 'B']
+    strand_a_cfg = get_strand_cfg(cfg=cfg, building_block_names=strand_a_names)
+    strand_b_cfg = get_strand_cfg(cfg=cfg, building_block_names=strand_b_names)
+    strand_a_graph_bundle = prepare_graph_bundle(cfg=strand_a_cfg)
+    strand_b_graph_bundle = prepare_graph_bundle(cfg=strand_b_cfg)
+
+    strand_a_counts_path = None
+    strand_b_counts_path = None
+    if counts_path is not None:
+        dual_display_combinations = load_filtered_combinations(
+            cfg=cfg,
+            building_block_names=building_block_names,
+            counts_path=counts_path,
+            top_n=top_n,
+        )
+        strand_a_combinations = project_strand_combinations(
+            combinations=dual_display_combinations,
+            building_block_names=building_block_names,
+            strand_building_block_names=strand_a_names,
+        )
+        strand_b_combinations = project_strand_combinations(
+            combinations=dual_display_combinations,
+            building_block_names=building_block_names,
+            strand_building_block_names=strand_b_names,
+        )
+    else:
+        strand_a_combinations = None
+        strand_b_combinations = None
+
+    strand_a_df = enumerate_single_strand(
+        cfg=strand_a_cfg,
+        graph_bundle=strand_a_graph_bundle,
+        building_block_names=strand_a_names,
+        combinations=strand_a_combinations,
+        debug=debug,
+        errors=errors,
+        save_dir=save_dir,
+    )
+    strand_b_df = enumerate_single_strand(
+        cfg=strand_b_cfg,
+        graph_bundle=strand_b_graph_bundle,
+        building_block_names=strand_b_names,
+        combinations=strand_b_combinations,
+        debug=debug,
+        errors=errors,
+        save_dir=save_dir,
+    )
+
+    strand_a_df = strand_a_df.rename(columns={'smiles': 'smiles_a'})
+    strand_b_df = strand_b_df.rename(columns={'smiles': 'smiles_b'})
+
+    strand_a_records = strand_a_df.to_dict('records')
+    strand_b_records = strand_b_df.to_dict('records')
+
+    combined_records = []
+    for strand_a_record, strand_b_record in product(strand_a_records, strand_b_records):
+        record = {**strand_a_record, **strand_b_record}
+        combined_records.append(record)
+
+    code_columns = [get_code_column_name(name) for name in building_block_names]
+    if not combined_records:
+        return pd.DataFrame(columns=[*code_columns, 'smiles_a', 'smiles_b'])
+    df = pd.DataFrame(combined_records)[[*code_columns, 'smiles_a', 'smiles_b']]
+    df = df.sort_values(code_columns).reset_index(drop=True)
+    return df
+
+
+def get_strand_cfg(*, cfg: dict, building_block_names: list[str]) -> dict:
+    """Return a strand-specific config with only the requested building blocks."""
+    strand_educts = {
+        entry['educt']
+        for name in building_block_names
+        for entry in cfg['whitelists'][name]
+    }
+    strand_products = {
+        entry['product']
+        for name in building_block_names
+        for entry in cfg['whitelists'][name]
+    }
+    strand_reactions = {
+        entry['reaction']
+        for name in building_block_names
+        for entry in cfg['whitelists'][name]
+    }
+    strand_compounds = set(cfg['catalog']['compounds']) & strand_educts
+    strand_nodes = set(building_block_names) | strand_products | strand_reactions | strand_compounds
+    strand_library = {
+        **cfg['library'],
+        'bb_edges': [edge for edge in cfg['library']['bb_edges'] if edge[0] in strand_nodes and edge[1] in strand_nodes],
+        'other_edges': [
+            edge for edge in cfg['library']['other_edges']
+            if edge[0] in strand_nodes and edge[1] in strand_nodes
+        ],
+        'building_blocks': building_block_names,
+        'products': sorted(strand_products),
+        'reactions': sorted(strand_reactions),
+    }
+    strand_catalog = {
+        **cfg['catalog'],
+        'reactions': {
+            name: data for name, data in cfg['catalog']['reactions'].items()
+            if name in strand_reactions
+        },
+    }
+    strand_structure = [entry for entry in cfg['structure'] if entry['name'] in building_block_names]
+    strand_whitelists = {name: cfg['whitelists'][name] for name in building_block_names}
+
+    return {
+        **cfg,
+        'library': strand_library,
+        'catalog': strand_catalog,
+        'structure': strand_structure,
+        'whitelists': strand_whitelists,
+    }
+
+
+def project_strand_combinations(*,
+                                combinations: list[tuple[dict, ...]],
+                                building_block_names: list[str],
+                                strand_building_block_names: list[str]) -> list[tuple[dict, ...]]:
+    """Project dual-display combinations onto one strand and drop duplicates."""
+    strand_indices = [building_block_names.index(name) for name in strand_building_block_names]
+    unique = {}
+    for combination in combinations:
+        strand_combination = tuple(combination[idx] for idx in strand_indices)
+        unique[tuple(entry['index'] for entry in strand_combination)] = strand_combination
+    return sorted(unique.values(), key=lambda combination: tuple(entry['index'] for entry in combination))
 
 
 def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
@@ -669,7 +846,7 @@ def find_next_reaction(G: nx.DiGraph):
         preds = sorted(G.predecessors(node))
         succ, = sorted(G.successors(node))  # note: currently only one product per reaction
 
-        if G.nodes[succ]['smiles'] is None and all([G.nodes[i]['smiles'] is not None for i in preds]):
+        if G.nodes[succ].get('smiles') is None and all([G.nodes[i]['smiles'] is not None for i in preds]):
             return {'reactants': preds, 'reaction': node, 'product': succ}
 
     return None
@@ -712,6 +889,8 @@ def complete_reaction_graph(G: nx.DiGraph, errors: str = 'raise') -> nx.DiGraph:
         The updated reaction graph.
     """
     while True:
+        next_reaction = None
+        products = None
 
         try:
             next_reaction = find_next_reaction(G)

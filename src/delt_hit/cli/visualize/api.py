@@ -127,6 +127,7 @@ class Visualize:
         assert lib_path.exists(), f"Library file not found at {lib_path}"
 
         df = pd.read_parquet(lib_path)
+        assert "smiles" in df.columns, "Dual-display libraries with `smiles_a`/`smiles_b` are not supported by `visualize library`"
         smiles = df["smiles"].dropna().tolist()
         legend_df = df.loc[df["smiles"].notna()]
         legends = build_code_legends(legend_df)

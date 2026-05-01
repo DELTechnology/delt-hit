@@ -5,7 +5,7 @@ from loguru import logger
 
 
 base_dir = Path(__file__).resolve().parent
-lane = "lane-1"
+lane = "lane-2"
 published_dir = base_dir / "published"
 selections_dir = base_dir / lane / "selections"
 
