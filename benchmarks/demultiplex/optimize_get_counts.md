@@ -79,7 +79,7 @@ Parallel (num_workers=11) …
 Command:
 
 ```bash
-./.venv/bin/python tests/benchmark_get_counts.py --n-reads 5000000 --chunk-size-bytes 5000000
+pixi run python tests/benchmark_get_counts.py --n-reads 5000000 --chunk-size-bytes 5000000
 ```
 
 Results:
@@ -109,7 +109,7 @@ However, the bigger finding is that the full `get_counts()` path also regressed 
 Commands were run with:
 
 ```bash
-./.venv/bin/python tests/benchmark_get_counts.py --n-reads 25000000 --chunk-size-bytes <SIZE>
+pixi run python tests/benchmark_get_counts.py --n-reads 25000000 --chunk-size-bytes <SIZE>
 ```
 
 Three chunk sizes were tested:

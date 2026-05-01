@@ -21,7 +21,7 @@ DATA_ROOT = BENCHMARKS_ROOT / "data"
 TOOLS_ROOT = BENCHMARKS_ROOT / "tools"
 DEFAULT_DATASET_NAME = "synthetic_2cycle_10bbpc_1m"
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "target" / "benchmarks"
-DELT_HIT_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
+DELT_HIT_CMD = ["pixi", "run", "delt-hit"]
 DELI_BIN = PROJECT_ROOT / "other_tools" / "DELi" / ".venv" / "bin" / "deli"
 
 
@@ -205,7 +205,6 @@ def run_delt(
     delt_root: Path,
 ) -> dict[str, object]:
     dataset_root = require_path(delt_root / dataset_name, "DELT-Hit prepared dataset")
-    tool_python = require_path(DELT_HIT_PYTHON, "DELT-Hit Python executable")
     config_path = require_path(dataset_root / "config.yaml", "DELT-Hit config")
 
     config = yaml.safe_load(config_path.read_text())
@@ -219,7 +218,7 @@ def run_delt(
     clean_delt_outputs(config_path)
     run_root = output_dir / "delt"
     run_root.mkdir(parents=True, exist_ok=True)
-    env = benchmark_environment(run_root, DELT_HIT_PYTHON.parent)
+    env = benchmark_environment(run_root)
 
     timings = {
         "demultiplex_s": run_command(
@@ -229,7 +228,7 @@ def run_delt(
             log_path=run_root / "logs" / "demultiplex.log",
         ),
         "count_aggregation_s": run_command(
-            [tool_python, "-m", "delt_hit.cli.main", "demultiplex", "process", "--config_path", config_path],
+            [*DELT_HIT_CMD, "demultiplex", "process", "--config_path", config_path],
             env=env,
             cwd=PROJECT_ROOT,
             log_path=run_root / "logs" / "count_aggregation.log",
