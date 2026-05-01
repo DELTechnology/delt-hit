@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run python3
+#!/usr/bin/env python3
 """Collect Slurm job stats for benchmark runs and write job-stats.json next to timing.json.
 
 For each tool/dataset directory that contains a timing.json, finds the most recent
