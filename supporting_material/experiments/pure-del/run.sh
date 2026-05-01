@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-cd /Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/pure-del || exit
+set -euo pipefail
 
-#PREFIX=lane-1
-PREFIX=lane-2
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR" || exit
 
-delt-hit init --excel_path $PREFIX.xlsx
+PREFIX="${1:-lane-1}"
+
+delt-hit init --excel_path "$PREFIX.xlsx"
 
 CONFIG_PATH=$PREFIX/config.yaml
 

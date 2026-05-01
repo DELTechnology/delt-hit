@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-cd /Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/favalli || exit
+set -euo pipefail
 
-PREFIX=lane-1
-#PREFIX=lane-2
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR" || exit
 
-delt-hit init --excel_path $PREFIX.xlsx
+PREFIX="${1:-lane-1}"
+
+delt-hit init --excel_path "$PREFIX.xlsx"
 
 CONFIG_PATH=$PREFIX/config.yaml
 
@@ -23,11 +25,11 @@ delt-hit analyse enrichment \
   --name=protein_vs_no_protein \
   --method=counts
 
-Rscript --vanilla $PREFIX/analysis/protein_vs_no_protein/counts/enrichment_counts.R
+Rscript --vanilla "$PREFIX/analysis/protein_vs_no_protein/counts/enrichment_counts.R"
 
 delt-hit analyse enrichment \
   --config_path=analysis.yaml \
   --name=protein_vs_no_protein \
   --method=edgeR
 
-Rscript --vanilla $PREFIX/analysis/protein_vs_no_protein/edgeR/enrichment_edgeR.R
+Rscript --vanilla "$PREFIX/analysis/protein_vs_no_protein/edgeR/enrichment_edgeR.R"

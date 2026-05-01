@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-cd /Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/template || exit
-delt-hit init --excel_path template.xlsx
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR" || exit
+
+delt-hit init --excel_path example-single-stranded.xlsx
 
 CONFIG_PATH=campaign/config.yaml
 

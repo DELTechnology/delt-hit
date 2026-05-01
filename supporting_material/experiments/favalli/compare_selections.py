@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 
 import pandas as pd
 from loguru import logger
@@ -6,7 +7,7 @@ from loguru import logger
 
 base_dir = Path(__file__).resolve().parent
 legacy_path = base_dir / "published" / "1907_NF2GB2_s1_R1_260424JS_2026_4_24_16_20_51_eval.txt"
-lane = "lane-2"
+lane = sys.argv[1] if len(sys.argv) > 1 else "lane-1"
 selection_names = [path.stem for path in (base_dir / lane / "selections").glob("*") if path.is_dir()]
 selection_names = sorted(selection_names)
 
