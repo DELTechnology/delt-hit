@@ -7,7 +7,3 @@ CONFIG_PATH=campaign-dual/config.yaml
 
 delt-hit visualize enumerate --config_path=$CONFIG_PATH
 delt-hit library enumerate --config_path=$CONFIG_PATH
-delt-hit library properties --config_path=$CONFIG_PATH
-
-delt-hit library represent --method=morgan --config_path=$CONFIG_PATH
-delt-hit library represent --method=bert --config_path=$CONFIG_PATH
