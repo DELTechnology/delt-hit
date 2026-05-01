@@ -360,7 +360,7 @@ Create an Excel file with multiple sheets defining your experiment. Each sheet c
 CRITICAL STEP: Use absolute paths or paths relative to your working directory for fastq\_path and save\_dir and ensure there are no trailing whitespaces.
 
 
-\protocolstep{2}{Create the selections sheet}
+\protocolstep{2}{Create the selection sheet}
 
 This sheet defines the experimental design including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes an experimental setting (for example a different protein target or experimental condition like controls) and is identified by a unique combination of S0 and S1 primers to demultiplex the sequencing data into the individual experiments.
 
@@ -462,12 +462,7 @@ Only required for advanced library enumeration. If the synthesis of the library 
 
 
 \input{tables/table10}
-It might be necessary to define multiple reaction paths for precursors even though they share the same reaction node in theory. Table 11 demonstrates this with two scaffolds that are activated with a Staudinger reduction (SR) reaction before reacting with the building block. The definition in Table 12 adds two independent reaction paths to the reaction graph and the reaction pathway can be resolved. In contrast, using the same reaction name SR for both would result in an invalid reaction graph that defines:
-
-scaffold\_1 + scaffold\_2 -\textgreater{} SR -\textgreater{} scaffold\_1A + scaffold\_1B
-
-
-\input{tables/table11}
+More advanced reaction-graph edge cases, including multi-path precursor activation schemes that require separate reaction nodes, are described in the supplementary note ``Advanced reaction-graph configurations'' so that the core protocol can stay aligned to the single-stranded workflow example while retaining the broader guidance.
 
 \protocolstep{9}{Generate the configuration file}
 
@@ -478,8 +473,14 @@ Once your Excel file is complete with all required sheets, generate the YAML con
 # Activate the delt-hit environment
 conda activate delt-hit
 
+# Move into the single-stranded example workflow
+cd supporting_material/experiments/example-single-stranded
+
 # Generate configuration from Excel template
-delt-hit init --excel_path=/path/to/your/experiment.xlsx
+delt-hit init --excel_path=example-single-stranded.xlsx
+
+# Reuse this config path in the downstream commands
+CONFIG_PATH=campaign/config.yaml
 \end{lstlisting}
 This command creates a YAML configuration file at save\_dir/name/config.yaml as specified in your Excel file in sheet experiment.
 
@@ -487,7 +488,7 @@ Expected output:
 
 
 \begin{lstlisting}
-Configuration created at /path/to/results/experiments/experiment-1/config.yaml
+Configuration created at campaign/config.yaml
 \end{lstlisting}
 CRITICAL STEP: Review the generated YAML file to verify all information was parsed correctly. The YAML file will be used for all subsequent analysis steps.
 
@@ -521,10 +522,10 @@ Generate the demultiplexing scripts with its dependencies and execute the analys
 
 \begin{lstlisting}
 # Generate Cutadapt input files and demultiplexing script
-delt-hit demultiplex prepare --config_path=/path/to/config.yaml
+delt-hit demultiplex prepare --config_path=$CONFIG_PATH
 
 # Execute demultiplexing
-/path/to/experiment/demultiplex/cutadapt_input_files/demultiplex.sh
+campaign/demultiplex/cutadapt_input_files/demultiplex.sh
 \end{lstlisting}
 The demultiplexing process performs:
 
@@ -546,14 +547,26 @@ Expected outputs:
 
 \protocolstep{12}{Process demultiplexing results and generate count tables}
 
-After demultiplexing completes, aggregate the results into count tables for each selection:
+After demultiplexing completes, the single-stranded example workflow next generates the text report and QC figures before aggregating the results into count tables for each selection:
 
 
 \begin{lstlisting}
+# Generate text-based quality control report
+delt-hit demultiplex report --config_path=$CONFIG_PATH
+
+# Generate quality control visualizations
+delt-hit demultiplex qc --config_path=$CONFIG_PATH
+
 # Process demultiplexing output and generate count tables
-delt-hit demultiplex process --config_path=/path/to/config.yaml
+delt-hit demultiplex process --config_path=$CONFIG_PATH
+
+# Also export flattened per-selection count files
+delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True
+
+# Optional: keep codon-id order instead of sorting by observed counts
+# delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True --sort_by_counts=False
 \end{lstlisting}
-This command:
+These commands:
 
 \begin{itemize}
   \item Parses the demultiplexed reads
@@ -577,11 +590,10 @@ Assess demultiplexing quality with comprehensive statistics and visualizations:
 
 
 \begin{lstlisting}
-# Generate text-based quality control report
-delt-hit demultiplex report --config_path=/path/to/config.yaml
-
-# Generate quality control visualizations
-delt-hit demultiplex qc --config_path=/path/to/config.yaml
+# In the single-stranded example workflow, these commands are executed
+# immediately before count-table generation (Step 12):
+delt-hit demultiplex report --config_path=$CONFIG_PATH
+delt-hit demultiplex qc --config_path=$CONFIG_PATH
 \end{lstlisting}
 Expected outputs:
 
@@ -627,7 +639,7 @@ Visualize demultiplexing results and explore count distributions:
 
 
 \begin{lstlisting}
-delt-hit dashboard --config_path=/path/to/config.yaml --counts_path=/path/to/experiment/selections/CA_P1/counts.txt
+delt-hit dashboard --config_path=$CONFIG_PATH --counts_path=campaign/selections/AG24_4_counts.txt
 
 # Dash is running on http://127.0.0.1:8050/  # copy paste into browser
 # * Serving Flask app 'delt_hit.cli.dashboard.api'
@@ -675,9 +687,9 @@ delt-hit visualize enumerate --config_path=$CONFIG_PATH
 
 delt-hit library enumerate \
   --config_path=$CONFIG_PATH \
-  --counts_path=/path/to/selections/SELECTION/counts.txt \
+  --counts_path=campaign/selections/AG24_4_counts.txt \
   --top_n=1000 \
-  --library_name=SELECTION_top_hits
+  --library_name=AG24_4_top_hits
 \end{lstlisting}
 Those commands:
 
@@ -690,10 +702,10 @@ Those commands:
 Expected outputs:
 
 \begin{itemize}
-  \item library/SELECTION\_top\_hits/library.parquet: Compound catalog for the top hits with SMILES and barcode mappings
-  \item reaction\_graph.png: Visual representation of synthetic schema
-  \item additional\_reactions\_graph.png: Visualizes the additional reactions from the reaction\_graph sheet
-  \item building\_block\_reactions\_graph.png: Visualizes the reactions derived from the building block sheets B0, B1, etc.
+  \item library/AG24\_4\_top\_hits.parquet: Compound catalog for the top hits with SMILES and barcode mappings
+  \item library/visualization/reaction\_graph.png: Visual representation of synthetic schema
+  \item library/visualization/reaction\_graph\_additional.png: Visualizes the additional reactions from the reaction\_graph sheet
+  \item library/visualization/reaction\_graph\_building\_blocks.png: Visualizes the reactions derived from the building block sheets B0, B1, etc.
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -718,8 +730,8 @@ Visualize the enumerated top hits and compute comprehensive molecular descriptor
 
 
 \begin{lstlisting}
-delt-hit visualize library --config_path=$CONFIG_PATH --library_name=SELECTION_top_hits
-delt-hit library properties --config_path=$CONFIG_PATH --library_name=SELECTION_top_hits
+delt-hit visualize library --config_path=$CONFIG_PATH --library_name=AG24_4_top_hits
+delt-hit library properties --config_path=$CONFIG_PATH --library_name=AG24_4_top_hits
 \end{lstlisting}
 Computed properties include:
 
@@ -751,7 +763,7 @@ This phase identifies enriched library members by comparing selection conditions
 
 \protocolstep{17}{Define statistical comparisons}
 
-From the information in the selections sheet, create a new dedicated configuration yaml file to specify which selections to compare.
+From the information in the selection sheet, create a new dedicated configuration yaml file to specify which selections to compare.
 
 A new configuration file is used to support comparisons across different selection runs, i.e. runs that might come from multiple individual sequencing files.
 
@@ -760,25 +772,25 @@ A new configuration file is used to support comparisons across different selecti
 # new analysis.yaml
 experiments:
 - name: protein_vs_no_protein
-  save_dir: /Volumes/experiment-GB/analysis
+  save_dir: campaign/analysis
   selections:
     - name: AG24_4
-      counts_path: /Volumes/experiment-GB/selections/AG24_4/counts.txt
+      counts_path: campaign/selections/AG24_4/counts.txt
       group: no_protein
     - name: AG24_5
-      counts_path: /Volumes/experiment-GB/selections/AG24_5/counts.txt
+      counts_path: campaign/selections/AG24_5/counts.txt
       group: no_protein
     - name: AG24_6
-      counts_path: /Volumes/experiment-GB/selections/AG24_6/counts.txt
+      counts_path: campaign/selections/AG24_6/counts.txt
       group: no_protein
     - name: AG24_13
-      counts_path: /Volumes/experiment-GB/selections/AG24_13/counts.txt
+      counts_path: campaign/selections/AG24_13/counts.txt
       group: protein
     - name: AG24_14
-      counts_path: /Volumes/experiment-GB/selections/AG24_14/counts.txt
+      counts_path: campaign/selections/AG24_14/counts.txt
       group: protein
     - name: AG24_15
-      counts_path: /Volumes/experiment-GB/selections/AG24_15/counts.txt
+      counts_path: campaign/selections/AG24_15/counts.txt
       group: protein
 \end{lstlisting}
 
@@ -791,10 +803,10 @@ A. Simple counts method (suitable for single replicates)
 
 \begin{lstlisting}
 # Generate R script for counts-based analysis
-delt-hit analyse enrichment --config_path=/path/to/analysis-config.yaml --name=protein_vs_no_protein --method=counts
+delt-hit analyse enrichment --config_path=analysis.yaml --name=protein_vs_no_protein --method=counts
 
 # Execute the generated R script
-Rscript --vanilla /path/to/experiment/analyses/analysis-1/counts/enrichment_counts.R
+Rscript --vanilla campaign/analysis/protein_vs_no_protein/counts/enrichment_counts.R
 \end{lstlisting}
 The counts method:
 
@@ -809,11 +821,11 @@ B. edgeR method (recommended when replicates are available)
 
 \begin{lstlisting}
 # Generate R script for edgeR statistical analysis
-delt-hit analyse enrichment --config_path=/path/to/analysis-config.yaml --name=protein_vs_no_protein --method=edgeR
+delt-hit analyse enrichment --config_path=analysis.yaml --name=protein_vs_no_protein --method=edgeR
 
 
 # Execute the generated R script
-Rscript --vanilla /path/to/experiment/analyses/analysis-1/edgeR/enrichment_edgeR.R
+Rscript --vanilla campaign/analysis/protein_vs_no_protein/edgeR/enrichment_edgeR.R
 \end{lstlisting}
 The edgeR method:
 
@@ -973,77 +985,78 @@ DELT-Hit generates a comprehensive, standardized output hierarchy:
 
 
 \begin{lstlisting}
-project_root/
+supporting_material/experiments/example-single-stranded/
 |---- analysis.yaml                        # analysis specification
 |---- campaign.fastq.gz                    # Raw sequencing reads 
 |---- example-single-stranded.xlsx         # Input excel sheet 
 |
-`---- experiments/                         # experiments (one folder per campaign)
-    `---- example-single-stranded/         # Example experiment instance
-        |---- config.yaml                  # Experiment-level config
-        |
-        |---- demultiplex/                 # Cutadapt-based demultiplexing)
-        |   |---- cutadapt_input_files/    # Files passed to Cutadapt (generated)
-        |   |   |---- demultiplex.sh       # Generated shell script running Cutadapt steps
-        |   |   `---- {0-S0,1-C0,2-B0,...}.fastq   # Cutadapt adapter lists
-        |   `---- cutadapt_output_files/   # Cutadapt outputs per step
-        |       |---- *.cutadapt.json      # Per-step JSON stats from Cutadapt
-        |       |---- *.cutadapt.log       # Per-step logs (stdout/stderr capture)
-        |       |---- input.fastq.gz       # Cutadapt input for the demultiplexing
-        |       |---- out.fastq.gz         # Cutadapt output for the demultiplexing
-        |       `---- reads_with_adapters.gz  # Reads retained with adapters
-        |
-        |---- library/                     # Library reconstruction & enumeration outputs
-        |   |---- library.parquet          # Enumerated library table
-        |   |---- reaction_graph.png       # Main reaction graph visualization
-        |   |---- building_block_reactions_graph.png   # Graph focused on building blocks
-        |   |---- additional_reactions_graph.png       # Extra/optional reactions graph
-        |   |
-        |   `---- properties/              # Calculated molecular descriptors for the library
-        |       |---- properties.parquet   # Descriptor table aligned with library.parquet
-        |       `---- prop_*.png           # Descriptor distributions (e.g.,mw/logP/TPSA/QED/...)
-        |
-        |---- representations/             # ML-ready representations derived from SMILES
-        |   |---- morgan.npz               # Morgan fingerprints (sparse array)
-        |   `---- bert.npz                 # Embeddings (e.g., SMILES BERT)
-        |
-        |---- selections/                  # Per-selection count tables (from demultiplexing)
-        |   |---- AG24_4/                  # One selection / condition / replicate
-        |   |   `---- counts.txt           # Count table for this selection
-        |   |---- AG24_5/
-        |   |   `---- counts.txt
-        |   |---- AG24_6/
-        |   |   `---- counts.txt
-        |   |---- AG24_13/
-        |   |   `---- counts.txt
-        |   `---- ...                      # Many more selections
-        |   # Note: AG24_*_counts.txt files at this level are flattened copies of the per-  
-        |           folder counts
-        |
-        |---- qc/                          # Quality control outputs
-        |   |---- report.txt               # Human-readable QC summary
-        |   |---- hits_{0-S0,1-C0,2-B0,...}.parquet  # Per-step ?hit? tables
-        |   `---- hits_{0-S0,1-C0,2-B0,...}.pdf      # Per-step QC report plots
-        |
-        `---- analysis/                    # Downstream statistical analyses
-            `---- protein_vs_no_protein/   # One analysis definition (experiment name)
-                |---- samples.csv          # metadata for statistical analysis
-                |---- data.csv             # data for statistical analysis
-                |
-                |---- counts/              # Simple counts-based enrichment
-                |   |---- enrichment_counts.R          # Script to compute enrichment
-                |   |---- stats.csv                    # Full results table
-                |   |---- hits.csv                     # Filtered top hits
-                |   |---- protein.csv                  # Group-normalized counts
-                |   |---- no_protein.csv               # Group-normalized counts
-                |   `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
-                |
-                `---- edgeR/               # edgeR-based differential enrichment
-                    |---- enrichment_edgeR.R           # edgeR workflow script
-                    |---- enrichment_stats.csv         # Full results with p-values/FDR
-                    |---- enrichment_hits.csv          # Significant hits (e.g., FDR < 0.05)
-                    |---- {AG24_4,AG24_5,AG24_6,...}.csv  # Normalized counts per selection
-                    `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
+`---- campaign/                            # Example experiment instance
+    |---- config.yaml                      # Experiment-level config
+    |
+    |---- demultiplex/                     # Cutadapt-based demultiplexing)
+    |   |---- cutadapt_input_files/        # Files passed to Cutadapt (generated)
+    |   |   |---- demultiplex.sh           # Generated shell script running Cutadapt steps
+    |   |   `---- {0-S0,1-C0,2-B0,...}.fastq   # Cutadapt adapter lists
+    |   `---- cutadapt_output_files/       # Cutadapt outputs per step
+    |       |---- *.cutadapt.json          # Per-step JSON stats from Cutadapt
+    |       |---- *.cutadapt.log           # Per-step logs (stdout/stderr capture)
+    |       |---- input.fastq.gz           # Cutadapt input for the demultiplexing
+    |       |---- out.fastq.gz             # Cutadapt output for the demultiplexing
+    |       `---- reads_with_adapters.gz   # Reads retained with adapters
+    |
+    |---- library/                         # Library reconstruction & enumeration outputs
+    |   |---- AG24_4_top_hits.parquet      # Enumerated top-hit catalog for AG24_4
+    |   |---- library.parquet              # Full enumerated library table
+    |   |---- visualization/
+    |   |   |---- reaction_graph.png       # Main reaction graph visualization
+    |   |   |---- reaction_graph_additional.png       # Extra/optional reactions graph
+    |   |   `---- reaction_graph_building_blocks.png  # Graph focused on building blocks
+    |   |
+    |   `---- properties/                  # Calculated molecular descriptors for the library
+    |       |---- AG24_4_top_hits/         # Descriptor outputs for top hits
+    |       |---- properties.parquet       # Descriptor table aligned with library.parquet
+    |       `---- prop_*.png               # Descriptor distributions (e.g.,mw/logP/TPSA/QED/...)
+    |
+    |---- representations/                 # ML-ready representations derived from SMILES
+    |   |---- morgan.npz                   # Morgan fingerprints (sparse array)
+    |   `---- bert.npz                     # Embeddings (e.g., SMILES BERT)
+    |
+    |---- selections/                      # Per-selection count tables (from demultiplexing)
+    |   |---- AG24_4/                      # One selection / condition / replicate
+    |   |   `---- counts.txt               # Count table for this selection
+    |   |---- AG24_4_counts.txt            # Flattened copy of the AG24_4 counts
+    |   |---- AG24_5/
+    |   |   `---- counts.txt
+    |   |---- AG24_6/
+    |   |   `---- counts.txt
+    |   |---- AG24_13/
+    |   |   `---- counts.txt
+    |   `---- ...                          # Many more selections
+    |
+    |---- qc/                              # Quality control outputs
+    |   |---- report.txt                   # Human-readable QC summary
+    |   |---- hits_{0-S0,1-C0,2-B0,...}.parquet  # Per-step hit tables
+    |   `---- hits_{0-S0,1-C0,2-B0,...}.pdf      # Per-step QC report plots
+    |
+    `---- analysis/                        # Downstream statistical analyses
+        `---- protein_vs_no_protein/       # One analysis definition (experiment name)
+            |---- samples.csv              # metadata for statistical analysis
+            |---- data.csv                 # data for statistical analysis
+            |
+            |---- counts/                  # Simple counts-based enrichment
+            |   |---- enrichment_counts.R  # Script to compute enrichment
+            |   |---- stats.csv            # Full results table
+            |   |---- hits.csv             # Filtered top hits
+            |   |---- protein.csv          # Group-normalized counts
+            |   |---- no_protein.csv       # Group-normalized counts
+            |   `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
+            |
+            `---- edgeR/                   # edgeR-based differential enrichment
+                |---- enrichment_edgeR.R   # edgeR workflow script
+                |---- enrichment_stats.csv # Full results with p-values/FDR
+                |---- enrichment_hits.csv  # Significant hits (e.g., FDR < 0.05)
+                |---- {AG24_4,AG24_5,AG24_6,...}.csv  # Normalized counts per selection
+                `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
 \end{lstlisting}
 
 \subsubsection{Chemical library characterization}
