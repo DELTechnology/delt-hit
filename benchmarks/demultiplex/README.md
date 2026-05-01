@@ -75,7 +75,7 @@ READS=10000
 ERR=0
 DATASET="synthetic_${CYCLES}cycle_${BBPC}bbpc_${DEPTH}_err=${ERR}"
 
-./.venv/bin/python benchmarks/demultiplex/generate_synthetic_fastq.py \
+python benchmarks/demultiplex/generate_synthetic_fastq.py \
   --num-cycles "$CYCLES" \
   --building-blocks-per-cycle "$BBPC" \
   --num-reads-per-compound "$READS" \
@@ -87,14 +87,14 @@ DATASET="synthetic_${CYCLES}cycle_${BBPC}bbpc_${DEPTH}_err=${ERR}"
 Prepare DELi inputs for that dataset:
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
+python benchmarks/demultiplex/converter/create_deli_inputs.py \
   --dataset-name "$DATASET"
 ```
 
 Prepare DELT-Hit inputs for that dataset:
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/converter/create_delt_inputs.py \
+python benchmarks/demultiplex/converter/create_delt_inputs.py \
   --dataset-name "$DATASET" \
   --num-cores 11
 ```
@@ -102,7 +102,7 @@ Prepare DELT-Hit inputs for that dataset:
 Run the benchmark for that dataset:
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
+python benchmarks/demultiplex/run_split_timing.py \
   --dataset-name "$DATASET" \
   --tool both
 ```
@@ -114,7 +114,7 @@ Use the converter scripts in [`benchmarks/demultiplex/converter`](./converter).
 ### DELi
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/converter/create_deli_inputs.py \
+python benchmarks/demultiplex/converter/create_deli_inputs.py \
   --dataset-name synthetic_4cycle_10bbpc_100m_err=0
 ```
 
@@ -126,7 +126,7 @@ Prepared inputs are written to:
 ### DELT-Hit
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/converter/create_delt_inputs.py \
+python benchmarks/demultiplex/converter/create_delt_inputs.py \
   --dataset-name synthetic_4cycle_10bbpc_100m_err=0 \
   --num-cores 11
 ```
@@ -161,7 +161,7 @@ It writes the canonical machine-readable report to:
 ### DELi Only
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
+python benchmarks/demultiplex/run_split_timing.py \
   --dataset-name synthetic_4cycle_10bbpc_100m_err=0 \
   --tool deli
 ```
@@ -169,7 +169,7 @@ It writes the canonical machine-readable report to:
 ### DELT-Hit Only
 
 ```bash
-./.venv/bin/python benchmarks/demultiplex/run_split_timing.py \
+python benchmarks/demultiplex/run_split_timing.py \
   --dataset-name synthetic_4cycle_10bbpc_100m_err=0 \
   --tool delt
 ```
@@ -352,7 +352,7 @@ mkdir -p "$ROOT/.tmp/mpl" "$ROOT/.tmp/fontconfig"
 export MPLCONFIGDIR="$ROOT/.tmp/mpl"
 export XDG_CACHE_HOME="$ROOT/.tmp"
 export FC_CACHEDIR="$ROOT/.tmp/fontconfig"
-export PATH="$ROOT/.venv/bin:$ROOT/other_tools/DELi/.venv/bin:$PATH"
+export PATH="$ROOT/other_tools/DELi/.venv/bin:$PATH"
 
 deli \
   --config-file "$DELI_DIR/deli_config" \
