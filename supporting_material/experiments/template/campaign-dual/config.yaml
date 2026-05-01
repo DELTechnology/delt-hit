@@ -1,0 +1,622 @@
+experiment:
+  name: campaign-dual
+  fastq_path: campaign-dual.fastq.gz
+  save_dir: ./
+  num_cores: 11
+selections:
+  AG24_4:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: no_protein
+    target: .nan
+    S0: ACACAC
+    S1: TCGATA
+    ids:
+    - 0
+    - 0
+  AG24_5:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: no_protein
+    target: .nan
+    S0: ACAGCA
+    S1: TCGATA
+    ids:
+    - 1
+    - 0
+  AG24_6:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: no_protein
+    target: .nan
+    S0: ACATGT
+    S1: TCGATA
+    ids:
+    - 2
+    - 0
+  AG24_13:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: A
+    S0: ACGACG
+    S1: TCGATA
+    ids:
+    - 3
+    - 0
+  AG24_14:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: A
+    S0: ACGCGA
+    S1: TCGATA
+    ids:
+    - 4
+    - 0
+  AG24_15:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: A
+    S0: ACTAGC
+    S1: TCGATA
+    ids:
+    - 5
+    - 0
+  AG24_22:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: B
+    S0: ACTCTG
+    S1: TCGATA
+    ids:
+    - 6
+    - 0
+  AG24_23:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: B
+    S0: ACTGAT
+    S1: TCGATA
+    ids:
+    - 7
+    - 0
+  AG24_24:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: B
+    S0: AGACTA
+    S1: TCGATA
+    ids:
+    - 8
+    - 0
+  AG24_31:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: no_protein
+    target: .nan
+    S0: AGAGAG
+    S1: TCGATA
+    ids:
+    - 9
+    - 0
+  AG24_32:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: no_protein
+    target: .nan
+    S0: TAGATG
+    S1: TCGATA
+    ids:
+    - 10
+    - 0
+  AG24_33:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: no_protein
+    target: .nan
+    S0: TAGTGT
+    S1: TCGATA
+    ids:
+    - 11
+    - 0
+  AG24_40:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: C
+    S0: TATCAC
+    S1: TCGATA
+    ids:
+    - 12
+    - 0
+  AG24_41:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: C
+    S0: TCATAG
+    S1: TCGATA
+    ids:
+    - 13
+    - 0
+  AG24_42:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: C
+    S0: TCGTCA
+    S1: TCGATA
+    ids:
+    - 14
+    - 0
+  AG24_49:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: D
+    S0: TCTACT
+    S1: TCGATA
+    ids:
+    - 15
+    - 0
+  AG24_50:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: D
+    S0: TCTGTA
+    S1: TCGATA
+    ids:
+    - 16
+    - 0
+  AG24_51:
+    operator: A. Smith
+    date: '2024-09-26'
+    group: protein
+    target: D
+    S0: TGACAT
+    S1: TCGATA
+    ids:
+    - 17
+    - 0
+  AG24_58:
+    operator: A. Smith
+    date: '2024-10-17'
+    group: no_protein
+    target: .nan
+    S0: TGCAGC
+    S1: TCGATA
+    ids:
+    - 18
+    - 0
+  AG24_59:
+    operator: A. Smith
+    date: '2024-10-17'
+    group: no_protein
+    target: .nan
+    S0: TGCGCG
+    S1: TCGATA
+    ids:
+    - 19
+    - 0
+  AG24_60:
+    operator: A. Smith
+    date: '2024-10-17'
+    group: no_protein
+    target: .nan
+    S0: GCTACT
+    S1: TCGATA
+    ids:
+    - 20
+    - 0
+  AG24_67:
+    operator: A. Smith
+    date: '2024-10-17'
+    group: protein
+    target: E
+    S0: GCACAT
+    S1: TCGATA
+    ids:
+    - 21
+    - 0
+  AG24_68:
+    operator: A. Smith
+    date: '2024-10-17'
+    group: protein
+    target: E
+    S0: GAGTGT
+    S1: TCGATA
+    ids:
+    - 22
+    - 0
+  AG24_69:
+    operator: A. Smith
+    date: '2024-10-17'
+    group: protein
+    target: E
+    S0: GTGCGA
+    S1: TCGATA
+    ids:
+    - 23
+    - 0
+  AG24_76:
+    operator: A. Smith
+    date: '2024-10-17'
+    group: protein
+    target: E
+    S0: GCCGCT
+    S1: TCGATA
+    ids:
+    - 24
+    - 0
+  AG24_77:
+    operator: A. Smith
+    date: '2024-10-17'
+    group: protein
+    target: E
+    S0: GAAGAT
+    S1: TCGATA
+    ids:
+    - 25
+    - 0
+  AG24_78:
+    operator: A. Smith
+    date: '2024-10-17'
+    group: protein
+    target: E
+    S0: GTTCAG
+    S1: TCGATA
+    ids:
+    - 26
+    - 0
+library:
+  products:
+  - product_1
+  - product_2
+  - product_3
+  - product_4
+  educts:
+  - product_1
+  - product_3
+  - scaffold_1
+  reactions:
+  - A-ABF1
+  - A-CuAAC
+  - B-ABF1
+  - B-CuAAC
+  bb_edges:
+  - - A-ABF1
+    - product_1
+  - - A-CuAAC
+    - product_2
+  - - B-ABF1
+    - product_3
+  - - B-CuAAC
+    - product_4
+  - - B0
+    - A-ABF1
+  - - B1
+    - A-CuAAC
+  - - B2
+    - B-ABF1
+  - - B3
+    - B-CuAAC
+  - - product_1
+    - A-CuAAC
+  - - product_3
+    - B-CuAAC
+  - - scaffold_1
+    - A-ABF1
+  - - scaffold_1
+    - B-ABF1
+  other_edges: []
+  building_blocks:
+  - B0
+  - B1
+  - B2
+  - B3
+catalog:
+  compounds:
+    scaffold_1:
+      smiles: O=C(N)CCC(N=[N+]=[N-])C(O)=O
+  reactions:
+    A-ABF1:
+      smirks: '[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);!$([NX3][CX3](=[OX1])[#6]);!$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]'
+    A-ABF2:
+      smirks: '[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);!$([NX3][CX3](=[OX1])[#6]);!$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]'
+    A-SR:
+      smirks: '[#6:1][$([NX2-][NX2+]#[NX1]),$([NX2]=[NX2+]=[NX1-])]>>[#6:1][N;H2]'
+    A-CuAAC:
+      smirks: '[CX2:1]#[CX2;H1:2].[N:3]=[N+:4]=[N-:5]>>[C:1]1=[C:2][N-0:3][N-0:4]=[N-0:5]1'
+    B-ABF1:
+      smirks: '[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);!$([NX3][CX3](=[OX1])[#6]);!$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]'
+    B-ABF2:
+      smirks: '[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);!$([NX3][CX3](=[OX1])[#6]);!$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]'
+    B-SR:
+      smirks: '[#6:1][$([NX2-][NX2+]#[NX1]),$([NX2]=[NX2+]=[NX1-])]>>[#6:1][N;H2]'
+    B-CuAAC:
+      smirks: '[CX2:1]#[CX2;H1:2].[N:3]=[N+:4]=[N-:5]>>[C:1]1=[C:2][N-0:3][N-0:4]=[N-0:5]1'
+structure:
+- name: S0
+  type: selection
+  max_error_rate: 0.0
+  indels: false
+  strand: .nan
+- name: C0
+  type: constant
+  max_error_rate: 1.01
+  indels: false
+  strand: .nan
+- name: B0
+  type: building_block
+  max_error_rate: 0.0
+  indels: false
+  strand: A
+- name: C1
+  type: constant
+  max_error_rate: 1.01
+  indels: false
+  strand: .nan
+- name: B1
+  type: building_block
+  max_error_rate: 0.0
+  indels: false
+  strand: A
+- name: C2
+  type: constant
+  max_error_rate: 1.01
+  indels: false
+  strand: .nan
+- name: B2
+  type: building_block
+  max_error_rate: 0.0
+  indels: false
+  strand: B
+- name: C3
+  type: constant
+  max_error_rate: 1.01
+  indels: false
+  strand: .nan
+- name: B3
+  type: building_block
+  max_error_rate: 0.0
+  indels: false
+  strand: B
+- name: C4
+  type: constant
+  max_error_rate: 1.01
+  indels: false
+  strand: .nan
+- name: S1
+  type: selection
+  max_error_rate: 0.0
+  indels: false
+  strand: .nan
+whitelists:
+  C0:
+  - codon: GGAGCTTCTGAATTCTGTGTGCTG
+  C1:
+  - codon: CGAGCGTCAGGCAGCCTGTGTGCTG
+  C2:
+  - codon: CGAGCGTCAGGCAGCCTGTGTGCTG
+  C3:
+  - codon: CGAGCGTCAGGCAGCCTGTGTGCTG
+  C4:
+  - codon: CGAGTCCCATGGCGC
+  B0:
+  - index: 0
+    codon: ATCTAT
+    smiles: NCC1=CC=CS1
+    educt: scaffold_1
+    reaction: A-ABF1
+    product: product_1
+    complement: false
+  - index: 1
+    codon: AGAATA
+    smiles: COC1=CC=C(OC)C(CN)=C1
+    educt: scaffold_1
+    reaction: A-ABF1
+    product: product_1
+    complement: false
+  - index: 2
+    codon: TCATTA
+    smiles: NCCCSCC1=CC=C(F)C=C1
+    educt: scaffold_1
+    reaction: A-ABF1
+    product: product_1
+    complement: false
+  - index: 3
+    codon: TTGACT
+    smiles: NCC1(CC1)C1=CC=CC=C1
+    educt: scaffold_1
+    reaction: A-ABF1
+    product: product_1
+    complement: false
+  - index: 4
+    codon: CGCTCT
+    smiles: CC(C)(CN)CN1CCCCCC1
+    educt: scaffold_1
+    reaction: A-ABF1
+    product: product_1
+    complement: false
+  B1:
+  - index: 0
+    codon: ATGCGT
+    smiles: C#CCN1C=CC2=C1C=CC=C2
+    educt: product_1
+    reaction: A-CuAAC
+    product: product_2
+    complement: false
+  - index: 1
+    codon: CAATAG
+    smiles: Cl.NCCC(O)CCC#C
+    educt: product_1
+    reaction: A-CuAAC
+    product: product_2
+    complement: false
+  B2:
+  - index: 0
+    codon: ATCTAT
+    smiles: NCC1=CC=CS1
+    educt: scaffold_1
+    reaction: B-ABF1
+    product: product_3
+    complement: false
+  - index: 1
+    codon: AGAATA
+    smiles: COC1=CC=C(OC)C(CN)=C1
+    educt: scaffold_1
+    reaction: B-ABF1
+    product: product_3
+    complement: false
+  - index: 2
+    codon: TCATTA
+    smiles: NCCCSCC1=CC=C(F)C=C1
+    educt: scaffold_1
+    reaction: B-ABF1
+    product: product_3
+    complement: false
+  - index: 3
+    codon: TTGACT
+    smiles: NCC1(CC1)C1=CC=CC=C1
+    educt: scaffold_1
+    reaction: B-ABF1
+    product: product_3
+    complement: false
+  - index: 4
+    codon: CGCTCT
+    smiles: CC(C)(CN)CN1CCCCCC1
+    educt: scaffold_1
+    reaction: B-ABF1
+    product: product_3
+    complement: false
+  B3:
+  - index: 0
+    codon: ATGCGT
+    smiles: C#CCN1C=CC2=C1C=CC=C2
+    educt: product_3
+    reaction: B-CuAAC
+    product: product_4
+    complement: false
+  - index: 1
+    codon: CAATAG
+    smiles: Cl.NCCC(O)CCC#C
+    educt: product_3
+    reaction: B-CuAAC
+    product: product_4
+    complement: false
+  S0:
+  - name: AG24_4
+    codon: ACACAC
+  - name: AG24_5
+    codon: ACAGCA
+  - name: AG24_6
+    codon: ACATGT
+  - name: AG24_13
+    codon: ACGACG
+  - name: AG24_14
+    codon: ACGCGA
+  - name: AG24_15
+    codon: ACTAGC
+  - name: AG24_22
+    codon: ACTCTG
+  - name: AG24_23
+    codon: ACTGAT
+  - name: AG24_24
+    codon: AGACTA
+  - name: AG24_31
+    codon: AGAGAG
+  - name: AG24_32
+    codon: TAGATG
+  - name: AG24_33
+    codon: TAGTGT
+  - name: AG24_40
+    codon: TATCAC
+  - name: AG24_41
+    codon: TCATAG
+  - name: AG24_42
+    codon: TCGTCA
+  - name: AG24_49
+    codon: TCTACT
+  - name: AG24_50
+    codon: TCTGTA
+  - name: AG24_51
+    codon: TGACAT
+  - name: AG24_58
+    codon: TGCAGC
+  - name: AG24_59
+    codon: TGCGCG
+  - name: AG24_60
+    codon: GCTACT
+  - name: AG24_67
+    codon: GCACAT
+  - name: AG24_68
+    codon: GAGTGT
+  - name: AG24_69
+    codon: GTGCGA
+  - name: AG24_76
+    codon: GCCGCT
+  - name: AG24_77
+    codon: GAAGAT
+  - name: AG24_78
+    codon: GTTCAG
+  S1:
+  - name: AG24_4
+    codon: TCGATA
+  - name: AG24_5
+    codon: TCGATA
+  - name: AG24_6
+    codon: TCGATA
+  - name: AG24_13
+    codon: TCGATA
+  - name: AG24_14
+    codon: TCGATA
+  - name: AG24_15
+    codon: TCGATA
+  - name: AG24_22
+    codon: TCGATA
+  - name: AG24_23
+    codon: TCGATA
+  - name: AG24_24
+    codon: TCGATA
+  - name: AG24_31
+    codon: TCGATA
+  - name: AG24_32
+    codon: TCGATA
+  - name: AG24_33
+    codon: TCGATA
+  - name: AG24_40
+    codon: TCGATA
+  - name: AG24_41
+    codon: TCGATA
+  - name: AG24_42
+    codon: TCGATA
+  - name: AG24_49
+    codon: TCGATA
+  - name: AG24_50
+    codon: TCGATA
+  - name: AG24_51
+    codon: TCGATA
+  - name: AG24_58
+    codon: TCGATA
+  - name: AG24_59
+    codon: TCGATA
+  - name: AG24_60
+    codon: TCGATA
+  - name: AG24_67
+    codon: TCGATA
+  - name: AG24_68
+    codon: TCGATA
+  - name: AG24_69
+    codon: TCGATA
+  - name: AG24_76
+    codon: TCGATA
+  - name: AG24_77
+    codon: TCGATA
+  - name: AG24_78
+    codon: TCGATA
