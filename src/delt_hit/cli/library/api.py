@@ -120,7 +120,7 @@ class Library:
 
         prop_names = [col for col in df.columns if col.startswith('prop_')]
         plt.close('all')
-        for name in prop_names:
+        for name in tqdm(prop_names, desc="Property histograms"):
             ax = self.plot_property(data=df, name=name)
             ax.figure.savefig(save_dir / f"{name}.png")
             plt.close(ax.figure)
@@ -136,7 +136,7 @@ class Library:
         """
 
         records = []
-        for smiles in tqdm(data['smiles']):
+        for smiles in tqdm(data['smiles'], desc="Molecular properties"):
             record = {}
             m = Chem.MolFromSmiles(smiles)
             record["prop_mw"] = Descriptors.MolWt(m)
