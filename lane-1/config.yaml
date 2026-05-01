@@ -4,366 +4,654 @@ experiment:
   save_dir: ./
   num_cores: 10
 selections:
-  MK_1:
+  '1_1':
+    alternative_name: MK_25
+    operator: MK
+    date: '2023-09-01'
+    target: Sigma-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACACAC
+    S1: ATA
+    ids:
+    - 0
+    - 0
+  '2_1':
+    alternative_name: MK_26
+    operator: MK
+    date: '2023-09-01'
+    target: Sigma-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACAGCA
+    S1: ATA
+    ids:
+    - 1
+    - 0
+  '3_1':
+    alternative_name: MK_27
+    operator: MK
+    date: '2023-09-01'
+    target: Sigma-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACATGT
+    S1: ATA
+    ids:
+    - 2
+    - 0
+  '4_1':
+    alternative_name: MK_28
+    operator: MK
+    date: '2023-09-01'
+    target: Andys-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACGACG
+    S1: ATA
+    ids:
+    - 3
+    - 0
+  '5_1':
+    alternative_name: MK_29
+    operator: MK
+    date: '2023-09-01'
+    target: Andys-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACGCGA
+    S1: ATA
+    ids:
+    - 4
+    - 0
+  '6_1':
+    alternative_name: MK_30
+    operator: MK
+    date: '2023-09-01'
+    target: Andys-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACTAGC
+    S1: ATA
+    ids:
+    - 5
+    - 0
+  '7_1':
+    alternative_name: MK_31
+    operator: MK
+    date: '2023-09-01'
+    target: CAII-biotin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACTCTG
+    S1: ATA
+    ids:
+    - 6
+    - 0
+  '8_1':
+    alternative_name: MK_32
+    operator: MK
+    date: '2023-09-01'
+    target: CAII-biotin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACTGAT
+    S1: ATA
+    ids:
+    - 7
+    - 0
+  '9_1':
+    alternative_name: MK_33
+    operator: MK
+    date: '2023-09-01'
+    target: CAII-biotin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: AGACTA
+    S1: ATA
+    ids:
+    - 8
+    - 0
+  '10_1':
+    alternative_name: MK_34
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: DynaBead C1
+    S0: AGAGAG
+    S1: ATA
+    ids:
+    - 9
+    - 0
+  '11_1':
+    alternative_name: MK_35
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: DynaBead C1
+    S0: TAGATG
+    S1: ATA
+    ids:
+    - 10
+    - 0
+  '12_1':
+    alternative_name: MK_36
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: DynaBead C1
+    S0: TAGTGT
+    S1: ATA
+    ids:
+    - 11
+    - 0
+  '13_1':
+    alternative_name: MK_37
+    operator: MK
+    date: '2023-09-01'
+    target: MCL-1_UP
+    group: protein
+    beads: HisPure
+    S0: TATCAC
+    S1: ATA
+    ids:
+    - 12
+    - 0
+  '14_1':
+    alternative_name: MK_38
+    operator: MK
+    date: '2023-09-01'
+    target: MCL-1_UP
+    group: protein
+    beads: HisPure
+    S0: TCATAG
+    S1: ATA
+    ids:
+    - 13
+    - 0
+  '15_1':
+    alternative_name: MK_39
+    operator: MK
+    date: '2023-09-01'
+    target: MCL-1_UP
+    group: protein
+    beads: HisPure
+    S0: TCGTCA
+    S1: ATA
+    ids:
+    - 14
+    - 0
+  '16_1':
+    alternative_name: MK_40
+    operator: MK
+    date: '2023-09-01'
+    target: CAIX-His_UP
+    group: protein
+    beads: HisPure
+    S0: TCTACT
+    S1: ATA
+    ids:
+    - 15
+    - 0
+  '17_1':
+    alternative_name: MK_41
+    operator: MK
+    date: '2023-09-01'
+    target: CAIX-His_UP
+    group: protein
+    beads: HisPure
+    S0: TCTGTA
+    S1: ATA
+    ids:
+    - 16
+    - 0
+  '18_1':
+    alternative_name: MK_42
+    operator: MK
+    date: '2023-09-01'
+    target: CAIX-His_UP
+    group: protein
+    beads: HisPure
+    S0: TGACAT
+    S1: ATA
+    ids:
+    - 17
+    - 0
+  '19_1':
+    alternative_name: MK_43
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: HisPure
+    S0: TGCAGC
+    S1: ATA
+    ids:
+    - 18
+    - 0
+  '20_1':
+    alternative_name: MK_44
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: HisPure
+    S0: TGCGCG
+    S1: ATA
+    ids:
+    - 19
+    - 0
+  '21_1':
+    alternative_name: MK_45
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: HisPure
+    S0: GCTACT
+    S1: ATA
+    ids:
+    - 20
+    - 0
+  '22_1':
+    alternative_name: MK_46
+    operator: MK
+    date: '2023-09-01'
+    target: Naive library UP
+    group: naive
+    beads: .nan
+    S0: GCACAT
+    S1: ATA
+    ids:
+    - 21
+    - 0
+  '23_1':
+    alternative_name: MK_47
+    operator: MK
+    date: '2023-09-01'
+    target: Naive library UP
+    group: naive
+    beads: .nan
+    S0: GAGTGT
+    S1: ATA
+    ids:
+    - 22
+    - 0
+  '24_1':
+    alternative_name: MK_48
+    operator: MK
+    date: '2023-09-01'
+    target: Naive library UP
+    group: naive
+    beads: .nan
+    S0: GTGCGA
+    S1: ATA
+    ids:
+    - 23
+    - 0
+  '25_1':
+    alternative_name: MK_49
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GCCGCT
+    S1: ATA
+    ids:
+    - 24
+    - 0
+  '26_1':
+    alternative_name: MK_50
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GAAGAT
+    S1: ATA
+    ids:
+    - 25
+    - 0
+  '27_1':
+    alternative_name: MK_51
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GTTCAG
+    S1: ATA
+    ids:
+    - 26
+    - 0
+  '1_2':
+    alternative_name: MK_1
     operator: MK
     date: '2023-09-01'
     target: Sigma-Thrombin_SP
     group: protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: ACACAC
     S1: TCG
     ids:
     - 0
-    - 0
-  MK_2:
+    - 1
+  '2_2':
+    alternative_name: MK_2
     operator: MK
     date: '2023-09-01'
     target: Sigma-Thrombin_SP
     group: protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: ACAGCA
     S1: TCG
     ids:
     - 1
-    - 0
-  MK_3:
+    - 1
+  '3_2':
+    alternative_name: MK_3
     operator: MK
     date: '2023-09-01'
     target: Sigma-Thrombin_SP
     group: protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: ACATGT
     S1: TCG
     ids:
     - 2
-    - 0
-  MK_4:
+    - 1
+  '4_2':
+    alternative_name: MK_4
     operator: MK
     date: '2023-09-01'
     target: Andys-Thrombin_SP
     group: protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: ACGACG
     S1: TCG
     ids:
     - 3
-    - 0
-  MK_5:
+    - 1
+  '5_2':
+    alternative_name: MK_5
     operator: MK
     date: '2023-09-01'
     target: Andys-Thrombin_SP
     group: protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: ACGCGA
     S1: TCG
     ids:
     - 4
-    - 0
-  MK_6:
+    - 1
+  '6_2':
+    alternative_name: MK_6
     operator: MK
     date: '2023-09-01'
     target: Andys-Thrombin_SP
     group: protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: ACTAGC
     S1: TCG
     ids:
     - 5
-    - 0
-  MK_7:
+    - 1
+  '7_2':
+    alternative_name: MK_7
     operator: MK
     date: '2023-09-01'
     target: CAII-biotin_SP
     group: protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: ACTCTG
     S1: TCG
     ids:
     - 6
-    - 0
-  MK_8:
+    - 1
+  '8_2':
+    alternative_name: MK_8
     operator: MK
     date: '2023-09-01'
     target: CAII-biotin_SP
     group: protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: ACTGAT
     S1: TCG
     ids:
     - 7
-    - 0
-  MK_9:
+    - 1
+  '9_2':
+    alternative_name: MK_9
     operator: MK
     date: '2023-09-01'
     target: CAII-biotin_SP
     group: protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: AGACTA
     S1: TCG
     ids:
     - 8
-    - 0
-  MK_10:
+    - 1
+  '10_2':
+    alternative_name: MK_10
     operator: MK
     date: '2023-09-01'
     target: No protein_SP
     group: no_protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: AGAGAG
     S1: TCG
     ids:
     - 9
-    - 0
-  MK_11:
+    - 1
+  '11_2':
+    alternative_name: MK_11
     operator: MK
     date: '2023-09-01'
     target: No protein_SP
     group: no_protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TAGATG
     S1: TCG
     ids:
     - 10
-    - 0
-  MK_12:
+    - 1
+  '12_2':
+    alternative_name: MK_12
     operator: MK
     date: '2023-09-01'
     target: No protein_SP
     group: no_protein
     beads: DynaBead C1
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TAGTGT
     S1: TCG
     ids:
     - 11
-    - 0
-  MK_13:
+    - 1
+  '13_2':
+    alternative_name: MK_13
     operator: MK
     date: '2023-09-01'
     target: MCL-1_SP
     group: protein
     beads: HisPure
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TATCAC
     S1: TCG
     ids:
     - 12
-    - 0
-  MK_14:
+    - 1
+  '14_2':
+    alternative_name: MK_14
     operator: MK
     date: '2023-09-01'
     target: MCL-1_SP
     group: protein
     beads: HisPure
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TCATAG
     S1: TCG
     ids:
     - 13
-    - 0
-  MK_15:
+    - 1
+  '15_2':
+    alternative_name: MK_15
     operator: MK
     date: '2023-09-01'
     target: MCL-1_SP
     group: protein
     beads: HisPure
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TCGTCA
     S1: TCG
     ids:
     - 14
-    - 0
-  MK_16:
+    - 1
+  '16_2':
+    alternative_name: MK_16
     operator: MK
     date: '2023-09-01'
     target: CAIX-His_SP
     group: protein
     beads: HisPure
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TCTACT
     S1: TCG
     ids:
     - 15
-    - 0
-  MK_17:
+    - 1
+  '17_2':
+    alternative_name: MK_17
     operator: MK
     date: '2023-09-01'
     target: CAIX-His_SP
     group: protein
     beads: HisPure
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TCTGTA
     S1: TCG
     ids:
     - 16
-    - 0
-  MK_18:
+    - 1
+  '18_2':
+    alternative_name: MK_18
     operator: MK
     date: '2023-09-01'
     target: CAIX-His_SP
     group: protein
     beads: HisPure
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TGACAT
     S1: TCG
     ids:
     - 17
-    - 0
-  MK_19:
+    - 1
+  '19_2':
+    alternative_name: MK_19
     operator: MK
     date: '2023-09-01'
     target: No protein_SP
     group: no_protein
     beads: HisPure
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TGCAGC
     S1: TCG
     ids:
     - 18
-    - 0
-  MK_20:
+    - 1
+  '20_2':
+    alternative_name: MK_20
     operator: MK
     date: '2023-09-01'
     target: No protein_SP
     group: no_protein
     beads: HisPure
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: TGCGCG
     S1: TCG
     ids:
     - 19
-    - 0
-  MK_21:
+    - 1
+  '21_2':
+    alternative_name: MK_21
     operator: MK
     date: '2023-09-01'
     target: No protein_SP
     group: no_protein
     beads: HisPure
-    info: '-'
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: GCTACT
     S1: TCG
     ids:
     - 20
-    - 0
-  MK_22:
+    - 1
+  '22_2':
+    alternative_name: MK_22
     operator: MK
     date: '2023-09-01'
     target: Naive library SP
     group: naive
     beads: .nan
-    info: .nan
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: GCACAT
     S1: TCG
     ids:
     - 21
-    - 0
-  MK_23:
+    - 1
+  '23_2':
+    alternative_name: MK_23
     operator: MK
     date: '2023-09-01'
     target: Naive library SP
     group: naive
     beads: .nan
-    info: .nan
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: GAGTGT
     S1: TCG
     ids:
     - 22
-    - 0
-  MK_24:
+    - 1
+  '24_2':
+    alternative_name: MK_24
     operator: MK
     date: '2023-09-01'
     target: Naive library SP
     group: naive
     beads: .nan
-    info: .nan
-    blocking: .nan
-    buffer: .nan
-    protocol: .nan
     S0: GTGCGA
     S1: TCG
     ids:
     - 23
-    - 0
+    - 1
+  '25_2':
+    alternative_name: .nan
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GCCGCT
+    S1: TCG
+    ids:
+    - 24
+    - 1
+  '26_2':
+    alternative_name: .nan
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GAAGAT
+    S1: TCG
+    ids:
+    - 25
+    - 1
+  '27_2':
+    alternative_name: .nan
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GTTCAG
+    S1: TCG
+    ids:
+    - 26
+    - 1
 library:
   products:
   - product_1
@@ -710,100 +998,220 @@ whitelists:
     product: product_3
     complement: false
   S0:
-  - name: MK_1
+  - name: '1_1'
     codon: ACACAC
-  - name: MK_2
+  - name: '2_1'
     codon: ACAGCA
-  - name: MK_3
+  - name: '3_1'
     codon: ACATGT
-  - name: MK_4
+  - name: '4_1'
     codon: ACGACG
-  - name: MK_5
+  - name: '5_1'
     codon: ACGCGA
-  - name: MK_6
+  - name: '6_1'
     codon: ACTAGC
-  - name: MK_7
+  - name: '7_1'
     codon: ACTCTG
-  - name: MK_8
+  - name: '8_1'
     codon: ACTGAT
-  - name: MK_9
+  - name: '9_1'
     codon: AGACTA
-  - name: MK_10
+  - name: '10_1'
     codon: AGAGAG
-  - name: MK_11
+  - name: '11_1'
     codon: TAGATG
-  - name: MK_12
+  - name: '12_1'
     codon: TAGTGT
-  - name: MK_13
+  - name: '13_1'
     codon: TATCAC
-  - name: MK_14
+  - name: '14_1'
     codon: TCATAG
-  - name: MK_15
+  - name: '15_1'
     codon: TCGTCA
-  - name: MK_16
+  - name: '16_1'
     codon: TCTACT
-  - name: MK_17
+  - name: '17_1'
     codon: TCTGTA
-  - name: MK_18
+  - name: '18_1'
     codon: TGACAT
-  - name: MK_19
+  - name: '19_1'
     codon: TGCAGC
-  - name: MK_20
+  - name: '20_1'
     codon: TGCGCG
-  - name: MK_21
+  - name: '21_1'
     codon: GCTACT
-  - name: MK_22
+  - name: '22_1'
     codon: GCACAT
-  - name: MK_23
+  - name: '23_1'
     codon: GAGTGT
-  - name: MK_24
+  - name: '24_1'
     codon: GTGCGA
+  - name: '25_1'
+    codon: GCCGCT
+  - name: '26_1'
+    codon: GAAGAT
+  - name: '27_1'
+    codon: GTTCAG
+  - name: '1_2'
+    codon: ACACAC
+  - name: '2_2'
+    codon: ACAGCA
+  - name: '3_2'
+    codon: ACATGT
+  - name: '4_2'
+    codon: ACGACG
+  - name: '5_2'
+    codon: ACGCGA
+  - name: '6_2'
+    codon: ACTAGC
+  - name: '7_2'
+    codon: ACTCTG
+  - name: '8_2'
+    codon: ACTGAT
+  - name: '9_2'
+    codon: AGACTA
+  - name: '10_2'
+    codon: AGAGAG
+  - name: '11_2'
+    codon: TAGATG
+  - name: '12_2'
+    codon: TAGTGT
+  - name: '13_2'
+    codon: TATCAC
+  - name: '14_2'
+    codon: TCATAG
+  - name: '15_2'
+    codon: TCGTCA
+  - name: '16_2'
+    codon: TCTACT
+  - name: '17_2'
+    codon: TCTGTA
+  - name: '18_2'
+    codon: TGACAT
+  - name: '19_2'
+    codon: TGCAGC
+  - name: '20_2'
+    codon: TGCGCG
+  - name: '21_2'
+    codon: GCTACT
+  - name: '22_2'
+    codon: GCACAT
+  - name: '23_2'
+    codon: GAGTGT
+  - name: '24_2'
+    codon: GTGCGA
+  - name: '25_2'
+    codon: GCCGCT
+  - name: '26_2'
+    codon: GAAGAT
+  - name: '27_2'
+    codon: GTTCAG
   S1:
-  - name: MK_1
+  - name: '1_1'
+    codon: ATA
+  - name: '2_1'
+    codon: ATA
+  - name: '3_1'
+    codon: ATA
+  - name: '4_1'
+    codon: ATA
+  - name: '5_1'
+    codon: ATA
+  - name: '6_1'
+    codon: ATA
+  - name: '7_1'
+    codon: ATA
+  - name: '8_1'
+    codon: ATA
+  - name: '9_1'
+    codon: ATA
+  - name: '10_1'
+    codon: ATA
+  - name: '11_1'
+    codon: ATA
+  - name: '12_1'
+    codon: ATA
+  - name: '13_1'
+    codon: ATA
+  - name: '14_1'
+    codon: ATA
+  - name: '15_1'
+    codon: ATA
+  - name: '16_1'
+    codon: ATA
+  - name: '17_1'
+    codon: ATA
+  - name: '18_1'
+    codon: ATA
+  - name: '19_1'
+    codon: ATA
+  - name: '20_1'
+    codon: ATA
+  - name: '21_1'
+    codon: ATA
+  - name: '22_1'
+    codon: ATA
+  - name: '23_1'
+    codon: ATA
+  - name: '24_1'
+    codon: ATA
+  - name: '25_1'
+    codon: ATA
+  - name: '26_1'
+    codon: ATA
+  - name: '27_1'
+    codon: ATA
+  - name: '1_2'
     codon: TCG
-  - name: MK_2
+  - name: '2_2'
     codon: TCG
-  - name: MK_3
+  - name: '3_2'
     codon: TCG
-  - name: MK_4
+  - name: '4_2'
     codon: TCG
-  - name: MK_5
+  - name: '5_2'
     codon: TCG
-  - name: MK_6
+  - name: '6_2'
     codon: TCG
-  - name: MK_7
+  - name: '7_2'
     codon: TCG
-  - name: MK_8
+  - name: '8_2'
     codon: TCG
-  - name: MK_9
+  - name: '9_2'
     codon: TCG
-  - name: MK_10
+  - name: '10_2'
     codon: TCG
-  - name: MK_11
+  - name: '11_2'
     codon: TCG
-  - name: MK_12
+  - name: '12_2'
     codon: TCG
-  - name: MK_13
+  - name: '13_2'
     codon: TCG
-  - name: MK_14
+  - name: '14_2'
     codon: TCG
-  - name: MK_15
+  - name: '15_2'
     codon: TCG
-  - name: MK_16
+  - name: '16_2'
     codon: TCG
-  - name: MK_17
+  - name: '17_2'
     codon: TCG
-  - name: MK_18
+  - name: '18_2'
     codon: TCG
-  - name: MK_19
+  - name: '19_2'
     codon: TCG
-  - name: MK_20
+  - name: '20_2'
     codon: TCG
-  - name: MK_21
+  - name: '21_2'
     codon: TCG
-  - name: MK_22
+  - name: '22_2'
     codon: TCG
-  - name: MK_23
+  - name: '23_2'
     codon: TCG
-  - name: MK_24
+  - name: '24_2'
+    codon: TCG
+  - name: '25_2'
+    codon: TCG
+  - name: '26_2'
+    codon: TCG
+  - name: '27_2'
     codon: TCG

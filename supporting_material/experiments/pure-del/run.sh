@@ -2,8 +2,8 @@
 
 cd /Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/pure-del || exit
 
-PREFIX=lane-1
-#PREFIX=lane-2
+#PREFIX=lane-1
+PREFIX=lane-2
 
 delt-hit init --excel_path $PREFIX.xlsx
 
