@@ -209,13 +209,10 @@ ALL_DATASETS=(
   "${CANONICAL_DATASETS[@]}"
   "${LARGE_2CYCLE_DATASETS[@]}"
 )
-```
 
-## 5. Slurm / `sbatch` Loops
+# When you want one job per dataset and per tool, keep the same arrays and submit them from a login node. 
+# These examples require `$TMPDIR` to be set, and each job creates its own synthetic dataset there so jobs do not race on shared files.
 
-When you want one job per dataset and per tool, keep the same arrays and submit them from a login node. These examples require `$TMPDIR` to be set, and each job creates its own synthetic dataset there so jobs do not race on shared files.
-
-```bash
 dataset_time_limit() {
   case "$1" in
     *_1m) echo "04:00:00" ;;

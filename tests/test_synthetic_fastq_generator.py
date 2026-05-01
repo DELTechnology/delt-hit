@@ -90,3 +90,29 @@ def test_higher_cycle_schema_and_building_blocks(tmp_path):
         "building_block_id_4",
         "count",
     }
+
+
+def test_building_block_generation_only_enforces_hamming_distance_when_errors_enabled():
+    module = load_generator_module()
+
+    no_error_blocks = module.make_building_blocks(
+        num_cycles=1,
+        building_blocks_per_cycle=4,
+        num_errors=0,
+    )
+    error_tolerant_blocks = module.make_building_blocks(
+        num_cycles=1,
+        building_blocks_per_cycle=4,
+        num_errors=1,
+    )
+
+    no_error_tags = [row["tag"] for row in no_error_blocks[0]]
+    error_tolerant_tags = [row["tag"] for row in error_tolerant_blocks[0]]
+
+    assert no_error_tags == [module.int_to_dna(idx, module.TAG_LENGTH) for idx in range(4)]
+    assert module.hamming_distance(no_error_tags[0], no_error_tags[1]) == 1
+    assert all(
+        module.hamming_distance(left, right) >= module.DEFAULT_BARCODE_MIN_HAMMING_DISTANCE
+        for idx, left in enumerate(error_tolerant_tags)
+        for right in error_tolerant_tags[idx + 1 :]
+    )
