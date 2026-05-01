@@ -39,6 +39,8 @@ Expected magic bytes:
   Saved as `supporting_material/experiments/favalli/20190812.A-1907_NF2GB2_s1_R1.fastq.gz`
 - Lane 2 FASTQ: `https://polybox.ethz.ch/index.php/s/9bX3YnzyDy8ez8g/download`
   Saved as `supporting_material/experiments/favalli/20190812.A-1907_NF2GB2_s2_R1.fastq.gz`
+- Published evaluation table: `https://polybox.ethz.ch/index.php/s/cgxBWkHnpkT6rBi/download`
+  Saved as `supporting_material/experiments/favalli/published/1907_NF2GB2_s1_R1_260424JS_2026_4_24_16_20_51_eval.txt`
 
 Run:
 
@@ -78,4 +80,5 @@ bash download.sh
 ## Notes on extraction
 
 - The Polybox FASTQ links validated above return real `application/gzip` payloads with BGZF-compatible gzip magic bytes.
+- The Favalli published-data link returns a real text payload and is saved into `supporting_material/experiments/favalli/published/`.
 - The Zenodo published-data link returns a real ZIP archive containing the selection tables. The `pure-del/download.sh` helper unzips it and copies the `selection_*_.txt` files into `published/`.
