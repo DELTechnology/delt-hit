@@ -1,0 +1,101 @@
+{
+  "dataset_name": "synthetic_2cycle_1000bbpc_1m_err=0",
+  "dataset_dir": "/tmp/60653991/delt-hit-benchmarks/60653991/synthetic_2cycle_1000bbpc_1m_err=0/data/synthetic_2cycle_1000bbpc_1m_err=0",
+  "expected_compounds": 1000000,
+  "expected_reads": 1000000,
+  "tool": "deli",
+  "output_dir": "/tmp/60653991/delt-hit-benchmarks/60653991/synthetic_2cycle_1000bbpc_1m_err=0/runtime/synthetic_2cycle_1000bbpc_1m_err=0/deli",
+  "timings": {
+    "decode_run_s": 29.8097909959979,
+    "decode_collect_s": 1.5455198300041957,
+    "decode_count_s": 3.611387807999563,
+    "total_s": 34.96669863400166
+  },
+  "counts_match": false,
+  "expected_rows": 1000000,
+  "observed_rows": 996094,
+  "expected_total_reads": 1000000,
+  "observed_total_reads": 996094,
+  "mismatch_examples": [
+    {
+      "codes": [
+        1,
+        251
+      ],
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "codes": [
+        1,
+        507
+      ],
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "codes": [
+        1,
+        763
+      ],
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "codes": [
+        2,
+        19
+      ],
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "codes": [
+        2,
+        275
+      ],
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "codes": [
+        2,
+        531
+      ],
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "codes": [
+        2,
+        787
+      ],
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "codes": [
+        3,
+        43
+      ],
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "codes": [
+        3,
+        299
+      ],
+      "expected": 1,
+      "observed": 0
+    },
+    {
+      "codes": [
+        3,
+        555
+      ],
+      "expected": 1,
+      "observed": 0
+    }
+  ]
+}
