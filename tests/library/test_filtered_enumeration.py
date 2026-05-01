@@ -3,7 +3,13 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from delt_hit.cli.library.api import Library, get_combinations
+from delt_hit.cli.library.api import (
+    Library,
+    _cap_figure_dpi,
+    _scale_dimensions_to_pixel_budget,
+    get_combinations,
+    visualize_smiles,
+)
 from delt_hit.cli.visualize.api import Visualize
 from delt_hit.utils import write_yaml
 
@@ -517,6 +523,57 @@ def test_visualize_library_rejects_dual_display_outputs(tmp_path):
 
     with pytest.raises(AssertionError, match="Dual-display libraries"):
         Visualize().library(config_path=config_path, library_name="observed_hits")
+
+
+def test_scale_dimensions_to_pixel_budget_keeps_small_images():
+    assert _scale_dimensions_to_pixel_budget(2_000, 2_000) == (2_000, 2_000)
+
+
+def test_scale_dimensions_to_pixel_budget_shrinks_large_images():
+    width, height = _scale_dimensions_to_pixel_budget(7_500, 30_000)
+    assert width * height <= 40_000_000
+    assert width < 7_500
+    assert height < 30_000
+
+
+def test_cap_figure_dpi_preserves_requested_dpi_for_small_figures():
+    fig = pytest.importorskip("matplotlib.pyplot").figure(figsize=(4, 4), dpi=100)
+    try:
+        assert _cap_figure_dpi(fig, requested_dpi=300) == 300
+    finally:
+        pytest.importorskip("matplotlib.pyplot").close(fig)
+
+
+def test_cap_figure_dpi_reduces_large_figure_exports():
+    fig = pytest.importorskip("matplotlib.pyplot").figure(figsize=(75, 300), dpi=100)
+    try:
+        assert _cap_figure_dpi(fig, requested_dpi=300) < 300
+    finally:
+        pytest.importorskip("matplotlib.pyplot").close(fig)
+
+
+def test_visualize_smiles_scales_large_grids_before_rendering(monkeypatch):
+    captured_kwargs = {}
+
+    class DummyImage:
+        size = (1_000, 1_000)
+
+    def capture_grid(*_args, **kwargs):
+        captured_kwargs.update(kwargs)
+        return DummyImage()
+
+    monkeypatch.setattr("delt_hit.cli.library.api.Draw.MolsToGridImage", capture_grid)
+
+    ax = visualize_smiles(
+        smiles=["CC"] * 2_500,
+        nrow=25,
+        sub_img_size=(300, 300),
+    )
+    try:
+        assert captured_kwargs["subImgSize"][0] < 300
+        assert captured_kwargs["subImgSize"][1] < 300
+    finally:
+        ax.figure.clf()
 
 
 def test_properties_default_mode_writes_properties_parquet(tmp_path):
