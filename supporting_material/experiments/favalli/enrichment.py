@@ -134,6 +134,7 @@ def plot_frequency_table(freq_df: pd.DataFrame, top_n: int, output_path: Path) -
     ax.legend(title="Method")
     plt.tight_layout()
     plt.savefig(output_path, dpi=200)
+    plt.savefig(output_path.with_suffix(".png"), dpi=200)
     plt.close()
 
 
