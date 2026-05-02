@@ -87,13 +87,15 @@ This script:
 - downloads `20190812.A-1907_NF2GB2_s2_R1.fasta.gz`
 - downloads the published evaluation table into `supporting_material/experiments/favalli/published/`
 
-Run DELT-Hit for a given lane:
+Run DELT-Hit for any Favalli workbook prefix:
 
 ```bash
 cd supporting_material/experiments/favalli
 bash run.sh lane-1
-# or
+# or one of:
 bash run.sh lane-2
+bash run.sh lane-1-fasta
+bash run.sh lane-2-fasta
 ```
 
 Compare DELT-Hit counts against the published counts:
@@ -101,11 +103,13 @@ Compare DELT-Hit counts against the published counts:
 ```bash
 cd supporting_material/experiments/favalli
 pixi run python compare_selections.py lane-1
-# or
+# or one of:
 pixi run python compare_selections.py lane-2
+pixi run python compare_selections.py lane-1-fasta
+pixi run python compare_selections.py lane-2-fasta
 ```
 
-Comparison tables are written to `supporting_material/experiments/favalli/comparison/lane-1/` or `supporting_material/experiments/favalli/comparison/lane-2/`. Inspect the generated CSV files and the `identical` column to confirm whether the published and DELT-Hit counts match for each selection.
+Comparison tables are written to `supporting_material/experiments/favalli/comparison/<prefix>/` for each of the four prefixes above. Each output folder contains one detailed CSV per selection plus a `report.csv` summary with the observed-compound counts, total counts, and mismatch totals for the published and DELT-Hit counts. Inspect the detailed CSV `identical` column and the summary report to confirm whether the published and DELT-Hit counts match for each selection.
 
 ### Pure-DEL
 
@@ -144,7 +148,7 @@ pixi run python compare_selections.py lane-1
 pixi run python compare_selections.py lane-2
 ```
 
-Comparison tables are written to `supporting_material/experiments/pure-del/comparison/lane-1/` or `supporting_material/experiments/pure-del/comparison/lane-2/`. Inspect the generated CSV files and the `identical` column to verify the agreement between the published selections and DELT-Hit output.
+Comparison tables are written to `supporting_material/experiments/pure-del/comparison/lane-1/` or `supporting_material/experiments/pure-del/comparison/lane-2/`. Each output folder contains one detailed CSV per selection plus a `report.csv` summary with the observed-compound counts, total counts, and mismatch totals for the published and DELT-Hit counts. Inspect the detailed CSV `identical` column and the summary report to verify the agreement between the published selections and DELT-Hit output.
 
 ## Additional Example
 
