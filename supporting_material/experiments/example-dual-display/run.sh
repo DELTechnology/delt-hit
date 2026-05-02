@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR" || exit
+cd supporting_material/experiments/example-dual-display || exit
 
 delt-hit init --excel_path example-dual-display.xlsx
 
