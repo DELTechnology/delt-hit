@@ -1,46 +1,40 @@
-# TODO(Jörg): confirm which numeric selection indices correspond to protein vs no_protein
-# for each lane before using these enrichment results in the manuscript.
-# Current assignment (1_1/2_1/3_1 = no_protein, 4_1/5_1/6_1 = protein) is a placeholder.
 experiments:
-  - name: his_pure_protein_vs_no_protein
-    save_dir: lane-1/analysis
+  - name: ca9_ds
+    save_dir: lane-1-fasta/analysis
     selections:
-      - name: 1_1
-        counts_path: lane-1/selections/1_1/counts.txt
+      - name: 22_2
+        counts_path: lane-1-fasta/selections/22_2/counts.txt
         group: no_protein
-      - name: 2_1
-        counts_path: lane-1/selections/2_1/counts.txt
+      - name: 23_2
+        counts_path: lane-1-fasta/selections/23_2/counts.txt
         group: no_protein
-      - name: 3_1
-        counts_path: lane-1/selections/3_1/counts.txt
+      - name: 24_2
+        counts_path: lane-1-fasta/selections/24_2/counts.txt
         group: no_protein
-      - name: 4_1
-        counts_path: lane-1/selections/4_1/counts.txt
+      - name: 4_2
+        counts_path: lane-1-fasta/selections/4_2/counts.txt
         group: protein
-      - name: 5_1
-        counts_path: lane-1/selections/5_1/counts.txt
+      - name: 5_2
+        counts_path: lane-1-fasta/selections/5_2/counts.txt
         group: protein
-      - name: 6_1
-        counts_path: lane-1/selections/6_1/counts.txt
+      - name: 6_2
+        counts_path: lane-1-fasta/selections/6_2/counts.txt
         group: protein
-  - name: dyna_protein_vs_no_protein
-    save_dir: lane-1/analysis
+  - name: ca9_ss
+    save_dir: lane-1-fasta/analysis
     selections:
-      - name: 1_1
-        counts_path: lane-1/selections/1_1/counts.txt
+      - name: 10_2
+        counts_path: lane-1-fasta/selections/10_2/counts.txt
         group: no_protein
-      - name: 2_1
-        counts_path: lane-1/selections/2_1/counts.txt
+      - name: 11_2
+        counts_path: lane-1-fasta/selections/11_2/counts.txt
         group: no_protein
-      - name: 3_1
-        counts_path: lane-1/selections/3_1/counts.txt
+      - name: 12_2
+        counts_path: lane-1-fasta/selections/12_2/counts.txt
         group: no_protein
-      - name: 4_1
-        counts_path: lane-1/selections/4_1/counts.txt
+      - name: 2_2
+        counts_path: lane-1-fasta/selections/2_2/counts.txt
         group: protein
-      - name: 5_1
-        counts_path: lane-1/selections/5_1/counts.txt
-        group: protein
-      - name: 6_1
-        counts_path: lane-1/selections/6_1/counts.txt
+      - name: 3_2
+        counts_path: lane-1-fasta/selections/3_2/counts.txt
         group: protein

@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR" || exit
+cd supporting_material/experiments/johanna || exit
 
 delt-hit init --excel_path NFv3_JP_1_c0.1percent.xlsx
 
