@@ -9,6 +9,12 @@ set -euo pipefail
 cd supporting_material/experiments/favalli || exit
 
 PREFIX="${1:-lane-1}"
+VALID_PREFIXES=("lane-1" "lane-2" "lane-1-fasta" "lane-2-fasta")
+
+if [[ ! " ${VALID_PREFIXES[*]} " =~ [[:space:]]${PREFIX}[[:space:]] ]]; then
+  echo "Unsupported prefix '${PREFIX}'. Expected one of: ${VALID_PREFIXES[*]}" >&2
+  exit 1
+fi
 
 delt-hit init --excel_path "$PREFIX.xlsx"
 
