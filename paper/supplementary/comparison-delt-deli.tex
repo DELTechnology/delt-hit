@@ -57,14 +57,14 @@ Benchmark and supporting-material workflows & Includes synthetic demultiplex and
 \bottomrule
 \end{longtable}
 
-The synthetic demultiplex benchmark documented in the shared runbook uses generated FASTQ datasets to compare DELT-Hit and DELi on the canonical 2-, 3-, and 4-cycle libraries with 10 building blocks per cycle across 1M, 10M, 100M, and 1000M reads, and additionally includes an extended 2-cycle runtime sweep with 10, 100, and 1000 building blocks per cycle. The reported outputs focus on end-to-end runtime and peak resident memory for the shared benchmark setup. Figure~\ref{fig:delt-deli-runtime-cycles} summarizes cycle-wise runtime scaling, Figure~\ref{fig:delt-deli-runtime-2cycle-bbpc} shows the extended 2-cycle runtime sweep, and Figure~\ref{fig:delt-deli-memory-cycles} summarizes peak RSS scaling.
+The synthetic demultiplex benchmark documented in the shared runbook uses generated FASTQ datasets to compare DELT-Hit and DELi on the canonical 2-, 3-, and 4-cycle libraries with 10 building blocks per cycle across 1M, 10M, 100M, and 1000M reads, and additionally includes an extended 2-cycle runtime sweep with 10, 100, and 1000 building blocks per cycle. Benchmarking was completed on a Slurm cluster with 12 CPUs and 128\,GB RAM allocated per job. The reported outputs focus on end-to-end runtime and memory consumption for the shared benchmark setup; the DELi 1000M-read runs exited with an out-of-memory state. Figure~\ref{fig:delt-deli-runtime-cycles} summarizes cycle-wise runtime scaling, Figure~\ref{fig:delt-deli-runtime-2cycle-bbpc} shows the extended 2-cycle runtime sweep, and Figure~\ref{fig:delt-deli-memory-cycles} summarizes peak RSS scaling.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_runtime.png}\hfill
 \includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_3cycle_10bbpc_runtime.png}\hfill
 \includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_4cycle_10bbpc_runtime.png}
-\caption{Cycle-wise runtime scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads.}
+\caption{Cycle-wise runtime scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads. The DELi 1000M-read runs exited with an out-of-memory state.}
 \label{fig:delt-deli-runtime-cycles}
 \end{figure}
 
@@ -80,7 +80,7 @@ The synthetic demultiplex benchmark documented in the shared runbook uses genera
 \includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_peak_rss.png}\hfill
 \includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_3cycle_10bbpc_peak_rss.png}\hfill
 \includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_4cycle_10bbpc_peak_rss.png}
-\caption{Cycle-wise peak RSS scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads.}
+\caption{Cycle-wise peak RSS scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads. The DELi 1000M-read runs exited with an out-of-memory state.}
 \label{fig:delt-deli-memory-cycles}
 \end{figure}
 
