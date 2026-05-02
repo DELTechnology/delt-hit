@@ -595,7 +595,8 @@ Expected outputs:
 
 \begin{itemize}
   \item qc/report.txt: Comprehensive text report with processing statistics
-  \item qc/*.png: Quality control plots showing barcode recovery and coverage distributions
+  \item qc/hits\_*.parquet: Per-region tables with barcode-assignment counts grouped by error level
+  \item qc/hits\_*.pdf and qc/hits\_*.png: Quality control plots showing barcode recovery and coverage distributions
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -740,8 +741,9 @@ Computed properties include:
 Expected outputs:
 
 \begin{itemize}
-  \item properties/properties.parquet: Library catalog augmented with molecular descriptors
-  \item properties/prop\_*.png: Distribution plots for each calculated property
+  \item library/properties/AG24\_4\_top\_hits/properties.parquet: Top-hit catalog augmented with molecular descriptors
+  \item library/properties/AG24\_4\_top\_hits/prop\_*.png: Distribution plots for each calculated property
+  \item library/visualization/libraries/AG24\_4\_top\_hits/*.png: Per-compound structure renderings for the enumerated top-hit set
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -834,17 +836,20 @@ The edgeR method:
 \end{itemize}
 For both methods, the tool produces the R scripts used for the analysis, which can be adapted to more specialized workflows.
 
-Expected outputs (both methods):
+Expected outputs:
 
 \begin{itemize}
-  \item stats.csv: Complete statistics for all library members with columns:
+  \item counts/stats.csv: Complete statistics for all library members from the simple counts method
+  \item counts/hits.csv: Top-ranked compounds from the simple counts method
+  \item edgeR/enrichment\_stats.csv: Complete statistics with \textit{P} values and FDR from the edgeR method
+  \item edgeR/enrichment\_hits.csv: Significant or top-ranked compounds from the edgeR method
   \item code\_1, code\_2, etc.: Building block indices
   \item LogFC: Log2 fold-change (edgeR) or difference in mean counts (counts method)
   \item PValue: Raw p-value (edgeR only)
   \item FDR: False discovery rate corrected p-value (edgeR only)
-  \item enrichment\_hits.csv: Top enriched compounds (FDR \textless{} 0.05 for edgeR)
-  \item correlation\_*.png: Replicate correlation plots for quality control
-  \item Normalized count files for each selection or group
+  \item counts/\{protein,no\_protein,...\}.csv: Group-level mean count tables from the counts method
+  \item edgeR/\{AG24\_4,AG24\_5,AG24\_6,...\}.csv: Normalized count tables for each selection from the edgeR method
+  \item counts/correlation\_*.png and edgeR/correlation\_*.png: Replicate correlation plots for quality control
 \end{itemize}
 Interpreting results:
 

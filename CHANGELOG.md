@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-04-30 to 2026-05-02
+
+### Added
+- QC codon-hit plotting now exports the manuscript-aligned image set needed for the revision package, with regression coverage to lock in the expected output behavior.
+- Enrichment plotting scripts now export PNG outputs directly for the Favalli and pure-DEL supporting-material analyses so revision figures can be reused without extra conversion steps.
+
+### Improved
+- Published-dataset supporting-material workflows were aligned and documented more clearly, including streamlined run scripts and revised README guidance for reproducing the revision analyses.
+- Favalli CA9 analysis selections were updated to match the current manuscript re-analysis workflow and supporting-material configuration.
+- Enrichment rerun documentation and output locations were cleaned up so the generated figures and tables map cleanly onto the revision deliverables.
+- Manuscript figure/output handling was aligned with the latest revision pass, including consistent QC image export behavior and updated LaTeX references in `paper/main.tex`.
+
 ## 2026-04-24 to 2026-04-29
 
 ### Added
