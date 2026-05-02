@@ -38,9 +38,14 @@
 \newcommand{\setupitem}[1]{\par\medskip\noindent\textbf{#1}\par}
 
 \title{An end-to-end computational framework for DNA-encoded chemical library analysis}
-\author{Adriano Martinelli+*, Alice Lessing+, Gary Hoppeler, Andreas Gloger, Louise Plais, Jörg Scheuermann*\\
-\small Institute of Pharmaceutical Sciences, Department of Chemistry and Applied Biosciences, ETH Zurich 8083 Zurich, Switzerland\\
-\small + these authors contributed equally; *corresponding authors: Adriano Martinelli, e-mail: adriano.martinelli@pharma.ethz.ch; Jörg Scheuermann, e-mail: joerg.scheuermann@pharma.ethz.ch}
+\author{%
+  \parbox{0.95\textwidth}{\centering
+    Adriano Martinelli+*, Alice Lessing+, Gary Hoppeler, Andreas Gloger,\\
+    Louise Plais, J\"org Scheuermann*\\[0.5em]
+    \small Institute of Pharmaceutical Sciences, Department of Chemistry and Applied Biosciences, ETH Zurich 8083 Zurich, Switzerland\\
+    \small + these authors contributed equally; *corresponding authors: Adriano Martinelli, e-mail: adriano.martinelli@pharma.ethz.ch; J\"org Scheuermann, e-mail: joerg.scheuermann@pharma.ethz.ch
+  }%
+}
 \date{}
 
 \begin{document}
@@ -388,9 +393,9 @@ This sheet defines the DNA construct architecture and error tolerances for demul
 There are three types of DNA regions:
 
 \begin{itemize}
-  \item selection: Region used for selection primers defined in the selection sheet; these regions should be named \texttt{S0}, \texttt{S1}, and so on.
-  \item constant: Constant regions shared across DNA constructs; these regions should be named sequentially \texttt{C0}, \texttt{C1}, and so on.
-  \item building\_block: Region identifying a chemical building block; these regions should be named sequentially \texttt{B0}, \texttt{B1}, and so on.
+  \item \texttt{selection}: Region used for selection primers defined in the selection sheet; these regions should be named \texttt{S0}, \texttt{S1}, and so on.
+  \item \texttt{constant}: Constant regions shared across DNA constructs; these regions should be named sequentially \texttt{C0}, \texttt{C1}, and so on.
+  \item \texttt{building\_block}: Region identifying a chemical building block; these regions should be named sequentially \texttt{B0}, \texttt{B1}, and so on.
 \end{itemize}
 Each DNA region is identified by a unique name. A \texttt{max\_error\_rate} and the allowance of indels can be configured separately for each region.
 
@@ -505,8 +510,8 @@ This phase processes raw sequencing reads to identify and count each library mem
 The demultiplexing parameters defined in the Excel file control how reads are processed by Cutadapt. Key parameters include:
 
 \begin{itemize}
-  \item max\_error\_rate: Tolerance for sequencing errors (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
-  \item indels: Whether to allow insertions/deletions during barcode matching
+  \item \texttt{max\_error\_rate}: Tolerance for sequencing errors (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
+  \item \texttt{indels}: Whether to allow insertions/deletions during barcode matching
 \end{itemize}
 As noted above, exact matches are recommended for selection barcodes (\texttt{max\_error\_rate = 0}, \texttt{indels = FALSE}) to ensure accurate multiplexing. Constant regions can tolerate higher error rates depending on their length.
 
@@ -573,10 +578,10 @@ These commands:
 Expected outputs:
 
 \begin{itemize}
-  \item selections/[selection\_name]/counts.txt: Tab-delimited count table with columns:
-  \item code\_1, code\_2,...: Building block indices
-  \item name: Selection identifier
-  \item count: Number of reads for this compound in this selection
+  \item \texttt{selections/[selection\_name]/counts.txt}: Tab-delimited count table with columns:
+  \item \texttt{code\_1}, \texttt{code\_2}, ...: Building block indices
+  \item \texttt{name}: Selection identifier
+  \item \texttt{count}: Number of reads for this compound in this selection
   \item Alternatively, counts can be saved as \texttt{\{selection\_name\}\_counts.txt} with the flag \texttt{--as\_files=True}. To save counts in codon order rather than sorted by observed counts, use \texttt{--sort\_by\_counts=False}.
 \end{itemize}
 
@@ -708,7 +713,7 @@ Expected outputs:
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/image2.png}
-\caption{Complete reaction graph for a DEL with two building blocks (violet), reactions (green), products (red) and starting compounds (blue).}
+\caption{Composite summary of enumeration-oriented visualization outputs from the single-stranded example workflow. The main panel shows the library reaction graph, alongside representative reaction templates, example \texttt{B0} and \texttt{B1} building blocks, and three enumerated top-hit structures generated during selection-focused library enumeration.}
 \label{fig:figure2}
 \end{figure}
 Performance note: Enumeration speed is approximately 1,000--10,000 compounds per second, depending on reaction complexity. For a library with 1 million compounds, expect 2--10 min of processing time depending on the hardware.
@@ -749,7 +754,7 @@ Expected outputs:
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/image3.png}
-\caption{Exemplary plot for the molecular weight distribution of library members.}
+\caption{Five representative structure renderings produced by \texttt{delt-hit visualize library} for the enumerated \texttt{AG24\_4\_top\_hits} collection. Each panel corresponds to one visualized top-hit compound from the single-stranded example workflow.}
 \label{fig:figure3}
 \end{figure}
 Performance note: Property calculation processes approximately 600-1000 compounds/second. For a 1 million compound library, expect 15-30 minutes processing time.
