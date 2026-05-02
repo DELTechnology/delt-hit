@@ -12,6 +12,7 @@ import argparse
 import csv
 import gzip
 import json
+import random
 from itertools import product
 from pathlib import Path
 
@@ -22,6 +23,7 @@ DEFAULT_DATASET_NAME = "synthetic"
 DEFAULT_NUM_CYCLES = 2
 DEFAULT_BUILDING_BLOCKS_PER_CYCLE = 10
 DEFAULT_NUM_READS_PER_COMPOUND = 1
+DEFAULT_MAX_READS_PER_COMPOUND: int | None = None
 DEFAULT_NUM_ERRORS = 0
 DEFAULT_ERRORS_IN_BB_ONLY = False
 DEFAULT_COMPRESSED = True
@@ -57,12 +59,37 @@ def expected_reads(
     *,
     num_cycles: int,
     building_blocks_per_cycle: int,
-    num_reads_per_compound: int,
+    num_reads_per_compound: int | None,
+    max_reads_per_compound: int | None = None,
 ) -> int:
+    if num_reads_per_compound is None:
+        if max_reads_per_compound is None:
+            raise ValueError("max_reads_per_compound must be set when num_reads_per_compound is null")
+        return 0
     return expected_compounds(
         num_cycles=num_cycles,
         building_blocks_per_cycle=building_blocks_per_cycle,
     ) * num_reads_per_compound
+
+
+def parse_optional_int(value: str) -> int | None:
+    if value.lower() == "null":
+        return None
+    return int(value)
+
+
+def build_compound_counts(
+    building_blocks_by_cycle: list[list[dict[str, object]]],
+    *,
+    num_reads_per_compound: int | None,
+    max_reads_per_compound: int | None,
+) -> list[tuple[tuple[dict[str, object], ...], int]]:
+    compounds = list(product(*building_blocks_by_cycle))
+    if num_reads_per_compound is not None:
+        return [(compound, num_reads_per_compound) for compound in compounds]
+    if max_reads_per_compound is None:
+        raise ValueError("max_reads_per_compound must be set when num_reads_per_compound is null")
+    return [(compound, random.randint(1, max_reads_per_compound)) for compound in compounds]
 
 
 def generate_distance_three_tags(*, count: int, length: int, offset: int = 0) -> list[str]:
@@ -126,12 +153,10 @@ def write_building_blocks(path: Path, building_blocks_by_cycle: list[list[dict[s
 
 def write_expected_counts(
     path: Path,
-    building_blocks_by_cycle: list[list[dict[str, object]]],
-    *,
-    num_reads_per_compound: int,
+    compound_counts: list[tuple[tuple[dict[str, object], ...], int]],
 ) -> int:
     path.parent.mkdir(parents=True, exist_ok=True)
-    num_cycles = len(building_blocks_by_cycle)
+    num_cycles = len(compound_counts[0][0]) if compound_counts else 0
     fieldnames = []
     for cycle in range(1, num_cycles + 1):
         fieldnames.append(f"code_{cycle}")
@@ -143,7 +168,7 @@ def write_expected_counts(
     with path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t")
         writer.writeheader()
-        for compound in product(*building_blocks_by_cycle):
+        for compound, count in compound_counts:
             row_count += 1
             row = {f"code_{idx}": block["code"] for idx, block in enumerate(compound, start=1)}
             row.update(
@@ -152,16 +177,15 @@ def write_expected_counts(
                     for idx, block in enumerate(compound, start=1)
                 }
             )
-            row["count"] = num_reads_per_compound
+            row["count"] = count
             writer.writerow(row)
     return row_count
 
 
 def write_fastq(
     path: Path,
-    building_blocks_by_cycle: list[list[dict[str, object]]],
+    compound_counts: list[tuple[tuple[dict[str, object], ...], int]],
     *,
-    num_reads_per_compound: int,
     dataset_name: str,
     compressed: bool,
     num_errors: int,
@@ -178,10 +202,10 @@ def write_fastq(
     open_func = gzip.open if compressed else open
     mode = "wt"
     with open_func(path, mode) as handle:
-        for compound_idx, compound in enumerate(product(*building_blocks_by_cycle), start=1):
+        for compound_idx, (compound, compound_count) in enumerate(compound_counts, start=1):
             bb_tags = [str(block["tag"]) for block in compound]
             ids = "_".join(str(block["building_block_id"]) for block in compound)
-            for replicate_idx in range(1, num_reads_per_compound + 1):
+            for replicate_idx in range(1, compound_count + 1):
                 read_count += 1
                 umi = int_to_dna(20_000 + read_count, UMI_LENGTH)
                 if num_errors == 0:
@@ -215,13 +239,15 @@ def write_manifest(
     dataset_name: str,
     num_cycles: int,
     building_blocks_per_cycle: int,
-    num_reads_per_compound: int,
+    num_reads_per_compound: int | None,
+    max_reads_per_compound: int | None,
     num_errors: int,
     errors_in_bb_only: bool,
     output_dir: Path,
     fastq_path: Path,
     expected_counts_path: Path,
     building_blocks_path: Path,
+    read_count: int,
 ) -> None:
     manifest = {
         "dataset_name": dataset_name,
@@ -229,6 +255,7 @@ def write_manifest(
         "num_cycles": num_cycles,
         "building_blocks_per_cycle": building_blocks_per_cycle,
         "num_reads_per_compound": num_reads_per_compound,
+        "max_reads_per_compound": max_reads_per_compound,
         "num_errors": num_errors,
         "errors_in_bb_only": errors_in_bb_only,
         "barcode_min_hamming_distance": DEFAULT_BARCODE_MIN_HAMMING_DISTANCE if num_errors > 0 else 0,
@@ -236,10 +263,15 @@ def write_manifest(
             num_cycles=num_cycles,
             building_blocks_per_cycle=building_blocks_per_cycle,
         ),
-        "expected_reads": expected_reads(
-            num_cycles=num_cycles,
-            building_blocks_per_cycle=building_blocks_per_cycle,
-            num_reads_per_compound=num_reads_per_compound,
+        "expected_reads": (
+            read_count
+            if num_reads_per_compound is None
+            else expected_reads(
+                num_cycles=num_cycles,
+                building_blocks_per_cycle=building_blocks_per_cycle,
+                num_reads_per_compound=num_reads_per_compound,
+                max_reads_per_compound=max_reads_per_compound,
+            )
         ),
         "library_tag": LIBRARY_TAG,
         "closing_tag": CLOSING_TAG,
@@ -271,9 +303,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--num-reads-per-compound",
-        type=int,
+        type=parse_optional_int,
         default=DEFAULT_NUM_READS_PER_COMPOUND,
-        help="Replicate reads to emit for each combinatorial compound.",
+        help='Replicate reads to emit for each combinatorial compound, or "null" to sample random counts from 1..max.',
+    )
+    parser.add_argument(
+        "--max-reads-per-compound",
+        type=int,
+        default=DEFAULT_MAX_READS_PER_COMPOUND,
+        help="Maximum random reads per compound when --num-reads-per-compound is null.",
     )
     parser.add_argument(
         "--num-errors",
@@ -310,8 +348,12 @@ def parse_args() -> argparse.Namespace:
         parser.error("num_cycles must be at least 1")
     if args.building_blocks_per_cycle < 1:
         parser.error("building_blocks_per_cycle must be at least 1")
-    if args.num_reads_per_compound < 1:
+    if args.num_reads_per_compound is not None and args.num_reads_per_compound < 1:
         parser.error("num_reads_per_compound must be at least 1")
+    if args.num_reads_per_compound is None and args.max_reads_per_compound is None:
+        parser.error("max_reads_per_compound must be set when num_reads_per_compound is null")
+    if args.max_reads_per_compound is not None and args.max_reads_per_compound < 1:
+        parser.error("max_reads_per_compound must be at least 1")
     if args.num_errors not in {0, 1}:
         parser.error("num_errors must be 0 or 1")
     args.compressed = args.compressed == "true"
@@ -323,7 +365,8 @@ def main(
     *,
     num_cycles: int = DEFAULT_NUM_CYCLES,
     building_blocks_per_cycle: int = DEFAULT_BUILDING_BLOCKS_PER_CYCLE,
-    num_reads_per_compound: int = DEFAULT_NUM_READS_PER_COMPOUND,
+    num_reads_per_compound: int | None = DEFAULT_NUM_READS_PER_COMPOUND,
+    max_reads_per_compound: int | None = DEFAULT_MAX_READS_PER_COMPOUND,
     num_errors: int = DEFAULT_NUM_ERRORS,
     errors_in_bb_only: bool = DEFAULT_ERRORS_IN_BB_ONLY,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
@@ -334,8 +377,12 @@ def main(
         raise ValueError("num_cycles must be at least 1")
     if building_blocks_per_cycle < 1:
         raise ValueError("building_blocks_per_cycle must be at least 1")
-    if num_reads_per_compound < 1:
+    if num_reads_per_compound is not None and num_reads_per_compound < 1:
         raise ValueError("num_reads_per_compound must be at least 1")
+    if num_reads_per_compound is None and max_reads_per_compound is None:
+        raise ValueError("max_reads_per_compound must be set when num_reads_per_compound is null")
+    if max_reads_per_compound is not None and max_reads_per_compound < 1:
+        raise ValueError("max_reads_per_compound must be at least 1")
     if num_errors not in {0, 1}:
         raise ValueError("num_errors must be 0 or 1")
 
@@ -353,16 +400,16 @@ def main(
         building_blocks_per_cycle=building_blocks_per_cycle,
         num_errors=num_errors,
     )
-    write_building_blocks(building_blocks_path, building_blocks_by_cycle)
-    compound_count = write_expected_counts(
-        expected_counts_path,
+    compound_counts = build_compound_counts(
         building_blocks_by_cycle,
         num_reads_per_compound=num_reads_per_compound,
+        max_reads_per_compound=max_reads_per_compound,
     )
+    write_building_blocks(building_blocks_path, building_blocks_by_cycle)
+    compound_count = write_expected_counts(expected_counts_path, compound_counts)
     read_count = write_fastq(
         fastq_path,
-        building_blocks_by_cycle,
-        num_reads_per_compound=num_reads_per_compound,
+        compound_counts,
         dataset_name=dataset_name,
         compressed=compressed,
         num_errors=num_errors,
@@ -374,12 +421,14 @@ def main(
         num_cycles=num_cycles,
         building_blocks_per_cycle=building_blocks_per_cycle,
         num_reads_per_compound=num_reads_per_compound,
+        max_reads_per_compound=max_reads_per_compound,
         num_errors=num_errors,
         errors_in_bb_only=errors_in_bb_only,
         output_dir=dataset_dir,
         fastq_path=fastq_path,
         expected_counts_path=expected_counts_path,
         building_blocks_path=building_blocks_path,
+        read_count=read_count,
     )
 
     print(f"Wrote FASTQ with {read_count} reads to {fastq_path}")
@@ -394,6 +443,7 @@ if __name__ == "__main__":
         num_cycles=cli_args.num_cycles,
         building_blocks_per_cycle=cli_args.building_blocks_per_cycle,
         num_reads_per_compound=cli_args.num_reads_per_compound,
+        max_reads_per_compound=cli_args.max_reads_per_compound,
         num_errors=cli_args.num_errors,
         errors_in_bb_only=cli_args.errors_in_bb_only,
         output_dir=cli_args.output_dir,

@@ -116,3 +116,27 @@ def test_building_block_generation_only_enforces_hamming_distance_when_errors_en
         for idx, left in enumerate(error_tolerant_tags)
         for right in error_tolerant_tags[idx + 1 :]
     )
+
+
+def test_null_num_reads_per_compound_uses_random_counts(tmp_path, monkeypatch):
+    module = load_generator_module()
+    sampled_counts = iter([1, 3, 2, 4])
+    monkeypatch.setattr(module.random, "randint", lambda _low, _high: next(sampled_counts))
+
+    module.main(
+        num_cycles=2,
+        building_blocks_per_cycle=2,
+        num_reads_per_compound=None,
+        max_reads_per_compound=4,
+        output_dir=tmp_path,
+        dataset_name="random_counts",
+    )
+
+    experiment_dir = tmp_path / "random_counts"
+    manifest = json.loads((experiment_dir / "manifest.json").read_text())
+    expected_counts = read_tsv(experiment_dir / "expected_counts.tsv")
+
+    assert [int(row["count"]) for row in expected_counts] == [1, 3, 2, 4]
+    assert manifest["expected_compounds"] == 4
+    assert manifest["expected_reads"] == 10
+    assert count_fastq_reads(experiment_dir / "random_counts.fastq.gz") == 10
