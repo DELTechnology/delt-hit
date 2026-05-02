@@ -13,13 +13,14 @@ args <- list(
 
 # ---- Helper ----
 get_corr_plot <- function(data, condition) {
+  code_columns <- grep("^code_", colnames(data), value = TRUE)
   pdat <- data %>%
     dplyr::filter(group == condition) %>%
-    dplyr::select(code_0, code_1, name, count) %>%
+    dplyr::select(dplyr::all_of(code_columns), name, count) %>%
     tidyr::pivot_wider(names_from = name, values_from = count, values_fill = 0)
 
   g <- pdat %>%
-    dplyr::select(-code_0, -code_1) %>%
+    dplyr::select(-dplyr::all_of(code_columns)) %>%
     GGally::ggpairs(
       upper = list(continuous = GGally::wrap("smooth", alpha = 0.3, size = 0.2)),
       lower = list(continuous = GGally::wrap("cor", size = 3))
@@ -32,6 +33,7 @@ get_corr_plot <- function(data, condition) {
 # ---- Load data ----
 data <- readr::read_csv(args$data_path, show_col_types = FALSE)
 samples <- readr::read_csv(args$samples_path, show_col_types = FALSE)
+code_columns <- grep("^code_", colnames(data), value = TRUE)
 
 data = data |>
     dplyr::inner_join(samples, by = "name")
@@ -46,7 +48,7 @@ if (isTRUE(args$cpm)) {
 
 # ---- Average across replicates ----
 data_avg <- data |>
-  dplyr::group_by(code_0, code_1, group) |>
+  dplyr::group_by(dplyr::across(dplyr::all_of(code_columns)), group) |>
   dplyr::summarise(mean = mean(count), .groups = "drop")
 
 # ---- Pivot and compute contrasts ----
@@ -74,7 +76,7 @@ stats |>
 present_groups <- intersect(c("protein","no_protein","naive"), colnames(stats))
 for (g in present_groups) {
   stats |>
-    dplyr::select(code_0, code_1, dplyr::all_of(g)) |>
+    dplyr::select(dplyr::all_of(code_columns), dplyr::all_of(g)) |>
     dplyr::rename(count = !!rlang::sym(g)) |>
     readr::write_csv(file.path(args$save_dir, paste0(g, ".csv")))
 }
