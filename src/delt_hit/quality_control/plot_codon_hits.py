@@ -80,3 +80,5 @@ def plot_hits(output_dir: Path, save_dir: Path) -> None:
             ax.set_xticklabels([])
         fig.tight_layout()
         fig.savefig(save_dir / f'hits_{grp_name}.pdf')
+        fig.savefig(save_dir / f'hits_{grp_name}.png', dpi=300)
+        plt.close(fig)
