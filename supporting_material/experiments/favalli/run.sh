@@ -8,7 +8,7 @@ set -euo pipefail
 
 cd supporting_material/experiments/favalli || exit
 
-PREFIX="${1:-lane-1}"
+PREFIX="${1:-lane-1-fasta}"
 VALID_PREFIXES=("lane-1" "lane-2" "lane-1-fasta" "lane-2-fasta")
 
 if [[ ! " ${VALID_PREFIXES[*]} " =~ [[:space:]]${PREFIX}[[:space:]] ]]; then
