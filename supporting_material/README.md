@@ -109,20 +109,21 @@ Run the Favalli enrichment analysis explicitly afterward:
 
 ```bash
 cd supporting_material/experiments/favalli
-pixi run delt-hit analyse enrichment \
-  --config_path=analysis.yaml \
-  --name=ca9_ds \
-  --method=counts
-Rscript --vanilla lane-1-fasta/analysis/ca9_ds/counts/enrichment_counts.R
-
-pixi run delt-hit analyse enrichment \
-  --config_path=analysis.yaml \
-  --name=ca9_ds \
-  --method=edgeR
-Rscript --vanilla lane-1-fasta/analysis/ca9_ds/edgeR/enrichment_edgeR.R
+for exp in ca9_ss ca9_ds;
+do
+    pixi run delt-hit analyse enrichment \
+      --config_path=analysis.yaml \
+      --name=${exp} \
+      --method=counts
+    Rscript --vanilla lane-1-fasta/analysis/${exp}/counts/enrichment_counts.R
+    
+    pixi run delt-hit analyse enrichment \
+      --config_path=analysis.yaml \
+      --name=${exp} \
+      --method=edgeR
+    Rscript --vanilla lane-1-fasta/analysis/${exp}/edgeR/enrichment_edgeR.R
+done
 ```
-
-The same pattern applies to any other analysis names defined in `analysis.yaml`.
 
 This workflow produces:
 
@@ -144,15 +145,6 @@ Compare DELT-Hit counts against the published counts:
 ```bash
 cd supporting_material/experiments/favalli
 pixi run python compare_selections.py lane-1-fasta
-```
-
-If you also want comparison tables for the other workbook prefixes, run:
-
-```bash
-cd supporting_material/experiments/favalli
-pixi run python compare_selections.py lane-1
-pixi run python compare_selections.py lane-2
-pixi run python compare_selections.py lane-2-fasta
 ```
 
 Comparison tables are written to `supporting_material/experiments/favalli/comparison/<prefix>/` for each of the four prefixes above. Each output folder contains one detailed CSV per selection plus a `report.csv` summary with the observed-compound counts, total counts, and mismatch totals for the published and DELT-Hit counts. Inspect the detailed CSV `identical` column and the summary report to confirm whether the published and DELT-Hit counts match for each selection.
