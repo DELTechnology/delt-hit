@@ -87,14 +87,34 @@ This script:
 - downloads `20190812.A-1907_NF2GB2_s2_R1.fasta.gz`
 - downloads the published evaluation table into `supporting_material/experiments/favalli/published/`
 
-Run DELT-Hit for any Favalli workbook prefix:
+Run DELT-Hit for the `lane-1-fasta` workbook prefix:
+
+```bash
+cd supporting_material/experiments/favalli
+bash run.sh lane-1-fasta
+```
+
+`run.sh` performs workbook initialization, demultiplex preparation, QC, DELT-Hit count generation, and the enrichment workflow referenced by the checked-in `analysis.yaml`. The current `analysis.yaml` is configured against `lane-1-fasta`, so this is the prefix that generates the analysis files required by the Favalli enrichment scripts.
+
+To generate all files required by both the enrichment workflow and the comparison script for `lane-1-fasta`, run:
+
+```bash
+cd supporting_material/experiments/favalli
+bash run.sh lane-1-fasta
+```
+
+This produces:
+
+- per-selection DELT-Hit counts under `lane-1-fasta/selections/`
+- enrichment analysis inputs and generated R scripts under `lane-1-fasta/analysis/`
+- counts- and edgeR-based enrichment outputs for the analyses defined in `analysis.yaml`
+
+Other workbook prefixes remain available for count comparison only:
 
 ```bash
 cd supporting_material/experiments/favalli
 bash run.sh lane-1
-# or one of:
 bash run.sh lane-2
-bash run.sh lane-1-fasta
 bash run.sh lane-2-fasta
 ```
 
@@ -102,10 +122,15 @@ Compare DELT-Hit counts against the published counts:
 
 ```bash
 cd supporting_material/experiments/favalli
-pixi run python compare_selections.py lane-1
-# or one of:
-pixi run python compare_selections.py lane-2
 pixi run python compare_selections.py lane-1-fasta
+```
+
+If you also want comparison tables for the other workbook prefixes, run:
+
+```bash
+cd supporting_material/experiments/favalli
+pixi run python compare_selections.py lane-1
+pixi run python compare_selections.py lane-2
 pixi run python compare_selections.py lane-2-fasta
 ```
 
@@ -138,6 +163,32 @@ bash run.sh lane-1
 # or
 bash run.sh lane-2
 ```
+
+`run.sh` performs lane initialization, demultiplex preparation, QC, and count generation for the requested lane. The enrichment analyses in `analysis.yaml` combine selections from both lanes, so they only run once both `lane-1/selections/` and `lane-2/selections/` exist locally.
+
+To generate all files required by both the enrichment workflow and the comparison script, run both lanes:
+
+```bash
+cd supporting_material/experiments/pure-del
+bash run.sh lane-1
+bash run.sh lane-2
+```
+
+After both lane runs have completed, rerun either command once more to execute the cross-lane enrichment analyses and plotting helpers:
+
+```bash
+cd supporting_material/experiments/pure-del
+bash run.sh lane-1
+# or
+bash run.sh lane-2
+```
+
+This produces:
+
+- per-selection DELT-Hit counts under `lane-1/selections/` and `lane-2/selections/`
+- enrichment analysis inputs and R scripts under `lane-1/analysis/` and `lane-2/analysis/`
+- counts- and edgeR-based enrichment outputs for `his_pure_up`, `his_pure_sp`, `dyna_up`, and `dyna_sp`
+- summary plots and CSV exports under `supporting_material/experiments/pure-del/enrichment/`
 
 Compare DELT-Hit counts against the published counts:
 
