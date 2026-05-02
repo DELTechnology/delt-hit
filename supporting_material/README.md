@@ -122,6 +122,10 @@ do
       --name=${exp} \
       --method=edgeR
     Rscript --vanilla lane-1-fasta/analysis/${exp}/edgeR/enrichment_edgeR.R
+
+    pixi run python enrichment.py \
+      --data-dir lane-1-fasta/analysis/${exp} \
+      --output-dir lane-1-fasta/analysis/${exp}
 done
 ```
 
@@ -130,6 +134,7 @@ This workflow produces:
 - per-selection DELT-Hit counts under `lane-1-fasta/selections/`
 - enrichment analysis inputs and generated R scripts under `lane-1-fasta/analysis/`
 - counts- and edgeR-based enrichment outputs for the analyses defined in `analysis.yaml`
+- enrichment summary plots and CSV exports in each analysis directory
 
 Other workbook prefixes remain available for count comparison only:
 
@@ -182,18 +187,30 @@ The cross-lane enrichment analyses in `analysis.yaml` require those two selectio
 
 ```bash
 cd supporting_material/experiments/pure-del
-pixi run delt-hit analyse enrichment --config_path=analysis.yaml --name=his_pure_up --method=counts
-Rscript --vanilla lane-2/analysis/his_pure_up/counts/enrichment_counts.R
+for exp in his_pure_up his_pure_sp dyna_up dyna_sp;
+do
+    case "${exp}" in
+        his_pure_up|dyna_up) lane_dir="lane-2" ;;
+        his_pure_sp|dyna_sp) lane_dir="lane-1" ;;
+    esac
 
-pixi run delt-hit analyse enrichment --config_path=analysis.yaml --name=his_pure_up --method=edgeR
-Rscript --vanilla lane-2/analysis/his_pure_up/edgeR/enrichment_edgeR.R
+    pixi run delt-hit analyse enrichment \
+      --config_path=analysis.yaml \
+      --name=${exp} \
+      --method=counts
+    Rscript --vanilla ${lane_dir}/analysis/${exp}/counts/enrichment_counts.R
 
-pixi run python enrichment.py \
-  --data-dir lane-2/analysis/his_pure_up \
-  --output-dir enrichment/his_pure_up
+    pixi run delt-hit analyse enrichment \
+      --config_path=analysis.yaml \
+      --name=${exp} \
+      --method=edgeR
+    Rscript --vanilla ${lane_dir}/analysis/${exp}/edgeR/enrichment_edgeR.R
+
+    pixi run python enrichment.py \
+      --data-dir ${lane_dir}/analysis/${exp} \
+      --output-dir enrichment/${exp}
+done
 ```
-
-Repeat the same `delt-hit analyse enrichment`, `Rscript`, and `pixi run python enrichment.py` pattern for `his_pure_sp`, `dyna_up`, and `dyna_sp`.
 
 This workflow produces:
 
