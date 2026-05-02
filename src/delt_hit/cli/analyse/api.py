@@ -102,13 +102,14 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
 
         # ---- Helper ----
         get_corr_plot <- function(data, condition) {{
+          code_columns <- grep("^code_", colnames(data), value = TRUE)
           pdat <- data %>%
             dplyr::filter(group == condition) %>%
-            dplyr::select(code_0, code_1, name, count) %>%
+            dplyr::select(dplyr::all_of(code_columns), name, count) %>%
             tidyr::pivot_wider(names_from = name, values_from = count, values_fill = 0)
         
           g <- pdat %>%
-            dplyr::select(-code_0, -code_1) %>%
+            dplyr::select(-dplyr::all_of(code_columns)) %>%
             GGally::ggpairs(
               upper = list(continuous = GGally::wrap("smooth", alpha = 0.3, size = 0.2)),
               lower = list(continuous = GGally::wrap("cor", size = 3))
@@ -119,23 +120,24 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
         }}
         
         get_hits.edgeR <- function(data, log = FALSE) {{
+          code_columns <- grep("^code_", colnames(data), value = TRUE)
 
           data.wide <- data %>%
             select(-group) %>%
             pivot_wider(names_from = name, values_from = count, values_fill = 0)
 
           data.row <- data.wide %>%
-            select(code_0, code_1)
+            select(all_of(code_columns))
 
           data.col <- data.frame(
-            name = data.wide %>% select(-code_0, -code_1, -id) %>% colnames(),
+            name = data.wide %>% select(-all_of(code_columns), -any_of("id")) %>% colnames(),
             stringsAsFactors = FALSE
           )
           groups <- factor(sapply(data.col$name, get_group_from_name))
           groups <- relevel(groups, "no_protein")
           data.col$group <- groups
 
-          data.counts <- as.matrix(data.wide %>% select(-code_0, -code_1, -id))
+          data.counts <- as.matrix(data.wide %>% select(-all_of(code_columns), -any_of("id")))
           rownames(data.counts) <- seq.int(nrow(data.wide))
 
           y <- DGEList(
@@ -192,6 +194,7 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
         # ---- Load data ----
         data    <- read_csv(args$data_path,    show_col_types = FALSE)
         samples <- read_csv(args$samples_path, show_col_types = FALSE)
+        code_columns <- grep("^code_", colnames(data), value = TRUE)
 
         grp_by_name <- setNames(samples$group, samples$name)
         get_group_from_name <- function(name) grp_by_name[[name]]
@@ -223,14 +226,14 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
         }}
 
         # derive selections from result table columns and export per-selection counts
-        selections <- setdiff(colnames(result.edgeR$counts), c("code_0", "code_1"))
+        selections <- setdiff(colnames(result.edgeR$counts), code_columns)
 
         # save normalized counts (CPMs; log scale depends on args$log)
         for (selection in selections) {{
           fname <- paste0(selection, ".csv")
           save.path <- file.path(args$save_dir, fname)
           result.edgeR$counts %>%
-            select(code_0, code_1, all_of(selection)) %>%
+            select(all_of(code_columns), all_of(selection)) %>%
             mutate(count = .data[[selection]]) %>%
             select(-all_of(selection)) %>%
             write_csv(file = save.path)
@@ -238,7 +241,7 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
         
         counts.norm <- result.edgeR$counts %>%
           pivot_longer(
-            cols = -c(code_0, code_1),
+            cols = -all_of(code_columns),
             names_to = "name",
             values_to = "count"
           )
@@ -282,13 +285,14 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
         
         # ---- Helper ----
         get_corr_plot <- function(data, condition) {{
+          code_columns <- grep("^code_", colnames(data), value = TRUE)
           pdat <- data %>%
             dplyr::filter(group == condition) %>%
-            dplyr::select(code_0, code_1, name, count) %>%
+            dplyr::select(dplyr::all_of(code_columns), name, count) %>%
             tidyr::pivot_wider(names_from = name, values_from = count, values_fill = 0)
         
           g <- pdat %>%
-            dplyr::select(-code_0, -code_1) %>%
+            dplyr::select(-dplyr::all_of(code_columns)) %>%
             GGally::ggpairs(
               upper = list(continuous = GGally::wrap("smooth", alpha = 0.3, size = 0.2)),
               lower = list(continuous = GGally::wrap("cor", size = 3))
@@ -301,6 +305,7 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
         # ---- Load data ----
         data <- readr::read_csv(args$data_path, show_col_types = FALSE)
         samples <- readr::read_csv(args$samples_path, show_col_types = FALSE)
+        code_columns <- grep("^code_", colnames(data), value = TRUE)
         
         data = data |>
             dplyr::inner_join(samples, by = "name")
@@ -315,7 +320,7 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
 
         # ---- Average across replicates ----
         data_avg <- data |>
-          dplyr::group_by(code_0, code_1, group) |>
+          dplyr::group_by(dplyr::across(dplyr::all_of(code_columns)), group) |>
           dplyr::summarise(mean = mean(count), .groups = "drop")
 
         # ---- Pivot and compute contrasts ----
@@ -343,7 +348,7 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
         present_groups <- intersect(c("protein","no_protein","naive"), colnames(stats))
         for (g in present_groups) {{
           stats |>
-            dplyr::select(code_0, code_1, dplyr::all_of(g)) |>
+            dplyr::select(dplyr::all_of(code_columns), dplyr::all_of(g)) |>
             dplyr::rename(count = !!rlang::sym(g)) |>
             readr::write_csv(file.path(args$save_dir, paste0(g, ".csv")))
         }}
