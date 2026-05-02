@@ -7,6 +7,7 @@
 - Enrichment plotting scripts now export PNG outputs directly for the Favalli and pure-DEL supporting-material analyses so revision figures can be reused without extra conversion steps.
 
 ### Improved
+- Enrichment analysis scripts were generalized to support an arbitrary number of `code_*` columns instead of assuming a fixed library width, making the published-dataset revision workflows work across more DEL architectures.
 - Published-dataset supporting-material workflows were aligned and documented more clearly, including streamlined run scripts and revised README guidance for reproducing the revision analyses.
 - Favalli CA9 analysis selections were updated to match the current manuscript re-analysis workflow and supporting-material configuration.
 - Enrichment rerun documentation and output locations were cleaned up so the generated figures and tables map cleanly onto the revision deliverables.

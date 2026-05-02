@@ -11,6 +11,7 @@ from rich.table import Table
 
 PSEUDOCOUNT = 1e-6
 DEFAULT_TOP_N = 10
+DEFAULT_PLOT_TOP_NS = [10, 50, 100, 500, 1000]
 METHOD_ORDER = ["diff", "ratio", "edgeR"]
 MAX_CODES_PER_PLOT = 10
 TOP_HITS_EXPORT_N = 10
@@ -53,6 +54,10 @@ def validate_top_n(top_n: int) -> None:
 
 def get_code_columns(df: pd.DataFrame) -> list[str]:
     return [column for column in df.columns if column.startswith("code_")]
+
+
+def get_plot_top_ns(top_n: int) -> list[int]:
+    return sorted({*DEFAULT_PLOT_TOP_NS, top_n})
 
 
 def build_ranked_tables(counts_df: pd.DataFrame, edger_df: pd.DataFrame) -> dict[str, pd.DataFrame]:
@@ -208,19 +213,20 @@ def main() -> None:
     code_columns = get_code_columns(counts_df)
 
     ranked_tables = build_ranked_tables(counts_df=counts_df, edger_df=edger_df)
-    top_tables = {method: table.head(args.top_n).copy() for method, table in ranked_tables.items()}
+    for top_n in get_plot_top_ns(args.top_n):
+        top_tables = {method: table.head(top_n).copy() for method, table in ranked_tables.items()}
 
-    for method in METHOD_ORDER:
-        print(f"{method}: selected {len(top_tables[method])} compounds")
+        for method in METHOD_ORDER:
+            print(f"{method}: selected {len(top_tables[method])} compounds for top {top_n}")
 
-    for code_column in code_columns:
-        freq_df = compute_frequency_table(top_tables=top_tables, code_column=code_column)
-        if freq_df.empty:
-            print(f"Skipped {code_column}: no compounds available to plot")
-            continue
-        output_path = output_dir / f"top_{args.top_n}_{code_column}_frequency.pdf"
-        plot_frequency_table(freq_df=freq_df, top_n=args.top_n, output_path=output_path)
-        print(f"Wrote {output_path}")
+        for code_column in code_columns:
+            freq_df = compute_frequency_table(top_tables=top_tables, code_column=code_column)
+            if freq_df.empty:
+                print(f"Skipped {code_column} for top {top_n}: no compounds available to plot")
+                continue
+            output_path = output_dir / f"top_{top_n}_{code_column}_frequency.pdf"
+            plot_frequency_table(freq_df=freq_df, top_n=top_n, output_path=output_path)
+            print(f"Wrote {output_path}")
 
     for method in METHOD_ORDER:
         print_method_table(method, ranked_tables[method], code_columns)
