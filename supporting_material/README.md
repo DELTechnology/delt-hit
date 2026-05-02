@@ -125,7 +125,7 @@ do
 
     pixi run python enrichment.py \
       --data-dir lane-1-fasta/analysis/${exp} \
-      --output-dir lane-1-fasta/analysis/${exp}
+      --output-dir enrichment/${exp}
 done
 ```
 
@@ -134,7 +134,7 @@ This workflow produces:
 - per-selection DELT-Hit counts under `lane-1-fasta/selections/`
 - enrichment analysis inputs and generated R scripts under `lane-1-fasta/analysis/`
 - counts- and edgeR-based enrichment outputs for the analyses defined in `analysis.yaml`
-- enrichment summary plots and CSV exports in each analysis directory
+- enrichment summary plots and CSV exports under `supporting_material/experiments/favalli/enrichment/`
 
 Other workbook prefixes remain available for count comparison only:
 
