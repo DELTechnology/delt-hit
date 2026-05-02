@@ -83,6 +83,8 @@ This script:
 
 - downloads `20190812.A-1907_NF2GB2_s1_R1.fastq.gz`
 - downloads `20190812.A-1907_NF2GB2_s2_R1.fastq.gz`
+- downloads `20190812.A-1907_NF2GB2_s1_R1.fasta.gz`
+- downloads `20190812.A-1907_NF2GB2_s2_R1.fasta.gz`
 - downloads the published evaluation table into `supporting_material/experiments/favalli/published/`
 
 Run DELT-Hit for a given lane:
