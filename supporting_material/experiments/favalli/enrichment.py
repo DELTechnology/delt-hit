@@ -25,7 +25,7 @@ console = Console()
 
 def parse_args() -> argparse.Namespace:
     script_dir = Path(__file__).resolve().parent
-    default_data_dir = script_dir / "lane-1" / "analysis" / "protein_vs_no_protein"
+    default_data_dir = script_dir / "lane-1-fasta" / "analysis" / "protein_vs_no_protein"
 
     parser = argparse.ArgumentParser(
         description="Plot code_0 and code_1 frequencies among top-ranked compounds."
