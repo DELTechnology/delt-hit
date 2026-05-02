@@ -31,6 +31,7 @@ for selection_name in sorted(selection_names):
             delt.set_index(["code_0", "code_1"]),
         ],
         axis=1,
+        join="outer",
     )
     counts = counts[counts.legacy != 0]
     counts = counts.convert_dtypes()
