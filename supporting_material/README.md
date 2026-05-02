@@ -173,16 +173,7 @@ This script:
 - downloads the Zenodo ZIP with published selection counts
 - extracts the `selection_*_.txt` files into `supporting_material/experiments/pure-del/published/`
 
-Run DELT-Hit for a given lane:
-
-```bash
-cd supporting_material/experiments/pure-del
-bash run.sh lane-1
-# or
-bash run.sh lane-2
-```
-
-`run.sh` performs lane initialization, demultiplex preparation, QC, and count generation for the requested lane.
+Run DELT-Hit for a given lane: `run.sh` performs lane initialization, demultiplex preparation, QC, and count generation for the requested lane.
 
 To generate all per-selection counts required by both the enrichment workflow and the comparison script, run both lanes:
 

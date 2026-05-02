@@ -7,9 +7,9 @@ suppressPackageStartupMessages({
 })
 
 args <- list(
-  data_path    = "/work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/supporting_material/experiments/pure-del/lane-2/analysis/his_pure_up/data.csv",
-  samples_path = "/work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/supporting_material/experiments/pure-del/lane-2/analysis/his_pure_up/samples.csv",
-  save_dir     = "/work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/supporting_material/experiments/pure-del/lane-2/analysis/his_pure_up/edgeR",
+  data_path    = "/work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/supporting_material/experiments/favalli/lane-1-fasta/analysis/ca9_ss/data.csv",
+  samples_path = "/work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/supporting_material/experiments/favalli/lane-1-fasta/analysis/ca9_ss/samples.csv",
+  save_dir     = "/work/FAC/FBM/DBC/mrapsoma/prometex/projects/delt-hit/supporting_material/experiments/favalli/lane-1-fasta/analysis/ca9_ss/edgeR",
   log          = FALSE
 )
 
