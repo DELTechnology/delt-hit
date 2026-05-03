@@ -6,6 +6,7 @@
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
@@ -25,6 +26,8 @@
 \begin{document}
 \maketitle
 \providecommand{\benchmarkroot}{../..}
+\setcounter{subsection}{0}
+\renewcommand{\thesubsection}{\arabic{subsection}}
 
 \input{analysis-of-published-datasets}
 \input{comparison-delt-deli}

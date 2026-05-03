@@ -8,6 +8,7 @@
 \usepackage{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{caption}
@@ -1186,6 +1187,8 @@ We thank the DEL research community for feedback during software development and
 \section*{Supplementary Information}
 \addcontentsline{toc}{section}{Supplementary Information}
 \providecommand{\benchmarkroot}{..}
+\setcounter{subsection}{0}
+\renewcommand{\thesubsection}{\arabic{subsection}}
 
 \input{supplementary/analysis-of-published-datasets}
 \input{supplementary/comparison-delt-deli}

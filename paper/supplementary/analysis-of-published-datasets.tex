@@ -1,13 +1,53 @@
 \subsection{Analysis of published datasets}
 
-To assess the applicability of DELT-Hit to previously published DEL selections, we reran two literature datasets that are distributed with the supporting material: the NF2 dataset reported by Favalli et al.\cite{ref37} and the Pure-DEL dataset reported in Science.\cite{ref38} For both examples, the supplementary files include the input sequencing data, the spreadsheet-based library definitions used to initialize DELT-Hit, and rerunnable command-line workflows that reproduce the demultiplexing, quality-control, count-generation and enrichment-analysis steps within the DELT-Hit framework. The same supporting-material bundle also now includes two standalone tutorial examples: a full single-stranded workflow under \texttt{supporting\_material/experiments/example-single-stranded/} and an enumeration-only dual-display example under \texttt{supporting\_material/experiments/example-dual-display/}.
+To assess the applicability of DELT-Hit to previously published DEL selections, we re-analysed two literature datasets distributed with the supporting material: the NF2 dataset reported by Favalli et al.\cite{ref37} and the Pure-DEL dataset reported in Science.\cite{ref38}
 
-The re-analysis workflow follows the same structure for both datasets. First, a DELT-Hit configuration is generated from the corresponding Excel workbook with \texttt{delt-hit init}. The resulting configuration is then used to prepare and execute demultiplexing, generate quality-control reports and visualizations, and process the mapped reads into per-selection count tables. For the Favalli dataset, the full rerun workflow is provided in \texttt{supporting\_material/experiments/favalli/run.sh}. For the Pure-DEL dataset, the corresponding workflow is provided in \texttt{supporting\_material/experiments/pure-del/run.sh}. These reproductions therefore recapitulate the full DELT-Hit analysis chain from raw FASTQ input to downstream count-based analysis on published data.
+For the Favalli dataset, we focus on the \texttt{lane-1-fasta} re-analysis. The rerunnable workflow is provided in \path{supporting_material/experiments/favalli/run.sh}, and step-by-step instructions for analysing the original FASTA file with DELT-Hit are given in \path{supporting_material/README.md}. The corresponding comparison script, \path{supporting_material/experiments/favalli/compare_selections.py}, shifts the DELT-Hit \texttt{code\_0}/\texttt{code\_1} identifiers to the published 1-based numbering and then matches them to the \texttt{CodeA}/\texttt{CodeB} columns of the original evaluation table. In this way, the DELT-Hit re-analysis reproduces the published count table that was originally generated with the C++ evaluation workflow referenced in the study. An example selection excerpt is shown in Table~\ref{tab:favalli-example}.
 
-To validate compatibility with prior analyses, DELT-Hit-derived selection counts were compared against legacy published count outputs using dataset-specific comparison utilities. For the Favalli reproduction, \texttt{supporting\_material/experiments/favalli/compare\_selections.py} aligns DELT-Hit counts with the legacy evaluation table after harmonizing barcode indexing and writes both per-selection comparison tables and per-run summary reports. For the Pure-DEL reproduction, \texttt{supporting\_material/experiments/pure-del/compare\_selections.py} performs the analogous comparison for the three-code library format used in that study and also writes per-run summary reports. In both cases, the scripts write per-selection comparison tables that allow exact-match validation of the observed non-zero published counts against the corresponding DELT-Hit outputs.
+The Pure-DEL library was analysed in the original study with a further-developed version of the same C++ analysis lineage. In our re-analysis, DELT-Hit was run from the original FASTQ files using \path{supporting_material/experiments/pure-del/run.sh}, and the resulting count tables were compared with the Zenodo-deposited selection tables using \path{supporting_material/experiments/pure-del/compare_selections.py}. This script shifts DELT-Hit \texttt{code\_0}/\texttt{code\_1}/\texttt{code\_2} identifiers to the deposited 1-based numbering and matches them to the \texttt{Code1}/\texttt{Code2}/\texttt{Code3} columns in the original tables. Across the two lane-specific reruns, the deposited selection count tables are recovered exactly for the corresponding deposited outputs, showing that the published Pure-DEL counts can be reproduced directly from the original sequencing data within the DELT-Hit workflow. An example selection excerpt is shown in Table~\ref{tab:puredel-example}.
 
-For the Favalli dataset, both standard lane reproductions and corresponding \texttt{-fasta} workbook reproductions are included in the repository. The supporting material provides the raw FASTQ files, FASTA exports, lane-specific Excel configuration workbooks, the processed DELT-Hit outputs, and comparison outputs under \texttt{supporting\_material/experiments/favalli/comparison/} for \texttt{lane-1}, \texttt{lane-2}, \texttt{lane-1-fasta}, and \texttt{lane-2-fasta}. These comparison outputs include both per-selection tables and run-level summary reports. This dataset therefore serves as a rerunnable example showing how a previously published DEL selection campaign can be reconstructed within DELT-Hit and compared directly with the historical count tables used in the original analysis.
+\begin{table}[htbp]
+\centering
+\small
+\caption{Top 10 rows from the Favalli selection \texttt{10\_2} comparison table.}
+\label{tab:favalli-example}
+\begin{tabular}{rrrrr}
+\toprule
+\textbf{code\_0} & \textbf{code\_1} & \textbf{legacy} & \textbf{delt} & \textbf{identical} \\
+\midrule
+268 & 278 & 62 & 62 & True \\
+67 & 278 & 59 & 59 & True \\
+67 & 60 & 53 & 53 & True \\
+3 & 278 & 51 & 51 & True \\
+268 & 60 & 49 & 49 & True \\
+204 & 16 & 47 & 47 & True \\
+67 & 304 & 43 & 43 & True \\
+193 & 16 & 42 & 42 & True \\
+67 & 230 & 42 & 42 & True \\
+268 & 230 & 39 & 39 & True \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-For the Pure-DEL dataset, the repository contains the same set of components: raw FASTQ inputs for two lanes, lane-specific Excel configuration files, DELT-Hit rerun outputs, the published selection-count tables, and comparison outputs under \texttt{supporting\_material/experiments/pure-del/comparison/}. These comparison outputs include both per-selection tables and run-level summary reports. As in the Favalli reproduction, the comparison workflow is based on direct alignment of the published and DELT-Hit count tables after harmonization of barcode numbering. We note that the supporting-material overview flags an open question regarding the relationship between the two Pure-DEL lanes, and therefore this supplementary note limits itself to documenting the rerunnable re-analysis and comparison workflow without drawing further conclusions from that observation.
-
-Together, these published-dataset reproductions show that DELT-Hit can be applied not only to the tutorial workflow distributed with the protocol, but also to previously published DEL selection datasets with legacy count outputs. The accompanying scripts and comparison tables provide a transparent route for verifying that published DEL analyses can be rerun within a common, end-to-end computational framework while preserving compatibility with prior count-based results.
+\begin{table}[htbp]
+\centering
+\small
+\caption{Top 10 rows from the Pure-DEL selection \texttt{16\_2} comparison table.}
+\label{tab:puredel-example}
+\begin{tabular}{rrrrrr}
+\toprule
+\textbf{code\_0} & \textbf{code\_1} & \textbf{code\_2} & \textbf{legacy} & \textbf{delt} & \textbf{identical} \\
+\midrule
+9 & 1 & 11 & 82237 & 82237 & True \\
+9 & 4 & 11 & 75428 & 75428 & True \\
+9 & 5 & 11 & 69178 & 69178 & True \\
+9 & 7 & 11 & 66951 & 66951 & True \\
+8 & 10 & 11 & 63161 & 63161 & True \\
+9 & 10 & 11 & 63147 & 63147 & True \\
+9 & 8 & 11 & 58942 & 58942 & True \\
+8 & 4 & 11 & 55386 & 55386 & True \\
+8 & 7 & 11 & 53387 & 53387 & True \\
+9 & 2 & 11 & 49307 & 49307 & True \\
+\bottomrule
+\end{tabular}
+\end{table}
