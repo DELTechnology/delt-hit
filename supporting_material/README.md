@@ -5,9 +5,6 @@ This directory collects the reproducible example workflows and dataset re-analys
 - `supporting_material/experiments/example-single-stranded/` contains a full single-stranded DEL workflow example, including the Excel template, FASTQ download helper, analysis configuration, and `run.sh` workflow script.
 - `supporting_material/experiments/example-dual-display/` contains a standalone dual-display example focused on library enumeration and visualization only.
 - `supporting_material/experiments/favalli/` and `supporting_material/experiments/pure-del/` contain rerunnable re-analyses of previously published datasets, together with comparison scripts for validating DELT-Hit output against the published counts.
-- `supporting_material/experiments/johanna/` contains an additional experiment-specific workflow example.
-
-For Polybox-based datasets, download troubleshooting notes and validated direct-download URLs are collected in `supporting_material/polybox-download.md`.
 
 ## Full Example DELT-Hit Workflow
 
