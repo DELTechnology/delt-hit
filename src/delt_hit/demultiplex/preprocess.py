@@ -19,8 +19,8 @@ def _complement_dna(codon: str) -> str:
     return codon.translate(str.maketrans('ACGT', 'TGCA'))
 
 
-def _transform_building_block_codon(codon: str, *, reverse: bool, complement: bool) -> str:
-    """Apply optional reverse/complement transforms to a building-block codon."""
+def _transform_codon(codon: str, *, reverse: bool, complement: bool) -> str:
+    """Apply optional reverse/complement transforms to a codon."""
     if complement:
         codon = _complement_dna(codon)
     if reverse:
@@ -28,25 +28,24 @@ def _transform_building_block_codon(codon: str, *, reverse: bool, complement: bo
     return codon
 
 
-def get_codons(name: str, whitelists: dict) -> list[str]:
-    """Return codon strings for a named whitelist.
+def get_codons(region: Region, whitelists: dict) -> list[str]:
+    """Return codon strings for a region.
 
     Args:
-        name: Whitelist key to look up.
+        region: Region metadata, including codon transform flags.
         whitelists: Mapping of whitelist names to codon records.
 
     Returns:
         A list of codon strings.
     """
     codons = []
-    for item in whitelists[name]:
+    for item in whitelists[region.name]:
         codon = item['codon']
-        if name.startswith('B'):
-            codon = _transform_building_block_codon(
-                codon,
-                reverse=item.get('reverse', False),
-                complement=item.get('complement', False),
-            )
+        codon = _transform_codon(
+            codon,
+            reverse=region.reverse,
+            complement=region.complement,
+        )
         codons.append(codon)
     return codons
 
@@ -78,14 +77,20 @@ def get_regions(structure: list[dict], whitelists: dict) -> list[Region]:
                 seen.add(codon)
         return unique
 
-    return [Region(
-        name=item['name'],
-        index=i,
-        codons=unique_codons(get_codons(item['name'], whitelists)),
-        max_error_rate=item['max_error_rate'],
-        indels=item['indels']
-    )
-        for i, item in enumerate(structure)]
+    regions = []
+    for i, item in enumerate(structure):
+        region = Region(
+            name=item['name'],
+            index=i,
+            codons=[],
+            max_error_rate=item['max_error_rate'],
+            indels=item['indels'],
+            reverse=item.get('reverse', False),
+            complement=item.get('complement', False),
+        )
+        region.codons = unique_codons(get_codons(region, whitelists))
+        regions.append(region)
+    return regions
 
 
 def write_fastq_files(regions: list[Region], save_path: Path) -> None:

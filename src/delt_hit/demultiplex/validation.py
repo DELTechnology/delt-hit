@@ -7,6 +7,8 @@ class Region(BaseModel):
     codons: list[str]
     max_error_rate: float
     indels: int
+    reverse: bool = False
+    complement: bool = False
 
     @property
     def id(self):
