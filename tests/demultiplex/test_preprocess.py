@@ -81,10 +81,10 @@ def test_generate_input_files_normalizes_short_fasta_extension(tmp_path):
 def test_get_codons_complements_building_blocks_only():
     whitelists = {
         "B0": [
-            {"codon": "GCCTCG", "complement": True},
-            {"codon": "AATTCC", "complement": False},
+            {"codon": "GCCTCG", "reverse": False, "complement": True},
+            {"codon": "AATTCC", "reverse": False, "complement": False},
         ],
-        "S0": [{"codon": "GCCTCG", "complement": True}],
+        "S0": [{"codon": "GCCTCG", "reverse": True, "complement": True}],
         "C0": [{"codon": "TTGGCC"}],
     }
 
@@ -93,7 +93,18 @@ def test_get_codons_complements_building_blocks_only():
     assert get_codons("C0", whitelists) == ["TTGGCC"]
 
 
-def test_generate_input_files_writes_complemented_building_block_adapters(tmp_path):
+def test_get_codons_supports_reverse_and_reverse_complement_for_building_blocks():
+    whitelists = {
+        "B0": [
+            {"codon": "GCCTCG", "reverse": True, "complement": False},
+            {"codon": "AATTCC", "reverse": True, "complement": True},
+        ],
+    }
+
+    assert get_codons("B0", whitelists) == ["GCTCCG", "GGAATT"]
+
+
+def test_generate_input_files_writes_transformed_building_block_adapters(tmp_path):
     config = {
         "experiment": {
             "save_dir": str(tmp_path),
@@ -115,8 +126,9 @@ def test_generate_input_files_writes_complemented_building_block_adapters(tmp_pa
         ],
         "whitelists": {
             "B0": [
-                {"index": 0, "codon": "GCCTCG", "complement": True},
-                {"index": 1, "codon": "AATTCC", "complement": False},
+                {"index": 0, "codon": "GCCTCG", "reverse": False, "complement": True},
+                {"index": 1, "codon": "AATTCC", "reverse": True, "complement": False},
+                {"index": 2, "codon": "TTGGCC", "reverse": True, "complement": True},
             ],
             "S0": [{"codon": "GCCTCG"}],
         },
@@ -133,5 +145,5 @@ def test_generate_input_files_writes_complemented_building_block_adapters(tmp_pa
         tmp_path / "demo" / "demultiplex" / "cutadapt_input_files" / "1-S0.fastq"
     ).read_text()
 
-    assert b0_fastq == ">0-B0.0\nCGGAGC\n>0-B0.1\nAATTCC"
+    assert b0_fastq == ">0-B0.0\nCGGAGC\n>0-B0.1\nCCTTAA\n>0-B0.2\nGGCCAA"
     assert s0_fastq == ">1-S0.0\nGCCTCG"
