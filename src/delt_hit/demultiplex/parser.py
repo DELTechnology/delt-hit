@@ -176,6 +176,11 @@ def structure_from_excel(path: Path):
     structure = pd.read_excel(path, sheet_name='structure')
     assert structure.name.str.match(r'^[SCB]').all(), "Structure `name` must start with 'S', 'B', or 'C' depending on type"
     assert structure.type.isin(['selection', 'building_block', 'constant']).all(), "Structure `type` must be one of 'selection', 'building_block', or 'constant'"
+    for column in ('reverse', 'complement'):
+        if column in structure.columns:
+            structure[column] = structure[column].map(_normalize_bool_flag)
+        else:
+            structure[column] = False
     if 'strand' in structure.columns:
         structure['strand'] = structure['strand'].where(structure['strand'].notna(), None)
         non_building_block = structure['type'] != 'building_block'
@@ -257,11 +262,6 @@ def whitelists_from_excel(path: Path):
         df = pd.read_excel(path, sheet_name=sheet)
         assert df.codon.nunique() == len(df), f"Codons for building blocks {sheet} must be unique"
         assert df.codon.notna().all(), f"Codons for building blocks {sheet} cannot be empty"
-        for column in ('reverse', 'complement'):
-            if column in df.columns:
-                df[column] = df[column].map(_normalize_bool_flag)
-            else:
-                df[column] = False
 
         df.index.name = 'index'
         df = df.reset_index()
