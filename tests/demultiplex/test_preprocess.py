@@ -3,6 +3,7 @@ from pathlib import Path
 import yaml
 
 from delt_hit.demultiplex.preprocess import generate_input_files, get_codons
+from delt_hit.demultiplex.validation import Region
 
 
 def _write_config(tmp_path: Path, input_name: str) -> Path:
@@ -78,33 +79,56 @@ def test_generate_input_files_normalizes_short_fasta_extension(tmp_path):
     assert "awk 'NR % 2 == 1'" in script
 
 
-def test_get_codons_complements_building_blocks_only():
+def test_get_codons_applies_region_level_complement_to_all_codons():
+    region = Region(
+        name="B0",
+        index=0,
+        codons=[],
+        max_error_rate=0.0,
+        indels=0,
+        complement=True,
+    )
     whitelists = {
         "B0": [
-            {"codon": "GCCTCG", "reverse": False, "complement": True},
-            {"codon": "AATTCC", "reverse": False, "complement": False},
+            {"codon": "GCCTCG"},
+            {"codon": "AATTCC"},
         ],
-        "S0": [{"codon": "GCCTCG", "reverse": True, "complement": True}],
         "C0": [{"codon": "TTGGCC"}],
     }
 
-    assert get_codons("B0", whitelists) == ["CGGAGC", "AATTCC"]
-    assert get_codons("S0", whitelists) == ["GCCTCG"]
-    assert get_codons("C0", whitelists) == ["TTGGCC"]
+    assert get_codons(region, whitelists) == ["CGGAGC", "TTAAGG"]
 
 
-def test_get_codons_supports_reverse_and_reverse_complement_for_building_blocks():
+def test_get_codons_supports_reverse_and_reverse_complement_for_any_region():
     whitelists = {
-        "B0": [
-            {"codon": "GCCTCG", "reverse": True, "complement": False},
-            {"codon": "AATTCC", "reverse": True, "complement": True},
+        "S0": [
+            {"codon": "GCCTCG"},
+            {"codon": "AATTCC"},
         ],
     }
+    reverse_only_region = Region(
+        name="S0",
+        index=0,
+        codons=[],
+        max_error_rate=0.0,
+        indels=0,
+        reverse=True,
+    )
+    reverse_complement_region = Region(
+        name="S0",
+        index=0,
+        codons=[],
+        max_error_rate=0.0,
+        indels=0,
+        reverse=True,
+        complement=True,
+    )
 
-    assert get_codons("B0", whitelists) == ["GCTCCG", "GGAATT"]
+    assert get_codons(reverse_only_region, whitelists) == ["GCTCCG", "CCTTAA"]
+    assert get_codons(reverse_complement_region, whitelists) == ["CGAGGC", "GGAATT"]
 
 
-def test_generate_input_files_writes_transformed_building_block_adapters(tmp_path):
+def test_generate_input_files_writes_transformed_region_adapters(tmp_path):
     config = {
         "experiment": {
             "save_dir": str(tmp_path),
@@ -117,20 +141,29 @@ def test_generate_input_files_writes_transformed_building_block_adapters(tmp_pat
                 "name": "B0",
                 "max_error_rate": 0.0,
                 "indels": 0,
+                "complement": True,
             },
             {
                 "name": "S0",
                 "max_error_rate": 0.0,
                 "indels": 0,
+                "reverse": True,
+            },
+            {
+                "name": "C0",
+                "max_error_rate": 0.0,
+                "indels": 0,
+                "reverse": True,
+                "complement": True,
             },
         ],
         "whitelists": {
             "B0": [
-                {"index": 0, "codon": "GCCTCG", "reverse": False, "complement": True},
-                {"index": 1, "codon": "AATTCC", "reverse": True, "complement": False},
-                {"index": 2, "codon": "TTGGCC", "reverse": True, "complement": True},
+                {"index": 0, "codon": "GCCTCG"},
+                {"index": 1, "codon": "AATTCC"},
             ],
             "S0": [{"codon": "GCCTCG"}],
+            "C0": [{"codon": "TTGGCC"}],
         },
     }
     config_path = tmp_path / "config.yaml"
@@ -144,6 +177,10 @@ def test_generate_input_files_writes_transformed_building_block_adapters(tmp_pat
     s0_fastq = (
         tmp_path / "demo" / "demultiplex" / "cutadapt_input_files" / "1-S0.fastq"
     ).read_text()
+    c0_fastq = (
+        tmp_path / "demo" / "demultiplex" / "cutadapt_input_files" / "2-C0.fastq"
+    ).read_text()
 
-    assert b0_fastq == ">0-B0.0\nCGGAGC\n>0-B0.1\nCCTTAA\n>0-B0.2\nGGCCAA"
-    assert s0_fastq == ">1-S0.0\nGCCTCG"
+    assert b0_fastq == ">0-B0.0\nCGGAGC\n>0-B0.1\nTTAAGG"
+    assert s0_fastq == ">1-S0.0\nGCTCCG"
+    assert c0_fastq == ">2-C0.0\nGGCCAA"
