@@ -440,60 +440,30 @@ whitelists:
     educt: scaffold_1
     reaction: A-ABF1
     product: product_1
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   - index: 1
     codon: AGAATA
     smiles: COC1=CC=C(OC)C(CN)=C1
     educt: scaffold_1
     reaction: A-ABF1
     product: product_1
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   - index: 2
     codon: TCATTA
     smiles: NCCCSCC1=CC=C(F)C=C1
     educt: scaffold_1
     reaction: A-ABF1
     product: product_1
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   - index: 3
     codon: TTGACT
     smiles: NCC1(CC1)C1=CC=CC=C1
     educt: scaffold_1
     reaction: A-ABF1
     product: product_1
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   - index: 4
     codon: CGCTCT
     smiles: CC(C)(CN)CN1CCCCCC1
     educt: scaffold_1
     reaction: A-ABF1
     product: product_1
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   B1:
   - index: 0
     codon: ATGCGT
@@ -514,60 +484,30 @@ whitelists:
     educt: scaffold_2
     reaction: B-ABF1
     product: product_3
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   - index: 1
     codon: GCCGCT
     smiles: NC1CCCCCC1
     educt: scaffold_2
     reaction: B-ABF1
     product: product_3
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   - index: 2
     codon: ATAGCT
     smiles: COC1=CC(CCN)=C(OC)C=C1
     educt: scaffold_2
     reaction: B-ABF1
     product: product_3
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   - index: 3
     codon: CACGCA
     smiles: NCC1CC1
     educt: scaffold_2
     reaction: B-ABF1
     product: product_3
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   - index: 4
     codon: TACCGG
     smiles: CN1N=C(C)C(CN)=C1C
     educt: scaffold_2
     reaction: B-ABF1
     product: product_3
-    'Unnamed: 5': .nan
-    'Unnamed: 6': .nan
-    'Unnamed: 7': .nan
-    'Unnamed: 8': .nan
-    'Unnamed: 9': .nan
-    'Unnamed: 10': .nan
   B3:
   - index: 0
     codon: TAGGAC
