@@ -19,6 +19,15 @@ def _complement_dna(codon: str) -> str:
     return codon.translate(str.maketrans('ACGT', 'TGCA'))
 
 
+def _transform_building_block_codon(codon: str, *, reverse: bool, complement: bool) -> str:
+    """Apply optional reverse/complement transforms to a building-block codon."""
+    if complement:
+        codon = _complement_dna(codon)
+    if reverse:
+        codon = codon[::-1]
+    return codon
+
+
 def get_codons(name: str, whitelists: dict) -> list[str]:
     """Return codon strings for a named whitelist.
 
@@ -32,8 +41,12 @@ def get_codons(name: str, whitelists: dict) -> list[str]:
     codons = []
     for item in whitelists[name]:
         codon = item['codon']
-        if name.startswith('B') and item.get('complement', False):
-            codon = _complement_dna(codon)
+        if name.startswith('B'):
+            codon = _transform_building_block_codon(
+                codon,
+                reverse=item.get('reverse', False),
+                complement=item.get('complement', False),
+            )
         codons.append(codon)
     return codons
 
