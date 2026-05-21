@@ -3,6 +3,7 @@ from textwrap import dedent
 from loguru import logger
 import pandas as pd
 
+from delt_hit.cli.analyse.zscore import zscore_analysis
 from delt_hit.utils import read_yaml
 
 class Analyse:
@@ -31,12 +32,12 @@ class Analyse:
         return data_path, samples_path, save_dir
 
     def enrichment(self, *, config_path: Path, name: str, method: str = 'counts'):
-        """Generate enrichment analysis scripts for an experiment.
+        """Generate or run enrichment analysis for an experiment.
 
         Args:
             config_path: Path to the YAML config file.
             name: Experiment name to analyze.
-            method: Analysis method ('counts' or 'edgeR').
+            method: Analysis method ('counts', 'edgeR', 'zscore', or 'DESeq2').
         """
         data_path, samples_path, save_dir = self.prepare(config_path=config_path, name=name)
 
@@ -51,8 +52,22 @@ class Analyse:
                               samples_path=samples_path,
                               log=False,
                               save_dir=save_dir / 'edgeR')
+            case 'zscore':
+                cfg = read_yaml(config_path)
+                exp, = list(filter(lambda x: x['name'] == name, cfg['experiments']))
+                zscore_analysis(
+                    data=pd.read_csv(data_path),
+                    samples=pd.read_csv(samples_path),
+                    library_size=exp.get('library_size'),
+                    save_dir=save_dir / 'zscore',
+                )
+                logger.info(f'Created z-score outputs at {save_dir / "zscore"}')
             case 'DESeq2':
                 pass
+            case _:
+                raise ValueError(
+                    f"Unknown enrichment method {method!r}; expected 'counts', 'edgeR', 'zscore', or 'DESeq2'"
+                )
 
     def run(self, config_path: Path):
         """Run the analysis pipeline (placeholder)."""
