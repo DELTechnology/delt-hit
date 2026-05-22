@@ -4,6 +4,7 @@ from loguru import logger
 import pandas as pd
 
 from delt_hit.utils import read_yaml
+from delt_hit.cli.analyse.zscore import zscore_analysis
 
 class Analyse:
 
@@ -36,7 +37,7 @@ class Analyse:
         Args:
             config_path: Path to the YAML config file.
             name: Experiment name to analyze.
-            method: Analysis method ('counts' or 'edgeR').
+            method: Analysis method ('counts', 'edgeR', or 'zscore').
         """
         data_path, samples_path, save_dir = self.prepare(config_path=config_path, name=name)
 
@@ -51,6 +52,19 @@ class Analyse:
                               samples_path=samples_path,
                               log=False,
                               save_dir=save_dir / 'edgeR')
+            case 'zscore':
+                cfg = read_yaml(config_path)
+                exp, = [e for e in cfg['experiments'] if e['name'] == name]
+                library_size = exp.get('library_size', None)
+                data = pd.read_csv(data_path)
+                samples = pd.read_csv(samples_path)
+                zscore_analysis(
+                    data=data,
+                    samples=samples,
+                    library_size=library_size,
+                    save_dir=save_dir / 'zscore',
+                )
+                logger.info(f'Z-score analysis complete, results in {save_dir / "zscore"}')
             case 'DESeq2':
                 pass
 

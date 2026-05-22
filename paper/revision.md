@@ -1,10 +1,10 @@
-# NP-P250643A Revision Task List
+    # NP-P250643A Revision Task List
 
 This file turns the editor and reviewer comments for the Nature Protocols revision into a concrete checklist for the manuscript, code, figures, benchmarking, and supporting material.
 
 ## Editor
 
-- [ ] Confirm the author list and author order are correct.
+- [x] Confirm the author list and author order are correct.
 - [x] Add a statement in Code Availability confirming foreseeable availability of any freely accessible web-based tool. Not applicable: DELT-Hit is not a freely accessible web-based tool.
 - [ ] Make the GitHub repository citable via Zenodo and add the DOI citation to the manuscript, Code Availability statement, and reference list.
 - [x] Change the title to avoid punctuation. Current title in `paper/main.tex`: `An end-to-end computational framework for DNA-encoded chemical library analysis`.
@@ -60,7 +60,7 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 
 ## Reviewer 4
 
-- [ ] Expand the SMIRKS template library with more validated DEL-compatible chemistries.
+- [x] Expand the SMIRKS template library with more validated DEL-compatible chemistries.
 - [ ] Show 2D reaction schemes alongside the corresponding SMIRKS strings.
 - [ ] Add 2D structural diagrams for building blocks from the tutorial dataset.
 - [ ] Add 2D structural diagrams for final products from the tutorial dataset.
