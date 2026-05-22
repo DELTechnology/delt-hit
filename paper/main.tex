@@ -12,11 +12,13 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{caption}
+\usepackage{float}
 \usepackage{subcaption}
 \usepackage{xcolor}
 \usepackage{listings}
-\usepackage{microtype}
+\usepackage[expansion=false]{microtype}
 \usepackage{parskip}
+\usepackage{seqsplit}
 
 \lstset{
   basicstyle=\small\ttfamily,
@@ -41,7 +43,7 @@
 \title{An end-to-end computational framework for DNA-encoded chemical library analysis}
 \author{%
   \parbox{0.95\textwidth}{\centering
-    Adriano Martinelli+*, Alice Lessing+, Gary Hoppeler, Andreas Gloger,\\
+    Adriano Martinelli+*, Alice Lessing+, Leandro Tollardo, Gary Hoppeler, \\Johanna Puff, Andreas Gloger,
     Louise Plais, J\"org Scheuermann*\\[0.5em]
     \small Institute of Pharmaceutical Sciences, Department of Chemistry and Applied Biosciences, ETH Zurich 8083 Zurich, Switzerland\\
     \small + these authors contributed equally; *corresponding authors: Adriano Martinelli, e-mail: adriano.martinelli@pharma.ethz.ch; J\"org Scheuermann, e-mail: joerg.scheuermann@pharma.ethz.ch
@@ -53,7 +55,7 @@
 \maketitle
 
 \begin{abstract}
-DNA-encoded chemical libraries (DELs) enable the screening of millions to billions of DNA-tagged small molecules in a single experiment, with binders identified after PCR amplification and high-throughput DNA sequencing. Analysis of DEL selection data requires the integration of sequence processing, cheminformatics, and statistical analysis, yet no general open-source workflow currently covers this full process. This protocol describes DELT-Hit (DNA-Encoded Library Technology Hit Identification), an open-source command-line tool for DEL data analysis. DELT-Hit converts raw FASTQ reads into analysis-ready chemical data through five connected modules: sequence demultiplexing with error-tolerant barcode handling; chemical structure reconstruction from building block libraries and reaction SMIRKS templates; molecular property and descriptor calculation; enrichment analysis and hit ranking using count-based and RNA-seq-derived methods; and quality-control and visualization tools for DEL data interpretation. The workflow supports both single-display and dual-display DEL architectures and produces standardized outputs for downstream analysis, including machine-learning applications. Researchers with basic command-line skills and familiarity with DEL selection workflows can perform demultiplexing and downstream analysis, whereas defining new reaction SMIRKS templates for library enumeration requires substantial cheminformatics expertise. The workflow can be completed in approximately [X--Y] h, with full-library enumeration typically representing the most time-consuming step. DELT-Hit is available at \url{https://github.com/DELTechnology/delt-hit}.
+\noindent DNA-encoded chemical libraries (DELs) enable the screening of millions to billions of DNA-tagged small molecules in a single experiment, with binders identified after PCR amplification and high-throughput DNA sequencing. Analysis of DEL selection data requires the integration of sequence processing, cheminformatics, and statistical analysis, yet no general open-source workflow currently covers this full process. This protocol describes DELT-Hit (DNA-Encoded Library Technology Hit Identification), an open-source command-line tool for DEL data analysis. DELT-Hit converts raw FASTQ reads into analysis-ready chemical data through five connected modules: sequence demultiplexing with error-tolerant barcode handling; chemical structure reconstruction from building block libraries and reaction SMIRKS templates; molecular property and descriptor calculation; enrichment analysis and hit ranking using count-based and RNA-seq-derived methods; and quality-control and visualization tools for DEL data interpretation. The workflow supports both single-display and dual-display DEL architectures and produces standardized outputs for downstream analysis, including machine-learning applications. Researchers with basic command-line skills and familiarity with DEL selection workflows can perform demultiplexing and downstream analysis, whereas defining new reaction SMIRKS templates for library enumeration requires substantial cheminformatics expertise. The duration of the workflow depends on the respective library size and the size of the raw sequencing data, and can last from approx. 1 hour to several hours, with full-library enumeration typically representing the most time-consuming step. DELT-Hit is available at \url{https://github.com/DELTechnology/delt-hit}.
 \end{abstract}
 
 \section*{Key points}
@@ -127,7 +129,7 @@ While DELT-Hit addresses many challenges in DEL analysis, several limitations sh
   \item Library chemistry: DELT-Hit supports arbitrary reaction sequences provided that each synthetic route yields a single, well-defined final product. Libraries with non-standard reaction schemes, unconventional building block representations, or complex precursor handling may require additional configuration and validation. Accurate reaction SMIRKS definitions are essential for correct enumeration and structure reconstruction, and library-specific templates may require advanced cheminformatics expertise.
 \end{itemize}
 
-\section{Comparison with other methods}
+\subsection{Comparison with other methods}
 Pharmaceutical companies that run DEL campaigns typically use internal or licensed software platforms that integrate sequencing, barcode decoding, hit identification, and downstream prioritization within proprietary ecosystems. These systems can support scalability and automation, but they are closed-source and therefore limit methodological transparency, user-driven customization, and community-led improvement.
 
 Contract research organizations (CROs) also provide DEL screening as a service against user-supplied targets. These services usually return processed results without exposing the underlying computational workflow or intermediate data products. As a result, users have limited opportunity to adapt the analysis, inspect intermediate outputs, or integrate DEL informatics into their own pipelines.
@@ -141,7 +143,9 @@ To our knowledge, DELi\cite{ref41} is the only other open-source software packag
   \item standardized SMILES outputs for library members to facilitate downstream machine-learning workflows
 \end{itemize}
 
-DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration.
+DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration. Re-analysis of published datasets and the DELT-Hit--DELi workflow comparison are provided in Supplementary Notes 1 and 2.
+
+On a benchmark of 14 affinity-measured positive controls from the NF2 dataset\cite{ref38}, DELT-Hit normalized z-score and simple counts both achieved a median positive-control rank of~2 with 92.9\% Recall@50, matching DELi NSC, while edgeR and DELi MLE performed best as secondary significance-annotation layers rather than primary rankers. The scoring definitions and full benchmark details are provided in Supplementary Notes 3 and 4, with source data in Supplementary Data 1.
 
 
 \section{Experimental design}
@@ -173,7 +177,7 @@ Reaction cycles used during library construction are specified with reaction SMI
 
 DELT-Hit accommodates libraries of varying complexity, including architectures with multiple reaction cycles, provided that each synthetic route resolves to a single, well-defined final product. Libraries with non-standard reaction schemes, unconventional building block representations, or complex precursor handling may require additional customization and validation.
 
-Library enumeration depends on accurate SMIRKS definitions. DELT-Hit provides templates for commonly used DEL reactions, but library-specific adaptations may require advanced cheminformatics expertise to ensure chemically correct product formation and reliable structure reconstruction.
+Library enumeration depends on accurate SMIRKS definitions. DELT-Hit provides templates for commonly used DEL reactions, but library-specific adaptations may require advanced cheminformatics expertise to ensure chemically correct product formation and reliable structure reconstruction. 
 
 
 \subsection{Quality control parameters}
@@ -308,7 +312,7 @@ conda install pygraphviz -y
 # Install DELT-Hit package
 pip install git+https://git@github.com/DELTechnology/delt-hit.git
 \end{lstlisting}
-CRITICAL STEP: Activate the \texttt{delt-hit} environment (\texttt{conda activate delt-hit}) each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with Conda during installation so that the \texttt{conda} command is available in new terminal windows. If activation fails, see Troubleshooting.
+CRITICAL STEP: Activate the \texttt{delt-hit} conda environment using \texttt{conda activate delt-hit} each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with Conda during installation so that the \texttt{conda} command is available in new terminal windows. If activation fails, see Troubleshooting.
 
 
 \setupitem{R environment configuration}
@@ -444,7 +448,7 @@ Required columns for library enumeration:
 
 \protocolstep{6}{Create the reactions sheet}
 
-Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}).
+Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). A collection of SMARTS/SMIRKS for reactions commonly employed in DEL synthesis is provided in the supplementary information. Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend to 
 
 
 \input{tables/table8}
@@ -464,7 +468,7 @@ Only required for advanced library enumeration. If library synthesis includes ad
 
 
 \input{tables/table10}
-More advanced reaction-graph edge cases, including multi-path precursor activation schemes that require separate reaction nodes, are described in the supplementary note ``Advanced reaction-graph configurations''.
+More advanced reaction-graph edge cases, including multi-path precursor activation schemes that require separate reaction nodes, are described in Supplementary Note 5.
 
 \protocolstep{9}{Generate the configuration file}
 
@@ -472,7 +476,7 @@ Once your Excel file is complete with all required sheets, generate the YAML con
 
 
 \begin{lstlisting}
-# Activate the delt-hit environment
+# Activate the DELT-Hit conda environment
 conda activate delt-hit
 
 # Move into the single-stranded example workflow
@@ -583,8 +587,9 @@ Expected outputs:
   \item \texttt{code\_1}, \texttt{code\_2}, ...: Building block indices
   \item \texttt{name}: Selection identifier
   \item \texttt{count}: Number of reads for this compound in this selection
-  \item Alternatively, counts can be saved as \texttt{\{selection\_name\}\_counts.txt} with the flag \texttt{--as\_files=True}. To save counts in codon order rather than sorted by observed counts, use \texttt{--sort\_by\_counts=False}.
+  \item Alternatively, counts can be saved as \texttt{\{selection\_name\}\_counts.txt} with the flag \texttt{--as\_files=True}. To retain codon order rather than sorting by observed counts, use \texttt{--sort\_by\_\allowbreak{}counts=False}.
 \end{itemize}
+\newpage
 
 \protocolstep{13}{Generate quality control reports}
 
@@ -605,17 +610,17 @@ Expected outputs:
   \item qc/hits\_*.pdf and qc/hits\_*.png: Quality control plots showing barcode recovery and coverage distributions
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/image4.png}
 \caption{Example report for a poor selection with only 37\% read retention. Report highlights the problematic region where more than 10\% of the reads are lost (not mapped to codons).}
 \label{fig:figure4}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/image5.png}
-\caption{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors. (TOP) Stacked barplot for the assigned counts to the different selection codons of S0. (BOTTOM) Stacked barplot for read assignment to constant region C0, in orange are the number of reads that were mapped to this region with 1 error, in blue the number of reads that were mapped with 0 errors.}
+\caption{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors. (TOP) Stacked bar plot for the assigned counts to the different selection codons of S0. (BOTTOM) Stacked bar plot for read assignment to constant region C0; reads mapped with 1 error are shown in orange, reads mapped with 0 errors in blue.}
 \label{fig:figure5}
 \end{figure}
 Quality assessment criteria:
@@ -648,7 +653,7 @@ delt-hit dashboard --config_path=$CONFIG_PATH --counts_path=campaign/selections/
 # * Serving Flask app 'delt_hit.cli.dashboard.api'
 # * Debug mode: on
 \end{lstlisting}
-This command starts a local server that can be opened in a web browser, typically at \texttt{http://localhost:8050}. Stop the server with \texttt{Ctrl+C} or by closing the terminal.
+This command starts a local server that can be opened in a web browser, typically at \url{http://localhost:8050}. Stop the server with \texttt{Ctrl+C} or by closing the terminal.
 
 Dashboard features:
 
@@ -658,7 +663,7 @@ Dashboard features:
   \item Interactive filtering: exploration of specific regions of the count distribution
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/image6.png}
 \caption{Interactive dashboard interface. The dashboard provides interactive visualization of count data with filtering capabilities (not shown). The top panel shows experimental metadata (not shown), while the main panel displays count distributions and allows exploration of specific compounds.}
@@ -675,6 +680,7 @@ Note: The dashboard displays raw counts from demultiplexing. For statistical com
 
 CRITICAL STEP: Use the default folder hierarchy produced by \texttt{delt-hit demultiplex process}. If a custom \texttt{counts.txt} file is provided, also pass the selection name exactly as specified in the selection sheet.
 
+\newpage
 
 \subsection{Phase 4: Selection-centric enumeration and analysis • TIMING 10 min - 2 h}
 This phase generates chemical structures and molecular properties for the top enriched compounds in a selected experiment. Library enumeration requires advanced knowledge of SMARTS/SMIRKS, and library-specific adjustments are often necessary.
@@ -727,9 +733,11 @@ Performance note: Enumeration speed is approximately 1,000--10,000 compounds per
   \item Re-run enumeration in debugging mode to visualize the reaction graphs that fail: delt-hit library enumerate --config\_path=/path/to/config.yaml --debug=invalid
 \end{itemize}
 
+\newpage
+
 \protocolstep{16}{Visualize and calculate molecular properties of top hits}
 
-Visualize the enumerated top hits and calculate molecular descriptors for chemical space characterization:
+Visualize the enumerated top hits and calculate molecular descriptors for chemical-space characterization:
 
 
 \begin{lstlisting}
@@ -752,13 +760,13 @@ Expected outputs:
   \item library/visualization/libraries/AG24\_4\_top\_hits/*.png: Per-compound structure renderings for the enumerated top-hit set
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/image3.png}
 \caption{Five representative structure renderings produced by \texttt{delt-hit visualize library} for the enumerated \texttt{AG24\_4\_top\_hits} collection. Each panel corresponds to one visualized top-hit compound from the single-stranded example workflow.}
 \label{fig:figure3}
 \end{figure}
-Performance note: Property calculation processes approximately 600-1000 compounds/second. For a 1 million compound library, expect 15-30 minutes processing time.
+Performance note: Property calculation processes approximately 600--1,000 compounds per second. For a library with 1 million compounds, expect 15--30 min of processing time.
 
 
 \subsection{Phase 5: Statistical analysis and hit identification • TIMING 10-30 min}
@@ -800,7 +808,7 @@ experiments:
 
 \protocolstep{18}{Perform enrichment analysis with statistical methods}
 
-DELT-Hit supports two statistical approaches for identifying enriched compounds. Both methods generate an R script that can be executed directly or modified further by the user.
+DELT-Hit supports three statistical approaches for identifying enriched compounds. Methods A and B generate an R script that can be executed directly or modified further by the user.
 
 A. Simple counts method (suitable for single replicates)
 
@@ -820,7 +828,7 @@ The counts method:
   \item does not provide statistical significance testing
   \item is suitable for exploratory analysis or for datasets without replicates
 \end{itemize}
-B. edgeR method (recommended when replicates are available)
+B. edgeR method (for significance annotation when replicates are available)
 
 
 \begin{lstlisting}
@@ -839,8 +847,23 @@ The edgeR method:
   \item calculates false discovery rate (FDR)-corrected \textit{P} values
   \item requires replicates (minimum of two per group)
   \item provides normalized count tables
+  \item is best interpreted as a significance-annotation layer rather than the sole primary ranking signal
 \end{itemize}
-For both methods, the tool produces the R scripts used for the analysis, which can be adapted to more specialized workflows.
+C. Normalized z-score method (suitable for datasets with or without replicates)
+
+\begin{lstlisting}
+# Run z-score analysis (pure Python, results written immediately)
+delt-hit analyse enrichment --config_path=analysis.yaml --name=protein_vs_no_protein --method=zscore
+\end{lstlisting}
+The z-score method:
+
+\begin{itemize}
+  \item computes the normalized z-score per compound per selection following Faver et al.\cite{ref42}
+  \item is depth-independent: z-scores are invariant to total sequencing depth across selections
+  \item is suitable for datasets with or without replicates
+  \item requires no R installation; results are written immediately on execution
+\end{itemize}
+For methods A and B, the tool produces R scripts that can be adapted to more specialized workflows.
 
 Expected outputs:
 
@@ -849,6 +872,9 @@ Expected outputs:
   \item counts/hits.csv: Top-ranked compounds from the simple counts method
   \item edgeR/enrichment\_stats.csv: Complete statistics with \textit{P} values and FDR from the edgeR method
   \item edgeR/enrichment\_hits.csv: Significant or top-ranked compounds from the edgeR method
+  \item zscore/stats.csv: Complete statistics with per-group mean z-score and enrichment score
+  \item zscore/hits.csv: Top-ranked compounds by descending z-score
+  \item zscore/\{AG24\_4,AG24\_5,AG24\_6,...\}.csv: Per-selection z-scores with observed/expected fractions
   \item code\_1, code\_2, etc.: Building block indices
   \item LogFC: Log2 fold-change (edgeR) or difference in mean counts (counts method)
   \item PValue: Raw p-value (edgeR only)
@@ -860,10 +886,10 @@ Expected outputs:
 Interpreting results:
 
 \begin{itemize}
-  \item LogFC \textgreater{} 0: Compound enriched in protein selections vs controls
-  \item LogFC \textless{} 0: Compound depleted in protein selections vs controls
+  \item LogFC \textgreater{} 0: Compound enriched in protein selections vs.\ controls
+  \item LogFC \textless{} 0: Compound depleted in protein selections vs.\ controls
   \item FDR \textless{} 0.05: Statistically significant enrichment (edgeR only)
-  \item High replicate correlation (R² \textgreater{} 0.7) indicates good experimental consistency
+  \item High replicate correlation ($R^2 > 0.7$) indicates good experimental consistency
 \end{itemize}
 CRITICAL STEP: Always examine replicate correlation plots to verify data quality before interpreting hit lists. Poor correlation may indicate technical problems or batch effects.
 
@@ -875,9 +901,12 @@ CRITICAL STEP: Always examine replicate correlation plots to verify data quality
   \item Consider adjusting FDR threshold for exploratory analysis
   \item Examine correlation plots for replicate consistency issues
 \end{itemize}
-\begin{itemize}
-  \item Figure 7 \textbar{} Replicate–replicate correlation of library member counts for quality control. Diagonal panels show density estimates of counts within each selection. Lower triangular panels report pairwise correlation coefficients between replicates. Upper triangular panels display scatter plots comparing counts from one replicate against another.
-\end{itemize}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/image7.png}
+\caption{Replicate--replicate correlation of library member counts for quality control. Diagonal panels show density estimates of counts within each selection. Lower triangular panels report pairwise correlation coefficients between replicates. Upper triangular panels display scatter plots comparing counts from one replicate against another.}
+\label{fig:figure7}
+\end{figure}
 
 \input{tables/table12}
 
@@ -964,7 +993,7 @@ Suggested quality indicators for demultiplexing are:
 Suggested quality indicators for statistical analysis are:
 
 \begin{itemize}
-  \item Replicate correlation: R² \textgreater{}0.7 for biological replicates and R² \textgreater{}0.9 for technical replicates
+  \item Replicate correlation: $R^2 > 0.7$ for biological replicates and $R^2 > 0.9$ for technical replicates
   \item Positive and negative controls: controls should show the expected behavior
 \end{itemize}
 
@@ -1058,12 +1087,17 @@ supporting_material/experiments/example-single-stranded/
             |   |---- no_protein.csv       # Group-normalized counts
             |   `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
             |
-            `---- edgeR/                   # edgeR-based differential enrichment
-                |---- enrichment_edgeR.R   # edgeR workflow script
-                |---- enrichment_stats.csv # Full results with p-values/FDR
-                |---- enrichment_hits.csv  # Significant hits (e.g., FDR < 0.05)
-                |---- {AG24_4,AG24_5,AG24_6,...}.csv  # Normalized counts per selection
-                `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
+            |---- edgeR/                   # edgeR-based differential enrichment
+            |   |---- enrichment_edgeR.R   # edgeR workflow script
+            |   |---- enrichment_stats.csv # Full results with p-values/FDR
+            |   |---- enrichment_hits.csv  # Significant hits (e.g., FDR < 0.05)
+            |   |---- {AG24_4,AG24_5,AG24_6,...}.csv  # Normalized counts per selection
+            |   `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
+            |
+            `---- zscore/                  # Normalized z-score enrichment
+                |---- stats.csv            # Per-group mean z-score + enrichment score
+                |---- hits.csv             # Top-ranked compounds by z-score
+                `---- {AG24_4,AG24_5,AG24_6,...}.csv  # Per-selection z-scores
 \end{lstlisting}
 
 \subsection{Chemical library characterization}
@@ -1162,13 +1196,15 @@ DELT-Hit is available under the MIT License:
 
 \begin{itemize}
   \item Primary repository: \url{https://github.com/DELTechnology/delt-hit}
-  \item Installation: \texttt{pip install git+https://git@github.com/DELTechnology/delt-hit.git}
+  \item Installation: {\sloppy\texttt{pip install git+https://git@github.com/DELTechnology/delt-hit.git}\par}
   \item Documentation: user guides, API reference, and tutorials are provided in the repository
   \item Issue tracking: bug reports and support requests can be submitted through GitHub Issues
 \end{itemize}
 
+Source data underlying the Supplementary Figures and benchmark summary tables are provided in Supplementary Data 1.
+
 \section{Author contributions}
-A.M. conceived the project, designed the software architecture, and implemented core algorithms. A.L. created and maintained the configuration files and testing frameworks. G.H. implemented core algorithms. A.G. performed selection experiments and contributed to result interpretation. L.P. performed software validation and contributed to code refinement. J.S. provided scientific oversight and experimental validation. All authors contributed to manuscript preparation and revision.
+A.M. conceived the project, designed the software architecture, and implemented core algorithms. A.L. created and maintained the configuration files and testing frameworks. L.T. and G.H. implemented core algorithms. A.G. and J.P. performed selection experiments and contributed to result interpretation. L.P. performed software validation and contributed to code refinement. J.S. provided scientific oversight and experimental validation. All authors contributed to manuscript preparation and revision.
 
 
 \section{Competing interests}
@@ -1186,12 +1222,22 @@ We thank the DEL research community for feedback during software development and
 \appendix
 \section*{Supplementary Information}
 \addcontentsline{toc}{section}{Supplementary Information}
-\providecommand{\benchmarkroot}{..}
-\setcounter{subsection}{0}
-\renewcommand{\thesubsection}{\arabic{subsection}}
 
-\input{supplementary/analysis-of-published-datasets}
-\input{supplementary/comparison-delt-deli}
+\textbf{Supplementary Notes.} A single combined PDF containing five notes:
+Supplementary Note 1, re-analysis of published datasets; Supplementary Note 2,
+DELT-Hit and DELi workflow comparison; Supplementary Note 3,
+enrichment-scoring methods; Supplementary Note 4, NF2 positive-control
+benchmark; and Supplementary Note 5, advanced reaction-graph configurations.
+The file includes five Supplementary Tables and four Supplementary Figures.
+
+\textbf{Supplementary Data 1.} Excel workbook containing source data for the
+four Supplementary Figures and reviewer-relevant benchmark tables, including
+the strict-affinity NF2 truth set, recovery summary, and per-instance rank
+table.
+
+\textbf{Inventory of Supplementary Information.} Plain-text inventory listing
+the supplementary files, their approved titles, and short legends for upload
+with the submission package.
 
 \bibliographystyle{unsrt}
 \bibliography{references}

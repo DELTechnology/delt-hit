@@ -1,0 +1,7 @@
+Inventory of Supplementary Information
+
+Supplementary Notes
+Single combined PDF containing five Supplementary Notes, five Supplementary Tables, and four Supplementary Figures. The file documents published count-table re-analysis, the DELT-Hit/DELi workflow comparison, enrichment-scoring definitions, the NF2 positive-control benchmark, and advanced reaction-graph configurations.
+
+Supplementary Data 1
+Excel workbook containing source data for the four Supplementary Figures and reviewer-relevant benchmark tables. Tabs include demultiplex runtime and memory data, NF2 Recall@k data, the strict-affinity NF2 truth set, the positive-control recovery summary, and the full per-instance rank table.
