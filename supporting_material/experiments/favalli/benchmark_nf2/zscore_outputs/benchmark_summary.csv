@@ -1,0 +1,15 @@
+experiment,paper_target,paper_ab,label,code_0,code_1,zscore_rank,zscore_value
+ss_caix,CAIX,A160/B475,strict_affinity,159,474,1,4.036
+ds_caix,CAIX,A160/B475,strict_affinity,159,474,1,2.7
+ss_caix,CAIX,A69/B475,strict_affinity,68,474,3,2.707
+ds_caix,CAIX,A69/B475,strict_affinity,68,474,2,2.648
+ss_crebbp,CREBBP,A130/B99,strict_affinity,129,98,2,0.239
+ds_crebbp,CREBBP,A130/B99,strict_affinity,129,98,1,0.169
+ss_crebbp,CREBBP,A130/B128,strict_affinity,129,127,14,0.121
+ds_crebbp,CREBBP,A130/B128,strict_affinity,129,127,2,0.108
+ss_wt_pik3,wt-PI3K,A110/B489,strict_affinity,109,488,1,0.104
+ds_wt_pik3,wt-PI3K,A110/B489,strict_affinity,109,488,1,0.03
+ss_h1047r_pik3,H1047R-PI3K,A110/B319,strict_affinity,109,318,1,0.108
+ds_h1047r_pik3,H1047R-PI3K,A110/B319,strict_affinity,109,318,4,0.019
+ss_h1047r_pik3,H1047R-PI3K,A110/B157,strict_affinity,109,156,2,0.092
+ds_h1047r_pik3,H1047R-PI3K,A110/B157,strict_affinity,109,156,674,0.008
