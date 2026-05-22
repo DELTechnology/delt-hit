@@ -3,7 +3,11 @@ from textwrap import dedent
 from loguru import logger
 import pandas as pd
 
-from delt_hit.cli.analyse.zscore import zscore_analysis
+from delt_hit.cli.analyse.zscore import (
+    get_code_columns,
+    resolve_library_size_from_experiment,
+    zscore_analysis,
+)
 from delt_hit.utils import read_yaml
 
 class Analyse:
@@ -55,10 +59,16 @@ class Analyse:
             case 'zscore':
                 cfg = read_yaml(config_path)
                 exp, = list(filter(lambda x: x['name'] == name, cfg['experiments']))
+                data = pd.read_csv(data_path)
+                library_size = resolve_library_size_from_experiment(
+                    exp=exp,
+                    analysis_config_path=config_path,
+                    code_columns=get_code_columns(data),
+                )
                 zscore_analysis(
-                    data=pd.read_csv(data_path),
+                    data=data,
                     samples=pd.read_csv(samples_path),
-                    library_size=exp.get('library_size'),
+                    library_size=library_size,
                     save_dir=save_dir / 'zscore',
                 )
                 logger.info(f'Created z-score outputs at {save_dir / "zscore"}')

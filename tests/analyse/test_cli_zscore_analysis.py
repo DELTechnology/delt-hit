@@ -119,7 +119,7 @@ def test_zscore_analysis_rejects_library_size_smaller_than_observed(tmp_path: Pa
     )
     samples = pd.DataFrame([{"name": "sel_1", "group": "protein"}])
 
-    with pytest.raises(ValueError, match="smaller than the observed"):
+    with pytest.raises(ValueError, match="smaller than the number of observed"):
         zscore_analysis(data=data, samples=samples, library_size=2, save_dir=tmp_path)
 
 
