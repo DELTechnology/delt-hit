@@ -871,8 +871,8 @@ Expected outputs:
 \begin{itemize}
   \item counts/stats.csv: Complete statistics for all library members from the simple counts method
   \item counts/hits.csv: Top-ranked compounds from the simple counts method
-  \item edgeR/enrichment\_stats.csv: Complete statistics with \textit{P} values and FDR from the edgeR method
-  \item edgeR/enrichment\_hits.csv: Significant or top-ranked compounds from the edgeR method
+  \item edgeR/stats.csv: Complete statistics with \textit{P} values and FDR from the edgeR method
+  \item edgeR/hits.csv: Significant or top-ranked compounds from the edgeR method
   \item code\_1, code\_2, etc.: Building block indices
   \item LogFC: Log2 fold-change (edgeR) or difference in mean counts (counts method)
   \item PValue: Raw p-value (edgeR only)
@@ -1084,8 +1084,8 @@ supporting_material/experiments/example-single-stranded/
             |
             `---- edgeR/                   # edgeR-based differential enrichment
                 |---- enrichment_edgeR.R   # edgeR workflow script
-                |---- enrichment_stats.csv # Full results with p-values/FDR
-                |---- enrichment_hits.csv  # Significant hits (e.g., FDR < 0.05)
+                |---- stats.csv            # Full results with p-values/FDR
+                |---- hits.csv             # Significant hits (e.g., FDR < 0.05)
                 |---- {AG24_4,AG24_5,AG24_6,...}.csv  # Normalized counts per selection
                 `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
 \end{lstlisting}
