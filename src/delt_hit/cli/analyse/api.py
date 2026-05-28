@@ -5,7 +5,7 @@ from loguru import logger
 from delt_hit.analyse.config import derive_library_size, load_analysis_experiment, load_project_config
 from delt_hit.analyse.data_prep import load_zscore_counts, prepare_replicate_analysis_data
 from delt_hit.analyse.scripts import counts_rscript, edgeR_rscript
-from delt_hit.analyse.zscore import compute_zscore_stats, zscore_rscript
+from delt_hit.analyse.zscore import zscore_rscript
 
 class Analyse:
     def enrichment(
@@ -62,19 +62,16 @@ class Analyse:
         assert counts is not None
         project_config = load_project_config(config_path=config_path)
         library_size = derive_library_size(project_config=project_config)
-        counts_table = load_zscore_counts(counts_path=counts)
-        stats = compute_zscore_stats(counts=counts_table, library_size=library_size)
+        load_zscore_counts(counts_path=counts)
 
         method_dir = save_dir / "z_score"
         method_dir.mkdir(parents=True, exist_ok=True)
-        stats.to_csv(method_dir / "stats.csv", index=False)
-        stats.sort_values("norm_z_score", ascending=False).head(100).to_csv(method_dir / "hits.csv", index=False)
         script_path = zscore_rscript(
             counts_path=Path(counts).expanduser().resolve(),
             library_size=library_size,
             save_dir=method_dir,
         )
-        logger.info(f"Created z-score analysis outputs in {method_dir} and script at {script_path}")
+        logger.info(f"Created z-score analysis script at {script_path}")
 
     def run(self, config_path: Path):
         """Run the analysis pipeline (placeholder)."""
