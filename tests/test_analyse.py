@@ -84,14 +84,15 @@ def make_project_config(tmp_path: Path) -> tuple[Path, Path]:
 @pytest.mark.parametrize(
     ("kwargs", "message"),
     [
-        ({"method": "counts", "name": "x"}, "`analysis_config` is required"),
-        ({"method": "counts", "analysis_config": Path("analysis.yaml")}, "`name` is required"),
-        ({"method": "counts", "analysis_config": Path("analysis.yaml"), "name": "x", "counts": Path("counts.txt")}, "`counts` is not supported"),
-        ({"method": "edgeR", "analysis_config": Path("analysis.yaml"), "name": "x", "config_path": Path("config.yaml")}, "`config_path` is not supported"),
-        ({"method": "z_score", "counts": Path("counts.txt")}, "`config_path` is required"),
-        ({"method": "z_score", "config_path": Path("config.yaml")}, "`counts` is required"),
-        ({"method": "z_score", "config_path": Path("config.yaml"), "counts": Path("counts.txt"), "analysis_config": Path("analysis.yaml")}, "`analysis_config` is not supported"),
-        ({"method": "z_score", "config_path": Path("config.yaml"), "counts": Path("counts.txt"), "name": "x"}, "`name` is not supported"),
+        ({"method": "counts", "name": "x"}, "`save_dir` is required"),
+        ({"method": "counts", "save_dir": Path("out"), "name": "x"}, "`analysis_config` is required"),
+        ({"method": "counts", "save_dir": Path("out"), "analysis_config": Path("analysis.yaml")}, "`name` is required"),
+        ({"method": "counts", "save_dir": Path("out"), "analysis_config": Path("analysis.yaml"), "name": "x", "counts": Path("counts.txt")}, "`counts` is not supported"),
+        ({"method": "edgeR", "save_dir": Path("out"), "analysis_config": Path("analysis.yaml"), "name": "x", "config_path": Path("config.yaml")}, "`config_path` is not supported"),
+        ({"method": "z_score", "save_dir": Path("out"), "counts": Path("counts.txt")}, "`config_path` is required"),
+        ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml")}, "`counts` is required"),
+        ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml"), "counts": Path("counts.txt"), "analysis_config": Path("analysis.yaml")}, "`analysis_config` is not supported"),
+        ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml"), "counts": Path("counts.txt"), "name": "x"}, "`name` is not supported"),
     ],
 )
 def test_enrichment_argument_validation(kwargs, message):
@@ -107,6 +108,7 @@ def test_deseq2_raises_not_implemented(tmp_path):
     with pytest.raises(NotImplementedError, match="DESeq2 analysis is not implemented"):
         analyse.enrichment(
             method="DESeq2",
+            save_dir=tmp_path / "output",
             analysis_config=analysis_config,
             name="protein_vs_no_protein",
         )
@@ -118,6 +120,7 @@ def test_counts_analysis_still_generates_merged_inputs_and_script(tmp_path):
 
     analyse.enrichment(
         method="counts",
+        save_dir=output_root,
         analysis_config=analysis_config,
         name="protein_vs_no_protein",
     )
@@ -137,11 +140,47 @@ def test_edger_analysis_generates_script(tmp_path):
 
     analyse.enrichment(
         method="edgeR",
+        save_dir=output_root,
         analysis_config=analysis_config,
         name="protein_vs_no_protein",
     )
 
     assert (output_root / "edgeR" / "enrichment_edgeR.R").exists()
+
+
+def test_edger_script_writes_hits_and_stats_csv_names(tmp_path):
+    analysis_config, output_root = make_analysis_config(tmp_path)
+    analyse = Analyse()
+
+    analyse.enrichment(
+        method="edgeR",
+        save_dir=output_root,
+        analysis_config=analysis_config,
+        name="protein_vs_no_protein",
+    )
+
+    script_text = (output_root / "edgeR" / "enrichment_edgeR.R").read_text()
+
+    assert '"stats.csv"' in script_text
+    assert '"hits.csv"' in script_text
+    assert "_stats.csv" not in script_text
+    assert "_hits.csv" not in script_text
+
+
+def test_edger_script_still_writes_selection_named_count_exports(tmp_path):
+    analysis_config, output_root = make_analysis_config(tmp_path)
+    analyse = Analyse()
+
+    analyse.enrichment(
+        method="edgeR",
+        save_dir=output_root,
+        analysis_config=analysis_config,
+        name="protein_vs_no_protein",
+    )
+
+    script_text = (output_root / "edgeR" / "enrichment_edgeR.R").read_text()
+
+    assert 'fname <- paste0(selection, ".csv")' in script_text
 
 
 def test_zscore_analysis_writes_stats_hits_and_script(tmp_path):
@@ -150,11 +189,12 @@ def test_zscore_analysis_writes_stats_hits_and_script(tmp_path):
 
     analyse.enrichment(
         method="z_score",
+        save_dir=tmp_path / "custom_output",
         config_path=config_path,
         counts=counts_path,
     )
 
-    output_dir = tmp_path / "project_output" / "demo_project" / "z_score"
+    output_dir = tmp_path / "custom_output" / "z_score"
     stats = pd.read_csv(output_dir / "stats.csv")
     hits = pd.read_csv(output_dir / "hits.csv")
 
@@ -202,7 +242,7 @@ def test_zscore_requires_derivable_library_size(tmp_path):
     analyse = Analyse()
 
     with pytest.raises(ValueError, match="missing whitelist entries"):
-        analyse.enrichment(method="z_score", config_path=bad_config, counts=counts_path)
+        analyse.enrichment(method="z_score", save_dir=tmp_path / "out", config_path=bad_config, counts=counts_path)
 
 
 @pytest.mark.parametrize(
@@ -229,4 +269,4 @@ def test_zscore_validates_counts_schema(tmp_path, rows, message):
     analyse = Analyse()
 
     with pytest.raises(ValueError, match=message):
-        analyse.enrichment(method="z_score", config_path=config_path, counts=counts_path)
+        analyse.enrichment(method="z_score", save_dir=tmp_path / "out", config_path=config_path, counts=counts_path)

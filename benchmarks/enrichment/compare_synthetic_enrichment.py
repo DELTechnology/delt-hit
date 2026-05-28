@@ -79,7 +79,12 @@ def run_analysis_method(
     if output_dir.exists():
         shutil.rmtree(output_dir)
 
-    analyse.enrichment(analysis_config=config_path, name=analysis_name, method=method)
+    analyse.enrichment(
+        analysis_config=config_path,
+        name=analysis_name,
+        method=method,
+        save_dir=analysis_root,
+    )
 
 
     script_name = "enrichment_counts.R" if method == "counts" else "enrichment_edgeR.R"
@@ -275,7 +280,7 @@ def compare_dataset(
     )
 
     counts_results = load_counts_results(counts_dir / "stats.csv")
-    edger_results = load_edger_results(edger_dir / "enrichment_stats.csv")
+    edger_results = load_edger_results(edger_dir / "stats.csv")
     comparison = build_comparison_table(truth, counts_results, edger_results)
 
     counts_metrics = compute_method_metrics(

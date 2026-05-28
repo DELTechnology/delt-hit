@@ -118,20 +118,14 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
 
         dir.create(args$save_dir, showWarnings = FALSE, recursive = TRUE)
 
-        for (i in seq_along(result.edgeR$stats)) {{
-          name  <- names(result.edgeR$stats)[i]
-          stats <- result.edgeR$stats[[i]]
-          if(is.null(stats)) next
-          save.path <- file.path(args$save_dir, paste0(name, "_stats.csv"))
-          write_csv(stats, file = save.path)
+        stats <- result.edgeR$stats[["enrichment"]]
+        if (!is.null(stats)) {{
+          write_csv(stats, file.path(args$save_dir, "stats.csv"))
         }}
 
-        for (i in seq_along(result.edgeR$hits)) {{
-          name <- names(result.edgeR$hits)[i]
-          hits <- result.edgeR$hits[[i]]
-          if(is.null(hits)) next
-          save.path <- file.path(args$save_dir, paste0(name, "_hits.csv"))
-          write_csv(hits, file = save.path)
+        hits <- result.edgeR$hits[["enrichment"]]
+        if (!is.null(hits)) {{
+          write_csv(hits, file.path(args$save_dir, "hits.csv"))
         }}
 
         selections <- setdiff(colnames(result.edgeR$counts), code_columns)
