@@ -1,9 +1,0 @@
-1907_NF2GB2_s1_R1.fasta
-Evaluation/1907_NF2GB2_s1_R1_260424JS
-7	30	C	./const1.txt
-37	61	C	./const2.txt
-69	80	C	./const3.txt
-1	6	S	./PrimerCodes1.txt
-81	89	S	./NF2_primers1b.txt
-31	36	B	./code1_NF2.txt
-62	68	B	./code2_NF2.txt
