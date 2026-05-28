@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1777768630.50215 "main.aux" "main.bbl" "main" 1777768636.33265 0
+["bibtex main"] 1779431533.59773 "main.aux" "main.bbl" "main" 1779431541.36051 0
   "./references.bib" 1777595828.28624 11718 a7db3a34edabfb2bff136a742d0c003d ""
   "/usr/local/texlive/2025/texmf-dist/bibtex/bst/base/unsrt.bst" 1292289607 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "main.aux" 1777768636.03603 20070 e6eb0bbe7d68248b8d9c6d36bae9f78b "pdflatex"
+  "main.aux" 1779431541.00016 20079 5d9af1c1edadc6caa2082249caf58b8a "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1777768630.6683 "main.tex" "main.pdf" "main" 1777768636.3328 0
+["pdflatex"] 1779431533.72863 "main.tex" "main.pdf" "main" 1779431541.36081 0
   "../benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_peak_rss.png" 1777642119.63677 107602 6714673e71855f8baf51782425eb35e5 ""
   "../benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_runtime.png" 1777642119.63753 106060 81335db1682e6d736052f056bbfc3d31 ""
   "../benchmarks/demultiplex/plots/synthetic_2cycle_bbpc_comparison_runtime.png" 1777642119.6387 184250 801df51be58bf17a5a3af9496d0b0a5a ""
@@ -150,12 +150,12 @@
   "figures/image4.png" 1777595018.29303 50767 10bcb9bb73eb5ba2632532cb68feac0b ""
   "figures/image5.png" 1777595018.2932 50759 9bc5d99d4e9e9882324bde6f88ecb226 ""
   "figures/image6.png" 1777595018.29335 216105 545e8f834ddf9ffd5e1fb04d8465a94a ""
-  "main.aux" 1777768636.03603 20070 e6eb0bbe7d68248b8d9c6d36bae9f78b "pdflatex"
-  "main.bbl" 1777768630.6615 8309 7ee6ffaebbd440429d74f77b76720532 "bibtex main"
-  "main.out" 1777768636.0371 8857 a514136475a66b3e3aa9a91adeb7cf06 "pdflatex"
-  "main.tex" 1777768613.0031 63561 81ca021c201d6cfeee49c55a0600dfab ""
+  "main.aux" 1779431541.00016 20079 5d9af1c1edadc6caa2082249caf58b8a "pdflatex"
+  "main.bbl" 1779431533.72478 8309 7ee6ffaebbd440429d74f77b76720532 "bibtex main"
+  "main.out" 1779431541.00201 8910 2261da8ff5f7c4105d54c7b916133112 "pdflatex"
+  "main.tex" 1779431518.6849 64820 bfd00bb9a53a94fdb3baf61d18b7308d ""
   "supplementary/analysis-of-published-datasets.tex" 1777768596.60987 3486 3a3bd22a2f672fb025936737b6a84e69 ""
-  "supplementary/comparison-delt-deli.tex" 1777768596.64887 3608 fa3051d01525ba69481c32965e24395c ""
+  "supplementary/comparison-delt-deli.tex" 1779431518.76651 2691 927aa8a6c8ef5884ed3abccc6b5e1a94 ""
   "tables/table1.tex" 1777595473.95883 544 896e192a25a2a97cabca53852e29ef45 ""
   "tables/table10.tex" 1777595473.96477 255 b8651af9974e1819125de7534a424436 ""
   "tables/table12.tex" 1777595473.96901 5228 53c07da8b0501b56a85f1d04fbce2b91 ""

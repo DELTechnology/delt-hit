@@ -132,14 +132,38 @@ Pharmaceutical companies that run DEL campaigns typically use internal or licens
 
 Contract research organizations (CROs) also provide DEL screening as a service against user-supplied targets. These services usually return processed results without exposing the underlying computational workflow or intermediate data products. As a result, users have limited opportunity to adapt the analysis, inspect intermediate outputs, or integrate DEL informatics into their own pipelines.
 
-To our knowledge, DELi\cite{ref41} is the only other open-source software package that combines barcode decoding, enrichment analysis, and library enumeration. DELi and DELT-Hit share several design principles, including modular architecture, transparent configuration, and integration with established bioinformatics and cheminformatics tools such as Cutadapt and RDKit. DELT-Hit differs in several areas:
+To our knowledge, DELi\cite{ref41} is the only other open-source software package that combines barcode decoding, enrichment analysis, and library enumeration. DELi and DELT-Hit share several design principles, including modular architecture, transparent configuration, and integration with established bioinformatics and cheminformatics tools such as Cutadapt and RDKit. Table~\ref{tab:delt-deli-comparison} summarizes the main workflow-level similarities and differences between DELT-Hit and DELi.
 
-\begin{itemize}
-  \item support for arbitrary reaction graphs for enumeration, enabling reconstruction of complex synthetic schemes
-  \item integration of RNA-seq-derived statistical models for hit calling that account for replicate structure and dispersion
-  \item support for arbitrary library designs, including single-display and dual-display formats
-  \item standardized SMILES outputs for library members to facilitate downstream machine-learning workflows
-\end{itemize}
+\newcommand{\cmark}{\checkmark}
+\begin{longtable}{p{4.9cm}p{3.7cm}p{3.7cm}}
+\caption{Comparison of DELT-Hit and DELi across major DEL analysis tasks.}
+\label{tab:delt-deli-comparison} \\
+\toprule
+\textbf{Feature} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Feature} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\midrule
+\endhead
+
+Input files & Excel workbook compiled to \texttt{config.yaml} & Library JSON, building-block CSV files, and decode-settings YAML \\
+User-friendliness & Single workbook keeps library design, barcode definitions, and analyses in one file & More modular and explicit, but usually requires editing several structured input files \\
+Raw read decoding & \cmark & \cmark \\
+Error-tolerant barcode matching & \cmark & \cmark \\
+Library enumeration & \cmark & \cmark \\
+Enrichment / analysis methods & Counts-based enrichment and \texttt{edgeR} & MLE, NSC/\texttt{SD\_min}, normalized z-score, log-space z-score, PolyO, overlap analyses \\
+Analysis reports & Organized analysis folders and static outputs & Automated HTML report with figures and CSV exports \\
+Dual-Display & \cmark &  \\
+Counts-driven filtered enumeration & \cmark &  \\
+Interactive count-table dashboard & \cmark &  \\
+Single-compound structure lookup &  & \cmark \\
+Molecular property and representation generation & \cmark &  \\
+\bottomrule
+\end{longtable}
+
+DELT-Hit extends this shared foundation with more flexible library architecture support, RNA-seq-derived statistical models for replicate-aware hit calling, and standardized chemical outputs designed for downstream cheminformatics and machine-learning workflows.
 
 DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration.
 
