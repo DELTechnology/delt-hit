@@ -79,7 +79,8 @@ def run_analysis_method(
     if output_dir.exists():
         shutil.rmtree(output_dir)
 
-    analyse.enrichment(config_path=config_path, name=analysis_name, method=method)
+    analyse.enrichment(analysis_config=config_path, name=analysis_name, method=method)
+
 
     script_name = "enrichment_counts.R" if method == "counts" else "enrichment_edgeR.R"
     script_path = output_dir / script_name
