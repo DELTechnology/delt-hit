@@ -7,7 +7,7 @@ import pytest
 import yaml
 
 from delt_hit.cli.analyse.api import Analyse
-from delt_hit.cli.analyse.zscore import compute_zscore_stats
+from delt_hit.analyse.zscore import compute_zscore_stats
 
 
 def write_yaml(path: Path, data: dict) -> Path:
