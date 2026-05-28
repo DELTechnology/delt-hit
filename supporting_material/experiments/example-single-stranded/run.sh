@@ -39,7 +39,7 @@ delt-hit analyse enrichment \
   --analysis_config=$ANALYSIS_CONFIG_PATH \
   --name=protein_vs_no_protein \
   --method=counts \
-  --save_dir=$ANALYSIS_OUTPUT_ROOT/protein_vs_no_protein
+  --save_dir=$ANALYSIS_OUTPUT_ROOT
 
 Rscript --vanilla campaign/analysis/protein_vs_no_protein/counts/enrichment_counts.R
 
@@ -47,7 +47,7 @@ delt-hit analyse enrichment \
   --analysis_config=$ANALYSIS_CONFIG_PATH \
   --name=protein_vs_no_protein \
   --method=edgeR \
-  --save_dir=$ANALYSIS_OUTPUT_ROOT/protein_vs_no_protein
+  --save_dir=$ANALYSIS_OUTPUT_ROOT
 
 Rscript --vanilla campaign/analysis/protein_vs_no_protein/edgeR/enrichment_edgeR.R
 

@@ -50,7 +50,7 @@ def make_analysis_config(tmp_path: Path) -> tuple[Path, Path]:
             ]
         },
     )
-    return analysis_config, tmp_path / "analysis_output" / "protein_vs_no_protein"
+    return analysis_config, tmp_path / "analysis_output"
 
 
 def make_project_config(tmp_path: Path) -> tuple[Path, Path]:
@@ -115,16 +115,17 @@ def test_deseq2_raises_not_implemented(tmp_path):
 
 
 def test_counts_analysis_still_generates_merged_inputs_and_script(tmp_path):
-    analysis_config, output_root = make_analysis_config(tmp_path)
+    analysis_config, save_dir = make_analysis_config(tmp_path)
     analyse = Analyse()
 
     analyse.enrichment(
         method="counts",
-        save_dir=output_root,
+        save_dir=save_dir,
         analysis_config=analysis_config,
         name="protein_vs_no_protein",
     )
 
+    output_root = save_dir / "protein_vs_no_protein"
     data = pd.read_csv(output_root / "data.csv")
     samples = pd.read_csv(output_root / "samples.csv")
     script_path = output_root / "counts" / "enrichment_counts.R"
@@ -135,30 +136,32 @@ def test_counts_analysis_still_generates_merged_inputs_and_script(tmp_path):
 
 
 def test_edger_analysis_generates_script(tmp_path):
-    analysis_config, output_root = make_analysis_config(tmp_path)
+    analysis_config, save_dir = make_analysis_config(tmp_path)
     analyse = Analyse()
 
     analyse.enrichment(
         method="edgeR",
-        save_dir=output_root,
+        save_dir=save_dir,
         analysis_config=analysis_config,
         name="protein_vs_no_protein",
     )
 
+    output_root = save_dir / "protein_vs_no_protein"
     assert (output_root / "edgeR" / "enrichment_edgeR.R").exists()
 
 
 def test_edger_script_writes_hits_and_stats_csv_names(tmp_path):
-    analysis_config, output_root = make_analysis_config(tmp_path)
+    analysis_config, save_dir = make_analysis_config(tmp_path)
     analyse = Analyse()
 
     analyse.enrichment(
         method="edgeR",
-        save_dir=output_root,
+        save_dir=save_dir,
         analysis_config=analysis_config,
         name="protein_vs_no_protein",
     )
 
+    output_root = save_dir / "protein_vs_no_protein"
     script_text = (output_root / "edgeR" / "enrichment_edgeR.R").read_text()
 
     assert '"stats.csv"' in script_text
@@ -168,16 +171,17 @@ def test_edger_script_writes_hits_and_stats_csv_names(tmp_path):
 
 
 def test_edger_script_still_writes_selection_named_count_exports(tmp_path):
-    analysis_config, output_root = make_analysis_config(tmp_path)
+    analysis_config, save_dir = make_analysis_config(tmp_path)
     analyse = Analyse()
 
     analyse.enrichment(
         method="edgeR",
-        save_dir=output_root,
+        save_dir=save_dir,
         analysis_config=analysis_config,
         name="protein_vs_no_protein",
     )
 
+    output_root = save_dir / "protein_vs_no_protein"
     script_text = (output_root / "edgeR" / "enrichment_edgeR.R").read_text()
 
     assert 'fname <- paste0(selection, ".csv")' in script_text

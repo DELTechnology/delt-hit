@@ -83,7 +83,7 @@ def run_analysis_method(
         analysis_config=config_path,
         name=analysis_name,
         method=method,
-        save_dir=analysis_root,
+        save_dir=analysis_root.parent,
     )
 
 

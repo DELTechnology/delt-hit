@@ -42,17 +42,18 @@ class Analyse:
         if method in {"counts", "edgeR", "DESeq2"}:
             assert analysis_config is not None
             assert name is not None
+            analysis_dir = save_dir / name
             exp = load_analysis_experiment(analysis_config=analysis_config, name=name)
-            data_path = save_dir / "data.csv"
-            samples_path = save_dir / "samples.csv"
+            data_path = analysis_dir / "data.csv"
+            samples_path = analysis_dir / "samples.csv"
             prepare_replicate_analysis_data(exp=exp, data_path=data_path, samples_path=samples_path)
             logger.info(f"Prepared data at {data_path} and samples at {samples_path}")
 
             match method:
                 case "counts":
-                    counts_rscript(data_path=data_path, samples_path=samples_path, cpm=False, save_dir=save_dir / "counts")
+                    counts_rscript(data_path=data_path, samples_path=samples_path, cpm=False, save_dir=analysis_dir / "counts")
                 case "edgeR":
-                    edgeR_rscript(data_path=data_path, samples_path=samples_path, log=False, save_dir=save_dir / "edgeR")
+                    edgeR_rscript(data_path=data_path, samples_path=samples_path, log=False, save_dir=analysis_dir / "edgeR")
                 case "DESeq2":
                     raise NotImplementedError("DESeq2 analysis is not implemented.")
             return
