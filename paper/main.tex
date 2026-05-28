@@ -19,6 +19,7 @@
 \usepackage[expansion=false]{microtype}
 \usepackage{parskip}
 \usepackage{seqsplit}
+\usepackage{tcolorbox}
 
 \lstset{
   basicstyle=\small\ttfamily,
@@ -87,7 +88,7 @@ We developed DELT-Hit to support routine analysis of DEL campaigns across a wide
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/image1.png}
-\caption{DELT-Hit is organized into analysis modules (blue) that align with the wet-lab DEL workflow (green). DEL synthesis (A) proceeds through iterative cycles of building block addition and encoding. Libraries are then screened in affinity-based selection experiments (B), after which retained DNA tags are PCR-amplified and sequenced. DELT-Hit uses Cutadapt\cite{ref29} to demultiplex sequencing reads (C) with user-defined error tolerances and produces count matrices for combinations of selection and building block codes. In parallel, library compounds can be enumerated in silico (D) from building block structures and reaction SMIRKS definitions, and molecular properties can be calculated (E). DELT-Hit then combines count data and chemical information for hit analysis (F), quality control, enrichment ranking, and interactive data exploration. The workflow also exports molecular representations, including Morgan fingerprints and BERT embeddings, for downstream machine-learning analyses.}
+\caption{DELT-Hit is organized into analysis modules (blue) that align with the wet-lab DEL workflow (green). DEL synthesis (A) proceeds through iterative cycles of building block addition and encoding. Libraries are then screened in affinity-based selection experiments (B), after which retained DNA tags are PCR-amplified and sequenced. DELT-Hit uses Cutadapt\cite{ref29} to demultiplex sequencing reads (C) with user-defined error tolerances and produces count matrices for combinations of selection and building block codes. In parallel, library compounds can be enumerated in silico (D) from building block structures and reaction SMIRKS definitions, and molecular properties can be calculated (E). The in silico enumeration and property calculation features can also be used prior to DEL synthesis to inform library design and building block selection. DELT-Hit then combines count data and chemical information for hit analysis (F), quality control, enrichment ranking, and interactive data exploration. The workflow also exports molecular representations, including Morgan fingerprints and BERT embeddings, for downstream machine-learning analyses.}
 \label{fig:figure1}
 \end{figure}
 The workflow integrates sequence demultiplexing via Cutadapt\cite{ref29}, chemical structure representation in SMILES\cite{ref30,ref31,ref32}, reaction definitions in SMIRKS\cite{ref33,ref34} implemented in RDKit\cite{ref35}, statistical analysis with edgeR\cite{ref36}, molecular property calculation, and interactive visualization. Users can run the full workflow or individual modules, and each stage produces executable scripts and standardized outputs that can be adapted to more specialized analyses.
@@ -130,6 +131,38 @@ While DELT-Hit addresses many challenges in DEL analysis, several limitations sh
 \end{itemize}
 
 \subsection{Comparison with other methods}
+
+\newcommand{\cmark}{\checkmark}
+\begin{longtable}{p{4.9cm}p{3.7cm}p{3.7cm}}
+\caption{Comparison of DELT-Hit and DELi across major DEL analysis tasks.}
+\label{tab:delt-deli-comparison} \\
+\toprule
+\textbf{Feature} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Feature} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\midrule
+\endhead
+
+Input files & Excel workbook compiled to \texttt{config.yaml} & Library JSON, building-block CSV files, and decode-settings YAML \\
+User-friendliness & Single workbook keeps library design, barcode definitions, and analyses in one file & More modular and explicit, but usually requires editing several structured input files \\
+Raw read decoding & \cmark & \cmark \\
+Error-tolerant barcode matching & \cmark & \cmark \\
+Library enumeration & \cmark & \cmark \\
+Enrichment / analysis methods & Counts-based enrichment, normalized z-score, and \texttt{edgeR} & MLE, NSC/\texttt{SD\_min}, normalized z-score, log-space z-score, PolyO, overlap analyses \\
+Analysis reports & Organized analysis folders and static outputs & Automated HTML report with figures and CSV exports \\
+Dual-Display & \cmark &  \\
+Counts-driven filtered enumeration & \cmark &  \\
+Interactive count-table dashboard & \cmark &  \\
+Single-compound structure lookup &  & \cmark \\
+Molecular property and representation generation & \cmark &  \\
+Barcode / tag design & & Error-correcting Hamming-code DNA tag generation \\
+ML integration & Fingerprint and embedding export for external ML pipelines & Built-in Random Forest and GNN (GIN/GAT) classifiers for enrichment prediction \\
+\bottomrule
+\end{longtable}
+
 Pharmaceutical companies that run DEL campaigns typically use internal or licensed software platforms that integrate sequencing, barcode decoding, hit identification, and downstream prioritization within proprietary ecosystems. These systems can support scalability and automation, but they are closed-source and therefore limit methodological transparency, user-driven customization, and community-led improvement.
 
 Contract research organizations (CROs) also provide DEL screening as a service against user-supplied targets. These services usually return processed results without exposing the underlying computational workflow or intermediate data products. As a result, users have limited opportunity to adapt the analysis, inspect intermediate outputs, or integrate DEL informatics into their own pipelines.
@@ -254,13 +287,25 @@ The provided example dataset is a toy library based on the architecture of a pub
 
 \input{tables/table2}
 
-\subsection{Experimental setup}
-The installation procedure below is performed once before running the DELT-Hit workflow. Subsequent analyses are also executed from the command line within the same software environment.
+\begin{tcolorbox}[
+  colback=gray!10,
+  colframe=gray!50,
+  title=Box 1 | Installing DELT-Hit,
+  fonttitle=\bfseries
+]
+In this box, we explain the installation procedure for DELT-Hit. 
 
-
-\setupitem{Install Git version control system}
-
+\setupitem{Prerequisite: Git version control system}
 Git is required to download the DELT-Hit package from the GitHub repository.
+
+Verify Git installation:
+
+\begin{lstlisting}
+git --version
+# Expected output: git version 2.x.x or higher
+\end{lstlisting}
+
+If Git is not yet installed:
 
 A. For macOS:
 
@@ -285,13 +330,10 @@ C. For Windows:
 # Download and install from: https://git-scm.com/download/win
 # Then use Git Bash or Windows Subsystem for Linux (WSL)
 \end{lstlisting}
-Verify Git installation:
 
+Verify successful installation (see above). 
 
-\begin{lstlisting}
-git --version
-# Expected output: git version 2.x.x or higher
-\end{lstlisting}
+\setupitem{Installation procedure for DELT-Hit}
 
 \setupitem{Environment setup with Conda}
 
@@ -349,10 +391,61 @@ delt-hit --help
 # Expected output: Help message describing the delt-hit command
 \end{lstlisting}
 
+\end{tcolorbox}
+
+\subsection{Experimental setup}
+The installation procedure detailed in Box 1 is performed once before running the DELT-Hit workflow. Subsequent analyses are also executed from the command line within the same software environment.
+
 \section{Procedure}
 
+\begin{tcolorbox}[
+  colback=gray!10,
+  colframe=gray!50,
+  title=Box 2 | Quickstart guide,
+  fonttitle=\bfseries
+]
+In this box, we give an overview of the required files and data to carry out the complete workflow and summarize steps of DELT-Hit procedure.
+
+Required material
+
+Hardware and software:
+\begin{itemize}
+  \item Hardware: Adequate computing hardware
+  \item Software: Complete installation of DELT-Hit with all dependencies
+\end{itemize}
+Input information:
+\begin{itemize}
+  \item Library setup: Laboratory records on library architecture, chemistry and encoding setup
+  \item Sequencing data: Illumina sequencing data containing raw sequencing reads
+\end{itemize}
+
+\setupitem{Procedure}
+
+\protocolstep{Phase 1}{Project initialization and configuration • TIMING 30-60 min}
+Creation of the configuration file defining library structure, experimental design and analysis parameters from a standardized Excel template. 
+
+\protocolstep{Phase 2}{Sequence processing and demultiplexing • TIMING 30 min - 4
+h}
+Processing of raw sequencing reads to identify and count library members in the analyzed selection experiments. 
+
+\protocolstep{Phase 3}{Data visualization and interpretation • TIMING 15-60 min}
+Exploration of count data and experimental metadata using the interactive dashboard. 
+
+\protocolstep{Phase 4}{Selection-centric enumeration and analysis • TIMING 10 min
+- 2 h}
+Analysis of top enriched compounds. Chemical structures and molecular properties are generated for a subset of highly enriched compounds for individual selection experiments. 
+
+\protocolstep{Phase 5}{Statistical analysis and hit identification • TIMING 10-30 min}
+Statistical identification of enriched library members based on comparison of different selection experiments. 
+
+\protocolstep{Phase 6}{Full library enumeration and machine learning representations
+• TIMING 1 h - 8 h}
+In-silico chemical assembly of all library members and calculation of molecular property distributions. This step is independent of phases 2-5 and can also be performed without sequencing data, for instance for evaluating library designs prior to DEL synthesis.
+
+\end{tcolorbox}
+
 \subsection{Phase 1: Project initialization and configuration • TIMING 30-60 min}
-The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template.
+The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template, a rudimentary template file can be found in the supplementary information.
 
 In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL library and experimental design information.
 
@@ -448,7 +541,7 @@ Required columns for library enumeration:
 
 \protocolstep{6}{Create the reactions sheet}
 
-Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). A collection of SMARTS/SMIRKS for reactions commonly employed in DEL synthesis is provided in the supplementary information. Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend to 
+Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). A collection of SMARTS/SMIRKS for reactions commonly employed in DEL synthesis is provided in the supplementary information (Supplementary Note 6). Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks.
 
 
 \input{tables/table8}
