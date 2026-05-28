@@ -91,8 +91,8 @@ def make_project_config(tmp_path: Path) -> tuple[Path, Path]:
         ({"method": "edgeR", "save_dir": Path("out"), "analysis_config": Path("analysis.yaml"), "name": "x", "config_path": Path("config.yaml")}, "`config_path` is not supported"),
         ({"method": "z_score", "save_dir": Path("out"), "counts": Path("counts.txt")}, "`config_path` is required"),
         ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml")}, "`counts` is required"),
+        ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml"), "counts": Path("counts.txt")}, "`name` is required"),
         ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml"), "counts": Path("counts.txt"), "analysis_config": Path("analysis.yaml")}, "`analysis_config` is not supported"),
-        ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml"), "counts": Path("counts.txt"), "name": "x"}, "`name` is not supported"),
     ],
 )
 def test_enrichment_argument_validation(kwargs, message):
@@ -125,10 +125,10 @@ def test_counts_analysis_still_generates_merged_inputs_and_script(tmp_path):
         name="protein_vs_no_protein",
     )
 
-    output_root = save_dir / "protein_vs_no_protein"
+    output_root = save_dir / "counts" / "protein_vs_no_protein"
     data = pd.read_csv(output_root / "data.csv")
     samples = pd.read_csv(output_root / "samples.csv")
-    script_path = output_root / "counts" / "enrichment_counts.R"
+    script_path = output_root / "enrichment_counts.R"
 
     assert list(samples.columns) == ["name", "group"]
     assert set(data["name"]) == {"protein_rep1", "no_protein_rep1"}
@@ -146,8 +146,8 @@ def test_edger_analysis_generates_script(tmp_path):
         name="protein_vs_no_protein",
     )
 
-    output_root = save_dir / "protein_vs_no_protein"
-    assert (output_root / "edgeR" / "enrichment_edgeR.R").exists()
+    output_root = save_dir / "edgeR" / "protein_vs_no_protein"
+    assert (output_root / "enrichment_edgeR.R").exists()
 
 
 def test_edger_script_writes_hits_and_stats_csv_names(tmp_path):
@@ -161,8 +161,8 @@ def test_edger_script_writes_hits_and_stats_csv_names(tmp_path):
         name="protein_vs_no_protein",
     )
 
-    output_root = save_dir / "protein_vs_no_protein"
-    script_text = (output_root / "edgeR" / "enrichment_edgeR.R").read_text()
+    output_root = save_dir / "edgeR" / "protein_vs_no_protein"
+    script_text = (output_root / "enrichment_edgeR.R").read_text()
 
     assert '"stats.csv"' in script_text
     assert '"hits.csv"' in script_text
@@ -181,8 +181,8 @@ def test_edger_script_still_writes_selection_named_count_exports(tmp_path):
         name="protein_vs_no_protein",
     )
 
-    output_root = save_dir / "protein_vs_no_protein"
-    script_text = (output_root / "edgeR" / "enrichment_edgeR.R").read_text()
+    output_root = save_dir / "edgeR" / "protein_vs_no_protein"
+    script_text = (output_root / "enrichment_edgeR.R").read_text()
 
     assert 'fname <- paste0(selection, ".csv")' in script_text
 
@@ -196,9 +196,10 @@ def test_zscore_analysis_writes_script_only(tmp_path):
         save_dir=tmp_path / "custom_output",
         config_path=config_path,
         counts=counts_path,
+        name="AG24_13",
     )
 
-    output_dir = tmp_path / "custom_output" / "z_score"
+    output_dir = tmp_path / "custom_output" / "z_score" / "AG24_13"
 
     assert (output_dir / "enrichment_z_score.R").exists()
     assert not (output_dir / "stats.csv").exists()
@@ -241,7 +242,7 @@ def test_zscore_requires_derivable_library_size(tmp_path):
     analyse = Analyse()
 
     with pytest.raises(ValueError, match="missing whitelist entries"):
-        analyse.enrichment(method="z_score", save_dir=tmp_path / "out", config_path=bad_config, counts=counts_path)
+        analyse.enrichment(method="z_score", save_dir=tmp_path / "out", config_path=bad_config, counts=counts_path, name="AG24_13")
 
 
 @pytest.mark.parametrize(
@@ -268,4 +269,4 @@ def test_zscore_validates_counts_schema(tmp_path, rows, message):
     analyse = Analyse()
 
     with pytest.raises(ValueError, match=message):
-        analyse.enrichment(method="z_score", save_dir=tmp_path / "out", config_path=config_path, counts=counts_path)
+        analyse.enrichment(method="z_score", save_dir=tmp_path / "out", config_path=config_path, counts=counts_path, name="AG24_13")

@@ -41,7 +41,7 @@ delt-hit analyse enrichment \
   --method=counts \
   --save_dir=$ANALYSIS_OUTPUT_ROOT
 
-Rscript --vanilla campaign/analysis/protein_vs_no_protein/counts/enrichment_counts.R
+Rscript --vanilla campaign/analysis/counts/protein_vs_no_protein/enrichment_counts.R
 
 delt-hit analyse enrichment \
   --analysis_config=$ANALYSIS_CONFIG_PATH \
@@ -49,16 +49,17 @@ delt-hit analyse enrichment \
   --method=edgeR \
   --save_dir=$ANALYSIS_OUTPUT_ROOT
 
-Rscript --vanilla campaign/analysis/protein_vs_no_protein/edgeR/enrichment_edgeR.R
+Rscript --vanilla campaign/analysis/edgeR/protein_vs_no_protein/enrichment_edgeR.R
 
 for selection in AG24_13 AG24_14 AG24_15; do
   delt-hit analyse enrichment \
     --config_path=$CONFIG_PATH \
     --counts=campaign/selections/$selection/counts.txt \
     --method=z_score \
-    --save_dir=$ANALYSIS_OUTPUT_ROOT/z_score/$selection
+    --name=$selection \
+    --save_dir=$ANALYSIS_OUTPUT_ROOT
 
-  Rscript --vanilla $ANALYSIS_OUTPUT_ROOT/z_score/$selection/z_score/enrichment_z_score.R
+  Rscript --vanilla $ANALYSIS_OUTPUT_ROOT/z_score/$selection/enrichment_z_score.R
 done
 
 # full library enumeration, usually only needed for ML tasks
