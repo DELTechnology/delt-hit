@@ -187,7 +187,7 @@ def test_edger_script_still_writes_selection_named_count_exports(tmp_path):
     assert 'fname <- paste0(selection, ".csv")' in script_text
 
 
-def test_zscore_analysis_writes_stats_hits_and_script(tmp_path):
+def test_zscore_analysis_writes_script_only(tmp_path):
     config_path, counts_path = make_project_config(tmp_path)
     analyse = Analyse()
 
@@ -199,15 +199,10 @@ def test_zscore_analysis_writes_stats_hits_and_script(tmp_path):
     )
 
     output_dir = tmp_path / "custom_output" / "z_score"
-    stats = pd.read_csv(output_dir / "stats.csv")
-    hits = pd.read_csv(output_dir / "hits.csv")
 
     assert (output_dir / "enrichment_z_score.R").exists()
-    assert "expected_count" in stats.columns
-    assert "sigma" in stats.columns
-    assert "z_score" in stats.columns
-    assert "norm_z_score" in stats.columns
-    assert hits.iloc[0]["norm_z_score"] == pytest.approx(stats["norm_z_score"].max())
+    assert not (output_dir / "stats.csv").exists()
+    assert not (output_dir / "hits.csv").exists()
 
 
 def test_compute_zscore_stats_matches_expected_values():
