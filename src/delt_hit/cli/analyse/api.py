@@ -42,29 +42,30 @@ class Analyse:
         if method in {"counts", "edgeR", "DESeq2"}:
             assert analysis_config is not None
             assert name is not None
-            analysis_dir = save_dir / name
+            method_dir = save_dir / method / name
             exp = load_analysis_experiment(analysis_config=analysis_config, name=name)
-            data_path = analysis_dir / "data.csv"
-            samples_path = analysis_dir / "samples.csv"
+            data_path = method_dir / "data.csv"
+            samples_path = method_dir / "samples.csv"
             prepare_replicate_analysis_data(exp=exp, data_path=data_path, samples_path=samples_path)
             logger.info(f"Prepared data at {data_path} and samples at {samples_path}")
 
             match method:
                 case "counts":
-                    counts_rscript(data_path=data_path, samples_path=samples_path, cpm=False, save_dir=analysis_dir / "counts")
+                    counts_rscript(data_path=data_path, samples_path=samples_path, cpm=False, save_dir=method_dir)
                 case "edgeR":
-                    edgeR_rscript(data_path=data_path, samples_path=samples_path, log=False, save_dir=analysis_dir / "edgeR")
+                    edgeR_rscript(data_path=data_path, samples_path=samples_path, log=False, save_dir=method_dir)
                 case "DESeq2":
                     raise NotImplementedError("DESeq2 analysis is not implemented.")
             return
 
         assert config_path is not None
         assert counts is not None
+        assert name is not None
         project_config = load_project_config(config_path=config_path)
         library_size = derive_library_size(project_config=project_config)
         load_zscore_counts(counts_path=counts)
 
-        method_dir = save_dir / "z_score"
+        method_dir = save_dir / "z_score" / name
         method_dir.mkdir(parents=True, exist_ok=True)
         script_path = zscore_rscript(
             counts_path=Path(counts).expanduser().resolve(),
@@ -106,10 +107,10 @@ class Analyse:
                 raise ValueError("`config_path` is required for method `z_score`.")
             if counts is None:
                 raise ValueError("`counts` is required for method `z_score`.")
+            if name is None:
+                raise ValueError("`name` is required for method `z_score`.")
             if analysis_config is not None:
                 raise ValueError("`analysis_config` is not supported for method `z_score`.")
-            if name is not None:
-                raise ValueError("`name` is not supported for method `z_score`.")
             return
 
         raise ValueError(f"Unsupported analysis method: {method}")

@@ -49,7 +49,7 @@ def read_analysis_config(config_path: Path) -> dict:
 def find_analysis_root(config_path: Path, analysis_name: str) -> Path:
     config = read_analysis_config(config_path)
     experiment, = [item for item in config["experiments"] if item["name"] == analysis_name]
-    return Path(experiment["save_dir"]).expanduser().resolve() / analysis_name
+    return Path(experiment["save_dir"]).expanduser().resolve()
 
 
 def run_r_script(*, rscript_bin: str, script_path: Path, log_path: Path) -> None:
@@ -75,7 +75,7 @@ def run_analysis_method(
     analysis_root: Path,
     rscript_bin: str,
 ) -> Path:
-    output_dir = analysis_root / method
+    output_dir = analysis_root / method / analysis_name
     if output_dir.exists():
         shutil.rmtree(output_dir)
 
@@ -83,7 +83,7 @@ def run_analysis_method(
         analysis_config=config_path,
         name=analysis_name,
         method=method,
-        save_dir=analysis_root.parent,
+        save_dir=analysis_root,
     )
 
 
