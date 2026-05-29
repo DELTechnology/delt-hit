@@ -1,0 +1,1217 @@
+experiment:
+  name: lane-2
+  fastq_path: 328321_2-230906_MK_TSD504704_S2_R1_001_UP_fl2.fastq.gz
+  save_dir: ./
+  num_cores: 10
+selections:
+  '1_1':
+    alternative_name: MK_25
+    operator: MK
+    date: '2023-09-01'
+    target: Sigma-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACACAC
+    S1: ATA
+    ids:
+    - 0
+    - 0
+  '2_1':
+    alternative_name: MK_26
+    operator: MK
+    date: '2023-09-01'
+    target: Sigma-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACAGCA
+    S1: ATA
+    ids:
+    - 1
+    - 0
+  '3_1':
+    alternative_name: MK_27
+    operator: MK
+    date: '2023-09-01'
+    target: Sigma-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACATGT
+    S1: ATA
+    ids:
+    - 2
+    - 0
+  '4_1':
+    alternative_name: MK_28
+    operator: MK
+    date: '2023-09-01'
+    target: Andys-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACGACG
+    S1: ATA
+    ids:
+    - 3
+    - 0
+  '5_1':
+    alternative_name: MK_29
+    operator: MK
+    date: '2023-09-01'
+    target: Andys-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACGCGA
+    S1: ATA
+    ids:
+    - 4
+    - 0
+  '6_1':
+    alternative_name: MK_30
+    operator: MK
+    date: '2023-09-01'
+    target: Andys-Thrombin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACTAGC
+    S1: ATA
+    ids:
+    - 5
+    - 0
+  '7_1':
+    alternative_name: MK_31
+    operator: MK
+    date: '2023-09-01'
+    target: CAII-biotin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACTCTG
+    S1: ATA
+    ids:
+    - 6
+    - 0
+  '8_1':
+    alternative_name: MK_32
+    operator: MK
+    date: '2023-09-01'
+    target: CAII-biotin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: ACTGAT
+    S1: ATA
+    ids:
+    - 7
+    - 0
+  '9_1':
+    alternative_name: MK_33
+    operator: MK
+    date: '2023-09-01'
+    target: CAII-biotin_UP
+    group: protein
+    beads: DynaBead C1
+    S0: AGACTA
+    S1: ATA
+    ids:
+    - 8
+    - 0
+  '10_1':
+    alternative_name: MK_34
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: DynaBead C1
+    S0: AGAGAG
+    S1: ATA
+    ids:
+    - 9
+    - 0
+  '11_1':
+    alternative_name: MK_35
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: DynaBead C1
+    S0: TAGATG
+    S1: ATA
+    ids:
+    - 10
+    - 0
+  '12_1':
+    alternative_name: MK_36
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: DynaBead C1
+    S0: TAGTGT
+    S1: ATA
+    ids:
+    - 11
+    - 0
+  '13_1':
+    alternative_name: MK_37
+    operator: MK
+    date: '2023-09-01'
+    target: MCL-1_UP
+    group: protein
+    beads: HisPure
+    S0: TATCAC
+    S1: ATA
+    ids:
+    - 12
+    - 0
+  '14_1':
+    alternative_name: MK_38
+    operator: MK
+    date: '2023-09-01'
+    target: MCL-1_UP
+    group: protein
+    beads: HisPure
+    S0: TCATAG
+    S1: ATA
+    ids:
+    - 13
+    - 0
+  '15_1':
+    alternative_name: MK_39
+    operator: MK
+    date: '2023-09-01'
+    target: MCL-1_UP
+    group: protein
+    beads: HisPure
+    S0: TCGTCA
+    S1: ATA
+    ids:
+    - 14
+    - 0
+  '16_1':
+    alternative_name: MK_40
+    operator: MK
+    date: '2023-09-01'
+    target: CAIX-His_UP
+    group: protein
+    beads: HisPure
+    S0: TCTACT
+    S1: ATA
+    ids:
+    - 15
+    - 0
+  '17_1':
+    alternative_name: MK_41
+    operator: MK
+    date: '2023-09-01'
+    target: CAIX-His_UP
+    group: protein
+    beads: HisPure
+    S0: TCTGTA
+    S1: ATA
+    ids:
+    - 16
+    - 0
+  '18_1':
+    alternative_name: MK_42
+    operator: MK
+    date: '2023-09-01'
+    target: CAIX-His_UP
+    group: protein
+    beads: HisPure
+    S0: TGACAT
+    S1: ATA
+    ids:
+    - 17
+    - 0
+  '19_1':
+    alternative_name: MK_43
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: HisPure
+    S0: TGCAGC
+    S1: ATA
+    ids:
+    - 18
+    - 0
+  '20_1':
+    alternative_name: MK_44
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: HisPure
+    S0: TGCGCG
+    S1: ATA
+    ids:
+    - 19
+    - 0
+  '21_1':
+    alternative_name: MK_45
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_UP
+    group: no_protein
+    beads: HisPure
+    S0: GCTACT
+    S1: ATA
+    ids:
+    - 20
+    - 0
+  '22_1':
+    alternative_name: MK_46
+    operator: MK
+    date: '2023-09-01'
+    target: Naive library UP
+    group: naive
+    beads: .nan
+    S0: GCACAT
+    S1: ATA
+    ids:
+    - 21
+    - 0
+  '23_1':
+    alternative_name: MK_47
+    operator: MK
+    date: '2023-09-01'
+    target: Naive library UP
+    group: naive
+    beads: .nan
+    S0: GAGTGT
+    S1: ATA
+    ids:
+    - 22
+    - 0
+  '24_1':
+    alternative_name: MK_48
+    operator: MK
+    date: '2023-09-01'
+    target: Naive library UP
+    group: naive
+    beads: .nan
+    S0: GTGCGA
+    S1: ATA
+    ids:
+    - 23
+    - 0
+  '25_1':
+    alternative_name: MK_49
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GCCGCT
+    S1: ATA
+    ids:
+    - 24
+    - 0
+  '26_1':
+    alternative_name: MK_50
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GAAGAT
+    S1: ATA
+    ids:
+    - 25
+    - 0
+  '27_1':
+    alternative_name: MK_51
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GTTCAG
+    S1: ATA
+    ids:
+    - 26
+    - 0
+  '1_2':
+    alternative_name: MK_1
+    operator: MK
+    date: '2023-09-01'
+    target: Sigma-Thrombin_SP
+    group: protein
+    beads: DynaBead C1
+    S0: ACACAC
+    S1: TCG
+    ids:
+    - 0
+    - 1
+  '2_2':
+    alternative_name: MK_2
+    operator: MK
+    date: '2023-09-01'
+    target: Sigma-Thrombin_SP
+    group: protein
+    beads: DynaBead C1
+    S0: ACAGCA
+    S1: TCG
+    ids:
+    - 1
+    - 1
+  '3_2':
+    alternative_name: MK_3
+    operator: MK
+    date: '2023-09-01'
+    target: Sigma-Thrombin_SP
+    group: protein
+    beads: DynaBead C1
+    S0: ACATGT
+    S1: TCG
+    ids:
+    - 2
+    - 1
+  '4_2':
+    alternative_name: MK_4
+    operator: MK
+    date: '2023-09-01'
+    target: Andys-Thrombin_SP
+    group: protein
+    beads: DynaBead C1
+    S0: ACGACG
+    S1: TCG
+    ids:
+    - 3
+    - 1
+  '5_2':
+    alternative_name: MK_5
+    operator: MK
+    date: '2023-09-01'
+    target: Andys-Thrombin_SP
+    group: protein
+    beads: DynaBead C1
+    S0: ACGCGA
+    S1: TCG
+    ids:
+    - 4
+    - 1
+  '6_2':
+    alternative_name: MK_6
+    operator: MK
+    date: '2023-09-01'
+    target: Andys-Thrombin_SP
+    group: protein
+    beads: DynaBead C1
+    S0: ACTAGC
+    S1: TCG
+    ids:
+    - 5
+    - 1
+  '7_2':
+    alternative_name: MK_7
+    operator: MK
+    date: '2023-09-01'
+    target: CAII-biotin_SP
+    group: protein
+    beads: DynaBead C1
+    S0: ACTCTG
+    S1: TCG
+    ids:
+    - 6
+    - 1
+  '8_2':
+    alternative_name: MK_8
+    operator: MK
+    date: '2023-09-01'
+    target: CAII-biotin_SP
+    group: protein
+    beads: DynaBead C1
+    S0: ACTGAT
+    S1: TCG
+    ids:
+    - 7
+    - 1
+  '9_2':
+    alternative_name: MK_9
+    operator: MK
+    date: '2023-09-01'
+    target: CAII-biotin_SP
+    group: protein
+    beads: DynaBead C1
+    S0: AGACTA
+    S1: TCG
+    ids:
+    - 8
+    - 1
+  '10_2':
+    alternative_name: MK_10
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_SP
+    group: no_protein
+    beads: DynaBead C1
+    S0: AGAGAG
+    S1: TCG
+    ids:
+    - 9
+    - 1
+  '11_2':
+    alternative_name: MK_11
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_SP
+    group: no_protein
+    beads: DynaBead C1
+    S0: TAGATG
+    S1: TCG
+    ids:
+    - 10
+    - 1
+  '12_2':
+    alternative_name: MK_12
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_SP
+    group: no_protein
+    beads: DynaBead C1
+    S0: TAGTGT
+    S1: TCG
+    ids:
+    - 11
+    - 1
+  '13_2':
+    alternative_name: MK_13
+    operator: MK
+    date: '2023-09-01'
+    target: MCL-1_SP
+    group: protein
+    beads: HisPure
+    S0: TATCAC
+    S1: TCG
+    ids:
+    - 12
+    - 1
+  '14_2':
+    alternative_name: MK_14
+    operator: MK
+    date: '2023-09-01'
+    target: MCL-1_SP
+    group: protein
+    beads: HisPure
+    S0: TCATAG
+    S1: TCG
+    ids:
+    - 13
+    - 1
+  '15_2':
+    alternative_name: MK_15
+    operator: MK
+    date: '2023-09-01'
+    target: MCL-1_SP
+    group: protein
+    beads: HisPure
+    S0: TCGTCA
+    S1: TCG
+    ids:
+    - 14
+    - 1
+  '16_2':
+    alternative_name: MK_16
+    operator: MK
+    date: '2023-09-01'
+    target: CAIX-His_SP
+    group: protein
+    beads: HisPure
+    S0: TCTACT
+    S1: TCG
+    ids:
+    - 15
+    - 1
+  '17_2':
+    alternative_name: MK_17
+    operator: MK
+    date: '2023-09-01'
+    target: CAIX-His_SP
+    group: protein
+    beads: HisPure
+    S0: TCTGTA
+    S1: TCG
+    ids:
+    - 16
+    - 1
+  '18_2':
+    alternative_name: MK_18
+    operator: MK
+    date: '2023-09-01'
+    target: CAIX-His_SP
+    group: protein
+    beads: HisPure
+    S0: TGACAT
+    S1: TCG
+    ids:
+    - 17
+    - 1
+  '19_2':
+    alternative_name: MK_19
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_SP
+    group: no_protein
+    beads: HisPure
+    S0: TGCAGC
+    S1: TCG
+    ids:
+    - 18
+    - 1
+  '20_2':
+    alternative_name: MK_20
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_SP
+    group: no_protein
+    beads: HisPure
+    S0: TGCGCG
+    S1: TCG
+    ids:
+    - 19
+    - 1
+  '21_2':
+    alternative_name: MK_21
+    operator: MK
+    date: '2023-09-01'
+    target: No protein_SP
+    group: no_protein
+    beads: HisPure
+    S0: GCTACT
+    S1: TCG
+    ids:
+    - 20
+    - 1
+  '22_2':
+    alternative_name: MK_22
+    operator: MK
+    date: '2023-09-01'
+    target: Naive library SP
+    group: naive
+    beads: .nan
+    S0: GCACAT
+    S1: TCG
+    ids:
+    - 21
+    - 1
+  '23_2':
+    alternative_name: MK_23
+    operator: MK
+    date: '2023-09-01'
+    target: Naive library SP
+    group: naive
+    beads: .nan
+    S0: GAGTGT
+    S1: TCG
+    ids:
+    - 22
+    - 1
+  '24_2':
+    alternative_name: MK_24
+    operator: MK
+    date: '2023-09-01'
+    target: Naive library SP
+    group: naive
+    beads: .nan
+    S0: GTGCGA
+    S1: TCG
+    ids:
+    - 23
+    - 1
+  '25_2':
+    alternative_name: .nan
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GCCGCT
+    S1: TCG
+    ids:
+    - 24
+    - 1
+  '26_2':
+    alternative_name: .nan
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GAAGAT
+    S1: TCG
+    ids:
+    - 25
+    - 1
+  '27_2':
+    alternative_name: .nan
+    operator: MK
+    date: '2023-09-01'
+    target: Naive junk
+    group: naive
+    beads: .nan
+    S0: GTTCAG
+    S1: TCG
+    ids:
+    - 26
+    - 1
+library:
+  products:
+  - product_1
+  - product_1B
+  - product_2
+  - product_2B
+  - product_3
+  - product_3B
+  educts:
+  - product_1
+  - product_1B
+  - product_2
+  - product_2B
+  - product_3
+  - scaffold_1
+  reactions:
+  - ABF1
+  - ABF2
+  - ABF3
+  - FmocD1
+  - FmocD2
+  - FmocD3
+  bb_edges:
+  - - ABF1
+    - product_1
+  - - ABF2
+    - product_2
+  - - ABF3
+    - product_3
+  - - B0
+    - ABF1
+  - - B1
+    - ABF2
+  - - B2
+    - ABF3
+  - - product_1B
+    - ABF2
+  - - product_2B
+    - ABF3
+  - - scaffold_1
+    - ABF1
+  other_edges:
+  - - FmocD1
+    - product_1B
+  - - FmocD2
+    - product_2B
+  - - FmocD3
+    - product_3B
+  - - product_1
+    - FmocD1
+  - - product_2
+    - FmocD2
+  - - product_3
+    - FmocD3
+  building_blocks:
+  - B0
+  - B1
+  - B2
+catalog:
+  compounds:
+    scaffold_1:
+      smiles: N[C@H](C(OC)=O)CC#C
+  reactions:
+    ABF1:
+      smirks: '[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);!$([NX3][CX3](=[OX1])[#6])!$([NX3][CX3](=[OX1])[NX3]);!$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]'
+    ABF2:
+      smirks: '[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);!$([NX3][CX3](=[OX1])[#6])!$([NX3][CX3](=[OX1])[NX3]);!$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]'
+    ABF3:
+      smirks: '[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);!$([NX3][CX3](=[OX1])[#6])!$([NX3][CX3](=[OX1])[NX3]);!$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]'
+    SR:
+      smirks: '[#6:1][$([NX2-][NX2+]#[NX1]),$([NX2]=[NX2+]=[NX1-])]>>[#6:1][N;H2]'
+    CuAAC:
+      smirks: '[CX2:1]#[CX2;H1:2].[N:3]=[N+:4]=[N-:5]>>[C:1]1=[C:2][N-0:3][N-0:4]=[N-0:5]1'
+    FmocD1:
+      smirks: '[N:1]C(OCC1c2c(c3c1cccc3)cccc2)=O>>[N:1]'
+    FmocD2:
+      smirks: '[N:1]C(OCC1c2c(c3c1cccc3)cccc2)=O>>[N:1]'
+    FmocD3:
+      smirks: '[N:1]C(OCC1c2c(c3c1cccc3)cccc2)=O>>[N:1]'
+structure:
+- name: S0
+  type: selection
+  max_error_rate: 0
+  indels: false
+- name: C0
+  type: constant
+  max_error_rate: 0
+  indels: false
+- name: B0
+  type: building_block
+  max_error_rate: 0
+  indels: false
+- name: C1
+  type: constant
+  max_error_rate: 0
+  indels: false
+- name: B1
+  type: building_block
+  max_error_rate: 0
+  indels: false
+- name: C2
+  type: constant
+  max_error_rate: 0
+  indels: false
+- name: B2
+  type: building_block
+  max_error_rate: 0
+  indels: false
+- name: C3
+  type: constant
+  max_error_rate: 0
+  indels: false
+- name: S1
+  type: selection
+  max_error_rate: 0
+  indels: false
+whitelists:
+  C0:
+  - codon: GGAGCTTCTGAATTCTGTGTGCTGTGCG
+  C1:
+  - codon: TACGG
+  C2:
+  - codon: TTGCG
+  C3:
+  - codon: TACGGCGTACTCAGTGCTCTGCACGGTCGC
+  B0:
+  - index: 0
+    smiles: C[C@H](NC(=O)OCC1c2ccccc2-c3ccccc13)C(O)=O
+    codon: ATCAAGCT
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  - index: 1
+    smiles: OC(=O)[C@@H]1CCCN1C(=O)OCC2c3ccccc3-c4ccccc24
+    codon: AGGTTGGC
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  - index: 2
+    smiles: OC(=O)[C@H](Cc1ccccc1)NC(=O)OCC2c3ccccc3-c4ccccc24
+    codon: ACCTTGCT
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  - index: 3
+    smiles: O=C(N[C@H](C(O)=O)C1CC1)OCC2C3=C(C4=C2C=CC=C4)C=CC=C3
+    codon: CTATCGTC
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  - index: 4
+    smiles: OC(=O)[C@H]1CCCN1C(=O)OCC2c3ccccc3-c4ccccc24
+    codon: GAGGTCAA
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  - index: 5
+    smiles: C(OC(N[C@H]([C@@H](CC)C)C(O)=O)=O)C1C=2C(C=3C1=CC=CC3)=CC=CC2
+    codon: TAGCATCG
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  - index: 6
+    smiles: COc1ccc(C[C@@H](NC(=O)OCC2c3ccccc3-c4ccccc24)C(O)=O)cc1
+    codon: CACAAGGA
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  - index: 7
+    smiles: OC(=O)C1CCN(CC1)C(=O)OCC2c3ccccc3-c4ccccc24
+    codon: AAGGCAGT
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  - index: 8
+    smiles: C(OC(N[C@H](CC1=CC(Cl)=C(Cl)C=C1)CC(O)=O)=O)C2C=3C(C=4C2=CC=CC4)=CC=CC3
+    codon: CGAGGTCT
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  - index: 9
+    smiles: C(OC(N[C@@H](CCC1CCCCC1)C(O)=O)=O)C2C=3C(C=4C2=CC=CC4)=CC=CC3
+    codon: CTGATCGA
+    reaction: ABF1
+    educt: scaffold_1
+    product: product_1
+    complement: false
+  B1:
+  - index: 0
+    smiles: C[C@H](NC(=O)OCC1c2ccccc2-c3ccccc13)C(O)=O
+    codon: ATGGCAAC
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  - index: 1
+    smiles: OC(=O)[C@@H]1CCCN1C(=O)OCC2c3ccccc3-c4ccccc24
+    codon: ACTGCTCT
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  - index: 2
+    smiles: O=C(O)[C@H]([C@H](O)C)NC(OCC1C2=CC=CC=C2C3=CC=CC=C13)=O
+    codon: TCCAGCAC
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  - index: 3
+    smiles: CCCC[C@@H](C(O)=O)NC(OCC1C2=CC=CC=C2C3=CC=CC=C13)=O
+    codon: ATCTACCG
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  - index: 4
+    smiles: C(OC(N[C@@H](CCCNC(N)=O)C(O)=O)=O)C1C=2C(C=3C1=CC=CC3)=CC=CC2
+    codon: CGGTCTAT
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  - index: 5
+    smiles: CC(C(O)=O)(C)NC(OCC1C2=C(C3=C1C=CC=C3)C=CC=C2)=O
+    codon: TTGAAGGC
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  - index: 6
+    smiles: C(OC(N[C@@H](CC(O)=O)C)=O)C1C=2C(C=3C1=CC=CC3)=CC=CC2
+    codon: CCACACTA
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  - index: 7
+    smiles: O=C(O)C1=CC=CC(=C1)CNC(=O)OCC2C=3C=CC=CC3C=4C=CC=CC42
+    codon: ACCTTCGT
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  - index: 8
+    smiles: OC(=O)c1ccc(CNC(=O)OCC2c3ccccc3-c4ccccc24)cc1
+    codon: GCGACCAT
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  - index: 9
+    smiles: O=C(OCC1C=2C=CC=CC2C=3C=CC=CC31)NC4C(=O)N(C=5C=CC=CC5CC4)CC(=O)O
+    codon: ACGGAGAC
+    reaction: ABF2
+    educt: product_1B
+    product: product_2
+    complement: false
+  B2:
+  - index: 0
+    smiles: C[C@H](NC(=O)OCC1c2ccccc2-c3ccccc13)C(O)=O
+    codon: GTATGACC
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 1
+    smiles: OC(=O)[C@@H]1CCCN1C(=O)OCC2c3ccccc3-c4ccccc24
+    codon: GTTGGCAC
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 2
+    smiles: CC(C)[C@H](NC(=O)OCC1c2ccccc2-c3ccccc13)C(O)=O
+    codon: TCCGGCTA
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 3
+    smiles: OC(=O)[C@H](Cc1ccccc1)NC(=O)OCC2c3ccccc3-c4ccccc24
+    codon: CAGAGTGC
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 4
+    smiles: C(OC(N[C@H](CC(C)C)C(O)=O)=O)C1C=2C(C=3C1=CC=CC3)=CC=CC2
+    codon: CTACGCAA
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 5
+    smiles: O=C(O)[C@@H](CC1CCCCC1)NC(OCC2C3=CC=CC=C3C4=CC=CC=C24)=O
+    codon: CTAACCGC
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 6
+    smiles: O=C(O)[C@@H](CC1=CC=C(C=C1)O)NC(OCC2C3=CC=CC=C3C4=CC=CC=C24)=O
+    codon: CATCGTGT
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 7
+    smiles: OC(=O)[C@H](CC1CC1)NC(=O)OCC2c3ccccc3-c4ccccc24
+    codon: TTGGCTAG
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 8
+    smiles: C(OC(N[C@@H](CC1=CC=C(Cl)C=C1)CC(O)=O)=O)C2C=3C(C=4C2=CC=CC4)=CC=CC3
+    codon: CGCAGAAC
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 9
+    smiles: O=C(O)[C@H](CCCCNC(C)=O)NC(OCC1C2=CC=CC=C2C3=CC=CC=C13)=O
+    codon: CGCTACTG
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  - index: 10
+    smiles: O=C(O)[C@H](CCCCNC(C1=CC=C(S(N)(=O)=O)C=C1)=O)NC(OCC2C3=CC=CC=C3C4=CC=CC=C24)=O
+    codon: AGCCTTGC
+    reaction: ABF3
+    educt: product_2B
+    product: product_3
+    complement: false
+  S0:
+  - name: '1_1'
+    codon: ACACAC
+  - name: '2_1'
+    codon: ACAGCA
+  - name: '3_1'
+    codon: ACATGT
+  - name: '4_1'
+    codon: ACGACG
+  - name: '5_1'
+    codon: ACGCGA
+  - name: '6_1'
+    codon: ACTAGC
+  - name: '7_1'
+    codon: ACTCTG
+  - name: '8_1'
+    codon: ACTGAT
+  - name: '9_1'
+    codon: AGACTA
+  - name: '10_1'
+    codon: AGAGAG
+  - name: '11_1'
+    codon: TAGATG
+  - name: '12_1'
+    codon: TAGTGT
+  - name: '13_1'
+    codon: TATCAC
+  - name: '14_1'
+    codon: TCATAG
+  - name: '15_1'
+    codon: TCGTCA
+  - name: '16_1'
+    codon: TCTACT
+  - name: '17_1'
+    codon: TCTGTA
+  - name: '18_1'
+    codon: TGACAT
+  - name: '19_1'
+    codon: TGCAGC
+  - name: '20_1'
+    codon: TGCGCG
+  - name: '21_1'
+    codon: GCTACT
+  - name: '22_1'
+    codon: GCACAT
+  - name: '23_1'
+    codon: GAGTGT
+  - name: '24_1'
+    codon: GTGCGA
+  - name: '25_1'
+    codon: GCCGCT
+  - name: '26_1'
+    codon: GAAGAT
+  - name: '27_1'
+    codon: GTTCAG
+  - name: '1_2'
+    codon: ACACAC
+  - name: '2_2'
+    codon: ACAGCA
+  - name: '3_2'
+    codon: ACATGT
+  - name: '4_2'
+    codon: ACGACG
+  - name: '5_2'
+    codon: ACGCGA
+  - name: '6_2'
+    codon: ACTAGC
+  - name: '7_2'
+    codon: ACTCTG
+  - name: '8_2'
+    codon: ACTGAT
+  - name: '9_2'
+    codon: AGACTA
+  - name: '10_2'
+    codon: AGAGAG
+  - name: '11_2'
+    codon: TAGATG
+  - name: '12_2'
+    codon: TAGTGT
+  - name: '13_2'
+    codon: TATCAC
+  - name: '14_2'
+    codon: TCATAG
+  - name: '15_2'
+    codon: TCGTCA
+  - name: '16_2'
+    codon: TCTACT
+  - name: '17_2'
+    codon: TCTGTA
+  - name: '18_2'
+    codon: TGACAT
+  - name: '19_2'
+    codon: TGCAGC
+  - name: '20_2'
+    codon: TGCGCG
+  - name: '21_2'
+    codon: GCTACT
+  - name: '22_2'
+    codon: GCACAT
+  - name: '23_2'
+    codon: GAGTGT
+  - name: '24_2'
+    codon: GTGCGA
+  - name: '25_2'
+    codon: GCCGCT
+  - name: '26_2'
+    codon: GAAGAT
+  - name: '27_2'
+    codon: GTTCAG
+  S1:
+  - name: '1_1'
+    codon: ATA
+  - name: '2_1'
+    codon: ATA
+  - name: '3_1'
+    codon: ATA
+  - name: '4_1'
+    codon: ATA
+  - name: '5_1'
+    codon: ATA
+  - name: '6_1'
+    codon: ATA
+  - name: '7_1'
+    codon: ATA
+  - name: '8_1'
+    codon: ATA
+  - name: '9_1'
+    codon: ATA
+  - name: '10_1'
+    codon: ATA
+  - name: '11_1'
+    codon: ATA
+  - name: '12_1'
+    codon: ATA
+  - name: '13_1'
+    codon: ATA
+  - name: '14_1'
+    codon: ATA
+  - name: '15_1'
+    codon: ATA
+  - name: '16_1'
+    codon: ATA
+  - name: '17_1'
+    codon: ATA
+  - name: '18_1'
+    codon: ATA
+  - name: '19_1'
+    codon: ATA
+  - name: '20_1'
+    codon: ATA
+  - name: '21_1'
+    codon: ATA
+  - name: '22_1'
+    codon: ATA
+  - name: '23_1'
+    codon: ATA
+  - name: '24_1'
+    codon: ATA
+  - name: '25_1'
+    codon: ATA
+  - name: '26_1'
+    codon: ATA
+  - name: '27_1'
+    codon: ATA
+  - name: '1_2'
+    codon: TCG
+  - name: '2_2'
+    codon: TCG
+  - name: '3_2'
+    codon: TCG
+  - name: '4_2'
+    codon: TCG
+  - name: '5_2'
+    codon: TCG
+  - name: '6_2'
+    codon: TCG
+  - name: '7_2'
+    codon: TCG
+  - name: '8_2'
+    codon: TCG
+  - name: '9_2'
+    codon: TCG
+  - name: '10_2'
+    codon: TCG
+  - name: '11_2'
+    codon: TCG
+  - name: '12_2'
+    codon: TCG
+  - name: '13_2'
+    codon: TCG
+  - name: '14_2'
+    codon: TCG
+  - name: '15_2'
+    codon: TCG
+  - name: '16_2'
+    codon: TCG
+  - name: '17_2'
+    codon: TCG
+  - name: '18_2'
+    codon: TCG
+  - name: '19_2'
+    codon: TCG
+  - name: '20_2'
+    codon: TCG
+  - name: '21_2'
+    codon: TCG
+  - name: '22_2'
+    codon: TCG
+  - name: '23_2'
+    codon: TCG
+  - name: '24_2'
+    codon: TCG
+  - name: '25_2'
+    codon: TCG
+  - name: '26_2'
+    codon: TCG
+  - name: '27_2'
+    codon: TCG
