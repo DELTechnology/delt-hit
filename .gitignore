@@ -335,3 +335,4 @@ other_tools/
 *.bbl
 *.blg
 *.fdb_latexmk
+*.swp
