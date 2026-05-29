@@ -94,8 +94,8 @@ class Visualize:
 
                     ax = visualize_smiles(
                         smiles=[smiles],
-                        legends=[f"{bb_name}:{entry['index']}"],
-                        title=f'{bb_name} Building Blocks',
+                        legends=None,
+                        title="",
                         nrow=1,
                         sub_img_size=(tile_size, tile_size),
                     )
@@ -113,8 +113,8 @@ class Visualize:
                     continue
                 compound_ax = visualize_smiles(
                     smiles=[smiles],
-                    legends=[name],
-                    title=name,
+                    legends=None,
+                    title="",
                     nrow=1,
                     sub_img_size=(tile_size, tile_size),
                 )
@@ -143,7 +143,6 @@ class Visualize:
         df = pd.read_parquet(lib_path)
         assert "smiles" in df.columns, "Dual-display libraries with `smiles_a`/`smiles_b` are not supported by `visualize library`"
         legend_df = df.loc[df["smiles"].notna()]
-        legends = build_code_legends(legend_df)
         filenames = build_code_filenames(legend_df)
 
         visualization_dir = get_library_dir(config_path) / "visualization"
@@ -153,28 +152,16 @@ class Visualize:
 
         smiles = legend_df["smiles"].tolist()
         for i, smiles_value in tqdm(enumerate(smiles), total=len(smiles), desc=f"{library_name} panels"):
-            legend = legends[i] if legends is not None else str(i)
             ax = visualize_smiles(
                 smiles=[smiles_value],
-                legends=[legend],
-                title=library_name,
+                legends=None,
+                title="",
                 nrow=1,
                 sub_img_size=(tile_size, tile_size),
             )
             filename = filenames[i] if filenames is not None else str(i)
             save_figure_outputs(ax.figure, library_dir / filename, dpi=dpi)
             close_figure(ax.figure)
-
-
-def build_code_legends(data: pd.DataFrame) -> list[str] | None:
-    """Build ``code_*`` legends for a library dataframe when available."""
-    code_columns = [col for col in data.columns if col.startswith("code_")]
-    code_columns = sorted(code_columns, key=lambda name: int(name.split("_", maxsplit=1)[1]))
-    if not code_columns:
-        return None
-    return data[code_columns].astype(str).agg(":".join, axis=1).tolist()
-
-
 def build_code_filenames(data: pd.DataFrame) -> list[str] | None:
     """Build per-entry filenames from ``code_*`` columns when available."""
     code_columns = [col for col in data.columns if col.startswith("code_")]
