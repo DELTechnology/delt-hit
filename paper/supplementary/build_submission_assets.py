@@ -54,7 +54,7 @@ def convert_supplementary_figures() -> list[Path]:
         DEMUX_DIR / "plots" / "synthetic_2cycle_10bbpc_peak_rss.png",
         DEMUX_DIR / "plots" / "synthetic_3cycle_10bbpc_peak_rss.png",
         DEMUX_DIR / "plots" / "synthetic_4cycle_10bbpc_peak_rss.png",
-        SUPP_DIR / "figures" / "nf2_strict14_delt_vs_deli_recall_palette1.png",
+        SUPP_DIR / "figures" / "nf2-recall-benchmark.png",
     ]
     written: list[Path] = []
     for path in figure_paths:

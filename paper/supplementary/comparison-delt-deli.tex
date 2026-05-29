@@ -1,4 +1,10 @@
-\phantomsection\subsection*{Supplementary Note 2: DELT-Hit and DELi workflow comparison}
+\subsection{DELT-Hit and DELi workflow comparison}
+\label{supp:comparison-delt-deli}
+
+\providecommand{\statusgreen}{\raisebox{0.15ex}{\textcolor{green!50!black}{\large$\bullet$}}}
+\providecommand{\statusamber}{\raisebox{0.15ex}{\textcolor{orange!90!black}{\large$\bullet$}}}
+\providecommand{\statusopen}{\raisebox{0.15ex}{\textcolor{gray}{\large$\bullet$}}}
+\providecommand{\statusred}{\raisebox{0.15ex}{\textcolor{red!70!black}{\large$\bullet$}}}
 
 The main text summarizes the DELT-Hit--DELi comparison as a compact status table organized by scientific-software criteria rather than by a flat feature checklist. This note provides the minimum context required to interpret those status assignments.
 
@@ -23,10 +29,28 @@ Both frameworks are scored \statusgreen\ for count-based enrichment because each
 \paragraph{6. Computational performance.}
 DELT-Hit is scored \statusgreen\ for memory and scaling behavior because the manuscript provides explicit timing expectations across dataset scales, qualitative RAM guidance, and a workflow design that uses multiple CPU cores during demultiplexing and post-processing. DELi is scored \statusamber\ because the preprint reports single-core throughput and describes external Nextflow-based parallel deployment, but gives less explicit memory characterization and less detailed scaling guidance than DELT-Hit.
 
-\iffalse
-Previous benchmarking-focused comparison content retained for reference but intentionally not rendered in the current supplement because it is not required to interpret the main-text comparison table.
+\paragraph{Synthetic demultiplexing benchmark.}
+To complement the workflow-level comparison above, we benchmarked DELT-Hit and
+DELi on shared synthetic FASTQ datasets designed to isolate demultiplexing
+performance under matched input conditions. The benchmark covers canonical
+2-, 3-, and 4-cycle libraries with 10 building blocks per cycle across 1M, 10M,
+100M, and 1000M reads, and additionally includes an extended 2-cycle sweep with
+10, 100, and 1000 building blocks per cycle. Jobs were executed on a HPC Slurm
+cluster with 12 CPUs and 128\,GB RAM allocated per run. The reported outputs
+focus on end-to-end runtime and peak RSS memory for the shared benchmark setup;
+the DELi 1000M-read runs terminated in an out-of-memory state.
 
-We further benchmark the demultiplexing of both frameworks on a synthetic dataset on canonical 2-, 3-, and 4-cycle libraries with 10 building blocks per cycle across 1M, 10M, 100M, and 1000M reads, and additionally include an extended 2-cycle runtime sweep with 10, 100, and 1000 building blocks per cycle. Benchmarking was completed on a HPC Slurm cluster with 12 CPUs and 128\,GB RAM allocated per job. The reported outputs focus on end-to-end runtime and memory consumption for the shared benchmark setup; the DELi 1000M-read runs exited with an out-of-memory state. Supplementary Figure~\ref{fig:delt-deli-runtime-cycles} summarizes cycle-wise runtime scaling, Supplementary Figure~\ref{fig:delt-deli-runtime-2cycle-bbpc} shows the extended 2-cycle runtime sweep, and Supplementary Figure~\ref{fig:delt-deli-memory-cycles} summarizes peak RSS scaling.
+We further benchmarked demultiplexing on canonical 2-, 3-, and 4-cycle
+synthetic libraries with 10 building blocks per cycle across 1M, 10M, 100M,
+and 1000M reads, and additionally included an extended 2-cycle runtime sweep
+with 10, 100, and 1000 building blocks per cycle.
+
+Supplementary Figure~\ref{fig:delt-deli-runtime-cycles} summarizes cycle-wise
+runtime scaling, Supplementary Figure~\ref{fig:delt-deli-runtime-2cycle-bbpc}
+shows the extended 2-cycle runtime sweep, and Supplementary
+Figure~\ref{fig:delt-deli-memory-cycles} summarizes peak RSS scaling. Within
+this benchmark setup, DELT-Hit shows more favorable runtime and memory scaling
+than DELi.
 
 \begin{figure}[H]
 \centering
@@ -52,6 +76,3 @@ We further benchmark the demultiplexing of both frameworks on a synthetic datase
 \caption{Peak memory usage (RSS) per cycle for the canonical synthetic demultiplex benchmark (10 building blocks per cycle), evaluated from 1 million to 1 billion reads. The DELi runs at 1 billion reads terminated due to out-of-memory (OOM).}
 \label{fig:delt-deli-memory-cycles}
 \end{figure}
-
-Within this benchmark setup, DELT-Hit demonstrates more favorable run-time and memory complexity than DELi.
-\fi

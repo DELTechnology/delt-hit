@@ -1,13 +1,21 @@
-\phantomsection\subsection*{Supplementary Note 3: Enrichment-scoring methods}
-\label{supp:statistical-methods}
+\subsection{Enrichment Scores}
+\label{supp:enrichment-scores}
 
-The enrichment benchmark compares six scores that are commonly useful for DEL
-selection data: DELT-Hit simple-count enrichment, DELT-Hit normalized z-score,
-DELT-Hit edgeR log fold change, DELi Normalized Sequence Count (NSC), DELi MLE,
-and DELi norm-z. This section defines the scores and the experimental settings
-where each is most appropriate before the benchmark results are presented.
+This section defines the DELT-Hit enrichment methods and the experimental
+settings where each is most appropriate.
 
-\textbf{Normalized z-score (Faver et al.\ formulation).}
+\textbf{Count Method.}
+The count method averages raw sequencing counts across replicates within each
+condition and scores each compound by the difference between the protein
+and no-protein means, $\bar{c}_{\rm prot} - \bar{c}_{\rm ctrl}$. It is a
+transparent count-based baseline that averages replicate counts and does not
+assume a parametric count distribution. Its main weakness is sensitivity to
+read-depth differences and raw-count scale, because the current default workflow
+operates on raw counts rather than library-size-normalized frequencies. It is
+therefore most informative when sequencing depths are comparable or as a simple
+benchmark baseline.
+
+\textbf{Z-Score Method (Faver et al.\ formulation).}
 Let $D$ denote the total number of distinct disynthon (or higher-cycle) compound
 identities in the library and $n$ the total number of sequencing reads in a
 selection. For a given compound, let $c$ be its raw read count. The observed
@@ -32,18 +40,7 @@ library diversity, sampling sparsity, and selection context. We use this
 normalized, depth-insensitive Faver formulation rather than the conventional
 binomial z-score, whose numerical value increases with sequencing depth.
 
-\textbf{Simple-count enrichment.}
-The simple-count method averages raw sequencing counts across replicates within
-each condition and scores each compound by the difference between the protein
-and no-protein means, $\bar{c}_{\rm prot} - \bar{c}_{\rm ctrl}$. It is a
-transparent count-based baseline that averages replicate counts and does not
-assume a parametric count distribution. Its main weakness is sensitivity to
-read-depth differences and raw-count scale, because the current default workflow
-operates on raw counts rather than library-size-normalized frequencies. It is
-therefore most informative when sequencing depths are comparable or as a simple
-benchmark baseline.
-
-\textbf{edgeR negative-binomial GLM.}
+\textbf{edgeR Method.}
 Compound-level read counts per selection are modelled as negative-binomial
 (NB) random variables. The NB model accommodates overdispersion relative to
 Poisson counts, which arises in DEL experiments from variation in sequencing
@@ -65,26 +62,3 @@ estimates or weaker statistical support, whereas frequency-based scores rank
 them directly by observed selection enrichment. For this reason, edgeR is best
 used to annotate a shortlist and flag statistically supported contrasts, rather
 than as the sole full-library ranking signal.
-
-\textbf{DELi NSC and equivalence with z-score.}
-The Normalized Sequence Count used in \deli{}\cite{ref41} is the observed
-selection frequency, $\mathrm{NSC} = c/n = p_{\rm obs}$. For a uniform library,
-where every compound has the same expected null probability, NSC and the
-normalized z-score produce the same rank ordering. This makes NSC the closest
-\deli{} comparator to the \delthit{} z-score in the NF2 benchmark.
-
-\textbf{DELi MLE.}
-The DELi maximum-likelihood estimate uses a Poisson count model to estimate
-enrichment relative to the no-protein baseline. This makes it conceptually close
-to ratio-style enrichment over a measured control. It can be informative when
-control counts are well sampled, but it is sensitive to zero or near-zero
-control counts because small denominator changes can move low-count compounds
-substantially in the ranked list.
-
-\textbf{DELi norm-z.}
-The DELi normalized z-score compares post-selection counts with the empirical
-mean and standard deviation of the no-protein controls. This denominator-based
-normalization is most useful when control counts have enough variation to
-provide a stable standard deviation. In sparse no-protein-control settings with
-many zero or near-zero control counts, the denominator can become unstable;
-therefore norm-z should be interpreted cautiously for sparse DEL count tables.

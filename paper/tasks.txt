@@ -1,2 +1,7 @@
-1. check produces SMIRKS and SMILES for building blocks
-2. 
+1. Verify all Supplementary notes are referenced correctly
+2. Verify all tables are referenced in the text
+3. Verify all figures are referened in the text
+4. Verify all todos in the revision.md are completed
+5. Verify that all mentions of the z-score in main.tex and supplementary information are aligned with the latest implementation
+6. Verify that all mentioned outputs are names correctly accroding to the latest code version (I ran all steps again, check against the file names that are in supporting material)
+7.  

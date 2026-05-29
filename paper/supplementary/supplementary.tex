@@ -17,20 +17,6 @@
 \usepackage{enumitem}
 \usepackage{caption}
 \usepackage{float}
-\usepackage[protrusion=true,expansion=false]{microtype}
-
-\captionsetup{font=small, labelfont=bf, skip=6pt}
-\renewcommand{\figurename}{Supplementary Figure}
-\renewcommand{\tablename}{Supplementary Table}
-
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
-\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
-\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
-\newcommand{\kd}{$K_d$}
-\usepackage{enumitem}
-\usepackage{caption}
-\usepackage{float}
 \usepackage{xcolor}
 \usepackage[protrusion=true,expansion=false]{microtype}
 \usepackage{seqsplit}
@@ -59,6 +45,7 @@
 \begin{document}
 \maketitle
 \providecommand{\benchmarkroot}{../..}
+\providecommand{\suppfigroot}{.}
 \setcounter{subsection}{0}
 \renewcommand{\thesubsection}{\arabic{subsection}}
 

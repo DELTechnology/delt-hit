@@ -249,11 +249,11 @@ def main() -> None:
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    build_enumeration_composite(visualization_root, output_dir / "image2.png")
-    build_library_examples_composite(visualization_root, output_dir / "image3.png")
+    build_enumeration_composite(visualization_root, output_dir / "enumeration-summary.png")
+    build_library_examples_composite(visualization_root, output_dir / "top-hit-structures.png")
 
-    print(f"Wrote {output_dir / 'image2.png'}")
-    print(f"Wrote {output_dir / 'image3.png'}")
+    print(f"Wrote {output_dir / 'enumeration-summary.png'}")
+    print(f"Wrote {output_dir / 'top-hit-structures.png'}")
 
 
 if __name__ == "__main__":
