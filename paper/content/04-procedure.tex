@@ -1,5 +1,6 @@
 \section{Procedure}
 
+\clearpage
 \begin{tcolorbox}[
   colback=gray!10,
   colframe=gray!50,
@@ -45,6 +46,7 @@ Statistical identification of enriched library members based on comparison of di
 In-silico chemical assembly of all library members and calculation of molecular property distributions. This step is independent of phases 2-5 and can also be performed without sequencing data, for instance for evaluating library designs prior to DEL synthesis.
 
 \end{tcolorbox}
+\clearpage
 
 \subsection{Phase 1: Project initialization and configuration • TIMING 30-60 min}
 The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template, a rudimentary template file can be found in the supplementary information.
@@ -73,14 +75,10 @@ Required columns for demultiplexing:
   \item name: Unique identifier for each selection
   \item S0, S1: Multiplexing barcodes for selection identification
 \end{itemize}
-Required columns for statistical analysis:
-
-\begin{itemize}
-  \item group: Statistical grouping (e.g., "protein", "no\_protein", "naive")
-\end{itemize}
 Optional columns:
 
 \begin{itemize}
+  \item group: Statistical grouping when needed for downstream analyses (for example, "protein", "no\_protein", "naive")
   \item operator: Person who performed the selection
   \item date: Date of selection experiment
   \item other columns can be added at the user's discretion
@@ -98,6 +96,7 @@ There are three types of DNA regions:
   \item \texttt{building\_block}: Region identifying a chemical building block; these regions should be named sequentially \texttt{B0}, \texttt{B1}, and so on.
 \end{itemize}
 Each DNA region is identified by a unique name. A \texttt{max\_error\_rate} and the allowance of indels can be configured separately for each region.
+An example dual-display workbook illustrating the dual-display-specific columns is provided in the DELT-Hit GitHub repository under \texttt{supporting\_material/experiments/example-dual-display/}.
 
 
 \input{tables/sequence-structure}
@@ -183,7 +182,7 @@ delt-hit init --excel_path=example-single-stranded.xlsx
 # Reuse this config path in the downstream commands
 CONFIG_PATH=campaign/config.yaml
 \end{lstlisting}
-This command creates a YAML configuration file at \texttt{save\_dir/name/config.yaml}, as defined in the \texttt{experiment} sheet.
+This command creates a YAML configuration file at \texttt{<save\_dir>/<name>/config.yaml}, as defined in the \texttt{experiment} sheet.
 
 Expected output:
 
@@ -278,7 +277,7 @@ These commands:
 Expected outputs:
 
 \begin{itemize}
-  \item \texttt{selections/[selection\_name]/counts.txt}: Tab-delimited count table with columns:
+  \item \texttt{selections/<selection\_name>/counts.txt}: Tab-delimited count table with columns:
   \item \texttt{code\_1}, \texttt{code\_2}, ...: Building block indices
   \item \texttt{name}: Selection identifier
   \item \texttt{count}: Number of reads for this compound in this selection
@@ -606,11 +605,11 @@ Create standardized chemical representations compatible with common machine-lear
 
 \begin{lstlisting}
 # Morgan fingerprints for similarity analysis
-# ~600-1000 compounds/s
+# Approx. 600-1000 compounds/s
 delt-hit library represent --method=morgan --config_path=/path/to/config.yaml
 
 # BERT embeddings for deep learning applications
-# ~600-1000 compounds/s
+# Approx. 600-1000 compounds/s
 delt-hit library represent --method=bert --config_path=/path/to/config.yaml
 \end{lstlisting}
 Available representation methods:
