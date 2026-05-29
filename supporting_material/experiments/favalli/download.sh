@@ -39,21 +39,21 @@ download_and_normalize_fasta() {
   mv "$raw_out" "$final_out"
 }
 
-download \
-  "https://polybox.ethz.ch/index.php/s/HbtDGTznwWGxwKr/download" \
-  "20190812.A-1907_NF2GB2_s1_R1.fastq.gz"
-
-download \
-  "https://polybox.ethz.ch/index.php/s/9bX3YnzyDy8ez8g/download" \
-  "20190812.A-1907_NF2GB2_s2_R1.fastq.gz"
+#download \
+#  "https://polybox.ethz.ch/index.php/s/HbtDGTznwWGxwKr/download" \
+#  "20190812.A-1907_NF2GB2_s1_R1.fastq.gz"
+#
+#download \
+#  "https://polybox.ethz.ch/index.php/s/9bX3YnzyDy8ez8g/download" \
+#  "20190812.A-1907_NF2GB2_s2_R1.fastq.gz"
 
 download_and_normalize_fasta \
   "https://polybox.ethz.ch/index.php/s/9xZkcW5jWtLHiFo/download" \
   "20190812.A-1907_NF2GB2_s1_R1.fastq.gz.fasta.gz"
 
-download_and_normalize_fasta \
-  "https://polybox.ethz.ch/index.php/s/XY2ieRTwdM337Jc/download" \
-  "20190812.A-1907_NF2GB2_s2_R1.fastq.gz.fasta.gz"
+#download_and_normalize_fasta \
+#  "https://polybox.ethz.ch/index.php/s/XY2ieRTwdM337Jc/download" \
+#  "20190812.A-1907_NF2GB2_s2_R1.fastq.gz.fasta.gz"
 
 mkdir -p published
 

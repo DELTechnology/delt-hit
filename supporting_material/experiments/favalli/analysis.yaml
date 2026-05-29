@@ -1,0 +1,21 @@
+experiments:
+  - name: ca9_ds
+    selections:
+      - name: '22_2'
+        counts_path: lane-1-fasta/selections/22_2/counts.txt
+        group: no_protein
+      - name: '23_2'
+        counts_path: lane-1-fasta/selections/23_2/counts.txt
+        group: no_protein
+      - name: '24_2'
+        counts_path: lane-1-fasta/selections/24_2/counts.txt
+        group: no_protein
+      - name: '4_2'
+        counts_path: lane-1-fasta/selections/4_2/counts.txt
+        group: protein
+      - name: '5_2'
+        counts_path: lane-1-fasta/selections/5_2/counts.txt
+        group: protein
+      - name: '6_2'
+        counts_path: lane-1-fasta/selections/6_2/counts.txt
+        group: protein

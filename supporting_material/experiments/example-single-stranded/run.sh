@@ -7,6 +7,8 @@ cd supporting_material/experiments/example-single-stranded || exit
 delt-hit init --excel_path example-single-stranded.xlsx
 
 CONFIG_PATH=campaign/config.yaml
+ANALYSIS_CONFIG_PATH=analysis.yaml
+ANALYSIS_OUTPUT_ROOT=campaign/analysis
 
 delt-hit demultiplex prepare --config_path=$CONFIG_PATH
 campaign/demultiplex/cutadapt_input_files/demultiplex.sh
@@ -34,18 +36,31 @@ delt-hit dashboard \
   --counts_path=campaign/selections/AG24_4_counts.txt
 
 delt-hit analyse enrichment \
-  --config_path=analysis.yaml \
+  --analysis_config=$ANALYSIS_CONFIG_PATH \
   --name=protein_vs_no_protein \
-  --method=counts
+  --method=counts \
+  --save_dir=$ANALYSIS_OUTPUT_ROOT
 
-Rscript --vanilla campaign/analysis/protein_vs_no_protein/counts/enrichment_counts.R
+Rscript --vanilla campaign/analysis/counts/protein_vs_no_protein/enrichment_counts.R
 
 delt-hit analyse enrichment \
-  --config_path=analysis.yaml \
+  --analysis_config=$ANALYSIS_CONFIG_PATH \
   --name=protein_vs_no_protein \
-  --method=edgeR
+  --method=edgeR \
+  --save_dir=$ANALYSIS_OUTPUT_ROOT
 
-Rscript --vanilla campaign/analysis/protein_vs_no_protein/edgeR/enrichment_edgeR.R
+Rscript --vanilla campaign/analysis/edgeR/protein_vs_no_protein/enrichment_edgeR.R
+
+for selection in AG24_13 AG24_14 AG24_15; do
+  delt-hit analyse enrichment \
+    --config_path=$CONFIG_PATH \
+    --counts=campaign/selections/$selection/counts.txt \
+    --method=z_score \
+    --name=$selection \
+    --save_dir=$ANALYSIS_OUTPUT_ROOT
+
+  Rscript --vanilla $ANALYSIS_OUTPUT_ROOT/z_score/$selection/enrichment_z_score.R
+done
 
 # full library enumeration, usually only needed for ML tasks
 delt-hit library enumerate --config_path=$CONFIG_PATH

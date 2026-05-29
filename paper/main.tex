@@ -44,8 +44,7 @@
 \title{An end-to-end computational framework for DNA-encoded chemical library analysis}
 \author{%
   \parbox{0.95\textwidth}{\centering
-    Adriano Martinelli+*, Alice Lessing+, Leandro Tollardo, Gary Hoppeler, \\Johanna Puff, Andreas Gloger,
-    Louise Plais, J\"org Scheuermann*\\[0.5em]
+    Adriano Martinelli+*, Alice Lessing+, Gary Hoppeler, Louise Plais, Leandro Tollardo, Johanna Puff, Andreas Gloger, Jörg Scheuermann*\\[0.5em]
     \small Institute of Pharmaceutical Sciences, Department of Chemistry and Applied Biosciences, ETH Zurich 8083 Zurich, Switzerland\\
     \small + these authors contributed equally; *corresponding authors: Adriano Martinelli, e-mail: adriano.martinelli@pharma.ethz.ch; J\"org Scheuermann, e-mail: joerg.scheuermann@pharma.ethz.ch
   }%
@@ -56,7 +55,7 @@
 \maketitle
 
 \begin{abstract}
-\noindent DNA-encoded chemical libraries (DELs) enable the screening of millions to billions of DNA-tagged small molecules in a single experiment, with binders identified after PCR amplification and high-throughput DNA sequencing. Analysis of DEL selection data requires the integration of sequence processing, cheminformatics, and statistical analysis, yet no general open-source workflow currently covers this full process. This protocol describes DELT-Hit (DNA-Encoded Library Technology Hit Identification), an open-source command-line tool for DEL data analysis. DELT-Hit converts raw FASTQ reads into analysis-ready chemical data through five connected modules: sequence demultiplexing with error-tolerant barcode handling; chemical structure reconstruction from building block libraries and reaction SMIRKS templates; molecular property and descriptor calculation; enrichment analysis and hit ranking using count-based and RNA-seq-derived methods; and quality-control and visualization tools for DEL data interpretation. The workflow supports both single-display and dual-display DEL architectures and produces standardized outputs for downstream analysis, including machine-learning applications. Researchers with basic command-line skills and familiarity with DEL selection workflows can perform demultiplexing and downstream analysis, whereas defining new reaction SMIRKS templates for library enumeration requires substantial cheminformatics expertise. The duration of the workflow depends on the respective library size and the size of the raw sequencing data, and can last from approx. 1 hour to several hours, with full-library enumeration typically representing the most time-consuming step. DELT-Hit is available at \url{https://github.com/DELTechnology/delt-hit}.
+DNA-encoded chemical libraries (DELs) enable the screening of millions to billions of DNA-tagged small molecules in a single experiment, with binders identified after PCR amplification and high-throughput DNA sequencing. Analysis of DEL selection data requires the integration of sequence processing, cheminformatics, and statistical analysis, yet no general open-source workflow currently covers this full process. This protocol describes DELT-Hit (DNA-Encoded Library Technology Hit Identification), an open-source command-line tool for DEL data analysis. DELT-Hit converts raw FASTQ reads into analysis-ready chemical data through five connected modules: sequence demultiplexing with error-tolerant barcode handling; chemical structure reconstruction from building block libraries and reaction SMIRKS templates; molecular property and descriptor calculation; enrichment analysis and hit ranking using count-based and RNA-seq-derived methods; and quality-control and visualization tools for DEL data interpretation. The workflow supports both single-display and dual-display DEL architectures and produces standardized outputs for downstream analysis, including machine-learning applications. Researchers with basic command-line skills and familiarity with DEL selection workflows can perform demultiplexing and downstream analysis, whereas defining new reaction SMIRKS templates for library enumeration requires substantial cheminformatics expertise. The duration of the workflow depends on the respective library size and the size of the raw sequencing data, and can last from approx. 1 hour to several hours, with full-library enumeration typically representing the most time-consuming step. DELT-Hit is available at \url{https://github.com/DELTechnology/delt-hit}.
 \end{abstract}
 
 \section*{Key points}
@@ -132,34 +131,48 @@ While DELT-Hit addresses many challenges in DEL analysis, several limitations sh
 
 \subsection{Comparison with other methods}
 
-\newcommand{\cmark}{\checkmark}
-\begin{longtable}{p{4.9cm}p{3.7cm}p{3.7cm}}
-\caption{Comparison of DELT-Hit and DELi across major DEL analysis tasks.}
+\newcommand{\statusgreen}{\raisebox{0.15ex}{\textcolor{green!50!black}{\large$\bullet$}}}
+\newcommand{\statusamber}{\raisebox{0.15ex}{\textcolor{orange!90!black}{\large$\bullet$}}}
+\newcommand{\statusopen}{\raisebox{0.15ex}{\textcolor{gray}{\large$\bullet$}}}
+\newcommand{\statusred}{\raisebox{0.15ex}{\textcolor{red!70!black}{\large$\bullet$}}}
+\begin{longtable}{p{8.8cm}p{1.2cm}p{1.2cm}}
+\caption{Comparison of DELT-Hit and DELi across selected scientific-software criteria. \statusgreen\ documented support; \statusamber\ partial or narrower support; \statusopen\ not clearly documented in the cited source; \statusred\ explicitly absent or described as future work. DELi scores are based only on the DELi preprint cited in the manuscript.}
 \label{tab:delt-deli-comparison} \\
 \toprule
-\textbf{Feature} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\textbf{Criterion} & \textbf{DELT-Hit} & \textbf{DELi} \\
 \midrule
 \endfirsthead
 
 \toprule
-\textbf{Feature} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\textbf{Criterion} & \textbf{DELT-Hit} & \textbf{DELi} \\
 \midrule
 \endhead
 
-Input files & Excel workbook compiled to \texttt{config.yaml} & Library JSON, building-block CSV files, and decode-settings YAML \\
-User-friendliness & Single workbook keeps library design, barcode definitions, and analyses in one file & More modular and explicit, but usually requires editing several structured input files \\
-Raw read decoding & \cmark & \cmark \\
-Error-tolerant barcode matching & \cmark & \cmark \\
-Library enumeration & \cmark & \cmark \\
-Enrichment / analysis methods & Counts-based enrichment, normalized z-score, and \texttt{edgeR} & MLE, NSC/\texttt{SD\_min}, normalized z-score, log-space z-score, PolyO, overlap analyses \\
-Analysis reports & Organized analysis folders and static outputs & Automated HTML report with figures and CSV exports \\
-Dual-Display & \cmark &  \\
-Counts-driven filtered enumeration & \cmark &  \\
-Interactive count-table dashboard & \cmark &  \\
-Single-compound structure lookup &  & \cmark \\
-Molecular property and representation generation & \cmark &  \\
-Barcode / tag design & & Error-correcting Hamming-code DNA tag generation \\
-ML integration & Fingerprint and embedding export for external ML pipelines & Built-in Random Forest and GNN (GIN/GAT) classifiers for enrichment prediction \\
+\multicolumn{3}{l}{\textbf{1. Workflow scope and usability}} \\
+1.1 Library design support & \statusamber & \statusgreen \\
+1.2 Configuration and workflow ergonomics & \statusgreen & \statusgreen \\
+1.3 Interoperability and downstream reuse & \statusgreen & \statusamber \\
+\midrule
+\multicolumn{3}{l}{\textbf{2. Supported DEL architectures}} \\
+2.1 Single-display support & \statusgreen & \statusgreen \\
+2.2 Dual-display support & \statusgreen & \statusopen \\
+\midrule
+\multicolumn{3}{l}{\textbf{3. Decoding and sequencing-side QC}} \\
+3.1 Error-tolerant demultiplexing & \statusgreen & \statusgreen \\
+3.2 UMI-aware counting & \statusopen & \statusgreen \\
+3.3 Decoding QC and reporting & \statusgreen & \statusgreen \\
+\midrule
+\multicolumn{3}{l}{\textbf{4. Chemical reconstruction and enumeration}} \\
+4.1 Library enumeration & \statusgreen & \statusgreen \\
+4.2 Flexible reaction-scheme support & \statusgreen & \statusred \\
+\midrule
+\multicolumn{3}{l}{\textbf{5. Statistical analysis and hit interpretation}} \\
+5.1 Count-based enrichment & \statusgreen & \statusgreen \\
+5.2 Statistical enrichment scoring & \statusgreen & \statusgreen \\
+5.3 Synthon-level analysis & \statusred & \statusgreen \\
+\midrule
+\multicolumn{3}{l}{\textbf{6. Computational performance}} \\
+6.1 Memory and scaling behavior & \statusgreen & \statusamber \\
 \bottomrule
 \end{longtable}
 
@@ -176,9 +189,7 @@ To our knowledge, DELi\cite{ref41} is the only other open-source software packag
   \item standardized SMILES outputs for library members to facilitate downstream machine-learning workflows
 \end{itemize}
 
-DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration. Re-analysis of published datasets and the DELT-Hit--DELi workflow comparison are provided in Supplementary Notes 1 and 2.
-
-On a benchmark of 14 affinity-measured positive controls from the NF2 dataset\cite{ref38}, DELT-Hit normalized z-score and simple counts both achieved a median positive-control rank of~2 with 92.9\% Recall@50, matching DELi NSC, while edgeR and DELi MLE performed best as secondary significance-annotation layers rather than primary rankers. The scoring definitions and full benchmark details are provided in Supplementary Notes 3 and 4, with source data in Supplementary Data 1.
+DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration. Re-analysis of published datasets and the DELT-Hit--DELi workflow comparison are provided in Supplementary Notes 1 and 2. A concise comparison of enrichment score rankings for recovery of a literature-supported CA9-associated building block in the Favalli dataset is provided in Supplementary Note 3.
 
 
 \section{Experimental design}
@@ -210,7 +221,7 @@ Reaction cycles used during library construction are specified with reaction SMI
 
 DELT-Hit accommodates libraries of varying complexity, including architectures with multiple reaction cycles, provided that each synthetic route resolves to a single, well-defined final product. Libraries with non-standard reaction schemes, unconventional building block representations, or complex precursor handling may require additional customization and validation.
 
-Library enumeration depends on accurate SMIRKS definitions. DELT-Hit provides templates for commonly used DEL reactions, but library-specific adaptations may require advanced cheminformatics expertise to ensure chemically correct product formation and reliable structure reconstruction. 
+Library enumeration depends on accurate SMIRKS definitions. DELT-Hit provides templates for commonly used DEL reactions, but library-specific adaptations may require advanced cheminformatics expertise to ensure chemically correct product formation and reliable structure reconstruction.
 
 
 \subsection{Quality control parameters}
@@ -293,7 +304,7 @@ The provided example dataset is a toy library based on the architecture of a pub
   title=Box 1 | Installing DELT-Hit,
   fonttitle=\bfseries
 ]
-In this box, we explain the installation procedure for DELT-Hit. 
+In this box, we explain the installation procedure for DELT-Hit.
 
 \setupitem{Prerequisite: Git version control system}
 Git is required to download the DELT-Hit package from the GitHub repository.
@@ -331,7 +342,7 @@ C. For Windows:
 # Then use Git Bash or Windows Subsystem for Linux (WSL)
 \end{lstlisting}
 
-Verify successful installation (see above). 
+Verify successful installation (see above).
 
 \setupitem{Installation procedure for DELT-Hit}
 
@@ -422,21 +433,21 @@ Input information:
 \setupitem{Procedure}
 
 \protocolstep{Phase 1}{Project initialization and configuration • TIMING 30-60 min}
-Creation of the configuration file defining library structure, experimental design and analysis parameters from a standardized Excel template. 
+Creation of the configuration file defining library structure, experimental design and analysis parameters from a standardized Excel template.
 
 \protocolstep{Phase 2}{Sequence processing and demultiplexing • TIMING 30 min - 4
 h}
-Processing of raw sequencing reads to identify and count library members in the analyzed selection experiments. 
+Processing of raw sequencing reads to identify and count library members in the analyzed selection experiments.
 
 \protocolstep{Phase 3}{Data visualization and interpretation • TIMING 15-60 min}
-Exploration of count data and experimental metadata using the interactive dashboard. 
+Exploration of count data and experimental metadata using the interactive dashboard.
 
 \protocolstep{Phase 4}{Selection-centric enumeration and analysis • TIMING 10 min
 - 2 h}
-Analysis of top enriched compounds. Chemical structures and molecular properties are generated for a subset of highly enriched compounds for individual selection experiments. 
+Analysis of top enriched compounds. Chemical structures and molecular properties are generated for a subset of highly enriched compounds for individual selection experiments.
 
 \protocolstep{Phase 5}{Statistical analysis and hit identification • TIMING 10-30 min}
-Statistical identification of enriched library members based on comparison of different selection experiments. 
+Statistical identification of enriched library members based on comparison of different selection experiments.
 
 \protocolstep{Phase 6}{Full library enumeration and machine learning representations
 • TIMING 1 h - 8 h}
@@ -954,7 +965,6 @@ The z-score method:
   \item computes the normalized z-score per compound per selection following Faver et al.\cite{ref42}
   \item is depth-independent: z-scores are invariant to total sequencing depth across selections
   \item is suitable for datasets with or without replicates
-  \item requires no R installation; results are written immediately on execution
 \end{itemize}
 For methods A and B, the tool produces R scripts that can be adapted to more specialized workflows.
 
@@ -1315,22 +1325,12 @@ We thank the DEL research community for feedback during software development and
 \appendix
 \section*{Supplementary Information}
 \addcontentsline{toc}{section}{Supplementary Information}
+\providecommand{\benchmarkroot}{..}
+\setcounter{subsection}{0}
+\renewcommand{\thesubsection}{\arabic{subsection}}
 
-\textbf{Supplementary Notes.} A single combined PDF containing five notes:
-Supplementary Note 1, re-analysis of published datasets; Supplementary Note 2,
-DELT-Hit and DELi workflow comparison; Supplementary Note 3,
-enrichment-scoring methods; Supplementary Note 4, NF2 positive-control
-benchmark; and Supplementary Note 5, advanced reaction-graph configurations.
-The file includes five Supplementary Tables and four Supplementary Figures.
-
-\textbf{Supplementary Data 1.} Excel workbook containing source data for the
-four Supplementary Figures and reviewer-relevant benchmark tables, including
-the strict-affinity NF2 truth set, recovery summary, and per-instance rank
-table.
-
-\textbf{Inventory of Supplementary Information.} Plain-text inventory listing
-the supplementary files, their approved titles, and short legends for upload
-with the submission package.
+\input{supplementary/analysis-of-published-datasets}
+\input{supplementary/comparison-delt-deli}
 
 \bibliographystyle{unsrt}
 \bibliography{references}

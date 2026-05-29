@@ -1,63 +1,57 @@
 \phantomsection\subsection*{Supplementary Note 2: DELT-Hit and DELi workflow comparison}
 
-Supplementary Table~\ref{tab:delt-deli-comparison} summarizes the main workflow-level similarities and differences between DELT-Hit and DELi.
+The main text summarizes the DELT-Hit--DELi comparison as a compact status table organized by scientific-software criteria rather than by a flat feature checklist. This note provides the minimum context required to interpret those status assignments.
 
-% \newcommand{\cmark}{\checkmark}
-% \begin{longtable}{p{4.9cm}p{3.7cm}p{3.7cm}}
-% \caption{Comparison of DELT-Hit and DELi across major DEL analysis tasks.}
-% \label{tab:delt-deli-comparison} \\
-% \toprule
-% \textbf{Feature} & \textbf{DELT-Hit} & \textbf{DELi} \\
-% \midrule
-% \endfirsthead
+\paragraph{Scoring scheme.}
+The table uses a four-state legend. \statusgreen\ indicates direct and explicit support in the cited source. \statusamber\ indicates partial support, narrower scope, or a workflow that is present but less fully documented or less broadly integrated. \statusopen\ indicates that the capability was not clearly demonstrated in the cited source. \statusred\ indicates that the cited source explicitly frames the capability as absent or as future work. DELi scores in the main-text table are based only on the DELi preprint shared for this comparison; they are not inferred from external documentation or repository inspection.
 
-% \toprule
-% \textbf{Feature} & \textbf{DELT-Hit} & \textbf{DELi} \\
-% \midrule
-% \endhead
+\paragraph{1. Workflow scope and usability.}
+DELi is scored \statusgreen\ for library design support because the preprint explicitly presents DELi as a platform for library design and describes a dedicated barcode-design module based on quaternary Hamming codes. DELT-Hit is scored \statusamber\ because the manuscript documents strong design-adjacent support through library specification, reaction-graph definition, enumeration, visualization, property calculation, and representation export, but it does not present a dedicated barcode-design or library-design module. Both tools are scored \statusgreen\ for configuration and workflow ergonomics because both descriptions emphasize a coherent command-line workflow with structured human-editable configuration. DELT-Hit is scored \statusgreen\ for interoperability and downstream reuse because the manuscript and repository emphasize standardized tabular outputs, executable scripts, parquet exports, and downstream cheminformatics or machine-learning handoff. DELi is scored \statusamber\ because the preprint clearly supports modular reuse and export of decoded count tables, but describes downstream reuse less systematically than DELT-Hit and emphasizes internal report-generation and integrated analysis workflows more strongly.
 
-% Input files & Excel workbook compiled to \texttt{config.yaml} & Library JSON, building-block CSV files, and decode-settings YAML \\
-% User-friendliness & Single workbook keeps library design, barcode definitions, and analyses in one file & More modular and explicit, but usually requires editing several structured input files \\
-% Raw read decoding & \cmark & \cmark \\
-% Error-tolerant barcode matching & \cmark & \cmark \\
-% Library enumeration & \cmark & \cmark \\
-% Enrichment / analysis methods & Counts-based enrichment, normalized z-score, and \texttt{edgeR} & MLE, NSC/\texttt{SD\_min}, normalized z-score, log-space z-score, PolyO, overlap analyses \\
-% Analysis reports & Organized analysis folders and static outputs & Automated HTML report with figures and CSV exports \\
-% Dual-Display & \cmark &  \\
-% Counts-driven filtered enumeration & \cmark &  \\
-% Interactive count-table dashboard & \cmark &  \\
-% Single-compound structure lookup &  & \cmark \\
-% Molecular property and representation generation & \cmark &  \\
-% Barcode / tag design & & Error-correcting Hamming-code DNA tag generation \\
-% ML integration & Fingerprint and embedding export for external ML pipelines & Built-in Random Forest and GNN (GIN/GAT) classifiers for enrichment prediction \\
-% \bottomrule
-% \end{longtable}
+\paragraph{2. Supported DEL architectures.}
+Both frameworks are scored \statusgreen\ for single-display support because this capability is explicit in both sources. DELT-Hit is scored \statusgreen\ for dual-display support because the manuscript explicitly claims support for single-display and dual-display workflows, and the implementation includes dual-display configuration validation and dual-display enumeration logic. This score is intended at the workflow level; some downstream DELT-Hit utilities still assume a single \texttt{smiles} column and therefore do not yet cover every dual-display output path symmetrically. DELi is scored \statusopen\ for dual-display support because the preprint documents heterogeneous DEL decoding and general barcode flexibility, but does not explicitly describe a dual-display analysis workflow or claim dual-display support directly.
+
+\paragraph{3. Decoding and sequencing-side QC.}
+Both tools are scored \statusgreen\ for error-tolerant demultiplexing because both descriptions explicitly combine read-to-library assignment with configurable error-tolerant barcode handling. DELi is scored \statusgreen\ for UMI-aware counting because the preprint explicitly states that UMI-corrected counting is supported and stored alongside raw counts. DELT-Hit is scored \statusopen\ on this row because the manuscript and repository materials reviewed here do not clearly document UMI correction. Both tools are scored \statusgreen\ for decoding QC and reporting, but the emphasis differs: DELT-Hit exposes text reports, QC plots, and an interactive count dashboard, whereas DELi emphasizes robust failure logging and configurable HTML reports.
+
+\paragraph{4. Chemical reconstruction and enumeration.}
+Both frameworks are scored \statusgreen\ for library enumeration because both sources explicitly document full-library enumeration from encoded building blocks and reaction definitions. DELT-Hit is scored \statusgreen\ for flexible reaction-scheme support because the manuscript explicitly describes an explicit reaction graph supporting arbitrary reaction sequences, branching pathways, and multi-step transformations, alongside visualization and debugging aids for failed enumerations. DELi is scored \statusred\ for this row because the preprint states that support for nonlinear and conditional synthesis schemes is planned for future updates, which makes the current scope narrower than the DELT-Hit workflow described in the manuscript.
+
+\paragraph{5. Statistical analysis and hit interpretation.}
+Both frameworks are scored \statusgreen\ for count-based enrichment because each tool supports compound-level ranking from decoded count data. Both are also scored \statusgreen\ for statistical enrichment scoring, but for different reasons. DELT-Hit combines simple count-based analysis with normalized z-score scoring and replicate-aware \texttt{edgeR} analysis, whereas DELi emphasizes a broader menu of literature-derived enrichment metrics. DELi is scored \statusgreen\ for synthon-level analysis because the preprint explicitly describes di- and monosynthon analysis and illustrates disynthon-level reporting. DELT-Hit is scored \statusred\ for this row because the manuscript and repository materials reviewed here do not document synthon-level analysis as a dedicated analysis mode.
+
+\paragraph{6. Computational performance.}
+DELT-Hit is scored \statusgreen\ for memory and scaling behavior because the manuscript provides explicit timing expectations across dataset scales, qualitative RAM guidance, and a workflow design that uses multiple CPU cores during demultiplexing and post-processing. DELi is scored \statusamber\ because the preprint reports single-core throughput and describes external Nextflow-based parallel deployment, but gives less explicit memory characterization and less detailed scaling guidance than DELT-Hit.
+
+\iffalse
+Previous benchmarking-focused comparison content retained for reference but intentionally not rendered in the current supplement because it is not required to interpret the main-text comparison table.
 
 We further benchmark the demultiplexing of both frameworks on a synthetic dataset on canonical 2-, 3-, and 4-cycle libraries with 10 building blocks per cycle across 1M, 10M, 100M, and 1000M reads, and additionally include an extended 2-cycle runtime sweep with 10, 100, and 1000 building blocks per cycle. Benchmarking was completed on a HPC Slurm cluster with 12 CPUs and 128\,GB RAM allocated per job. The reported outputs focus on end-to-end runtime and memory consumption for the shared benchmark setup; the DELi 1000M-read runs exited with an out-of-memory state. Supplementary Figure~\ref{fig:delt-deli-runtime-cycles} summarizes cycle-wise runtime scaling, Supplementary Figure~\ref{fig:delt-deli-runtime-2cycle-bbpc} shows the extended 2-cycle runtime sweep, and Supplementary Figure~\ref{fig:delt-deli-memory-cycles} summarizes peak RSS scaling.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_runtime.jpg}\hfill
-\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_3cycle_10bbpc_runtime.jpg}\hfill
-\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_4cycle_10bbpc_runtime.jpg}
+\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_runtime.png}\hfill
+\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_3cycle_10bbpc_runtime.png}\hfill
+\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_4cycle_10bbpc_runtime.png}
 \caption{Cycle-wise runtime scaling for the canonical synthetic demultiplex benchmark at 10 building blocks per cycle across 1M to 1000M reads. The DELi 1000M-read runs exited with an out-of-memory state.}
 \label{fig:delt-deli-runtime-cycles}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.75\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_2cycle_bbpc_comparison_runtime.jpg}
+\includegraphics[width=0.75\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_2cycle_bbpc_comparison_runtime.png}
 \caption{Runtime scaling for the extended 2-cycle synthetic benchmark across 10, 100, and 1000 building blocks per cycle.}
 \label{fig:delt-deli-runtime-2cycle-bbpc}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_peak_rss.jpg}\hfill
-\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_3cycle_10bbpc_peak_rss.jpg}\hfill
-\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_4cycle_10bbpc_peak_rss.jpg}
+\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_2cycle_10bbpc_peak_rss.png}\hfill
+\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_3cycle_10bbpc_peak_rss.png}\hfill
+\includegraphics[width=0.32\textwidth]{\benchmarkroot/benchmarks/demultiplex/plots/synthetic_4cycle_10bbpc_peak_rss.png}
 \caption{Peak memory usage (RSS) per cycle for the canonical synthetic demultiplex benchmark (10 building blocks per cycle), evaluated from 1 million to 1 billion reads. The DELi runs at 1 billion reads terminated due to out-of-memory (OOM).}
 \label{fig:delt-deli-memory-cycles}
 \end{figure}
 
 Within this benchmark setup, DELT-Hit demonstrates more favorable run-time and memory complexity than DELi.
+\fi

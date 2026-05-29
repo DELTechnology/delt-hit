@@ -28,6 +28,22 @@
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 \newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
 \newcommand{\kd}{$K_d$}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{seqsplit}
+
+\captionsetup{font=small, labelfont=bf, skip=6pt}
+\renewcommand{\figurename}{Supplementary Figure}
+\renewcommand{\tablename}{Supplementary Table}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand{\kd}{$K_d$}
 
 \hypersetup{
   colorlinks=true,
@@ -46,21 +62,10 @@
 \setcounter{subsection}{0}
 \renewcommand{\thesubsection}{\arabic{subsection}}
 
-\newcommand{\delthit}{\textit{DELT-Hit}}
-\newcommand{\delexplore}{\textit{DELT-Hit}}
-\newcommand{\deli}{\textit{DELi}}
-
-This file is organized as six Supplementary Notes. Supplementary
-Note~1 re-analyses published count tables, Supplementary Note~2 compares the
-DELT-Hit and DELi workflows, Supplementary Note~3 defines enrichment-scoring
-methods, Supplementary Note~4 reports the NF2 positive-control benchmark,
-Supplementary Note~5 gives an advanced reaction-graph configuration example, and Supplementary Note~6 provides a set of SMIRKS for standard DEL reactions.
-
 \input{analysis-of-published-datasets}
 \input{comparison-delt-deli}
 \clearpage
-\input{statistical-methods}
-\input{enrichment-benchmark}
+\input{enrichment-scores-comparison}
 \input{reaction-graph-advanced}
 \input{template-reactions}
 

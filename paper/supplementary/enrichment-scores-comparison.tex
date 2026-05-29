@@ -1,0 +1,18 @@
+\phantomsection\subsection*{Supplementary Note 3: Comparison of enrichment score rankings for the Favalli CA9 selection}
+\label{supp:enrichment-benchmark}
+
+To provide a comparison of the ranking schemes implemented in DELT-Hit, we re-analysed the Favalli selection against CA9.
+as a literature-supported positive-control motif, we focused on building block 1, code 474, which occurs in previously
+reported CA9-binding compounds from related DEL selections\cite{ref37,ref38}. For each enrichment method
+(count-based, edgeR, and z-score), compounds were ordered by the corresponding score and the occurrence of
+building block 1/code 474 was counted within the top 10, 25, 50, and 100 ranked compounds. This simple recovery analysis
+provides a high-level comparison of how effectively the different ranking strategies prioritize a known CA9-associated
+building block. This analysis indicates that the edgeR methods is slightly more sensitive than pure count-based ranking.
+Scripts to reproduce the analysis are described in \path{supporting_material/README.md}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/favalli_ca9_ds_top50_code1_counts.png}
+\caption{Occurrence counts of code 1 building blocks among the top 50 ranked compounds for the Favalli CA9 ds analysis. For the z-score method, bars show the mean across replicate-specific top-50 selections and the error bars show the replicate standard deviation.}
+\label{fig:favalli-ca9-ds-top50-code1}
+\end{figure}
