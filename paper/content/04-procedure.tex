@@ -165,6 +165,7 @@ Only required for advanced library enumeration. If library synthesis includes ad
 More advanced reaction-graph edge cases, including multi-path precursor activation schemes that require separate reaction nodes, are described in Supplementary Note~\ref{supp:reaction-graph-advanced}.
 
 \protocolstep{9}{Generate the configuration file}
+\textbf{Troubleshooting}
 
 Once your Excel file is complete with all required sheets, generate the YAML configuration file:
 
@@ -192,14 +193,6 @@ Configuration created at campaign/config.yaml
 \end{lstlisting}
 CRITICAL STEP: Review the generated YAML file to verify that all information was parsed correctly. This file is used in all downstream steps.
 
-\textbf{Troubleshooting.} While the tool supports some basic input validation it is helpful to check the following if the command fails:
-
-\begin{itemize}
-  \item All building blocks are present in the configuration file
-  \item Column names match exactly as specified in the tables above
-  \item Excel file was saved with the latest changes before running the command
-\end{itemize}
-
 \subsection{Phase 2: Sequence processing and demultiplexing • TIMING 30 min - 4 h}
 This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
 
@@ -216,6 +209,7 @@ As noted above, exact matches are recommended for selection barcodes (\texttt{ma
 
 
 \protocolstep{11}{Prepare and execute sequence demultiplexing}
+\textbf{Troubleshooting}
 
 Generate the demultiplexing scripts with its dependencies and execute the analysis:
 
@@ -286,6 +280,7 @@ Expected outputs:
 \newpage
 
 \protocolstep{13}{Generate quality control reports}
+\textbf{Troubleshooting}
 
 Assess demultiplexing quality with summary statistics and visualizations:
 
@@ -314,7 +309,7 @@ Expected outputs:
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/qc-stacked-barplots.png}
-\caption{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors. (TOP) Stacked bar plot for the assigned counts to the different selection codons of S0. (BOTTOM) Stacked bar plot for read assignment to constant region C0; reads mapped with 1 error are shown in orange, reads mapped with 0 errors in blue.}
+\caption{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors.}
 \label{fig:figure5}
 \end{figure}
 Quality assessment criteria:
@@ -322,13 +317,6 @@ Quality assessment criteria:
 \begin{itemize}
   \item Read retention: \textgreater{}70\% of input reads should be successfully assigned
   \item Barcode coverage: Most building blocks should have \textgreater{}0 reads
-\end{itemize}
-\textbf{Troubleshooting.} Low read retention (\textless{}50\%) may indicate:
-
-\begin{itemize}
-  \item Incorrect barcode sequences in configuration
-  \item Poor sequencing quality
-  \item Poor library quality
 \end{itemize}
 
 \subsection{Phase 3: Data visualization and interpretation • TIMING 15-60 min}
@@ -357,12 +345,6 @@ Dashboard features:
   \item Interactive filtering: exploration of specific regions of the count distribution
 \end{itemize}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{figures/qc-stacked-barplots-with-errors.png}
-\caption{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file, annotated by sequencing error level. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors.}
-\label{fig:figure6}
-\end{figure}
 Using the dashboard:
 
 \begin{itemize}
@@ -381,6 +363,7 @@ This phase generates chemical structures and molecular properties for the top en
 
 
 \protocolstep{15}{Enumerate top compounds from a selection}
+\textbf{Troubleshooting}
 
 Generate chemical structures for the top enriched compounds in a selected experiment. First visualize the reaction graph to verify the library architecture, then enumerate the top hits:
 
@@ -418,14 +401,6 @@ Expected outputs:
 \label{fig:figure2}
 \end{figure}
 Performance note: Enumeration speed is approximately 1,000--10,000 compounds per second, depending on reaction complexity. For a library with 1 million compounds, expect 2--10 min of processing time depending on the hardware.
-
-\textbf{Troubleshooting.}
-
-\begin{itemize}
-  \item Check that all reaction SMIRKS are valid and specific enough to produce a single product
-  \item Ensure reactant and product names match between building blocks and compounds sheets
-  \item Re-run enumeration in debugging mode to visualize the reaction graphs that fail: delt-hit library enumerate --config\_path=/path/to/config.yaml --debug=invalid
-\end{itemize}
 
 \newpage
 
@@ -501,6 +476,7 @@ experiments:
 \end{lstlisting}
 
 \protocolstep{18}{Perform enrichment analysis with statistical methods}
+\textbf{Troubleshooting}
 
 DELT-Hit supports three statistical approaches for identifying enriched compounds. Methods A, B, and C each generate an R script that can be executed directly or adapted further by the user. Methods A and B are designed for evaluation settings with replicates, whereas method C can also be used for experiments without replicates.
 
@@ -560,15 +536,6 @@ Interpreting results:
   \item High replicate correlation ($R^2 > 0.7$) indicates good experimental consistency
 \end{itemize}
 CRITICAL STEP: Always examine replicate correlation plots to verify data quality before interpreting hit lists. Poor correlation may indicate technical problems or batch effects.
-
-\textbf{Troubleshooting.} If no hits are identified:
-
-\begin{itemize}
-  \item Check that experimental groups are correctly assigned
-  \item Verify sufficient sequencing depth (\textgreater{}100 reads per compound for reliable statistics)
-  \item Consider adjusting FDR threshold for exploratory analysis
-  \item Examine correlation plots for replicate consistency issues
-\end{itemize}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/dashboard.png}
