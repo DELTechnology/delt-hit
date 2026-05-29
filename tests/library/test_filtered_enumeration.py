@@ -431,6 +431,41 @@ def test_visualize_enumerate_passes_tile_size_to_structure_rendering(tmp_path, m
     assert len(captured_sizes) == 5
 
 
+def test_visualize_enumerate_omits_structure_titles_and_legends(tmp_path, monkeypatch):
+    _, config_path = make_test_config(tmp_path)
+    captured_titles = []
+    captured_legends = []
+
+    class DummyFigure:
+        def savefig(self, path, *_args, **_kwargs):
+            Path(path).write_text("figure")
+
+        def tight_layout(self):
+            return None
+
+    class DummyAxes:
+        figure = DummyFigure()
+
+    def capture_visualize_smiles(*args, **kwargs):
+        captured_titles.append(kwargs.get("title"))
+        captured_legends.append(kwargs.get("legends"))
+        return DummyAxes()
+
+    monkeypatch.setattr("delt_hit.cli.visualize.api.save_graph_visualizations", lambda **_kwargs: None)
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_reaction_schemes", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("delt_hit.cli.visualize.api.visualize_smiles", capture_visualize_smiles)
+
+    Visualize().enumerate(
+        config_path=config_path,
+        building_blocks=True,
+        compounds=True,
+    )
+
+    assert captured_titles
+    assert set(captured_titles) == {""}
+    assert set(captured_legends) == {None}
+
+
 def test_visualize_library_writes_named_library_panels(tmp_path, monkeypatch):
     _, config_path = make_test_config(tmp_path)
     library_path = tmp_path / "mini" / "library" / "observed_hits.parquet"
@@ -465,7 +500,7 @@ def test_visualize_library_writes_named_library_panels(tmp_path, monkeypatch):
     assert (viz_dir / "libraries" / "observed_hits" / "B0=0-B1=1.png").exists()
 
 
-def test_visualize_library_passes_legends_and_rendering_options(tmp_path, monkeypatch):
+def test_visualize_library_passes_clean_rendering_options(tmp_path, monkeypatch):
     _, config_path = make_test_config(tmp_path)
     library_path = tmp_path / "mini" / "library" / "observed_hits.parquet"
     library_path.parent.mkdir(parents=True, exist_ok=True)
@@ -500,7 +535,8 @@ def test_visualize_library_passes_legends_and_rendering_options(tmp_path, monkey
         tile_size=420,
     )
 
-    assert [entry["legends"] for entry in captured_kwargs] == [["1:0"], ["0:1"]]
+    assert {entry["legends"] for entry in captured_kwargs} == {None}
+    assert {entry["title"] for entry in captured_kwargs} == {""}
     assert {entry["sub_img_size"] for entry in captured_kwargs} == {(420, 420)}
     assert {entry["nrow"] for entry in captured_kwargs} == {1}
 

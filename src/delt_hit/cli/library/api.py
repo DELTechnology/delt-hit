@@ -798,12 +798,11 @@ def visualize_reaction_schemes(reactions: dict, save_dir: Path, *, dpi: int = 30
         ax.set_axis_off()
 
         if not smirks or (isinstance(smirks, float) and pd.isna(smirks)):
-            ax.text(0.5, 0.5, name, ha='center', va='center', fontsize=14)
+            pass
         else:
             rxn = rdChemReactions.ReactionFromSmarts(smirks)
             img = Draw.ReactionToImage(rxn, subImgSize=(300, 150))
             ax.imshow(img)
-            ax.set_title(name, fontsize=12)
 
         save_figure_outputs(fig, save_dir / name, dpi=dpi)
         close_figure(fig)
@@ -935,7 +934,6 @@ def visualize_smiles(
     if len(smiles) == 0:
         fig, ax = plt.subplots(1, 1, figsize=(8, 3))
         ax.set_axis_off()
-        ax.text(0.5, 0.5, "No structures to display", ha='center', va='center')
         ax.set_title(title)
         return ax
 
