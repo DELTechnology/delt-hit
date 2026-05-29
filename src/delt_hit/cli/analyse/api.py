@@ -74,10 +74,6 @@ class Analyse:
         )
         logger.info(f"Created z-score analysis script at {script_path}")
 
-    def run(self, config_path: Path):
-        """Run the analysis pipeline (placeholder)."""
-        pass
-
     @staticmethod
     def _validate_enrichment_inputs(
         *,

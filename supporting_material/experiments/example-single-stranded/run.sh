@@ -18,7 +18,6 @@ delt-hit demultiplex qc --config_path=$CONFIG_PATH
 
 delt-hit demultiplex process --config_path=$CONFIG_PATH
 delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True
-# delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True --sort_by_counts=False
 
 delt-hit visualize enumerate --config_path=$CONFIG_PATH
 
