@@ -238,6 +238,25 @@ fabric.properties
 .Rapp.history
 
 # Session Data files
+
+# Generated supporting-material PNGs
+supporting_material/**/*.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/reaction_graph.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/reactions/ABF1.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/reactions/ABF2.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/reactions/SR.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/building_blocks/B0/0.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/building_blocks/B0/1.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/building_blocks/B0/2.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/building_blocks/B1/0.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/building_blocks/B1/1.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/building_blocks/B1/2.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/libraries/AG24_4_top_hits/B0=11-B1=274.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/libraries/AG24_4_top_hits/B0=23-B1=314.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/libraries/AG24_4_top_hits/B0=219-B1=314.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/libraries/AG24_4_top_hits/B0=290-B1=314.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/libraries/AG24_4_top_hits/B0=295-B1=556.png
+!supporting_material/experiments/example-single-stranded/campaign/library/visualization/libraries/AG24_4_top_hits/B0=222-B1=314.png
 .RData
 .RDataTmp
 
