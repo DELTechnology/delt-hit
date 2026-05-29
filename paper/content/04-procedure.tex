@@ -503,85 +503,61 @@ experiments:
 
 \protocolstep{18}{Perform enrichment analysis with statistical methods}
 
-DELT-Hit supports three statistical approaches for identifying enriched compounds. Methods A and B generate an R script that can be executed directly or modified further by the user.
+DELT-Hit supports three statistical approaches for identifying enriched compounds. Methods A, B, and C each generate an R script that can be executed directly or adapted further by the user. Methods A and B are designed for evaluation settings with replicates, whereas method C can also be used for experiments without replicates.
 
-A. Simple counts method (suitable for single replicates)
+A. Simple counts method
 
 
 \begin{lstlisting}
 # Generate R script for counts-based analysis
-delt-hit analyse enrichment --config_path=analysis.yaml --name=protein_vs_no_protein --method=counts
+delt-hit analyse enrichment --analysis_config=analysis.yaml --save_dir=campaign/analysis --name=protein_vs_no_protein --method=counts
 
 # Execute the generated R script
-Rscript --vanilla campaign/analysis/protein_vs_no_protein/counts/enrichment_counts.R
+Rscript --vanilla campaign/analysis/counts/protein_vs_no_protein/enrichment_counts.R
 \end{lstlisting}
-The counts method:
+The simple counts method averages counts across replicates within each group and computes a direct enrichment score from the difference between the protein and control groups. It does not provide formal significance testing, but it is useful as a straightforward ranking approach when replicate-based comparisons are being evaluated.
 
-\begin{itemize}
-  \item averages counts across replicates within each group
-  \item computes simple differences between groups
-  \item does not provide statistical significance testing
-  \item is suitable for exploratory analysis or for datasets without replicates
-\end{itemize}
-B. edgeR method (for significance annotation when replicates are available)
+B. edgeR method
 
 
 \begin{lstlisting}
 # Generate R script for edgeR statistical analysis
-delt-hit analyse enrichment --config_path=analysis.yaml --name=protein_vs_no_protein --method=edgeR
+delt-hit analyse enrichment --analysis_config=analysis.yaml --save_dir=campaign/analysis --name=protein_vs_no_protein --method=edgeR
 
 
 # Execute the generated R script
-Rscript --vanilla campaign/analysis/protein_vs_no_protein/edgeR/enrichment_edgeR.R
+Rscript --vanilla campaign/analysis/edgeR/protein_vs_no_protein/enrichment_edgeR.R
 \end{lstlisting}
-The edgeR method:
+The edgeR method applies RNA-seq-derived statistical modeling with empirical Bayes shrinkage, reports false-discovery-rate-corrected \textit{P} values, and provides normalized count tables for each selection. It requires replicates and is best used as a significance-annotation layer alongside enrichment ranking.
 
-\begin{itemize}
-  \item implements RNA-seq-derived statistical models
-  \item uses empirical Bayes shrinkage to improve power
-  \item calculates false discovery rate (FDR)-corrected \textit{P} values
-  \item requires replicates (minimum of two per group)
-  \item provides normalized count tables
-  \item is best interpreted as a significance-annotation layer rather than the sole primary ranking signal
-\end{itemize}
-C. Normalized z-score method (suitable for datasets with or without replicates)
+C. Normalized z-score method
 
 \begin{lstlisting}
-# Run z-score analysis (pure Python, results written immediately)
-delt-hit analyse enrichment --config_path=analysis.yaml --name=protein_vs_no_protein --method=zscore
-\end{lstlisting}
-The z-score method:
+# Generate R script for normalized z-score analysis
+delt-hit analyse enrichment --config_path=campaign/config.yaml --counts=campaign/selections/AG24_15/counts.txt --save_dir=campaign/analysis --name=AG24_15 --method=z_score
 
-\begin{itemize}
-  \item computes the normalized z-score per compound per selection following Faver et al.\cite{ref42}
-  \item is suitable for datasets with or without replicates
-\end{itemize}
-For methods A and B, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CA9-associated building block by Favalli \cite{ref38} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}.
+# Execute the generated R script
+Rscript --vanilla campaign/analysis/z_score/AG24_15/enrichment_z_score.R
+\end{lstlisting}
+The normalized z-score method computes the per-compound score for an individual selection following Faver et al.\cite{ref42}. Because it does not rely on replicate-based variance estimation, it can also be applied to experiments without replicates.
+
+For all three methods, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CA9-associated building block by Favalli \cite{ref38} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}.
 
 Expected outputs:
 
 \begin{itemize}
-  \item counts/stats.csv: Complete statistics for all library members from the simple counts method
-  \item counts/hits.csv: Top-ranked compounds from the simple counts method
-  \item edgeR/enrichment\_stats.csv: Complete statistics with \textit{P} values and FDR from the edgeR method
-  \item edgeR/enrichment\_hits.csv: Significant or top-ranked compounds from the edgeR method
-  \item zscore/stats.csv: Complete statistics with per-group mean z-score and enrichment score
-  \item zscore/hits.csv: Top-ranked compounds by descending z-score
-  \item zscore/\{AG24\_4,AG24\_5,AG24\_6,...\}.csv: Per-selection z-scores with observed/expected fractions
-  \item code\_1, code\_2, etc.: Building block indices
-  \item LogFC: Log2 fold-change (edgeR) or difference in mean counts (counts method)
-  \item PValue: Raw p-value (edgeR only)
-  \item FDR: False discovery rate corrected p-value (edgeR only)
-  \item counts/\{protein,no\_protein,...\}.csv: Group-level mean count tables from the counts method
-  \item edgeR/\{AG24\_4,AG24\_5,AG24\_6,...\}.csv: Normalized count tables for each selection from the edgeR method
-  \item counts/correlation\_*.png and edgeR/correlation\_*.png: Replicate correlation plots for quality control
+  \item \texttt{<method>/hits.csv}: top-ranked compounds
+  \item \texttt{<method>/stats.csv}: full results table
+  \item \texttt{<method>/enrichment.R}: executable analysis script
 \end{itemize}
+These files report, for each compound, the enrichment score and, where applicable, method-specific parameters such as log fold change or \textit{P} values.
+
 Interpreting results:
 
 \begin{itemize}
-  \item LogFC \textgreater{} 0: Compound enriched in protein selections vs.\ controls
-  \item LogFC \textless{} 0: Compound depleted in protein selections vs.\ controls
-  \item FDR \textless{} 0.05: Statistically significant enrichment (edgeR only)
+  \item Higher enrichment scores indicate stronger enrichment
+  \item Some methods additionally report a log fold change relative to a control; LogFC \textgreater{} 0 corresponds to enrichment relative to the control
+  \item FDR \textless{} 0.05 indicates statistically significant enrichment for methods that report adjusted \textit{P} values
   \item High replicate correlation ($R^2 > 0.7$) indicates good experimental consistency
 \end{itemize}
 CRITICAL STEP: Always examine replicate correlation plots to verify data quality before interpreting hit lists. Poor correlation may indicate technical problems or batch effects.
