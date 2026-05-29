@@ -1,6 +1,5 @@
 import json
 import multiprocessing
-import subprocess
 from pathlib import Path
 
 import pandas as pd
@@ -85,13 +84,3 @@ class Demultiplex:
         save_dir = save_dir / name / 'qc'
         save_dir.mkdir(parents=True, exist_ok=True)
         plot_hits(output_dir=output_dir, save_dir=save_dir)
-
-    def run(self, *, config_path: Path, fast_dev_run: bool = False):
-        """Run the full demultiplex pipeline.
-
-        Args:
-            config_path: Path to the YAML config file.
-            fast_dev_run: Whether to use a small read subset.
-        """
-        exec_path = generate_input_files(config_path=config_path, fast_dev_run=fast_dev_run)
-        subprocess.run(['bash', exec_path])

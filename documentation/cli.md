@@ -57,13 +57,6 @@ delt-hit demultiplex prepare --config_path <path/to/config.yaml>
 - `demultiplex.sh` shell script that chains Cutadapt steps
 - FASTQ barcode files per region (`S*`, `B*`, etc.)
 
-### `run`
-Runs the demultiplexing pipeline end-to-end by generating the script and executing it.
-
-```
-delt-hit demultiplex run --config_path <path/to/config.yaml>
-```
-
 ### `process`
 Consumes Cutadapt output and computes per-selection barcode counts.
 
