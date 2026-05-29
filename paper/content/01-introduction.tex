@@ -1,5 +1,5 @@
 \section{Introduction}
-DNA-encoded chemical libraries (DELs) enable the synthesis and screening of chemical spaces that would be difficult to access with conventional high-throughput screening\cite{ref1,ref2,ref3,ref4,ref5,ref6,ref7,ref8,ref9}. As in other display technologies, each library member is linked to an encoding DNA sequence, which connects phenotype (the small molecule) to genotype (the DNA tag). This design enables the parallel screening of very large libraries against biological targets and supports efficient hit discovery\cite{ref4,ref10}.
+DNA-encoded chemical libraries (DELs) enable the synthesis and screening of chemical spaces that would be difficult to access with conventional high-throughput screening\cite{ref1,ref2,ref3,ref4,ref5,ref6,ref7,ref8,ref9}. In analogy to biological display technologies, each library member is linked to an encoding DNA sequence, which connects phenotype (the small molecule) to genotype (the DNA tag). This design enables the parallel screening of very large libraries against biological targets and supports efficient hit discovery\cite{ref4,ref10}.
 
 Affinity-based DEL selections can be automated and have been described previously in a Nature Protocol\cite{ref11}. After selection, the DNA tags of retained compounds are PCR-amplified and analyzed by high-throughput sequencing to determine the abundance of individual library members\cite{ref11,ref7}. DELs are now used widely in both industry and academia\cite{ref7,ref8,ref9,ref12}.
 
@@ -24,11 +24,11 @@ The workflow integrates sequence demultiplexing via Cutadapt\cite{ref29}, chemic
 
 
 \subsection{Overview of the procedure}
-The DELT-Hit protocol is organized into six command-line analysis phases spanning 21 steps. Some downstream phases are optional or can be run independently:
+The DELT-Hit protocol is organized into six analysis phases spanning 21 steps. Some downstream phases are optional or can be run independently:
 
 (i) Project setup and library specification (Steps 1--9): Configuration file creation from Excel templates, library architecture definition, reaction specification, and experimental metadata setup.
 
-(ii) Sequence demultiplexing and quality assessment (Steps 10--13): High-throughput sequence processing, barcode identification with error correction, and quality-control metric generation.
+(ii) Sequence demultiplexing and quality assessment (Steps 10--13):     High-throughput sequencing data processing, barcode identification with error correction, and quality-control metric generation.
 
 (iii) Data visualization and interpretation (Step 14): Interactive dashboard exploration of raw count data to identify selections of interest.
 
@@ -55,7 +55,7 @@ A dual-display encoded self-assembling chemical (ESAC) library containing 56 mil
 While DELT-Hit addresses many challenges in DEL analysis, several limitations should be considered:
 
 \begin{itemize}
-  \item Computational complexity: library size grows combinatorially with the number of diversity elements, which mainly affects enumeration, property calculation, and molecular representation. By contrast, demultiplexing depends primarily on the number of sequencing reads and is therefore largely independent of library size.
+  \item Computational complexity: library size grows combinatorial with the number of diversity elements, which mainly affects enumeration, property calculation, and molecular representation. By contrast, demultiplexing depends primarily on the number of sequencing reads (sequencing depth) and is therefore largely independent of library size.
   \item Library chemistry: DELT-Hit supports arbitrary reaction sequences provided that each synthetic route yields a single, well-defined final product. Libraries with non-standard reaction schemes, unconventional building block representations, or complex precursor handling may require additional configuration and validation. Accurate reaction SMIRKS definitions are essential for correct enumeration and structure reconstruction, and library-specific templates may require advanced cheminformatics expertise.
 \end{itemize}
 
@@ -65,8 +65,8 @@ While DELT-Hit addresses many challenges in DEL analysis, several limitations sh
 \newcommand{\statusamber}{\raisebox{0.15ex}{\textcolor{orange!90!black}{\large$\bullet$}}}
 \newcommand{\statusopen}{\raisebox{0.15ex}{\textcolor{gray}{\large$\bullet$}}}
 \newcommand{\statusred}{\raisebox{0.15ex}{\textcolor{red!70!black}{\large$\bullet$}}}
-\begin{longtable}{p{8.8cm}p{1.2cm}p{1.2cm}}
-\caption{Comparison of DELT-Hit and DELi across selected scientific-software criteria. \statusgreen\ documented support; \statusamber\ partial or narrower support; \statusopen\ not clearly documented in the cited source; \statusred\ explicitly absent or described as future work. DELi scores are based only on the DELi preprint cited in the manuscript.}
+\begin{longtable}{p{8.8cm}p{2.8cm}p{1.2cm}}
+\caption{Comparison of DELT-Hit and DELi across selected scientific-software criteria. \statusgreen\ supported; \statusamber\ partial support; \statusopen\ not clearly documented; \statusred\ not supported.}
 \label{tab:delt-deli-comparison} \\
 \toprule
 \textbf{Criterion} & \textbf{DELT-Hit} & \textbf{DELi} \\
@@ -79,7 +79,7 @@ While DELT-Hit addresses many challenges in DEL analysis, several limitations sh
 \endhead
 
 \multicolumn{3}{l}{\textbf{1. Workflow scope and usability}} \\
-1.1 Library design support & \statusamber & \statusgreen \\
+1.1 Library design support & \statusopen & \statusgreen \\
 1.2 Configuration and workflow ergonomics & \statusgreen & \statusgreen \\
 1.3 Interoperability and downstream reuse & \statusgreen & \statusamber \\
 \midrule
@@ -89,7 +89,7 @@ While DELT-Hit addresses many challenges in DEL analysis, several limitations sh
 \midrule
 \multicolumn{3}{l}{\textbf{3. Decoding and sequencing-side QC}} \\
 3.1 Error-tolerant demultiplexing & \statusgreen & \statusgreen \\
-3.2 UMI-aware counting & \statusopen & \statusgreen \\
+3.2 UMI-aware counting & \statusamber & \statusgreen \\
 3.3 Decoding QC and reporting & \statusgreen & \statusgreen \\
 \midrule
 \multicolumn{3}{l}{\textbf{4. Chemical reconstruction and enumeration}} \\
@@ -115,8 +115,8 @@ To our knowledge, DELi\cite{ref41} is the only other open-source software packag
 \begin{itemize}
   \item support for arbitrary reaction graphs for enumeration, enabling reconstruction of complex synthetic schemes
   \item integration of RNA-seq-derived statistical models for hit calling that account for replicate structure and dispersion
-  \item support for arbitrary library designs, including single-display and dual-display formats
-  \item standardized SMILES outputs for library members to facilitate downstream machine-learning workflows
+  \item support for widely used library designs, including single-display and dual-display formats
 \end{itemize}
 
-DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration. Re-analysis of published datasets and the DELT-Hit--DELi workflow comparison are provided in Supplementary Note~\ref{supp:analysis-of-published-datasets} and Supplementary Note~\ref{supp:comparison-delt-deli}. A concise comparison of enrichment score rankings for recovery of a literature-supported CA9-associated building block in the Favalli dataset is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}.
+DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration. A more detailed comparison of DELT-Hit and DELi is provided in Supplementary Note~\ref{supp:comparison-delt-deli}. A concise comparison of enrichment score rankings for recovery of a literature-supported CA9-associated building block in the Favalli dataset is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}.
+
