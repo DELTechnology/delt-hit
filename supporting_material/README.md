@@ -88,50 +88,57 @@ Run DELT-Hit for the `lane-1-fasta` workbook prefix:
 
 ```bash
 cd supporting_material/experiments/favalli
-bash run.sh lane-1-fasta
+bash run.sh
 ```
 
 `run.sh` performs workbook initialization, demultiplex preparation, QC, and DELT-Hit count generation for the requested workbook prefix.
-
-To generate all files required by both the enrichment workflow and the comparison script for `lane-1-fasta`, run:
-
-```bash
-cd supporting_material/experiments/favalli
-bash run.sh lane-1-fasta
-```
-
+ 
 This produces the per-selection DELT-Hit counts under `lane-1-fasta/selections/`, which are the inputs required by both the checked-in `analysis.yaml` enrichment workflow and the comparison script.
 
 Run the Favalli enrichment analysis explicitly afterward:
 
 ```bash
 cd supporting_material/experiments/favalli
-for exp in ca9_ss ca9_ds;
+exp=ca9_ds
+
+pixi run delt-hit analyse enrichment \
+  --analysis_config=analysis.yaml \
+  --save_dir=lane-1-fasta/analysis \
+  --name=${exp} \
+  --method=counts
+Rscript --vanilla lane-1-fasta/analysis/counts/${exp}/enrichment_counts.R
+
+pixi run delt-hit analyse enrichment \
+  --analysis_config=analysis.yaml \
+  --save_dir=lane-1-fasta/analysis \
+  --name=${exp} \
+  --method=edgeR
+Rscript --vanilla lane-1-fasta/analysis/edgeR/${exp}/enrichment_edgeR.R
+
+for selection in "4_2" "5_2" "6_2";
 do
     pixi run delt-hit analyse enrichment \
-      --config_path=analysis.yaml \
-      --name=${exp} \
-      --method=counts
-    Rscript --vanilla lane-1-fasta/analysis/${exp}/counts/enrichment_counts.R
-    
-    pixi run delt-hit analyse enrichment \
-      --config_path=analysis.yaml \
-      --name=${exp} \
-      --method=edgeR
-    Rscript --vanilla lane-1-fasta/analysis/${exp}/edgeR/enrichment_edgeR.R
-
-    pixi run python enrichment.py \
-      --data-dir lane-1-fasta/analysis/${exp} \
-      --output-dir enrichment/${exp}
+      --config_path=lane-1-fasta/config.yaml \
+      --save_dir=lane-1-fasta/analysis \
+      --counts=lane-1-fasta/selections/${selection}/counts.txt \
+      --name=${selection} \
+      --method=z_score
+    Rscript --vanilla lane-1-fasta/analysis/z_score/${selection}/enrichment_z_score.R
 done
+
+pixi run python enrichment_scores.py \
+  --analysis-root lane-1-fasta/analysis \
+  --analysis-config analysis.yaml \
+  --name ${exp} \
+  --output-dir enrichment/${exp}
 ```
 
 This workflow produces:
 
 - per-selection DELT-Hit counts under `lane-1-fasta/selections/`
-- enrichment analysis inputs and generated R scripts under `lane-1-fasta/analysis/`
-- counts- and edgeR-based enrichment outputs for the analyses defined in `analysis.yaml`
-- enrichment summary plots and CSV exports under `supporting_material/experiments/favalli/enrichment/`
+- counts-, edgeR-, and z-score analysis inputs and generated R scripts under `lane-1-fasta/analysis/`
+- counts-, edgeR-, and z-score-based enrichment outputs for the analyses defined in `analysis.yaml`
+- score-comparison summary plots and CSV exports under `supporting_material/experiments/favalli/enrichment/`
 
 Other workbook prefixes remain available for count comparison only:
 

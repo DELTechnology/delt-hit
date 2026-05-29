@@ -302,7 +302,6 @@ paper/experiment-1/*.parquet
 paper/experiment-1/selections
 paper/experiment-1/representations
 *.csv
-!supporting_material/experiments/favalli/benchmark_nf2/strict14_method_ranks.csv
 *.parquet
 *.fastq
 *.fasta
@@ -320,7 +319,6 @@ paper/experiment-1/representations
 
 # experiments
 experiments/synthetic_2cycle/
-supporting_material/experiments/favalli/benchmark_nf2/outputs/
 *.zip
 
 .claude
@@ -330,3 +328,10 @@ other_tools/
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+
+*.fls
+*.aux
+*.out
+*.bbl
+*.blg
+*.fdb_latexmk
