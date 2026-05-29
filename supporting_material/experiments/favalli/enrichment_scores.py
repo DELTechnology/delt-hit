@@ -4,8 +4,8 @@ import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
+import seaborn as sns
 import yaml
 from rich.console import Console
 from rich.table import Table
@@ -30,7 +30,7 @@ def parse_args() -> argparse.Namespace:
     default_analysis_config = script_dir / "analysis.yaml"
 
     parser = argparse.ArgumentParser(
-        description="Plot top-hit code frequencies from counts, edgeR, and z-score score tables."
+        description="Plot top-hit code count summaries from counts, edgeR, and z-score stats tables."
     )
     parser.add_argument("--top-n", type=int, default=DEFAULT_TOP_N, help="Number of top compounds to select per method.")
     parser.add_argument(
@@ -73,40 +73,22 @@ def get_code_columns(df: pd.DataFrame) -> list[str]:
     return code_columns
 
 
-def ensure_id_column(df: pd.DataFrame, code_columns: list[str]) -> pd.DataFrame:
-    if "id" in df.columns:
-        return df.copy()
-
-    table = df.copy()
-    table["id"] = table[code_columns].astype(int).astype(str).agg("_".join, axis=1)
-    return table
-
-
 def get_plot_top_ns(top_n: int) -> list[int]:
     return sorted({*DEFAULT_PLOT_TOP_NS, top_n})
 
 
-def load_analysis_experiment(*, analysis_config: Path, name: str) -> dict:
-    config = yaml.safe_load(Path(analysis_config).read_text())
-    experiments = config.get("experiments", [])
-    matches = [experiment for experiment in experiments if experiment.get("name") == name]
-    if not matches:
-        raise ValueError(f"Experiment {name} not found in analysis config {analysis_config}.")
-    return matches[0]
-
-
 def infer_zscore_selections(*, analysis_config: Path, name: str) -> list[str]:
-    experiment = load_analysis_experiment(analysis_config=analysis_config, name=name)
-    selections = [selection["name"] for selection in experiment["selections"] if selection.get("group") == "protein"]
-    if not selections:
-        raise ValueError(f"Experiment {name} has no protein selections in {analysis_config}.")
-    return selections
+    config = yaml.safe_load(analysis_config.read_text())
+    for experiment in config["experiments"]:
+        if experiment["name"] == name:
+            return [selection["name"] for selection in experiment["selections"] if selection["group"] == "protein"]
+    raise ValueError(f"Experiment {name} not found in analysis config {analysis_config}.")
 
 
 def load_counts_scores(path: Path) -> pd.DataFrame:
     table = pd.read_csv(path)
     code_columns = get_code_columns(table)
-    table = ensure_id_column(table, code_columns)
+    table["id"] = table[code_columns].astype(int).astype(str).agg("_".join, axis=1)
     required = {"enrichment"}
     missing = required.difference(table.columns)
     if missing:
@@ -121,7 +103,7 @@ def load_counts_scores(path: Path) -> pd.DataFrame:
 def load_edger_scores(path: Path) -> pd.DataFrame:
     table = pd.read_csv(path)
     code_columns = get_code_columns(table)
-    table = ensure_id_column(table, code_columns)
+    table["id"] = table[code_columns].astype(int).astype(str).agg("_".join, axis=1)
     required = {"logFC", "FDR"}
     missing = required.difference(table.columns)
     if missing:
@@ -140,7 +122,6 @@ def load_zscore_replicates(paths: dict[str, Path]) -> tuple[list[str], dict[str,
     for selection, path in paths.items():
         table = pd.read_csv(path)
         selection_code_columns = get_code_columns(table)
-        table = ensure_id_column(table, selection_code_columns)
         required = {"count", "norm_z_score"}
         missing = required.difference(table.columns)
         if missing:
@@ -181,114 +162,116 @@ def build_zscore_aggregate(zscore_tables: dict[str, pd.DataFrame], code_columns:
     merged[count_columns] = merged[count_columns].fillna(0.0)
     merged[score_columns] = merged[score_columns].fillna(0.0)
     merged["mean_count"] = merged[count_columns].mean(axis=1)
-    merged["mean_norm_z_score"] = merged[score_columns].mean(axis=1)
-    merged["sd_norm_z_score"] = merged[score_columns].std(axis=1, ddof=0)
+    merged["mean_z_score"] = merged[score_columns].mean(axis=1)
+    merged["sd_z_score"] = merged[score_columns].std(axis=1, ddof=0)
 
-    ranked = merged.sort_values(["mean_count", "mean_norm_z_score"], ascending=[False, False]).reset_index(drop=True).copy()
+    ranked = merged.sort_values(["mean_z_score", "mean_count"], ascending=[False, False]).reset_index(drop=True).copy()
     ranked["rank"] = ranked.index + 1
     ranked["method"] = "z_score"
-    ranked["score"] = ranked["mean_norm_z_score"]
+    ranked["score"] = ranked["mean_z_score"]
     return ranked
 
 
-def compute_frequency_table(ranked_tables: dict[str, pd.DataFrame], top_n: int, code_column: str) -> pd.DataFrame:
+def export_hits_csv(
+    ranked_tables: dict[str, pd.DataFrame],
+    zscore_replicates: dict[str, pd.DataFrame],
+    code_columns: list[str],
+    output_path: Path,
+    top_n: int,
+) -> None:
     frames = []
-    all_codes: set[int] = set()
+    base_columns = ["method", "replicate", "rank", *code_columns, "score"]
 
     for method in ("counts", "edgeR"):
-        table = ranked_tables[method].head(top_n)
-        all_codes.update(table[code_column].astype(int).tolist())
+        table = ranked_tables[method].head(top_n).copy()
+        table["replicate"] = "aggregate"
+        frames.append(table.loc[:, base_columns])
 
-    zscore_replicates: dict[str, pd.DataFrame] = ranked_tables["z_score_replicates"]  # type: ignore[assignment]
-    for table in zscore_replicates.values():
-        all_codes.update(table.head(top_n)[code_column].astype(int).tolist())
+    zscore_table = ranked_tables["z_score"].head(top_n).copy()
+    zscore_table["replicate"] = "aggregate"
+    frames.append(zscore_table.loc[:, base_columns + ["mean_count", "mean_z_score", "sd_z_score"]])
 
-    ordered_codes = sorted(all_codes)
-    if not ordered_codes:
-        return pd.DataFrame(columns=["code_value", "method", "frequency", "error", "code_type"])
+    for replicate_name, replicate_table in zscore_replicates.items():
+        table = replicate_table.head(top_n).copy()
+        table["replicate"] = replicate_name
+        frames.append(table.loc[:, base_columns + ["count", "norm_z_score"]])
 
+    pd.concat(frames, ignore_index=True).to_csv(output_path, index=False)
+
+
+def compute_count_table_from_hits(hits_df: pd.DataFrame, code_column: str) -> pd.DataFrame:
+    frames = []
     for method in ("counts", "edgeR"):
-        table = ranked_tables[method].head(top_n)
-        counts = table[code_column].value_counts().reindex(ordered_codes, fill_value=0)
-        frames.append(
-            pd.DataFrame(
-                {
-                    "code_value": ordered_codes,
-                    "method": method,
-                    "frequency": counts.to_numpy(dtype=float),
-                    "error": np.zeros(len(ordered_codes), dtype=float),
-                    "code_type": code_column,
-                }
+        table = hits_df.loc[(hits_df["method"] == method) & (hits_df["replicate"] == "aggregate")].copy()
+        if table.empty:
+            continue
+        grouped = (
+            table[code_column].value_counts()
+            .rename_axis("code_value")
+            .reset_index(name="count")
+        )
+        grouped["replicate"] = "aggregate"
+        grouped["method"] = method
+        grouped["code_type"] = code_column
+        frames.append(grouped)
+
+    zscore_rows = hits_df.loc[(hits_df["method"] == "z_score") & (hits_df["replicate"] != "aggregate")].copy()
+    if not zscore_rows.empty:
+        replicate_counts = []
+        for replicate_name, table in zscore_rows.groupby("replicate"):
+            grouped = (
+                table[code_column].value_counts()
+                .rename_axis("code_value")
+                .reset_index(name="count")
             )
-        )
+            grouped["method"] = "z_score"
+            grouped["replicate"] = replicate_name
+            grouped["code_type"] = code_column
+            replicate_counts.append(grouped)
 
-    replicate_counts = []
-    for table in zscore_replicates.values():
-        replicate_counts.append(
-            table.head(top_n)[code_column].value_counts().reindex(ordered_codes, fill_value=0).to_numpy(dtype=float)
-        )
+        frames.append(pd.concat(replicate_counts, ignore_index=True))
 
-    replicate_matrix = np.vstack(replicate_counts) if replicate_counts else np.zeros((0, len(ordered_codes)))
-    zscore_mean = replicate_matrix.mean(axis=0) if replicate_counts else np.zeros(len(ordered_codes), dtype=float)
-    zscore_std = replicate_matrix.std(axis=0, ddof=0) if replicate_counts else np.zeros(len(ordered_codes), dtype=float)
-    frames.append(
-        pd.DataFrame(
-            {
-                "code_value": ordered_codes,
-                "method": "z_score",
-                "frequency": zscore_mean,
-                "error": zscore_std,
-                "code_type": code_column,
-            }
-        )
-    )
+    if not frames:
+        return pd.DataFrame(columns=["code_value", "count", "replicate", "method", "code_type"])
 
-    freq_df = pd.concat(frames, ignore_index=True)
+    count_df = pd.concat(frames, ignore_index=True)
     top_codes = (
-        freq_df.groupby("code_value", as_index=False)["frequency"]
+        count_df.groupby(["method", "code_value"], as_index=False)["count"]
+        .mean()
+        .groupby("code_value", as_index=False)["count"]
         .sum()
-        .sort_values(["frequency", "code_value"], ascending=[False, True])
+        .sort_values(["count", "code_value"], ascending=[False, True])
         .head(MAX_CODES_PER_PLOT)["code_value"]
         .tolist()
     )
-    return freq_df.loc[freq_df["code_value"].isin(sorted(top_codes))].copy()
+    return count_df.loc[count_df["code_value"].isin(sorted(top_codes))].copy()
 
 
-def plot_frequency_table(freq_df: pd.DataFrame, top_n: int, output_path: Path) -> None:
-    if freq_df.empty:
+def plot_count_table(count_df: pd.DataFrame, top_n: int, output_path: Path) -> None:
+    if count_df.empty:
         return
 
-    code_type = str(freq_df["code_type"].iat[0])
-    code_values = sorted(freq_df["code_value"].unique().tolist())
-    x = np.arange(len(code_values), dtype=float)
-    width = 0.24
-
-    fig_width = max(8.0, 0.6 * len(code_values) * len(METHOD_ORDER))
-    fig, ax = plt.subplots(figsize=(fig_width, 6))
-
-    for idx, method in enumerate(METHOD_ORDER):
-        subset = freq_df.loc[freq_df["method"] == method].set_index("code_value").reindex(code_values)
-        positions = x + (idx - (len(METHOD_ORDER) - 1) / 2) * width
-        ax.bar(
-            positions,
-            subset["frequency"].to_numpy(dtype=float),
-            width=width,
-            yerr=subset["error"].to_numpy(dtype=float),
-            capsize=4 if method == "z_score" else 0,
-            color=PALETTE[method],
-            label=method,
-        )
-
-    ax.set_title(f"{code_type} frequency among top {top_n} compounds")
+    code_type = str(count_df["code_type"].iat[0])
+    fig_width = max(8, 0.45 * count_df["code_value"].nunique() * len(METHOD_ORDER))
+    plt.figure(figsize=(fig_width, 6))
+    ax = sns.barplot(
+        data=count_df,
+        x="code_value",
+        y="count",
+        hue="method",
+        hue_order=METHOD_ORDER,
+        palette=PALETTE,
+        estimator="mean",
+        errorbar="sd",
+    )
+    ax.set_title(f"{code_type} counts among top {top_n} compounds")
     ax.set_xlabel(code_type)
-    ax.set_ylabel("Frequency")
-    ax.set_xticks(x)
-    ax.set_xticklabels([str(code_value) for code_value in code_values])
+    ax.set_ylabel("Count")
     ax.legend(title="Method")
-    fig.tight_layout()
-    fig.savefig(output_path, dpi=200)
-    fig.savefig(output_path.with_suffix(".png"), dpi=200)
-    plt.close(fig)
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=200)
+    plt.savefig(output_path.with_suffix(".png"), dpi=200)
+    plt.close()
 
 
 def print_method_table(method: str, table: pd.DataFrame, code_columns: list[str]) -> None:
@@ -300,7 +283,7 @@ def print_method_table(method: str, table: pd.DataFrame, code_columns: list[str]
 
     extra_columns: list[str] = []
     if method == "z_score":
-        extra_columns = ["mean_count", "sd_norm_z_score"]
+        extra_columns = ["mean_count", "sd_z_score"]
         rich_table.add_column("Mean Count", justify="right")
         rich_table.add_column("Score SD", justify="right")
 
@@ -311,7 +294,7 @@ def print_method_table(method: str, table: pd.DataFrame, code_columns: list[str]
             f"{row['score']:.6g}",
         ]
         if extra_columns:
-            values.extend([f"{row['mean_count']:.3f}", f"{row['sd_norm_z_score']:.6g}"])
+            values.extend([f"{row['mean_count']:.3f}", f"{row['sd_z_score']:.6g}"])
         rich_table.add_row(*values)
 
     console.print(rich_table)
@@ -355,31 +338,14 @@ def build_controls_table(ranked_tables: dict[str, pd.DataFrame], code_columns: l
     return pd.DataFrame(rows)
 
 
-def export_hits_csv(ranked_tables: dict[str, pd.DataFrame], code_columns: list[str], output_path: Path) -> None:
-    frames = []
-    base_columns = ["method", "rank", *code_columns, "score"]
-    for method in METHOD_ORDER:
-        table = ranked_tables[method].head(TOP_HITS_EXPORT_N).copy()
-        if method == "z_score":
-            export_columns = base_columns + ["mean_count", "sd_norm_z_score"]
-        else:
-            export_columns = base_columns
-        frames.append(table.loc[:, export_columns])
-
-    pd.concat(frames, ignore_index=True).to_csv(output_path, index=False)
-
-
 def main() -> None:
     args = parse_args()
     validate_top_n(args.top_n)
 
     analysis_root = args.analysis_root.expanduser().resolve()
     analysis_config = args.analysis_config.expanduser().resolve()
-    output_dir = (
-        args.output_dir.expanduser().resolve()
-        if args.output_dir is not None
-        else Path(__file__).resolve().parent / "enrichment" / args.name
-    )
+
+    output_dir = args.output_dir.expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
     zscore_selections = args.zscore_selections or infer_zscore_selections(analysis_config=analysis_config, name=args.name)
@@ -400,28 +366,37 @@ def main() -> None:
         "counts": counts_ranked,
         "edgeR": edger_ranked,
         "z_score": zscore_ranked,
-        "z_score_replicates": zscore_replicates,  # type: ignore[dict-item]
     }
 
-    for top_n in get_plot_top_ns(args.top_n):
+    plot_top_ns = get_plot_top_ns(args.top_n)
+    for top_n in plot_top_ns:
+        hits_path = output_dir / f"hits_{top_n}.csv"
+        export_hits_csv(
+            ranked_tables=ranked_tables,
+            zscore_replicates=zscore_replicates,
+            code_columns=code_columns,
+            output_path=hits_path,
+            top_n=top_n,
+        )
+        print(f"Wrote {hits_path}")
+
+        hits_df = pd.read_csv(hits_path)
         for method in METHOD_ORDER:
-            print(f"{method}: selected {len(ranked_tables[method].head(top_n))} compounds for top {top_n}")
+            print(
+                f"{method}: selected {len(hits_df.loc[(hits_df['method'] == method) & (hits_df['replicate'] == 'aggregate')])} compounds for top {top_n}"
+            )
 
         for code_column in code_columns:
-            freq_df = compute_frequency_table(ranked_tables=ranked_tables, top_n=top_n, code_column=code_column)
-            if freq_df.empty:
+            count_df = compute_count_table_from_hits(hits_df=hits_df, code_column=code_column)
+            if count_df.empty:
                 continue
-            output_path = output_dir / f"top_{top_n}_{code_column}_frequency.pdf"
-            plot_frequency_table(freq_df=freq_df, top_n=top_n, output_path=output_path)
+            output_path = output_dir / f"top_{top_n}_{code_column}_counts.pdf"
+            plot_count_table(count_df=count_df, top_n=top_n, output_path=output_path)
             print(f"Wrote {output_path}")
 
     print_query_table(ranked_tables, code_columns)
     for method in METHOD_ORDER:
         print_method_table(method, ranked_tables[method], code_columns)
-
-    hits_path = output_dir / "hits.csv"
-    export_hits_csv(ranked_tables=ranked_tables, code_columns=code_columns, output_path=hits_path)
-    print(f"Wrote {hits_path}")
 
     controls_path = output_dir / "controls.csv"
     build_controls_table(ranked_tables=ranked_tables, code_columns=code_columns).to_csv(controls_path, index=False)

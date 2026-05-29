@@ -306,6 +306,7 @@ paper/experiment-1/representations
 *.fastq
 *.fasta
 *.png
+!paper/supplementary/figures/favalli_ca9_ds_top50_code1_counts.png
 *.txt
 *.json
 *.pdf
@@ -329,3 +330,10 @@ other_tools/
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+
+*.fls
+*.aux
+*.out
+*.bbl
+*.blg
+*.fdb_latexmk
