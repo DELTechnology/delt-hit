@@ -1,0 +1,122 @@
+\section{Introduction}
+DNA-encoded chemical libraries (DELs) enable the synthesis and screening of chemical spaces that would be difficult to access with conventional high-throughput screening\cite{ref1,ref2,ref3,ref4,ref5,ref6,ref7,ref8,ref9}. As in other display technologies, each library member is linked to an encoding DNA sequence, which connects phenotype (the small molecule) to genotype (the DNA tag). This design enables the parallel screening of very large libraries against biological targets and supports efficient hit discovery\cite{ref4,ref10}.
+
+Affinity-based DEL selections can be automated and have been described previously in a Nature Protocol\cite{ref11}. After selection, the DNA tags of retained compounds are PCR-amplified and analyzed by high-throughput sequencing to determine the abundance of individual library members\cite{ref11,ref7}. DELs are now used widely in both industry and academia\cite{ref7,ref8,ref9,ref12}.
+
+DEL architectures include single-display and dual-display formats, depending on whether the pharmacophore is presented on one DNA-linked fragment or on two pairing oligonucleotide strands\cite{ref13}. Standard libraries are often encoded on double-stranded DNA headpieces, but single-stranded and Y-shaped encoding schemes are also used\cite{ref14}. Regardless of the encoding format, selection and PCR amplification ultimately produce double-stranded amplicons for sequencing and downstream analysis\cite{ref11}.
+
+DEL datasets require integrated sequence processing, cheminformatics, and statistical analysis. They also create opportunities for machine-learning applications\cite{ref15,ref16,ref17,ref18,ref19,ref20,ref21,ref22,ref23,ref24,ref25,ref26,ref27,ref28}. At the same time, DEL analysis poses challenges that are not addressed by standard genomics workflows, including demultiplexing complex barcode combinations, reconstructing chemical structures from encoded building blocks, comparing enrichment across conditions, and connecting selection outputs to downstream structure-based analysis.
+
+Individual parts of a DEL analysis workflow can be assembled from tools originally developed for RNA-seq\cite{ref29}, but these tools do not readily accommodate the range of DEL architectures and experimental designs used in practice. They also do not usually provide DEL-specific intermediate outputs or quality-control measures for troubleshooting and validation.
+
+
+\subsection{Development of the protocol}
+We developed DELT-Hit to support routine analysis of DEL campaigns across a wide range of library sizes and architectures. The workflow combines established bioinformatics methods with DEL-specific sequence handling, chemical enumeration, and quality control. Configuration files and standardized outputs support reproducibility, while the modular design allows users to adapt the workflow to different experimental settings.
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/workflow-overview.png}
+\caption{DELT-Hit is organized into analysis modules (blue) that align with the wet-lab DEL workflow (green). DEL synthesis (A) proceeds through iterative cycles of building block addition and encoding. Libraries are then screened in affinity-based selection experiments (B), after which retained DNA tags are PCR-amplified and sequenced. DELT-Hit uses Cutadapt\cite{ref29} to demultiplex sequencing reads (C) with user-defined error tolerances and produces count matrices for combinations of selection and building block codes. In parallel, library compounds can be enumerated in silico (D) from building block structures and reaction SMIRKS definitions, and molecular properties can be calculated (E). The in silico enumeration and property calculation features can also be used prior to DEL synthesis to inform library design and building block selection. DELT-Hit then combines count data and chemical information for hit analysis (F), quality control, enrichment ranking, and interactive data exploration. The workflow also exports molecular representations, including Morgan fingerprints and BERT embeddings, for downstream machine-learning analyses.}
+\label{fig:figure1}
+\end{figure}
+The workflow integrates sequence demultiplexing via Cutadapt\cite{ref29}, chemical structure representation in SMILES\cite{ref30,ref31,ref32}, reaction definitions in SMIRKS\cite{ref33,ref34} implemented in RDKit\cite{ref35}, statistical analysis with edgeR\cite{ref36}, molecular property calculation, and interactive visualization. Users can run the full workflow or individual modules, and each stage produces executable scripts and standardized outputs that can be adapted to more specialized analyses.
+
+
+\subsection{Overview of the procedure}
+The DELT-Hit protocol is organized into six sequential stages executed from the command line:
+
+(i) Project setup and library specification (Steps 1--9): Configuration file creation from Excel templates, library architecture definition, reaction specification, and experimental metadata setup.
+
+(ii) Sequence demultiplexing and quality assessment (Steps 10--13): High-throughput sequence processing, barcode identification with error correction, and quality-control metric generation.
+
+(iii) Data visualization and interpretation (Step 14): Interactive dashboard exploration of raw count data to identify selections of interest.
+
+(iv) Selection-centric enumeration and analysis (Steps 15--16): Automated SMILES generation and molecular property calculation for the top enriched compounds of a chosen selection.
+
+(v) Statistical analysis and hit detection (Steps 17--18): Enrichment analysis using established RNA-seq methods, hit ranking with multiple statistical approaches, and result validation.
+
+(vi) Full library enumeration and machine learning representations (Steps 19--21): Optional full-library enumeration and generation of molecular fingerprints and embeddings for downstream machine-learning workflows.
+
+
+\subsection{Applications of the method}
+DELT-Hit accommodates library architectures ranging from simple two-cycle libraries to more complex multi-branch schemes. The workflow has been applied across several DEL campaigns:
+
+A single-display DEL with two diversity elements comprising 366,600 glutamic acid derivatives (GB-DEL) was encoded in single-stranded DNA format and tested in affinity-based selections, enabling de novo identification of binders against several pharmaceutically relevant proteins. The GB-DEL was also used for affinity maturation in a dual-display format by combining it with low-affinity hits displayed on a pairing strand\cite{ref37}.
+
+A second single-display DEL with two diversity elements comprising 670,752 derivatives based on a 2-azido-3-iodophenylpropionic acid scaffold (NF-DEL) was likewise encoded in single-stranded DNA format and used to investigate the effect of stereo- and regiochemistry on ligand discovery. Selections against pharmaceutically relevant protein targets yielded selective enzyme inhibitors and binders to tumor-associated antigens that enabled conditional chimeric antigen receptor T-cell activation and tumor targeting\cite{ref38}.
+
+A proof-of-principle single-display, double-stranded DEL containing 1,100 members and three amino acid diversity elements was synthesized on magnetic beads using a solid-phase approach with final release of the library from the support. The workflow supported analysis of both the standard released library and a self-purified version in which incomplete synthetic structures were removed before final release. Selections against carbonic anhydrase II and IX showed improved enrichment of the positive control for the self-purified DEL. Because synthesis and encoding yields correlate in this format, DNA sequencing of the unselected library can be used to assess chemical display yields. The solid-support synthesis also permits anhydrous reaction conditions and therefore enables water-free chemistry that is difficult to implement in standard DEL workflows\cite{ref39}.
+
+A dual-display encoded self-assembling chemical (ESAC) library containing 56 million members enabled incremental connection of two displayed peptides. This library was used to study macrocycle flexibility with a two-step cyclization strategy. Selections against three targets revealed target-specific preferences for different conformational states, including a 314 nM thrombin inhibitor from the conformationally restrained macrocyclic subset, a more flexible streptavidin binder from the semi-closed conformation, and binders to human alkaline phosphatase (PLAP) from the open dual-display format\cite{ref40}.
+
+
+\subsection{Limitations}
+While DELT-Hit addresses many challenges in DEL analysis, several limitations should be considered:
+
+\begin{itemize}
+  \item Computational complexity: library size grows combinatorially with the number of diversity elements, which mainly affects enumeration, property calculation, and molecular representation. By contrast, demultiplexing depends primarily on the number of sequencing reads and is therefore largely independent of library size.
+  \item Library chemistry: DELT-Hit supports arbitrary reaction sequences provided that each synthetic route yields a single, well-defined final product. Libraries with non-standard reaction schemes, unconventional building block representations, or complex precursor handling may require additional configuration and validation. Accurate reaction SMIRKS definitions are essential for correct enumeration and structure reconstruction, and library-specific templates may require advanced cheminformatics expertise.
+\end{itemize}
+
+\subsection{Comparison with other methods}
+
+\newcommand{\statusgreen}{\raisebox{0.15ex}{\textcolor{green!50!black}{\large$\bullet$}}}
+\newcommand{\statusamber}{\raisebox{0.15ex}{\textcolor{orange!90!black}{\large$\bullet$}}}
+\newcommand{\statusopen}{\raisebox{0.15ex}{\textcolor{gray}{\large$\bullet$}}}
+\newcommand{\statusred}{\raisebox{0.15ex}{\textcolor{red!70!black}{\large$\bullet$}}}
+\begin{longtable}{p{8.8cm}p{1.2cm}p{1.2cm}}
+\caption{Comparison of DELT-Hit and DELi across selected scientific-software criteria. \statusgreen\ documented support; \statusamber\ partial or narrower support; \statusopen\ not clearly documented in the cited source; \statusred\ explicitly absent or described as future work. DELi scores are based only on the DELi preprint cited in the manuscript.}
+\label{tab:delt-deli-comparison} \\
+\toprule
+\textbf{Criterion} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Criterion} & \textbf{DELT-Hit} & \textbf{DELi} \\
+\midrule
+\endhead
+
+\multicolumn{3}{l}{\textbf{1. Workflow scope and usability}} \\
+1.1 Library design support & \statusamber & \statusgreen \\
+1.2 Configuration and workflow ergonomics & \statusgreen & \statusgreen \\
+1.3 Interoperability and downstream reuse & \statusgreen & \statusamber \\
+\midrule
+\multicolumn{3}{l}{\textbf{2. Supported DEL architectures}} \\
+2.1 Single-display support & \statusgreen & \statusgreen \\
+2.2 Dual-display support & \statusgreen & \statusopen \\
+\midrule
+\multicolumn{3}{l}{\textbf{3. Decoding and sequencing-side QC}} \\
+3.1 Error-tolerant demultiplexing & \statusgreen & \statusgreen \\
+3.2 UMI-aware counting & \statusopen & \statusgreen \\
+3.3 Decoding QC and reporting & \statusgreen & \statusgreen \\
+\midrule
+\multicolumn{3}{l}{\textbf{4. Chemical reconstruction and enumeration}} \\
+4.1 Library enumeration & \statusgreen & \statusgreen \\
+4.2 Flexible reaction-scheme support & \statusgreen & \statusred \\
+\midrule
+\multicolumn{3}{l}{\textbf{5. Statistical analysis and hit interpretation}} \\
+5.1 Count-based enrichment & \statusgreen & \statusgreen \\
+5.2 Statistical enrichment scoring & \statusgreen & \statusgreen \\
+5.3 Synthon-level analysis & \statusred & \statusgreen \\
+\midrule
+\multicolumn{3}{l}{\textbf{6. Computational performance}} \\
+6.1 Memory and scaling behavior & \statusgreen & \statusamber \\
+\bottomrule
+\end{longtable}
+
+Pharmaceutical companies that run DEL campaigns typically use internal or licensed software platforms that integrate sequencing, barcode decoding, hit identification, and downstream prioritization within proprietary ecosystems. These systems can support scalability and automation, but they are closed-source and therefore limit methodological transparency, user-driven customization, and community-led improvement.
+
+Contract research organizations (CROs) also provide DEL screening as a service against user-supplied targets. These services usually return processed results without exposing the underlying computational workflow or intermediate data products. As a result, users have limited opportunity to adapt the analysis, inspect intermediate outputs, or integrate DEL informatics into their own pipelines.
+
+To our knowledge, DELi\cite{ref41} is the only other open-source software package that combines barcode decoding, enrichment analysis, and library enumeration. DELi and DELT-Hit share several design principles, including modular architecture, transparent configuration, and integration with established bioinformatics and cheminformatics tools such as Cutadapt and RDKit. DELT-Hit differs in several areas:
+
+\begin{itemize}
+  \item support for arbitrary reaction graphs for enumeration, enabling reconstruction of complex synthetic schemes
+  \item integration of RNA-seq-derived statistical models for hit calling that account for replicate structure and dispersion
+  \item support for arbitrary library designs, including single-display and dual-display formats
+  \item standardized SMILES outputs for library members to facilitate downstream machine-learning workflows
+\end{itemize}
+
+DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration. Re-analysis of published datasets and the DELT-Hit--DELi workflow comparison are provided in Supplementary Note~\ref{supp:analysis-of-published-datasets} and Supplementary Note~\ref{supp:comparison-delt-deli}. A concise comparison of enrichment score rankings for recovery of a literature-supported CA9-associated building block in the Favalli dataset is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}.

@@ -1,0 +1,653 @@
+\section{Procedure}
+
+\begin{tcolorbox}[
+  colback=gray!10,
+  colframe=gray!50,
+  title=Box 2 | Quickstart guide,
+  fonttitle=\bfseries
+]
+In this box, we give an overview of the required files and data to carry out the complete workflow and summarize steps of DELT-Hit procedure.
+
+Required material
+
+Hardware and software:
+\begin{itemize}
+  \item Hardware: Adequate computing hardware
+  \item Software: Complete installation of DELT-Hit with all dependencies
+\end{itemize}
+Input information:
+\begin{itemize}
+  \item Library setup: Laboratory records on library architecture, chemistry and encoding setup
+  \item Sequencing data: Illumina sequencing data containing raw sequencing reads
+\end{itemize}
+
+\setupitem{Procedure}
+
+\protocolstep{Phase 1}{Project initialization and configuration • TIMING 30-60 min}
+Creation of the configuration file defining library structure, experimental design and analysis parameters from a standardized Excel template.
+
+\protocolstep{Phase 2}{Sequence processing and demultiplexing • TIMING 30 min - 4
+h}
+Processing of raw sequencing reads to identify and count library members in the analyzed selection experiments.
+
+\protocolstep{Phase 3}{Data visualization and interpretation • TIMING 15-60 min}
+Exploration of count data and experimental metadata using the interactive dashboard.
+
+\protocolstep{Phase 4}{Selection-centric enumeration and analysis • TIMING 10 min
+- 2 h}
+Analysis of top enriched compounds. Chemical structures and molecular properties are generated for a subset of highly enriched compounds for individual selection experiments.
+
+\protocolstep{Phase 5}{Statistical analysis and hit identification • TIMING 10-30 min}
+Statistical identification of enriched library members based on comparison of different selection experiments.
+
+\protocolstep{Phase 6}{Full library enumeration and machine learning representations
+• TIMING 1 h - 8 h}
+In-silico chemical assembly of all library members and calculation of molecular property distributions. This step is independent of phases 2-5 and can also be performed without sequencing data, for instance for evaluating library designs prior to DEL synthesis.
+
+\end{tcolorbox}
+
+\subsection{Phase 1: Project initialization and configuration • TIMING 30-60 min}
+The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template, a rudimentary template file can be found in the supplementary information.
+
+In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL library and experimental design information.
+
+
+\protocolstep{1}{Create the experiment sheet}
+
+Create an Excel workbook with multiple sheets defining the experiment. Each sheet contains specific information required for the analysis. The following sections describe the required sheets and their format. Users can start from the template provided in Table 3. The experiment sheet contains the experiment name, file paths, and computational resource settings.
+
+
+\input{tables/experiment-config}
+CRITICAL STEP: Use absolute paths, or paths relative to the working directory, for \texttt{fastq\_path} and \texttt{save\_dir}. Remove any trailing whitespace.
+
+
+\protocolstep{2}{Create the selection sheet}
+
+This sheet defines the experimental design, including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes one experimental setting, such as a target protein or control condition, and is identified by a unique combination of \texttt{S0} and \texttt{S1} primers for demultiplexing.
+
+
+\input{tables/selection-design}
+Required columns for demultiplexing:
+
+\begin{itemize}
+  \item name: Unique identifier for each selection
+  \item S0, S1: Multiplexing barcodes for selection identification
+\end{itemize}
+Required columns for statistical analysis:
+
+\begin{itemize}
+  \item group: Statistical grouping (e.g., "protein", "no\_protein", "naive")
+\end{itemize}
+Optional columns:
+
+\begin{itemize}
+  \item operator: Person who performed the selection
+  \item date: Date of selection experiment
+  \item other columns can be added at the user's discretion
+\end{itemize}
+
+\protocolstep{3}{Create the structure sheet}
+
+This sheet defines the DNA construct architecture and error tolerances for demultiplexing.
+
+There are three types of DNA regions:
+
+\begin{itemize}
+  \item \texttt{selection}: Region used for selection primers defined in the selection sheet; these regions should be named \texttt{S0}, \texttt{S1}, and so on.
+  \item \texttt{constant}: Constant regions shared across DNA constructs; these regions should be named sequentially \texttt{C0}, \texttt{C1}, and so on.
+  \item \texttt{building\_block}: Region identifying a chemical building block; these regions should be named sequentially \texttt{B0}, \texttt{B1}, and so on.
+\end{itemize}
+Each DNA region is identified by a unique name. A \texttt{max\_error\_rate} and the allowance of indels can be configured separately for each region.
+
+
+\input{tables/sequence-structure}
+Column descriptions:
+
+\begin{itemize}
+  \item name: Unique identifier for each DNA region
+  \item type: Region type (selection, constant, or building\_block)
+  \item max\_error\_rate: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
+  \item indels: Whether to allow insertions/deletions (TRUE/FALSE)
+\end{itemize}
+CRITICAL STEP: Selection barcodes should require perfect matches (\texttt{max\_error\_rate = 0}, \texttt{indels = FALSE}) to ensure accurate multiplexing. Constant regions can tolerate higher error rates depending on their length.
+
+
+\protocolstep{4}{Create the constant sheet}
+
+This sheet contains the DNA sequences for all constant regions defined in the structure sheet.
+
+
+\input{tables/constant-regions}
+Note: The \texttt{name} column must match the constant-region names defined in the structure sheet.
+
+
+\protocolstep{5}{Create building block sheets (B0, B1, etc.)}
+
+DELT-Hit supports libraries with an arbitrary number of building block regions. For each region defined in the structure sheet, create a sheet with the corresponding name (for example, \texttt{B0}, \texttt{B1}, ..., \texttt{BN}) and list the DNA codons used at that position. To enable library enumeration and property calculation, also define the chemical structures of the building blocks and the reactions used during library synthesis.
+
+
+\input{tables/building-blocks-b0}
+Required columns for demultiplexing:
+
+\begin{itemize}
+  \item codon: DNA barcode sequence identifying this building block
+\end{itemize}
+Required columns for library enumeration:
+
+\begin{itemize}
+  \item smiles: Chemical structure in SMILES notation
+  \item reaction: Name of the reaction using this building block
+  \item educt: Name of the compound this building block reacts with if any
+  \item product: Name of the product formed
+\end{itemize}
+
+\protocolstep{6}{Create the reactions sheet}
+
+Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). A collection of SMARTS/SMIRKS for reactions commonly employed in DEL synthesis is provided in the supplementary information (Supplementary Note~\ref{supp:template-reactions}). Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks.
+
+
+\input{tables/reaction-smirks}
+Note: The \texttt{name} column must match the reaction names used in the building block sheets.
+
+
+\protocolstep{7}{Create the compounds sheet}
+
+Only required for library enumeration. Define any additional chemical compounds (scaffolds, reagents) used in the reactions.
+
+
+\input{tables/compound-definitions}
+
+\protocolstep{8}{Create the additional reaction steps}
+
+Only required for advanced library enumeration. If library synthesis includes additional steps, such as precursor conversion or deprotection before a reaction, define them in the \texttt{reaction\_graph} sheet. Each row describes a reaction with up to two educts, a reaction name, and the resulting product. Add one row for each additional step using the compound and reaction names defined in the corresponding sheets.
+
+
+\input{tables/additional-reactions}
+More advanced reaction-graph edge cases, including multi-path precursor activation schemes that require separate reaction nodes, are described in Supplementary Note~\ref{supp:reaction-graph-advanced}.
+
+\protocolstep{9}{Generate the configuration file}
+
+Once your Excel file is complete with all required sheets, generate the YAML configuration file:
+
+
+\begin{lstlisting}
+# Activate the DELT-Hit conda environment
+conda activate delt-hit
+
+# Move into the single-stranded example workflow
+cd supporting_material/experiments/example-single-stranded
+
+# Generate configuration from Excel template
+delt-hit init --excel_path=example-single-stranded.xlsx
+
+# Reuse this config path in the downstream commands
+CONFIG_PATH=campaign/config.yaml
+\end{lstlisting}
+This command creates a YAML configuration file at \texttt{save\_dir/name/config.yaml}, as defined in the \texttt{experiment} sheet.
+
+Expected output:
+
+
+\begin{lstlisting}
+Configuration created at campaign/config.yaml
+\end{lstlisting}
+CRITICAL STEP: Review the generated YAML file to verify that all information was parsed correctly. This file is used in all downstream steps.
+
+\textbf{Troubleshooting.} While the tool supports some basic input validation it is helpful to check the following if the command fails:
+
+\begin{itemize}
+  \item All building blocks are present in the configuration file
+  \item Column names match exactly as specified in the tables above
+  \item Excel file was saved with the latest changes before running the command
+\end{itemize}
+
+\subsection{Phase 2: Sequence processing and demultiplexing • TIMING 30 min - 4 h}
+This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
+
+
+\protocolstep{10}{Configure demultiplexing parameters}
+
+The demultiplexing parameters defined in the Excel file control how reads are processed by Cutadapt. Key parameters include:
+
+\begin{itemize}
+  \item \texttt{max\_error\_rate}: Tolerance for sequencing errors (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
+  \item \texttt{indels}: Whether to allow insertions/deletions during barcode matching
+\end{itemize}
+As noted above, exact matches are recommended for selection barcodes (\texttt{max\_error\_rate = 0}, \texttt{indels = FALSE}) to ensure accurate multiplexing. Constant regions can tolerate higher error rates depending on their length.
+
+
+\protocolstep{11}{Prepare and execute sequence demultiplexing}
+
+Generate the demultiplexing scripts with its dependencies and execute the analysis:
+
+
+\begin{lstlisting}
+# Generate Cutadapt input files and demultiplexing script
+delt-hit demultiplex prepare --config_path=$CONFIG_PATH
+
+# Execute demultiplexing
+campaign/demultiplex/cutadapt_input_files/demultiplex.sh
+\end{lstlisting}
+The demultiplexing process performs:
+
+\begin{itemize}
+  \item Adapter detection and trimming: removal of sequencing adapters
+  \item Barcode extraction: sequential identification of selection and building block barcodes
+  \item Quality filtering: rejection of reads with errors exceeding the defined thresholds
+\end{itemize}
+The generated shell script runs Cutadapt on the FASTQ file and maps reads to selection and codon identifiers. It produces \texttt{reads\_with\_adapters.gz}, which contains all mapped sequences.
+
+Performance note: Processing speed is approximately 50,000--200,000 reads per second. For a typical dataset with 50--100 million reads, expect 30 min to 2 h of processing time.
+
+Expected outputs:
+
+\begin{itemize}
+  \item demultiplex/cutadapt\_output\_files/*.cutadapt.json: Detailed processing statistics for each demultiplexing step
+  \item demultiplex/cutadapt\_output\_files/reads\_with\_adapters.gz: Intermediate files with extracted barcodes
+\end{itemize}
+
+\protocolstep{12}{Process demultiplexing results and generate count tables}
+
+After demultiplexing, generate the text report and QC figures, then aggregate the results into count tables for each selection:
+
+
+\begin{lstlisting}
+# Generate text-based quality control report
+delt-hit demultiplex report --config_path=$CONFIG_PATH
+
+# Generate quality control visualizations
+delt-hit demultiplex qc --config_path=$CONFIG_PATH
+
+# Process demultiplexing output and generate count tables
+delt-hit demultiplex process --config_path=$CONFIG_PATH
+
+# Also export flattened per-selection count files
+delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True
+
+# Optional: keep codon-id order instead of sorting by observed counts
+# delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True --sort_by_counts=False
+\end{lstlisting}
+These commands:
+
+\begin{itemize}
+  \item parse the demultiplexed reads
+  \item map barcode combinations to library members
+  \item generate count tables for each selection
+  \item save the results in a standardized format
+\end{itemize}
+Expected outputs:
+
+\begin{itemize}
+  \item \texttt{selections/[selection\_name]/counts.txt}: Tab-delimited count table with columns:
+  \item \texttt{code\_1}, \texttt{code\_2}, ...: Building block indices
+  \item \texttt{name}: Selection identifier
+  \item \texttt{count}: Number of reads for this compound in this selection
+  \item Alternatively, counts can be saved as \texttt{\{selection\_name\}\_counts.txt} with the flag \texttt{--as\_files=True}. To retain codon order rather than sorting by observed counts, use \texttt{--sort\_by\_\allowbreak{}counts=False}.
+\end{itemize}
+\newpage
+
+\protocolstep{13}{Generate quality control reports}
+
+Assess demultiplexing quality with summary statistics and visualizations:
+
+
+\begin{lstlisting}
+# In the single-stranded example workflow, these commands are executed
+# immediately before count-table generation (Step 12):
+delt-hit demultiplex report --config_path=$CONFIG_PATH
+delt-hit demultiplex qc --config_path=$CONFIG_PATH
+\end{lstlisting}
+Expected outputs:
+
+\begin{itemize}
+  \item qc/report.txt: Comprehensive text report with processing statistics
+  \item qc/hits\_*.parquet: Per-region tables with barcode-assignment counts grouped by error level
+  \item qc/hits\_*.pdf and qc/hits\_*.png: Quality control plots showing barcode recovery and coverage distributions
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/qc-poor-selection-report.png}
+\caption{Example report for a poor selection with only 37\% read retention. Report highlights the problematic region where more than 10\% of the reads are lost (not mapped to codons).}
+\label{fig:figure4}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/qc-stacked-barplots.png}
+\caption{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors. (TOP) Stacked bar plot for the assigned counts to the different selection codons of S0. (BOTTOM) Stacked bar plot for read assignment to constant region C0; reads mapped with 1 error are shown in orange, reads mapped with 0 errors in blue.}
+\label{fig:figure5}
+\end{figure}
+Quality assessment criteria:
+
+\begin{itemize}
+  \item Read retention: \textgreater{}70\% of input reads should be successfully assigned
+  \item Barcode coverage: Most building blocks should have \textgreater{}0 reads
+\end{itemize}
+\textbf{Troubleshooting.} Low read retention (\textless{}50\%) may indicate:
+
+\begin{itemize}
+  \item Incorrect barcode sequences in configuration
+  \item Poor sequencing quality
+  \item Poor library quality
+\end{itemize}
+
+\subsection{Phase 3: Data visualization and interpretation • TIMING 15-60 min}
+The interactive dashboard provides real-time exploration of raw count data and experimental metadata.
+
+
+\protocolstep{14}{Launch the interactive analysis dashboard}
+
+Visualize demultiplexing results and explore count distributions:
+
+
+\begin{lstlisting}
+delt-hit dashboard --config_path=$CONFIG_PATH --counts_path=campaign/selections/AG24_4_counts.txt
+
+# Dash is running on http://127.0.0.1:8050/  # copy paste into browser
+# * Serving Flask app 'delt_hit.cli.dashboard.api'
+# * Debug mode: on
+\end{lstlisting}
+This command starts a local server that can be opened in a web browser, typically at \url{http://localhost:8050}. Stop the server with \texttt{Ctrl+C} or by closing the terminal.
+
+Dashboard features:
+
+\begin{itemize}
+  \item Experimental metadata display: selection conditions, target information, and experimental parameters
+  \item Count distribution visualization: scatter plots, histograms, and summary statistics for the selected condition
+  \item Interactive filtering: exploration of specific regions of the count distribution
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/dashboard-interface.png}
+\caption{Interactive dashboard interface. The dashboard provides interactive visualization of count data with filtering capabilities (not shown). The top panel shows experimental metadata (not shown), while the main panel displays count distributions and allows exploration of specific compounds.}
+\label{fig:figure6}
+\end{figure}
+Using the dashboard:
+
+\begin{itemize}
+  \item Select different count files to visualize different selection conditions
+  \item Visualize aggregated counts across codon dimensions:
+  \item Apply filters to focus on specific count ranges
+\end{itemize}
+Note: The dashboard displays raw counts from demultiplexing. For statistical comparisons and hit identification, use the enrichment analysis results from Phase 5. The command accepts counts provided as a \texttt{.txt} file, so users can also visualize custom normalized count tables by passing \texttt{--counts\_path} and, if needed, \texttt{--selection\_name}.
+
+CRITICAL STEP: Use the default folder hierarchy produced by \texttt{delt-hit demultiplex process}. If a custom \texttt{counts.txt} file is provided, also pass the selection name exactly as specified in the selection sheet.
+
+\newpage
+
+\subsection{Phase 4: Selection-centric enumeration and analysis • TIMING 10 min - 2 h}
+This phase generates chemical structures and molecular properties for the top enriched compounds in a selected experiment. Library enumeration requires advanced knowledge of SMARTS/SMIRKS, and library-specific adjustments are often necessary.
+
+
+\protocolstep{15}{Enumerate top compounds from a selection}
+
+Generate chemical structures for the top enriched compounds in a selected experiment. First visualize the reaction graph to verify the library architecture, then enumerate the top hits:
+
+
+\begin{lstlisting}
+delt-hit visualize enumerate --config_path=$CONFIG_PATH
+
+delt-hit library enumerate \
+  --config_path=$CONFIG_PATH \
+  --counts_path=campaign/selections/AG24_4_counts.txt \
+  --top_n=1000 \
+  --library_name=AG24_4_top_hits
+\end{lstlisting}
+These commands:
+
+\begin{itemize}
+  \item visualize the reaction graph for inspection
+  \item enumerate the top \texttt{top\_n} compounds by count for the selected experiment
+  \item validate chemical structures
+  \item save the compound catalog for the selected hits
+\end{itemize}
+Expected outputs:
+
+\begin{itemize}
+  \item library/AG24\_4\_top\_hits.parquet: Compound catalog for the top hits with SMILES and barcode mappings
+  \item library/visualization/reaction\_graph.png: Visual representation of synthetic schema
+  \item library/visualization/reaction\_graph\_additional.png: Visualizes the additional reactions from the reaction\_graph sheet
+  \item library/visualization/reaction\_graph\_building\_blocks.png: Visualizes the reactions derived from the building block sheets B0, B1, etc.
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/enumeration-summary.png}
+\caption{Composite summary of enumeration-oriented visualization outputs from the single-stranded example workflow. The main panel shows the library reaction graph, alongside representative reaction templates, example \texttt{B0} and \texttt{B1} building blocks, and three enumerated top-hit structures generated during selection-focused library enumeration.}
+\label{fig:figure2}
+\end{figure}
+Performance note: Enumeration speed is approximately 1,000--10,000 compounds per second, depending on reaction complexity. For a library with 1 million compounds, expect 2--10 min of processing time depending on the hardware.
+
+\textbf{Troubleshooting.}
+
+\begin{itemize}
+  \item Check that all reaction SMIRKS are valid and specific enough to produce a single product
+  \item Ensure reactant and product names match between building blocks and compounds sheets
+  \item Re-run enumeration in debugging mode to visualize the reaction graphs that fail: delt-hit library enumerate --config\_path=/path/to/config.yaml --debug=invalid
+\end{itemize}
+
+\newpage
+
+\protocolstep{16}{Visualize and calculate molecular properties of top hits}
+
+Visualize the enumerated top hits and calculate molecular descriptors for chemical-space characterization:
+
+
+\begin{lstlisting}
+delt-hit visualize library --config_path=$CONFIG_PATH --library_name=AG24_4_top_hits
+delt-hit library properties --config_path=$CONFIG_PATH --library_name=AG24_4_top_hits
+\end{lstlisting}
+Computed properties include:
+
+\begin{itemize}
+  \item Lipinski descriptors: Molecular weight (MW), partition coefficient (LogP), hydrogen bond donors (HBD), hydrogen bond acceptors (HBA)
+  \item Topological indices: Topological polar surface area (TPSA), rotatable bonds
+  \item Structural complexity metrics: Number of aromatic rings, heavy atom count, formal charge
+  \item Drug-likeness scores: Quantitative estimate of drug-likeness (QED), fraction of sp³ carbons
+\end{itemize}
+Expected outputs:
+
+\begin{itemize}
+  \item library/properties/AG24\_4\_top\_hits/properties.parquet: Top-hit catalog augmented with molecular descriptors
+  \item library/properties/AG24\_4\_top\_hits/prop\_*.png: Distribution plots for each calculated property
+  \item library/visualization/libraries/AG24\_4\_top\_hits/*.png: Per-compound structure renderings for the enumerated top-hit set
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/top-hit-structures.png}
+\caption{Five representative structure renderings produced by \texttt{delt-hit visualize library} for the enumerated \texttt{AG24\_4\_top\_hits} collection. Each panel corresponds to one visualized top-hit compound from the single-stranded example workflow.}
+\label{fig:figure3}
+\end{figure}
+Performance note: Property calculation processes approximately 600--1,000 compounds per second. For a library with 1 million compounds, expect 15--30 min of processing time.
+
+
+\subsection{Phase 5: Statistical analysis and hit identification • TIMING 10-30 min}
+This phase identifies enriched library members by comparing selection conditions using established statistical methods.
+
+
+\protocolstep{17}{Define statistical comparisons}
+
+Using the information from the selection sheet, create a dedicated YAML configuration file that specifies which selections to compare.
+
+This file supports comparisons across different selection runs, including runs derived from multiple sequencing files.
+
+
+\begin{lstlisting}
+# new analysis.yaml
+experiments:
+- name: protein_vs_no_protein
+  save_dir: campaign/analysis
+  selections:
+    - name: AG24_4
+      counts_path: campaign/selections/AG24_4/counts.txt
+      group: no_protein
+    - name: AG24_5
+      counts_path: campaign/selections/AG24_5/counts.txt
+      group: no_protein
+    - name: AG24_6
+      counts_path: campaign/selections/AG24_6/counts.txt
+      group: no_protein
+    - name: AG24_13
+      counts_path: campaign/selections/AG24_13/counts.txt
+      group: protein
+    - name: AG24_14
+      counts_path: campaign/selections/AG24_14/counts.txt
+      group: protein
+    - name: AG24_15
+      counts_path: campaign/selections/AG24_15/counts.txt
+      group: protein
+\end{lstlisting}
+
+\protocolstep{18}{Perform enrichment analysis with statistical methods}
+
+DELT-Hit supports three statistical approaches for identifying enriched compounds. Methods A and B generate an R script that can be executed directly or modified further by the user.
+
+A. Simple counts method (suitable for single replicates)
+
+
+\begin{lstlisting}
+# Generate R script for counts-based analysis
+delt-hit analyse enrichment --config_path=analysis.yaml --name=protein_vs_no_protein --method=counts
+
+# Execute the generated R script
+Rscript --vanilla campaign/analysis/protein_vs_no_protein/counts/enrichment_counts.R
+\end{lstlisting}
+The counts method:
+
+\begin{itemize}
+  \item averages counts across replicates within each group
+  \item computes simple differences between groups
+  \item does not provide statistical significance testing
+  \item is suitable for exploratory analysis or for datasets without replicates
+\end{itemize}
+B. edgeR method (for significance annotation when replicates are available)
+
+
+\begin{lstlisting}
+# Generate R script for edgeR statistical analysis
+delt-hit analyse enrichment --config_path=analysis.yaml --name=protein_vs_no_protein --method=edgeR
+
+
+# Execute the generated R script
+Rscript --vanilla campaign/analysis/protein_vs_no_protein/edgeR/enrichment_edgeR.R
+\end{lstlisting}
+The edgeR method:
+
+\begin{itemize}
+  \item implements RNA-seq-derived statistical models
+  \item uses empirical Bayes shrinkage to improve power
+  \item calculates false discovery rate (FDR)-corrected \textit{P} values
+  \item requires replicates (minimum of two per group)
+  \item provides normalized count tables
+  \item is best interpreted as a significance-annotation layer rather than the sole primary ranking signal
+\end{itemize}
+C. Normalized z-score method (suitable for datasets with or without replicates)
+
+\begin{lstlisting}
+# Run z-score analysis (pure Python, results written immediately)
+delt-hit analyse enrichment --config_path=analysis.yaml --name=protein_vs_no_protein --method=zscore
+\end{lstlisting}
+The z-score method:
+
+\begin{itemize}
+  \item computes the normalized z-score per compound per selection following Faver et al.\cite{ref42}
+  \item is depth-independent: z-scores are invariant to total sequencing depth across selections
+  \item is suitable for datasets with or without replicates
+\end{itemize}
+For methods A and B, the tool produces R scripts that can be adapted to more specialized workflows.
+
+Expected outputs:
+
+\begin{itemize}
+  \item counts/stats.csv: Complete statistics for all library members from the simple counts method
+  \item counts/hits.csv: Top-ranked compounds from the simple counts method
+  \item edgeR/enrichment\_stats.csv: Complete statistics with \textit{P} values and FDR from the edgeR method
+  \item edgeR/enrichment\_hits.csv: Significant or top-ranked compounds from the edgeR method
+  \item zscore/stats.csv: Complete statistics with per-group mean z-score and enrichment score
+  \item zscore/hits.csv: Top-ranked compounds by descending z-score
+  \item zscore/\{AG24\_4,AG24\_5,AG24\_6,...\}.csv: Per-selection z-scores with observed/expected fractions
+  \item code\_1, code\_2, etc.: Building block indices
+  \item LogFC: Log2 fold-change (edgeR) or difference in mean counts (counts method)
+  \item PValue: Raw p-value (edgeR only)
+  \item FDR: False discovery rate corrected p-value (edgeR only)
+  \item counts/\{protein,no\_protein,...\}.csv: Group-level mean count tables from the counts method
+  \item edgeR/\{AG24\_4,AG24\_5,AG24\_6,...\}.csv: Normalized count tables for each selection from the edgeR method
+  \item counts/correlation\_*.png and edgeR/correlation\_*.png: Replicate correlation plots for quality control
+\end{itemize}
+Interpreting results:
+
+\begin{itemize}
+  \item LogFC \textgreater{} 0: Compound enriched in protein selections vs.\ controls
+  \item LogFC \textless{} 0: Compound depleted in protein selections vs.\ controls
+  \item FDR \textless{} 0.05: Statistically significant enrichment (edgeR only)
+  \item High replicate correlation ($R^2 > 0.7$) indicates good experimental consistency
+\end{itemize}
+CRITICAL STEP: Always examine replicate correlation plots to verify data quality before interpreting hit lists. Poor correlation may indicate technical problems or batch effects.
+
+\textbf{Troubleshooting.} If no hits are identified:
+
+\begin{itemize}
+  \item Check that experimental groups are correctly assigned
+  \item Verify sufficient sequencing depth (\textgreater{}100 reads per compound for reliable statistics)
+  \item Consider adjusting FDR threshold for exploratory analysis
+  \item Examine correlation plots for replicate consistency issues
+\end{itemize}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/replicate-correlation-matrix.png}
+\caption{Replicate--replicate correlation of library member counts for quality control. Diagonal panels show density estimates of counts within each selection. Lower triangular panels report pairwise correlation coefficients between replicates. Upper triangular panels display scatter plots comparing counts from one replicate against another.}
+\label{fig:figure7}
+\end{figure}
+
+\input{tables/edger-hits}
+
+
+\subsection{Phase 6: Full library enumeration and machine learning representations • TIMING 1 h - 8 h}
+This phase performs full-library enumeration and generates molecular representations for downstream machine-learning applications. These steps are optional.
+
+\protocolstep{19}{Enumerate the full library}
+
+Enumerate all library members for downstream machine-learning tasks:
+
+\begin{lstlisting}
+delt-hit library enumerate --config_path=$CONFIG_PATH
+\end{lstlisting}
+
+\protocolstep{20}{Calculate molecular properties for the full library}
+
+Calculate molecular properties for all library members:
+
+\begin{lstlisting}
+delt-hit library properties --config_path=$CONFIG_PATH
+\end{lstlisting}
+
+\protocolstep{21}{Generate molecular representations for machine learning}
+
+Create standardized chemical representations compatible with common machine-learning frameworks:
+
+
+\begin{lstlisting}
+# Morgan fingerprints for similarity analysis
+# ~600-1000 compounds/s
+delt-hit library represent --method=morgan --config_path=/path/to/config.yaml
+
+# BERT embeddings for deep learning applications
+# ~600-1000 compounds/s
+delt-hit library represent --method=bert --config_path=/path/to/config.yaml
+\end{lstlisting}
+Available representation methods:
+
+\begin{itemize}
+  \item morgan: Morgan circular fingerprints (2048-bit vectors) for similarity searching and clustering
+  \item bert: Transformer-based molecular embeddings (768-dimensional vectors) for deep-learning applications
+\end{itemize}
+Expected outputs:
+
+\begin{itemize}
+  \item representations/morgan.npz: Sparse matrix of Morgan fingerprints
+  \item representations/bert.npz: Dense matrix of BERT embeddings
+\end{itemize}
+Note: These representations are compatible with scikit-learn, PyTorch, and TensorFlow.

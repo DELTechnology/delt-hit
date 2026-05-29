@@ -1,0 +1,174 @@
+\section{Anticipated results}
+
+\subsection{Output file structure}
+DELT-Hit generates a standardized output hierarchy:
+
+
+\begin{lstlisting}
+supporting_material/experiments/example-single-stranded/
+|---- analysis.yaml                        # analysis specification
+|---- campaign.fastq.gz                    # Raw sequencing reads 
+|---- example-single-stranded.xlsx         # Input excel sheet 
+|
+`---- campaign/                            # Example experiment instance
+    |---- config.yaml                      # Experiment-level config
+    |
+    |---- demultiplex/                     # Cutadapt-based demultiplexing)
+    |   |---- cutadapt_input_files/        # Files passed to Cutadapt (generated)
+    |   |   |---- demultiplex.sh           # Generated shell script running Cutadapt steps
+    |   |   `---- {0-S0,1-C0,2-B0,...}.fastq   # Cutadapt adapter lists
+    |   `---- cutadapt_output_files/       # Cutadapt outputs per step
+    |       |---- *.cutadapt.json          # Per-step JSON stats from Cutadapt
+    |       |---- *.cutadapt.log           # Per-step logs (stdout/stderr capture)
+    |       |---- input.fastq.gz           # Cutadapt input for the demultiplexing
+    |       |---- out.fastq.gz             # Cutadapt output for the demultiplexing
+    |       `---- reads_with_adapters.gz   # Reads retained with adapters
+    |
+    |---- library/                         # Library reconstruction & enumeration outputs
+    |   |---- AG24_4_top_hits.parquet      # Enumerated top-hit catalog for AG24_4
+    |   |---- library.parquet              # Full enumerated library table
+    |   |---- visualization/
+    |   |   |---- reaction_graph.png       # Main reaction graph visualization
+    |   |   |---- reaction_graph_additional.png       # Extra/optional reactions graph
+    |   |   `---- reaction_graph_building_blocks.png  # Graph focused on building blocks
+    |   |
+    |   `---- properties/                  # Calculated molecular descriptors for the library
+    |       |---- AG24_4_top_hits/         # Descriptor outputs for top hits
+    |       |---- properties.parquet       # Descriptor table aligned with library.parquet
+    |       `---- prop_*.png               # Descriptor distributions (e.g.,mw/logP/TPSA/QED/...)
+    |
+    |---- representations/                 # ML-ready representations derived from SMILES
+    |   |---- morgan.npz                   # Morgan fingerprints (sparse array)
+    |   `---- bert.npz                     # Embeddings (e.g., SMILES BERT)
+    |
+    |---- selections/                      # Per-selection count tables (from demultiplexing)
+    |   |---- AG24_4/                      # One selection / condition / replicate
+    |   |   `---- counts.txt               # Count table for this selection
+    |   |---- AG24_4_counts.txt            # Flattened copy of the AG24_4 counts
+    |   |---- AG24_5/
+    |   |   `---- counts.txt
+    |   |---- AG24_6/
+    |   |   `---- counts.txt
+    |   |---- AG24_13/
+    |   |   `---- counts.txt
+    |   `---- ...                          # Many more selections
+    |
+    |---- qc/                              # Quality control outputs
+    |   |---- report.txt                   # Human-readable QC summary
+    |   |---- hits_{0-S0,1-C0,2-B0,...}.parquet  # Per-step hit tables
+    |   `---- hits_{0-S0,1-C0,2-B0,...}.pdf      # Per-step QC report plots
+    |
+    `---- analysis/                        # Downstream statistical analyses
+        `---- protein_vs_no_protein/       # One analysis definition (experiment name)
+            |---- samples.csv              # metadata for statistical analysis
+            |---- data.csv                 # data for statistical analysis
+            |
+            |---- counts/                  # Simple counts-based enrichment
+            |   |---- enrichment_counts.R  # Script to compute enrichment
+            |   |---- stats.csv            # Full results table
+            |   |---- hits.csv             # Filtered top hits
+            |   |---- protein.csv          # Group-normalized counts
+            |   |---- no_protein.csv       # Group-normalized counts
+            |   `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
+            |
+            |---- edgeR/                   # edgeR-based differential enrichment
+            |   |---- enrichment_edgeR.R   # edgeR workflow script
+            |   |---- enrichment_stats.csv # Full results with p-values/FDR
+            |   |---- enrichment_hits.csv  # Significant hits (e.g., FDR < 0.05)
+            |   |---- {AG24_4,AG24_5,AG24_6,...}.csv  # Normalized counts per selection
+            |   `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
+            |
+            `---- zscore/                  # Normalized z-score enrichment
+                |---- stats.csv            # Per-group mean z-score + enrichment score
+                |---- hits.csv             # Top-ranked compounds by z-score
+                `---- {AG24_4,AG24_5,AG24_6,...}.csv  # Per-selection z-scores
+\end{lstlisting}
+
+\subsection{Chemical library characterization}
+Library enumeration generates structural and chemical-space information for all possible compounds in the DEL.
+
+Library enumeration:
+
+The reaction graph (Figure 2) visualizes the synthetic scheme and shows how building blocks combine through defined reactions to generate final products. This representation helps validate:
+
+\begin{itemize}
+  \item Correct reaction connectivity
+  \item Building block incorporation at each step
+  \item Expected product formation
+\end{itemize}
+Library size:
+
+\begin{itemize}
+  \item Library enumeration should produce as many compounds as expected for the provided library setup.
+\end{itemize}
+Molecular property distributions:
+
+Property calculation provides descriptor analysis for chemical characterization. Figure 3 shows a typical molecular weight distribution, with most compounds falling in the 300--600 Da range.
+
+
+\subsection{Demultiplexing performance}
+Successful demultiplexing is consistent with good library and sequencing quality.
+
+Quality-control visualizations (Figures 4--5) show:
+
+\begin{itemize}
+  \item Read retention through processing steps: the percentage of reads retained after each adapter-trimming step
+  \item Barcode coverage distributions: how evenly reads are distributed across building blocks
+  \item Error-rate distributions: the frequency of sequencing errors detected at each position
+\end{itemize}
+Typical interpretations are:
+
+\begin{itemize}
+  \item Excellent or good performance: library construction and sequencing quality are likely to be high
+  \item Acceptable performance: the dataset remains usable but may have reduced sensitivity
+  \item Poor performance: technical issues are likely and troubleshooting is required
+\end{itemize}
+Common patterns include:
+
+\begin{itemize}
+  \item High initial retention (\textgreater{}90\%): correct adapter sequences and good sequencing quality
+  \item Even barcode distribution: a well-balanced library with limited synthesis bias
+  \item Low error rates (\textless{}2\%): sequencing quality suitable for stringent matching
+\end{itemize}
+
+\subsection{Statistical analysis outputs}
+Hit identification produces ranked lists of enriched compounds together with measures of statistical significance.
+
+Expected enrichment patterns for a typical protein target screen against negative controls include:
+
+\begin{itemize}
+  \item dynamic range of approximately 2--1000-fold enrichment over negative controls
+  \item replicate consistency, with Pearson correlation \textit{R} \textgreater{} 0.7 between biological replicates
+  \item reliable detection of \textgreater{}2-fold enrichment when counts exceed \textgreater{}100 reads per compound
+  \item reproducible selection experiments with limited batch effects
+\end{itemize}
+
+\subsection{Integration capabilities and downstream applications}
+DELT-Hit outputs can be used in established cheminformatics and machine-learning workflows.
+
+Machine-learning workflows:
+
+The generated molecular representations enable:
+
+\begin{itemize}
+  \item Scikit-learn compatibility: Morgan fingerprints for classification, regression, and clustering
+  \item deep-learning workflows: BERT embeddings compatible with TensorFlow and PyTorch
+  \item chemical similarity analysis: Tanimoto similarity calculations using Morgan fingerprints
+  \item dimensionality reduction: PCA, t-SNE, or UMAP visualization of chemical space
+\end{itemize}
+Cheminformatics pipelines:
+
+Integration with RDKit and related tools supports:
+
+\begin{itemize}
+  \item structure-activity relationship (SAR) analysis to identify structural motifs associated with activity
+  \item virtual screening of larger chemical databases using enriched compounds
+\end{itemize}
+Statistical analysis:
+
+Direct export to R supports:
+
+\begin{itemize}
+  \item dose-response modeling across multiple selection stringencies
+  \item multi-target analysis across different protein targets
+\end{itemize}

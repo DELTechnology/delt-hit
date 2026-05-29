@@ -1,0 +1,168 @@
+\section{Materials}
+
+\subsection{Equipment}
+Computing hardware:
+
+\begin{itemize}
+  \item Minimum configuration: 8 GB RAM, 8 CPU cores, 50 GB available storage
+  \item Recommended configuration: 32 GB RAM, 16 CPU cores, 100 GB available storage
+  \item High-performance setup: 64 GB RAM, 32 CPU cores, 250 GB SSD storage
+\end{itemize}
+Operating systems:
+
+\begin{itemize}
+  \item Linux (Ubuntu 20.04+)
+  \item macOS (12.0+)
+  \item Windows 10/11 (with Windows Subsystem for Linux recommended)
+\end{itemize}
+
+\subsection{Software dependencies}
+DELT-Hit is implemented as a Python package organized into the modules \texttt{init}, \texttt{demultiplex}, \texttt{qc}, \texttt{report}, \texttt{library}, \texttt{enumerate}, \texttt{properties}, \texttt{represent}, \texttt{dashboard}, and \texttt{analyse}. Core requirements are:
+
+\begin{itemize}
+  \item Python 3.12 or higher with pip package manager
+  \item Conda package manager (Miniconda or Anaconda)
+  \item R statistical computing environment (version 4.1+)
+  \item Git version control system (version 2.0+)
+\end{itemize}
+Python packages (automatically installed):
+
+\begin{itemize}
+  \item cutadapt (4.9+): Sequence adapter trimming and demultiplexing
+  \item rdkit (2024.3+): Chemical structure processing and property calculation
+  \item pandas (2.2+): Data manipulation and statistical analysis
+  \item numpy (1.24+): Numerical computing and array operations
+  \item matplotlib/seaborn: Data visualization and publication-quality plotting
+  \item plotly: Interactive visualization and dashboard components
+  \item scipy (1.10+): Statistical functions and optimization algorithms
+\end{itemize}
+R packages (manual installation required):
+
+\begin{itemize}
+  \item edgeR: Differential expression analysis adapted for count data
+  \item limma: Linear modeling and empirical Bayes statistics
+  \item tidyverse: Data manipulation and visualization tools
+  \item GGally: Extension to ggplot2 for correlation matrices
+  \item BiocManager: Bioconductor package management
+\end{itemize}
+
+\subsection{Input file preparation}
+Required input files:
+
+
+\input{tables/input-files}
+Example datasets (available for download):
+
+The provided example dataset is a toy library based on the architecture of a published library\cite{ref37}.
+
+
+\input{tables/tutorial-datasets}
+
+\begin{tcolorbox}[
+  colback=gray!10,
+  colframe=gray!50,
+  title=Box 1 | Installing DELT-Hit,
+  fonttitle=\bfseries
+]
+In this box, we explain the installation procedure for DELT-Hit.
+
+\setupitem{Prerequisite: Git version control system}
+Git is required to download the DELT-Hit package from the GitHub repository.
+
+Verify Git installation:
+
+\begin{lstlisting}
+git --version
+# Expected output: git version 2.x.x or higher
+\end{lstlisting}
+
+If Git is not yet installed:
+
+A. For macOS:
+
+
+\begin{lstlisting}
+# Install using Homebrew (recommended)
+brew install git
+
+# Or download from: https://git-scm.com/download/mac
+\end{lstlisting}
+B. For Linux (Ubuntu/Debian):
+
+
+\begin{lstlisting}
+sudo apt-get update
+sudo apt-get install git
+\end{lstlisting}
+C. For Windows:
+
+
+\begin{lstlisting}
+# Download and install from: https://git-scm.com/download/win
+# Then use Git Bash or Windows Subsystem for Linux (WSL)
+\end{lstlisting}
+
+Verify successful installation (see above).
+
+\setupitem{Installation procedure for DELT-Hit}
+
+\setupitem{Environment setup with Conda}
+
+We recommend using Miniconda to create an isolated environment with controlled dependencies. This step is only required once.
+
+
+\begin{lstlisting}
+# Download and install Miniconda for your operating system
+# Follow instructions at: https://docs.anaconda.com/miniconda
+
+# Create dedicated environment (only needed once)
+conda create -n delt-hit python=3.12 -y
+
+# Activate environment (required for each new terminal session)
+conda activate delt-hit
+conda install pygraphviz -y
+
+# Install DELT-Hit package
+pip install git+https://git@github.com/DELTechnology/delt-hit.git
+\end{lstlisting}
+CRITICAL STEP: Activate the \texttt{delt-hit} conda environment using \texttt{conda activate delt-hit} each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with Conda during installation so that the \texttt{conda} command is available in new terminal windows. If activation fails, see Troubleshooting.
+
+
+\setupitem{R environment configuration}
+
+Statistical analysis requires R and specific Bioconductor packages. This configuration is only required once.
+
+Open R or RStudio and execute:
+
+
+\begin{lstlisting}
+# Install required CRAN packages
+install.packages(c("tidyverse", "GGally"))
+
+# Install BiocManager for Bioconductor packages
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# Install Bioconductor packages
+BiocManager::install(c("edgeR", "limma"))
+\end{lstlisting}
+
+\setupitem{Installation verification}
+
+Verify that all components are correctly installed:
+
+
+\begin{lstlisting}
+# Activate environment
+conda activate delt-hit
+
+# Test core functionality
+delt-hit --help
+
+# Expected output: Help message describing the delt-hit command
+\end{lstlisting}
+
+\end{tcolorbox}
+
+\subsection{Experimental setup}
+The installation procedure detailed in Box 1 is performed once before running the DELT-Hit workflow. Subsequent analyses are also executed from the command line within the same software environment.

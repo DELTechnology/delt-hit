@@ -1,0 +1,16 @@
+\section{Timing}
+Protocol execution times depend on dataset characteristics and computational resources. This table provides estimates for different dataset scales using the recommended hardware configuration (32 GB RAM, 16 CPU cores).
+
+
+\input{tables/timing-estimates}
+¹Small dataset: \textless{}100K compounds
+²Medium dataset: 100K-10M compounds
+³Large dataset: \textgreater{}10M compounds
+
+Notes:
+
+\begin{itemize}
+  \item Software installation is required only once before first use
+  \item Times assume the recommended hardware configuration (32 GB RAM, 16 CPU cores)
+  \item Parallel processing with the \texttt{num\_cores} parameter can substantially affect runtime
+\end{itemize}

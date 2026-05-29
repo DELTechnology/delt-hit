@@ -1,0 +1,37 @@
+\section{Troubleshooting}
+This section summarizes common issues encountered during DELT-Hit analysis.
+
+
+\input{tables/troubleshooting}
+
+\subsection{Performance optimization guidelines}
+Approximate memory requirements by library size are:
+
+\begin{itemize}
+  \item Small libraries (\textless{}1M compounds): 16 GB RAM is usually sufficient
+  \item Medium libraries (1--50M compounds): 32 GB RAM is recommended
+  \item Large libraries (\textgreater{}50M compounds): at least 32 GB RAM is required
+\end{itemize}
+To improve processing speed:
+
+\begin{itemize}
+  \item use SSD storage to improve I/O performance
+  \item increase the \texttt{num\_cores} parameter for parallel processing
+  \item use compressed FASTQ files (\texttt{.gz}) to reduce disk usage
+\end{itemize}
+
+\subsection{Quality control thresholds}
+Suggested quality indicators for demultiplexing are:
+
+\begin{itemize}
+  \item Excellent: \textgreater{}90\% initial read retention
+  \item Good: 70--90\% initial retention
+  \item Acceptable: 50--70\% initial retention
+  \item Poor: \textless{}50\% retention (requires troubleshooting)
+\end{itemize}
+Suggested quality indicators for statistical analysis are:
+
+\begin{itemize}
+  \item Replicate correlation: $R^2 > 0.7$ for biological replicates and $R^2 > 0.9$ for technical replicates
+  \item Positive and negative controls: controls should show the expected behavior
+\end{itemize}
