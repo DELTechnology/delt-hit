@@ -361,7 +361,7 @@ Dashboard features:
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/qc-stacked-barplots-with-errors.png}
-\caption{Interactive dashboard interface. The dashboard provides interactive visualization of count data with filtering capabilities (not shown). The top panel shows experimental metadata (not shown), while the main panel displays count distributions and allows exploration of specific compounds.}
+\caption{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file, annotated by sequencing error level. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors.}
 \label{fig:figure6}
 \end{figure}
 Using the dashboard:
@@ -573,7 +573,7 @@ CRITICAL STEP: Always examine replicate correlation plots to verify data quality
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/dashboard.png}
-\caption{Replicate--replicate correlation of library member counts for quality control. Diagonal panels show density estimates of counts within each selection. Lower triangular panels report pairwise correlation coefficients between replicates. Upper triangular panels display scatter plots comparing counts from one replicate against another.}
+\caption{Interactive dashboard interface for exploring raw count data and experimental metadata. The dashboard provides count-distribution views, filtering controls, and selection-level context to support rapid inspection of demultiplexing outputs before downstream statistical analysis.}
 \label{fig:figure7}
 \end{figure}
 
