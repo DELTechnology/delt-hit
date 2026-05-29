@@ -74,25 +74,42 @@ def _get_font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFo
     return ImageFont.load_default()
 
 
-TITLE = _get_font(64, bold=True)
-SUB = _get_font(40, bold=True)
-LABEL = _get_font(30, bold=True)
-SMALL = _get_font(24)
+SUB = _get_font(66, bold=True)
+SECTION = _get_font(64, bold=True)
+LABEL = _get_font(50, bold=True)
+SMALL = _get_font(44)
 
 
 def contain(image: Image.Image, size: tuple[int, int]) -> Image.Image:
     return ImageOps.contain(image.convert("RGB"), size, method=Image.Resampling.LANCZOS)
 
 
-def draw_header(
-    draw: ImageDraw.ImageDraw,
-    x: int,
-    y: int,
-    title: str,
-    subtitle: str,
-) -> None:
-    draw.text((x, y), title, font=TITLE, fill=INK)
-    draw.text((x, y + 78), subtitle, font=SMALL, fill=MUTED)
+def require_paths(paths: list[Path]) -> list[Path]:
+    missing = [path for path in paths if not path.exists()]
+    if missing:
+        joined = ", ".join(str(path) for path in missing)
+        raise FileNotFoundError(f"Missing expected PNG files: {joined}")
+    return paths
+
+
+def first_building_blocks(directory: Path, count: int) -> list[Path]:
+    indexed_paths = sorted(directory.glob("*.png"), key=lambda path: int(path.stem))
+    if len(indexed_paths) < count:
+        raise FileNotFoundError(f"Expected at least {count} PNG files in {directory}, found {len(indexed_paths)}")
+    return indexed_paths[:count]
+
+
+def top_hit_paths(visualization_root: Path) -> list[Path]:
+    library_dir = visualization_root / "libraries" / "AG24_4_top_hits"
+    hits = [
+        library_dir / "B0=11-B1=274.png",
+        library_dir / "B0=23-B1=314.png",
+        library_dir / "B0=219-B1=314.png",
+        library_dir / "B0=290-B1=314.png",
+        library_dir / "B0=295-B1=556.png",
+        library_dir / "B0=222-B1=314.png",
+    ]
+    return require_paths(hits)
 
 
 def panel(
@@ -116,16 +133,16 @@ def panel(
     inner_h = size[1] - 90
     top_offset = 0
     if title or subtitle:
-        inner_h = size[1] - 120
-        top_offset = 30
+        inner_h = size[1] - 210
+        top_offset = 58
     body = contain(image, (inner_w, inner_h))
     x = (size[0] - body.width) // 2
-    y = top_offset + (inner_h - body.height) // 2 + (30 if title or subtitle else 20)
+    y = top_offset + (inner_h - body.height) // 2 + (68 if title or subtitle else 20)
     canvas.paste(body, (x, y))
     if title:
-        draw.text((22, 18), title, font=LABEL, fill=INK)
+        draw.text((28, 24), title, font=LABEL, fill=INK)
     if subtitle:
-        draw.text((22, 56), subtitle, font=SMALL, fill=MUTED)
+        draw.text((28, 96), subtitle, font=SMALL, fill=MUTED)
     return canvas
 
 
@@ -133,107 +150,65 @@ def build_enumeration_composite(visualization_root: Path, output_path: Path) -> 
     reaction_graph = visualization_root / "reaction_graph.png"
     reaction_abf1 = visualization_root / "reactions" / "ABF1.png"
     reaction_sr = visualization_root / "reactions" / "SR.png"
+    reaction_aba2 = visualization_root / "reactions" / "ABF2.png"
 
-    b0_examples = [visualization_root / "building_blocks" / "B0" / f"{n}.png" for n in [0, 1, 10]]
-    b1_examples = [visualization_root / "building_blocks" / "B1" / f"{n}.png" for n in [0, 1, 10]]
-    compound_examples = [
-        visualization_root / "libraries" / "AG24_4_top_hits" / name
-        for name in [
-            "B0=11-B1=274.png",
-            "B0=23-B1=314.png",
-            "B0=219-B1=314.png",
-        ]
-    ]
+    b0_examples = first_building_blocks(visualization_root / "building_blocks" / "B0", 3)
+    b1_examples = first_building_blocks(visualization_root / "building_blocks" / "B1", 3)
+    require_paths([reaction_graph, reaction_abf1, reaction_sr, reaction_aba2])
 
     width, height = 3600, 3000
     figure = Image.new("RGB", (width, height), BG)
     draw = ImageDraw.Draw(figure)
-    draw_header(
-        draw,
-        120,
-        70,
-        "Enumeration workflow outputs",
-        "Reaction graph, representative reactions, building blocks, and enumerated top-hit structures",
-    )
-
     graph_panel = panel(
         reaction_graph,
-        (2050, 1320),
+        (2050, 1420),
         title="Library reaction graph",
         subtitle="Visualized from the example-single-stranded workflow",
     )
-    figure.paste(graph_panel, (100, 220))
+    figure.paste(graph_panel, (100, 100))
 
-    figure.paste(panel(reaction_abf1, (1250, 390), title="Reaction template ABF1"), (2230, 220))
-    figure.paste(panel(reaction_sr, (1250, 390), title="Reaction template SR"), (2230, 640))
+    figure.paste(panel(reaction_abf1, (1250, 400), title="Reaction template ABF1"), (2230, 100))
+    figure.paste(panel(reaction_sr, (1250, 400), title="Reaction template SR"), (2230, 520))
+    figure.paste(panel(reaction_aba2, (1250, 400), title="Reaction template ABF2"), (2230, 940))
 
-    compound_y = 1080
-    compound_w = 390
-    for i, compound_path in enumerate(compound_examples, start=1):
-        compound_panel = panel(
-            compound_path,
-            (compound_w, 520),
-            title=f"Top compound {i}",
-            subtitle=compound_path.stem,
-        )
-        figure.paste(compound_panel, (2230 + (i - 1) * (compound_w + 20), compound_y))
-
-    section_y = 1680
+    section_y = 1560
     for x, title in [
         (100, "Representative B0 building blocks"),
         (1840, "Representative B1 building blocks"),
     ]:
         draw.rounded_rectangle(
-            (x, section_y, x + 1660, section_y + 1040),
+            (x, section_y, x + 1660, section_y + 720),
             28,
             fill=SECTION_BG,
             outline=BORDER,
             width=3,
         )
-        draw.text((x + 30, section_y + 24), title, font=SUB, fill=INK)
+        draw.text((x + 30, section_y + 30), title, font=SECTION, fill=INK)
 
     for i, building_block_path in enumerate(b0_examples):
-        block_panel = panel(building_block_path, (500, 860), title=f"B0 code {building_block_path.stem}")
-        figure.paste(block_panel, (140 + i * 520, 1820))
+        block_panel = panel(building_block_path, (500, 540), title=f"B0 code {building_block_path.stem}")
+        figure.paste(block_panel, (140 + i * 520, 1680))
 
     for i, building_block_path in enumerate(b1_examples):
-        block_panel = panel(building_block_path, (500, 860), title=f"B1 code {building_block_path.stem}")
-        figure.paste(block_panel, (1880 + i * 520, 1820))
+        block_panel = panel(building_block_path, (500, 540), title=f"B1 code {building_block_path.stem}")
+        figure.paste(block_panel, (1880 + i * 520, 1680))
 
     figure.save(output_path, quality=95)
 
 
 def build_library_examples_composite(visualization_root: Path, output_path: Path) -> None:
-    library_examples = [
-        visualization_root / "libraries" / "AG24_4_top_hits" / name
-        for name in [
-            "B0=11-B1=274.png",
-            "B0=23-B1=314.png",
-            "B0=219-B1=314.png",
-            "B0=290-B1=314.png",
-            "B0=295-B1=556.png",
-            "B0=222-B1=314.png",
-        ]
-    ]
+    library_examples = top_hit_paths(visualization_root)
 
     width, height = 3300, 2600
     figure = Image.new("RGB", (width, height), BG)
-    draw = ImageDraw.Draw(figure)
-    draw_header(
-        draw,
-        110,
-        70,
-        "Library visualization examples",
-        "Six representative enumerated top-hit structures from AG24_4_top_hits",
-    )
 
     positions = [
-        (110, 260),
-        (1160, 260),
-        (2210, 260),
-        (110, 1360),
-        (1160, 1360),
-        (2210, 1360),
+        (110, 110),
+        (1160, 110),
+        (2210, 110),
+        (110, 1260),
+        (1160, 1260),
+        (2210, 1260),
     ]
     size = (980, 980)
     for i, (image_path, (x, y)) in enumerate(zip(library_examples, positions), start=1):

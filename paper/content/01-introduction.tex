@@ -110,7 +110,7 @@ Pharmaceutical companies that run DEL campaigns typically use internal or licens
 
 Contract research organizations (CROs) also provide DEL screening as a service against user-supplied targets. These services usually return processed results without exposing the underlying computational workflow or intermediate data products. As a result, users have limited opportunity to adapt the analysis, inspect intermediate outputs, or integrate DEL informatics into their own pipelines.
 
-To our knowledge, DELi\cite{ref41} is the only other open-source software package that combines barcode decoding, enrichment analysis, and library enumeration. DELi and DELT-Hit share several design principles, including modular architecture, transparent configuration, and integration with established bioinformatics and cheminformatics tools such as Cutadapt and RDKit. DELT-Hit differs in several areas:
+To our knowledge, DELi\cite{ref41} is the only other open-source software package that combines barcode decoding, enrichment analysis, and library enumeration. DELi and DELT-Hit share several design principles, including modular architecture, transparent configuration, and integration with established bioinformatics and cheminformatics tools such as Cutadapt and RDKit (Table~\ref{tab:delt-deli-comparison}). DELT-Hit differs in several areas:
 
 \begin{itemize}
   \item support for arbitrary reaction graphs for enumeration, enabling reconstruction of complex synthetic schemes
@@ -119,4 +119,3 @@ To our knowledge, DELi\cite{ref41} is the only other open-source software packag
 \end{itemize}
 
 DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration. A more detailed comparison of DELT-Hit and DELi is provided in Supplementary Note~\ref{supp:comparison-delt-deli}. A concise comparison of enrichment score rankings for recovery of a literature-supported CA9-associated building block in the Favalli dataset is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}.
-
