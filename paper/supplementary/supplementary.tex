@@ -7,10 +7,29 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{amssymb}
+\usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{pdflscape}
 \usepackage{hyperref}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{seqsplit}
+
+\captionsetup{font=small, labelfont=bf, skip=6pt}
+\renewcommand{\figurename}{Supplementary Figure}
+\renewcommand{\tablename}{Supplementary Table}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand{\kd}{$K_d$}
 
 \hypersetup{
   colorlinks=true,
@@ -19,7 +38,7 @@
   citecolor=blue,
 }
 
-\title{Supplementary Information}
+\title{Supplementary Notes}
 \author{}
 \date{}
 
@@ -29,11 +48,29 @@
 \setcounter{subsection}{0}
 \renewcommand{\thesubsection}{\arabic{subsection}}
 
+\newcommand{\delthit}{\textit{DELT-Hit}}
+\newcommand{\delexplore}{\textit{DELT-Hit}}
+\newcommand{\deli}{\textit{DELi}}
+\newcommand{\statusgreen}{\raisebox{0.15ex}{\textcolor{green!50!black}{\large$\bullet$}}}
+\newcommand{\statusamber}{\raisebox{0.15ex}{\textcolor{orange!90!black}{\large$\bullet$}}}
+\newcommand{\statusopen}{\raisebox{0.15ex}{\textcolor{gray}{\large$\bullet$}}}
+\newcommand{\statusred}{\raisebox{0.15ex}{\textcolor{red!70!black}{\large$\bullet$}}}
+
+This file is organized as five Supplementary Notes. Supplementary
+Note~1 re-analyses published count tables, Supplementary Note~2 compares the
+DELT-Hit and DELi workflows, Supplementary Note~3 compares enrichment score
+rankings for the Favalli CA9 selection, Supplementary Note~4 gives an advanced
+reaction-graph configuration example, and Supplementary Note~5
+provides a set of SMIRKS for standard DEL reactions.
+
 \input{analysis-of-published-datasets}
 \input{comparison-delt-deli}
+\clearpage
+\input{enrichment-scores-comparison}
 \input{reaction-graph-advanced}
+\input{template-reactions}
 
-\bibliographystyle{plainnat}
+\bibliographystyle{unsrt}
 \bibliography{../references}
 
 \end{document}
