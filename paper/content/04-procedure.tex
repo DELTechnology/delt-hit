@@ -188,7 +188,7 @@ Generate the demultiplexing scripts with its dependencies and execute the analys
 delt-hit demultiplex prepare --config_path=$CONFIG_PATH
 
 # Execute demultiplexing
-campaign/demultiplex/cutadapt_input_files/demultiplex.sh
+<name>/demultiplex/cutadapt_input_files/demultiplex.sh
 \end{lstlisting}
 The demultiplexing process performs:
 
@@ -300,7 +300,8 @@ Visualize demultiplexing results and explore count distributions:
 
 
 \begin{lstlisting}
-delt-hit dashboard --config_path=$CONFIG_PATH --counts_path=campaign/selections/AG24_4_counts.txt
+delt-hit dashboard --config_path=$CONFIG_PATH \
+  --counts_path=<name>/selections/<selection_name>/counts.txt
 
 # Dash is running on http://127.0.0.1:8050/  # copy paste into browser
 # * Serving Flask app 'delt_hit.cli.dashboard.api'
@@ -346,9 +347,9 @@ delt-hit visualize enumerate --config_path=$CONFIG_PATH
 
 delt-hit library enumerate \
   --config_path=$CONFIG_PATH \
-  --counts_path=campaign/selections/AG24_4_counts.txt \
-  --top_n=1000 \
-  --library_name=AG24_4_top_hits
+  --counts_path=<name>/selections/<selection_name>/counts.txt \
+  --top_n=<top_n> \
+  --library_name=<library_name>
 \end{lstlisting}
 These commands:
 
@@ -361,7 +362,7 @@ These commands:
 Expected outputs:
 
 \begin{itemize}
-  \item library/AG24\_4\_top\_hits.parquet: Compound catalog for the top hits with SMILES and barcode mappings
+  \item library/\textless library\_name\textgreater.parquet: Compound catalog for the top hits with SMILES and barcode mappings
   \item library/visualization/reaction\_graph.png: Visual representation of synthetic schema
   \item library/visualization/reaction\_graph\_additional.png: Visualizes the additional reactions from the reaction\_graph sheet
   \item library/visualization/reaction\_graph\_building\_blocks.png: Visualizes the reactions derived from the building block sheets B0, B1, etc.
@@ -383,8 +384,8 @@ Visualize the enumerated top hits and calculate molecular descriptors for chemic
 
 
 \begin{lstlisting}
-delt-hit visualize library --config_path=$CONFIG_PATH --library_name=AG24_4_top_hits
-delt-hit library properties --config_path=$CONFIG_PATH --library_name=AG24_4_top_hits
+delt-hit visualize library --config_path=$CONFIG_PATH --library_name=<library_name>
+delt-hit library properties --config_path=$CONFIG_PATH --library_name=<library_name>
 \end{lstlisting}
 Computed properties include:
 
@@ -397,9 +398,9 @@ Computed properties include:
 Expected outputs:
 
 \begin{itemize}
-  \item library/properties/AG24\_4\_top\_hits/properties.parquet: Top-hit catalog augmented with molecular descriptors
-  \item library/properties/AG24\_4\_top\_hits/prop\_*.png: Distribution plots for each calculated property
-  \item library/visualization/libraries/AG24\_4\_top\_hits/*.png: Per-compound structure renderings for the enumerated top-hit set
+  \item library/properties/\textless library\_name\textgreater/properties.parquet: Top-hit catalog augmented with molecular descriptors
+  \item library/properties/\textless library\_name\textgreater/prop\_*.png: Distribution plots for each calculated property
+  \item library/visualization/libraries/\textless library\_name\textgreater/*.png: Per-compound structure renderings for the enumerated top-hit set
 \end{itemize}
 
 \begin{figure}[H]
@@ -460,10 +461,11 @@ A. Simple counts method
 
 \begin{lstlisting}
 # Generate R script for counts-based analysis
-delt-hit analyse enrichment --analysis_config=analysis.yaml --save_dir=campaign/analysis --name=condition_vs_control --method=counts
+delt-hit analyse enrichment --analysis_config=<analysis_config> \
+  --save_dir=<save_dir> --name=<experiment_name> --method=counts
 
 # Execute the generated R script
-Rscript --vanilla campaign/analysis/counts/condition_vs_control/enrichment_counts.R
+Rscript --vanilla <save_dir>/counts/<experiment_name>/enrichment_counts.R
 \end{lstlisting}
 The simple counts method averages counts across replicates within each group and computes a direct enrichment score from the difference between the condition and control groups. It does not provide formal significance testing, but it is useful as a straightforward ranking approach when replicate-based comparisons are being evaluated.
 
@@ -472,11 +474,11 @@ B. edgeR method
 
 \begin{lstlisting}
 # Generate R script for edgeR statistical analysis
-delt-hit analyse enrichment --analysis_config=analysis.yaml --save_dir=campaign/analysis --name=condition_vs_control --method=edgeR
-
+delt-hit analyse enrichment --analysis_config=<analysis_config> \
+  --save_dir=<save_dir> --name=<experiment_name> --method=edgeR
 
 # Execute the generated R script
-Rscript --vanilla campaign/analysis/edgeR/condition_vs_control/enrichment_edgeR.R
+Rscript --vanilla <save_dir>/edgeR/<experiment_name>/enrichment_edgeR.R
 \end{lstlisting}
 The edgeR method applies RNA-seq-derived statistical modeling with empirical Bayes shrinkage, reports false-discovery-rate-corrected \textit{P} values, and provides normalized count tables for each selection. It requires replicates and is best used as a significance-annotation layer alongside enrichment ranking.
 
@@ -484,10 +486,12 @@ C. Normalized z-score method
 
 \begin{lstlisting}
 # Generate R script for normalized z-score analysis
-delt-hit analyse enrichment --config_path=campaign/config.yaml --counts=campaign/selections/AG24_15/counts.txt --save_dir=campaign/analysis --name=AG24_15 --method=z_score
+delt-hit analyse enrichment --config_path=$CONFIG_PATH \
+  --counts=<name>/selections/<selection_name>/counts.txt \
+  --save_dir=<save_dir> --name=<selection_name> --method=z_score
 
 # Execute the generated R script
-Rscript --vanilla campaign/analysis/z_score/AG24_15/enrichment_z_score.R
+Rscript --vanilla <save_dir>/z_score/<selection_name>/enrichment_z_score.R
 \end{lstlisting}
 The normalized z-score method computes the per-compound score for an individual selection following Faver et al.\cite{faver_quantitativecomparisonenrichment_2019}. Because it does not rely on replicate-based variance estimation, it can also be applied to experiments without replicates.
 
@@ -550,11 +554,11 @@ Create standardized chemical representations compatible with common machine-lear
 \begin{lstlisting}
 # Morgan fingerprints for similarity analysis
 # Approx. 600-1000 compounds/s
-delt-hit library represent --method=morgan --config_path=/path/to/config.yaml
+delt-hit library represent --method=morgan --config_path=$CONFIG_PATH
 
 # BERT embeddings for deep learning applications
 # Approx. 600-1000 compounds/s
-delt-hit library represent --method=bert --config_path=/path/to/config.yaml
+delt-hit library represent --method=bert --config_path=$CONFIG_PATH
 \end{lstlisting}
 Available representation methods:
 
