@@ -441,14 +441,14 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
             ], className="mb-4")
         ], className="mb-8"),
 
-        # Stats + Plot
-        html.Div([
-            html.H3("Dataset Statistics", className="text-xl font-bold mb-2"),
-            html.Div(id="stats-display", className="bg-gray-100 p-4 rounded-lg mb-4")
-        ]),
+        # Plot + Stats
         html.Div([
             dcc.Graph(id='counts-plot', style={'height': '800px', 'width': '100%'})
-        ], className="bg-white p-4 rounded-lg shadow")
+        ], className="bg-white p-4 rounded-lg shadow mb-4"),
+        html.Div([
+            html.H3("Dataset Statistics", className="text-xl font-bold mb-2"),
+            html.Div(id="stats-display", className="bg-gray-100 p-4 rounded-lg")
+        ])
 
     ], className="container mx-auto p-4 bg-gray-50 min-h-screen")
 
