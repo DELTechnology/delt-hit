@@ -14,7 +14,7 @@ Create an Excel workbook with multiple sheets defining the experiment. We recomm
 
 
 \input{tables/experiment-config}
-CRITICAL STEP: Use absolute paths, or paths relative to the working directory, for \texttt{fastq\_path} and \texttt{save\_dir}. Here, \texttt{./} refers to the current working directory from which the command is run.
+CRITICAL: Use absolute paths, or paths relative to the working directory, for \texttt{fastq\_path} and \texttt{save\_dir}. Here, \texttt{./} refers to the current working directory from which the command is run.
 
 
 \protocolstep{2}{Create the selection sheet}
@@ -62,7 +62,7 @@ Column descriptions:
   \item \texttt{max\_error\_rate}: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = 10\% errors)
   \item \texttt{indels}: Whether to allow insertions/deletions (\texttt{TRUE}/\texttt{FALSE})
 \end{itemize}
-CRITICAL STEP: To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
+CRITICAL: To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
 
 
 \protocolstep{4}{Create the constant sheet}
@@ -71,7 +71,7 @@ The \texttt{constant} sheet contains the DNA sequences for all constant regions 
 
 
 \input{tables/constant-regions}
-CRITICAL STEP: The \texttt{name} column must match the constant-region names defined in the \texttt{structure} sheet.
+CRITICAL: The \texttt{name} column must match the constant-region names defined in the \texttt{structure} sheet.
 
 
 \protocolstep{5}{Create building block sheets (\texttt{B0}, \texttt{B1}, etc.)}
@@ -122,7 +122,7 @@ Only required for library enumeration. In the \texttt{reactions} sheet, define a
 
 
 \input{tables/reaction-smirks}
-CRITICAL STEP: The \texttt{name} column must match the reaction names used in the \texttt{B0}, \texttt{B1}, ..., \texttt{BN} sheets.
+CRITICAL: The \texttt{name} column must match the reaction names used in the \texttt{B0}, \texttt{B1}, ..., \texttt{BN} sheets.
 
 
 \protocolstep{7}{Create the compounds sheet}
@@ -150,7 +150,7 @@ Once your Excel file is complete with all required sheets, activate the DELT-Hit
 conda activate delt-hit
 delt-hit init --excel_path=<PATH_TO_EXCEL>
 \end{lstlisting}
-This command creates a YAML configuration file at \texttt{\textless save\_dir\textgreater/\textless name\textgreater/config.yaml}, as defined in the \texttt{experiment} sheet. The placeholders \texttt{\textless name\textgreater} and \texttt{\textless save\_dir\textgreater} used throughout the subsequent steps refer to the \texttt{name} and \texttt{save\_dir} fields in Table~\ref{tab:table3}.
+This command creates a YAML configuration file at \texttt{\textless save\_dir\textgreater/\textless name\textgreater/config.yaml}, as defined in the \texttt{experiment} sheet. Throughout the following steps, angle-bracket tokens such as \texttt{\textless name\textgreater}, \texttt{\textless save\_dir\textgreater}, \texttt{\textless selection\_name\textgreater}, and \texttt{\textless library\_name\textgreater} are placeholders to be replaced with values from the Excel workbook or analysis YAML. \texttt{\textless name\textgreater} and \texttt{\textless save\_dir\textgreater} refer to the fields in Table~\ref{tab:table3}; \texttt{\textless experiment\_name\textgreater} and \texttt{\textless selection\_name\textgreater} refer to the \texttt{name} fields in the analysis YAML defined in Step~17.
 
 Expected output:
 
@@ -158,7 +158,7 @@ Expected output:
 \begin{lstlisting}
 Configuration created at <save_dir>/<name>/config.yaml
 \end{lstlisting}
-CRITICAL STEP: Review the generated YAML file to verify that all information was parsed correctly. This file is used in all downstream steps.
+CRITICAL: Review the generated YAML file to verify that all information was parsed correctly. This file is used in all downstream steps.
 
 \subsection{Phase 2: Sequence processing and demultiplexing}
 \textbf{TIMING 30 min - 4 h}
@@ -326,7 +326,7 @@ Using the dashboard:
 \end{itemize}
 CAUTION: The dashboard displays raw counts from demultiplexing. For statistical comparisons and hit identification, use the enrichment analysis results from Phase 5. The command accepts counts provided as a \texttt{.txt} file, so users can also visualize custom normalized count tables by passing \texttt{--counts\_path} and, if needed, \texttt{--selection\_name}.
 
-CRITICAL STEP: Use the default folder hierarchy produced by \texttt{delt-hit demultiplex process}. If a custom \texttt{counts.txt} file is provided, also pass the selection name exactly as specified in the selection sheet.
+CRITICAL: Use the default folder hierarchy produced by \texttt{delt-hit demultiplex process}. If a custom \texttt{counts.txt} file is provided, also pass the selection name exactly as specified in the selection sheet.
 
 \newpage
 
@@ -426,7 +426,7 @@ This file supports comparisons across different selection runs, including runs d
 
 
 \begin{lstlisting}
-# analysis.yaml
+# analysis.yaml -- general structure
 experiments:
 - name: <experiment_name>        # referenced as --name in enrichment commands
   save_dir: <save_dir>           # referenced as --save_dir in enrichment commands
@@ -435,6 +435,34 @@ experiments:
       counts_path: <name>/selections/<selection_name>/counts.txt
       group: control             # or "condition"
     - ...
+\end{lstlisting}
+
+Example for the single-stranded workflow (see Box~2):
+
+\begin{lstlisting}
+# analysis.yaml -- single-stranded example
+experiments:
+- name: condition_vs_control
+  save_dir: campaign/analysis
+  selections:
+    - name: AG24_4
+      counts_path: campaign/selections/AG24_4/counts.txt
+      group: control
+    - name: AG24_5
+      counts_path: campaign/selections/AG24_5/counts.txt
+      group: control
+    - name: AG24_6
+      counts_path: campaign/selections/AG24_6/counts.txt
+      group: control
+    - name: AG24_13
+      counts_path: campaign/selections/AG24_13/counts.txt
+      group: condition
+    - name: AG24_14
+      counts_path: campaign/selections/AG24_14/counts.txt
+      group: condition
+    - name: AG24_15
+      counts_path: campaign/selections/AG24_15/counts.txt
+      group: condition
 \end{lstlisting}
 
 \protocolstep{18}{Perform enrichment analysis with statistical methods}
@@ -500,7 +528,7 @@ Interpreting results:
   \item FDR \textless{} 0.05 indicates statistically significant enrichment for methods that report adjusted \textit{P} values
   \item High replicate correlation ($R^2 > 0.7$) indicates good experimental consistency
 \end{itemize}
-CRITICAL STEP: Always examine replicate correlation plots to verify data quality before interpreting hit lists. Poor correlation may indicate technical problems or batch effects.
+CRITICAL: Always examine replicate correlation plots to verify data quality before interpreting hit lists. Poor correlation may indicate technical problems or batch effects.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/dashboard.png}
