@@ -7,6 +7,23 @@ Protocol execution times depend on dataset characteristics and computational res
 ²Medium dataset: 100K-10M compounds
 ³Large dataset: \textgreater{}10M compounds
 
+Measured runtimes for the three manuscript example workflows can be read directly from the terminal or scheduler output because each command in the support scripts is prefixed with \texttt{time} (\path{supporting_material/experiments/example-single-stranded/run.sh}, \path{supporting_material/experiments/pure-del/run.sh}, and \path{supporting_material/experiments/favalli/run-all.sh}).
+
+\begin{table}[htbp]
+\centering
+\caption{Measured runtime for the manuscript example workflows}
+\label{tab:application-timing}
+\begin{tabular}{p{4.6cm}p{3.2cm}p{5.6cm}}
+\toprule
+Example workflow & Runtime & Timing source \\
+\midrule
+Example single-stranded library & To be measured & terminal or job log from \path{supporting_material/experiments/example-single-stranded/run.sh} \\
+Pure-DEL re-analysis & To be measured & terminal or job log from \path{supporting_material/experiments/pure-del/run.sh} \\
+Favalli re-analysis & To be measured & terminal or job log from \path{supporting_material/experiments/favalli/run-all.sh} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 Notes:
 
 \begin{itemize}
