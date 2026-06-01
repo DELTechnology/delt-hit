@@ -240,7 +240,7 @@ These commands:
 Expected outputs:
 
 \begin{itemize}
-  \item \texttt{selections/<selection\_name>/counts.txt}: Tab-delimited count table with columns:
+  \item \texttt{selections/\textless selection\_name\textgreater/counts.txt}: Tab-delimited count table with columns:
   \item \texttt{code\_0}, \texttt{code\_1}, ...: Building block indices
   \item \texttt{name}: Selection identifier
   \item \texttt{count}: Number of reads for this compound in this selection
@@ -362,10 +362,10 @@ These commands:
 Expected outputs:
 
 \begin{itemize}
-  \item library/\textless library\_name\textgreater.parquet: Compound catalog for the top hits with SMILES and barcode mappings
-  \item library/visualization/reaction\_graph.png: Visual representation of synthetic schema
-  \item library/visualization/reaction\_graph\_additional.png: Visualizes the additional reactions from the reaction\_graph sheet
-  \item library/visualization/reaction\_graph\_building\_blocks.png: Visualizes the reactions derived from the building block sheets B0, B1, etc.
+  \item \texttt{library/\textless library\_name\textgreater.parquet}: Compound catalog for the top hits with SMILES and barcode mappings
+  \item \texttt{library/visualization/reaction\_graph.png}: Visual representation of synthetic schema
+  \item \texttt{library/visualization/reaction\_graph\_additional.png}: Visualizes the additional reactions from the \texttt{reaction\_graph} sheet
+  \item \texttt{library/visualization/reaction\_graph\_building\_blocks.png}: Visualizes the reactions derived from the building block sheets \texttt{B0}, \texttt{B1}, etc.
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -398,9 +398,9 @@ Computed properties include:
 Expected outputs:
 
 \begin{itemize}
-  \item library/properties/\textless library\_name\textgreater/properties.parquet: Top-hit catalog augmented with molecular descriptors
-  \item library/properties/\textless library\_name\textgreater/prop\_*.png: Distribution plots for each calculated property
-  \item library/visualization/libraries/\textless library\_name\textgreater/*.png: Per-compound structure renderings for the enumerated top-hit set
+  \item \texttt{library/properties/\textless library\_name\textgreater/properties.parquet}: Top-hit catalog augmented with molecular descriptors
+  \item \texttt{library/properties/\textless library\_name\textgreater/prop\_*.png}: Distribution plots for each calculated property
+  \item \texttt{library/visualization/libraries/\textless library\_name\textgreater/*.png}: Per-compound structure renderings for the enumerated top-hit set
 \end{itemize}
 
 \begin{figure}[H]
@@ -514,9 +514,9 @@ For all three methods, the tool produces R scripts that can be adapted to more s
 Expected outputs:
 
 \begin{itemize}
-  \item \texttt{<method>/hits.csv}: top-ranked compounds
-  \item \texttt{<method>/stats.csv}: full results table
-  \item \texttt{<method>/enrichment.R}: executable analysis script
+  \item \texttt{\textless method\textgreater/hits.csv}: top-ranked compounds
+  \item \texttt{\textless method\textgreater/stats.csv}: full results table
+  \item \texttt{\textless method\textgreater/enrichment.R}: executable analysis script
 \end{itemize}
 These files report, for each compound, the enrichment score and, where applicable, method-specific parameters such as log fold change or \textit{P} values.
 
