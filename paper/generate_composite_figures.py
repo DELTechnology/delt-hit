@@ -267,10 +267,10 @@ def build_properties_and_examples_composite(
     positions = [
         (1920, 110),
         (2720, 110),
-        (1920, 1450),
-        (2720, 1450),
+        (1920, 1560),
+        (2720, 1560),
     ]
-    size = (730, 1220)
+    size = (730, 1330)
     for i, (image_path, (x, y)) in enumerate(zip(library_examples, positions), start=1):
         example_panel = panel(image_path, size, title=f"Example {i}", subtitle=image_path.stem)
         figure.paste(example_panel, (x, y))
