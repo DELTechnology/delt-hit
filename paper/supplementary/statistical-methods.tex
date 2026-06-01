@@ -6,8 +6,8 @@ settings where each is most appropriate.
 
 \textbf{Count Method.}
 The count method averages raw sequencing counts across replicates within each
-condition and scores each compound by the difference between the protein
-and no-protein means, $\bar{c}_{\rm prot} - \bar{c}_{\rm ctrl}$. It is a
+group and scores each compound by the difference between the condition
+and control means, $\bar{c}_{\rm cond} - \bar{c}_{\rm ctrl}$. It is a
 transparent count-based baseline that averages replicate counts and does not
 assume a parametric count distribution. Its main weakness is sensitivity to
 read-depth differences and raw-count scale, because the current default workflow
@@ -48,7 +48,7 @@ depth, barcode-decoding efficiency, and chemical synthesis yield. Per-compound
 dispersion is estimated by empirical Bayes shrinkage towards a trend fitted
 across all compounds\cite{ref36}. A likelihood-ratio test (LRT) is performed
 for each compound to compare the NB-GLM fit under a two-group design
-(protein vs.\ no-protein) against a null model; Benjamini--Hochberg
+(condition vs.\ control) against a null model; Benjamini--Hochberg
 false-discovery rate (FDR) correction is applied across all compounds.
 Compounds are ranked by log$_2$ fold change (logFC); FDR is available as a
 secondary filter.

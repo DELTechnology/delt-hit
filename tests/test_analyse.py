@@ -22,14 +22,14 @@ def write_counts(path: Path, rows: list[dict]) -> Path:
 
 def make_analysis_config(tmp_path: Path) -> tuple[Path, Path]:
     selection_a = write_counts(
-        tmp_path / "protein_counts.txt",
+        tmp_path / "condition_counts.txt",
         [
             {"code_0": 0, "code_1": 0, "count": 10, "id": "0_0"},
             {"code_0": 0, "code_1": 1, "count": 5, "id": "0_1"},
         ],
     )
     selection_b = write_counts(
-        tmp_path / "no_protein_counts.txt",
+        tmp_path / "control_counts.txt",
         [
             {"code_0": 0, "code_1": 0, "count": 3, "id": "0_0"},
             {"code_0": 0, "code_1": 1, "count": 4, "id": "0_1"},
@@ -40,11 +40,11 @@ def make_analysis_config(tmp_path: Path) -> tuple[Path, Path]:
         {
             "experiments": [
                 {
-                    "name": "protein_vs_no_protein",
+                    "name": "condition_vs_control",
                     "save_dir": str(tmp_path / "analysis_output"),
                     "selections": [
-                        {"name": "protein_rep1", "group": "protein", "counts_path": str(selection_a)},
-                        {"name": "no_protein_rep1", "group": "no_protein", "counts_path": str(selection_b)},
+                        {"name": "condition_rep1", "group": "condition", "counts_path": str(selection_a)},
+                        {"name": "control_rep1", "group": "control", "counts_path": str(selection_b)},
                     ],
                 }
             ]
@@ -110,7 +110,7 @@ def test_deseq2_raises_not_implemented(tmp_path):
             method="DESeq2",
             save_dir=tmp_path / "output",
             analysis_config=analysis_config,
-            name="protein_vs_no_protein",
+            name="condition_vs_control",
         )
 
 
@@ -122,16 +122,16 @@ def test_counts_analysis_still_generates_merged_inputs_and_script(tmp_path):
         method="counts",
         save_dir=save_dir,
         analysis_config=analysis_config,
-        name="protein_vs_no_protein",
+        name="condition_vs_control",
     )
 
-    output_root = save_dir / "counts" / "protein_vs_no_protein"
+    output_root = save_dir / "counts" / "condition_vs_control"
     data = pd.read_csv(output_root / "data.csv")
     samples = pd.read_csv(output_root / "samples.csv")
     script_path = output_root / "enrichment_counts.R"
 
     assert list(samples.columns) == ["name", "group"]
-    assert set(data["name"]) == {"protein_rep1", "no_protein_rep1"}
+    assert set(data["name"]) == {"condition_rep1", "control_rep1"}
     assert script_path.exists()
 
 
@@ -143,10 +143,10 @@ def test_edger_analysis_generates_script(tmp_path):
         method="edgeR",
         save_dir=save_dir,
         analysis_config=analysis_config,
-        name="protein_vs_no_protein",
+        name="condition_vs_control",
     )
 
-    output_root = save_dir / "edgeR" / "protein_vs_no_protein"
+    output_root = save_dir / "edgeR" / "condition_vs_control"
     assert (output_root / "enrichment_edgeR.R").exists()
 
 
@@ -158,10 +158,10 @@ def test_edger_script_writes_hits_and_stats_csv_names(tmp_path):
         method="edgeR",
         save_dir=save_dir,
         analysis_config=analysis_config,
-        name="protein_vs_no_protein",
+        name="condition_vs_control",
     )
 
-    output_root = save_dir / "edgeR" / "protein_vs_no_protein"
+    output_root = save_dir / "edgeR" / "condition_vs_control"
     script_text = (output_root / "enrichment_edgeR.R").read_text()
 
     assert '"stats.csv"' in script_text
@@ -178,10 +178,10 @@ def test_edger_script_still_writes_selection_named_count_exports(tmp_path):
         method="edgeR",
         save_dir=save_dir,
         analysis_config=analysis_config,
-        name="protein_vs_no_protein",
+        name="condition_vs_control",
     )
 
-    output_root = save_dir / "edgeR" / "protein_vs_no_protein"
+    output_root = save_dir / "edgeR" / "condition_vs_control"
     script_text = (output_root / "enrichment_edgeR.R").read_text()
 
     assert 'fname <- paste0(selection, ".csv")' in script_text

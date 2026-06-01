@@ -1,22 +1,22 @@
 experiments:
-  - name: protein_vs_no_protein
+  - name: condition_vs_control
     save_dir: campaign/analysis
     selections:
       - name: 'AG24_4'
         counts_path: campaign/selections/AG24_4/counts.txt
-        group: no_protein
+        group: control
       - name: 'AG24_5'
         counts_path: campaign/selections/AG24_5/counts.txt
-        group: no_protein
+        group: control
       - name: 'AG24_6'
         counts_path: campaign/selections/AG24_6/counts.txt
-        group: no_protein
+        group: control
       - name: 'AG24_13'
         counts_path: campaign/selections/AG24_13/counts.txt
-        group: protein
+        group: condition
       - name: 'AG24_14'
         counts_path: campaign/selections/AG24_14/counts.txt
-        group: protein
+        group: condition
       - name: 'AG24_15'
         counts_path: campaign/selections/AG24_15/counts.txt
-        group: protein
+        group: condition

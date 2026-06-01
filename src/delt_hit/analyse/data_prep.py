@@ -5,6 +5,15 @@ from pathlib import Path
 import pandas as pd
 
 
+def canonicalize_group_name(group: str) -> str:
+    """Map legacy group labels onto generic control/condition labels."""
+    mapping = {
+        "protein": "condition",
+        "no_protein": "control",
+    }
+    return mapping.get(group, group)
+
+
 def prepare_replicate_analysis_data(*, exp: dict, data_path: Path, samples_path: Path) -> tuple[Path, Path]:
     """Compile counts and sample metadata for counts/edgeR analysis."""
     selections = exp["selections"]
@@ -19,6 +28,7 @@ def prepare_replicate_analysis_data(*, exp: dict, data_path: Path, samples_path:
         data.append(counts)
 
     samples = pd.DataFrame(selections)[["name", "group"]]
+    samples["group"] = samples["group"].map(canonicalize_group_name)
     samples_path.parent.mkdir(parents=True, exist_ok=True)
     samples.to_csv(samples_path, index=False)
 

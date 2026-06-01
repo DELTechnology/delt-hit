@@ -43,14 +43,14 @@ def parse_args() -> argparse.Namespace:
         "--analysis-config",
         type=Path,
         default=default_analysis_config,
-        help="Analysis YAML used to infer the protein replicate selections for z-score.",
+        help="Analysis YAML used to infer the condition replicate selections for z-score.",
     )
     parser.add_argument("--name", default="ca9_ds", help="Experiment name for the counts and edgeR results.")
     parser.add_argument(
         "--zscore-selections",
         nargs="*",
         default=None,
-        help="Optional explicit z-score selection names. Defaults to the protein selections for --name in the analysis config.",
+        help="Optional explicit z-score selection names. Defaults to the condition selections for --name in the analysis config.",
     )
     parser.add_argument(
         "--output-dir",
@@ -81,7 +81,7 @@ def infer_zscore_selections(*, analysis_config: Path, name: str) -> list[str]:
     config = yaml.safe_load(analysis_config.read_text())
     for experiment in config["experiments"]:
         if experiment["name"] == name:
-            return [selection["name"] for selection in experiment["selections"] if selection["group"] == "protein"]
+            return [selection["name"] for selection in experiment["selections"] if selection["group"] == "condition"]
     raise ValueError(f"Experiment {name} not found in analysis config {analysis_config}.")
 
 

@@ -33,7 +33,7 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 - [ ] Add discussion and/or data justifying the use of edgeR for DEL data.
 - [ ] Show that edgeR and other scoring methods recover positive controls robustly.
 - [ ] Preferably support the edgeR justification with a dataset containing replicates.
-- [ ] **Confirm with Jörg** which selection indices in the Favalli dataset correspond to protein vs no-protein groups (currently `1_1/2_1/3_1` vs `4_1/5_1/6_1` as placeholder in `supporting_material/experiments/favalli/analysis.yaml`). Required before enrichment results for the Favalli re-analysis can be included in the manuscript.
+- [ ] **Confirm with Jörg** which selection indices in the Favalli dataset correspond to condition vs no-condition groups (currently `1_1/2_1/3_1` vs `4_1/5_1/6_1` as placeholder in `supporting_material/experiments/favalli/analysis.yaml`). Required before enrichment results for the Favalli re-analysis can be included in the manuscript.
 - [ ] Proofread the manuscript for terminology, language consistency, and readability.
 
 ## Reviewer 2

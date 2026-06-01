@@ -37,7 +37,7 @@
 - [ ] Look into the normalised Z-score methodology (Faver et al. 2019, DOI: 10.1021/acscombsci.8b00116) as a third enrichment mode (see §4.4 below).
 
 ### Johanna
-- [ ] Compile a list of positive control building blocks and their correspondence to proteins.
+- [ ] Compile a list of positive control building blocks and their correspondence to conditions.
 
 ### Adriano
 - [ ] Change compound indexing to be consistent throughout.
@@ -163,7 +163,7 @@ Abstract chemical formats (SMILES strings, schematic graphs) are hard for chemis
 → *Action:* Adriano implements molecule visualisation (top-N final compounds); Alice adds reaction visualisation to SMIRKS overview file.
 
 **R4.3 — Diverse selection conditions**
-The tool primarily demonstrates "protein vs. no-protein". Required: discuss how the analysis modules handle competitive experiments, concentration gradients, or varied stringency washes.
+The tool primarily demonstrates "condition vs. no-condition". Required: discuss how the analysis modules handle competitive experiments, concentration gradients, or varied stringency washes.
 → *Action:* Adriano investigates and adds to manuscript.
 
 **R4.4 — Normalised Z-score enrichment mode**

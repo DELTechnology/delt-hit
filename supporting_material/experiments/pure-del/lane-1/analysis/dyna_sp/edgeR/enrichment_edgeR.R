@@ -47,7 +47,7 @@ get_hits.edgeR <- function(data, log = FALSE) {
     stringsAsFactors = FALSE
   )
   groups <- factor(sapply(data.col$name, get_group_from_name))
-  groups <- relevel(groups, "no_protein")
+  groups <- relevel(groups, "control")
   data.col$group <- groups
 
   data.counts <- as.matrix(data.wide %>% select(-all_of(code_columns), -any_of("id")))
@@ -71,8 +71,8 @@ get_hits.edgeR <- function(data, log = FALSE) {
   fit <- glmFit(y, design)
 
   cm <- makeContrasts(
-    enrichment = protein - no_protein,
-    # sticky     = no_protein - naive,
+    enrichment = condition - control,
+    # sticky     = control - naive,
     levels = design
   )
   lrt.enrichment <- glmLRT(fit, contrast = cm[, 1])

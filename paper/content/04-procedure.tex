@@ -65,7 +65,7 @@ CRITICAL STEP: Use absolute paths, or paths relative to the working directory, f
 
 \protocolstep{2}{Create the selection sheet}
 
-This sheet defines the experimental design, including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes one experimental setting, such as a target protein or control condition, and is identified by a unique combination of \texttt{S0} and \texttt{S1} primers for demultiplexing.
+This sheet defines the experimental design, including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes one experimental setting, such as a target condition or control condition, and is identified by a unique combination of \texttt{S0} and \texttt{S1} primers for demultiplexing.
 
 
 \input{tables/selection-design}
@@ -78,7 +78,7 @@ Required columns for demultiplexing:
 Optional columns:
 
 \begin{itemize}
-  \item group: Statistical grouping when needed for downstream analyses (for example, "protein", "no\_protein", "naive")
+  \item group: Statistical grouping when needed for downstream analyses (for example, "condition", "no\_condition", "naive")
   \item operator: Person who performed the selection
   \item date: Date of selection experiment
   \item other columns can be added at the user's discretion
@@ -452,27 +452,27 @@ This file supports comparisons across different selection runs, including runs d
 \begin{lstlisting}
 # new analysis.yaml
 experiments:
-- name: protein_vs_no_protein
+- name: condition_vs_control
   save_dir: campaign/analysis
   selections:
     - name: AG24_4
       counts_path: campaign/selections/AG24_4/counts.txt
-      group: no_protein
+      group: control
     - name: AG24_5
       counts_path: campaign/selections/AG24_5/counts.txt
-      group: no_protein
+      group: control
     - name: AG24_6
       counts_path: campaign/selections/AG24_6/counts.txt
-      group: no_protein
+      group: control
     - name: AG24_13
       counts_path: campaign/selections/AG24_13/counts.txt
-      group: protein
+      group: condition
     - name: AG24_14
       counts_path: campaign/selections/AG24_14/counts.txt
-      group: protein
+      group: condition
     - name: AG24_15
       counts_path: campaign/selections/AG24_15/counts.txt
-      group: protein
+      group: condition
 \end{lstlisting}
 
 \protocolstep{18}{Perform enrichment analysis with statistical methods}
@@ -485,23 +485,23 @@ A. Simple counts method
 
 \begin{lstlisting}
 # Generate R script for counts-based analysis
-delt-hit analyse enrichment --analysis_config=analysis.yaml --save_dir=campaign/analysis --name=protein_vs_no_protein --method=counts
+delt-hit analyse enrichment --analysis_config=analysis.yaml --save_dir=campaign/analysis --name=condition_vs_control --method=counts
 
 # Execute the generated R script
-Rscript --vanilla campaign/analysis/counts/protein_vs_no_protein/enrichment_counts.R
+Rscript --vanilla campaign/analysis/counts/condition_vs_control/enrichment_counts.R
 \end{lstlisting}
-The simple counts method averages counts across replicates within each group and computes a direct enrichment score from the difference between the protein and control groups. It does not provide formal significance testing, but it is useful as a straightforward ranking approach when replicate-based comparisons are being evaluated.
+The simple counts method averages counts across replicates within each group and computes a direct enrichment score from the difference between the condition and control groups. It does not provide formal significance testing, but it is useful as a straightforward ranking approach when replicate-based comparisons are being evaluated.
 
 B. edgeR method
 
 
 \begin{lstlisting}
 # Generate R script for edgeR statistical analysis
-delt-hit analyse enrichment --analysis_config=analysis.yaml --save_dir=campaign/analysis --name=protein_vs_no_protein --method=edgeR
+delt-hit analyse enrichment --analysis_config=analysis.yaml --save_dir=campaign/analysis --name=condition_vs_control --method=edgeR
 
 
 # Execute the generated R script
-Rscript --vanilla campaign/analysis/edgeR/protein_vs_no_protein/enrichment_edgeR.R
+Rscript --vanilla campaign/analysis/edgeR/condition_vs_control/enrichment_edgeR.R
 \end{lstlisting}
 The edgeR method applies RNA-seq-derived statistical modeling with empirical Bayes shrinkage, reports false-discovery-rate-corrected \textit{P} values, and provides normalized count tables for each selection. It requires replicates and is best used as a significance-annotation layer alongside enrichment ranking.
 

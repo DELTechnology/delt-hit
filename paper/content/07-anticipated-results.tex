@@ -59,7 +59,7 @@ supporting_material/experiments/example-single-stranded/
     |   `---- hits_{0-S0,1-C0,2-B0,...}.pdf      # Per-step QC report plots
     |
     `---- analysis/                        # Downstream statistical analyses
-        `---- protein_vs_no_protein/       # One analysis definition (experiment name)
+        `---- condition_vs_control/       # One analysis definition (experiment name)
             |---- samples.csv              # metadata for statistical analysis
             |---- data.csv                 # data for statistical analysis
             |
@@ -67,16 +67,16 @@ supporting_material/experiments/example-single-stranded/
             |   |---- enrichment_counts.R  # Script to compute enrichment
             |   |---- stats.csv            # Full results table
             |   |---- hits.csv             # Filtered top hits
-            |   |---- protein.csv          # Group-normalized counts
-            |   |---- no_protein.csv       # Group-normalized counts
-            |   `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
+            |   |---- condition.csv          # Group-normalized counts
+            |   |---- control.csv       # Group-normalized counts
+            |   `---- correlation_{condition,control}.png  # Replicate correlation plots
             |
             |---- edgeR/                   # edgeR-based differential enrichment
             |   |---- enrichment_edgeR.R   # edgeR workflow script
             |   |---- enrichment_stats.csv # Full results with p-values/FDR
             |   |---- enrichment_hits.csv  # Significant hits (e.g., FDR < 0.05)
             |   |---- {AG24_4,AG24_5,AG24_6,...}.csv  # Normalized counts per selection
-            |   `---- correlation_{protein,no_protein}.png  # Replicate correlation plots
+            |   `---- correlation_{condition,control}.png  # Replicate correlation plots
             |
             `---- zscore/                  # Normalized z-score enrichment
                 |---- stats.csv            # Per-group mean z-score + enrichment score
@@ -134,7 +134,7 @@ Common patterns include:
 \subsection{Statistical analysis outputs}
 Hit identification produces ranked lists of enriched compounds together with measures of statistical significance.
 
-Expected enrichment patterns for a typical protein target screen against negative controls include:
+Expected enrichment patterns for a typical condition target screen against negative controls include:
 
 \begin{itemize}
   \item dynamic range of approximately 2--1000-fold enrichment over negative controls
@@ -170,5 +170,5 @@ Direct export to R supports:
 
 \begin{itemize}
   \item dose-response modeling across multiple selection stringencies
-  \item multi-target analysis across different protein targets
+  \item multi-target analysis across different condition targets
 \end{itemize}

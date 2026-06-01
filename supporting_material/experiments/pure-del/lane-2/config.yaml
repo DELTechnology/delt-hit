@@ -9,7 +9,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Sigma-Thrombin_UP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACACAC
     S1: ATA
@@ -21,7 +21,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Sigma-Thrombin_UP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACAGCA
     S1: ATA
@@ -33,7 +33,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Sigma-Thrombin_UP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACATGT
     S1: ATA
@@ -45,7 +45,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Andys-Thrombin_UP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACGACG
     S1: ATA
@@ -57,7 +57,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Andys-Thrombin_UP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACGCGA
     S1: ATA
@@ -69,7 +69,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Andys-Thrombin_UP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACTAGC
     S1: ATA
@@ -81,7 +81,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAII-biotin_UP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACTCTG
     S1: ATA
@@ -93,7 +93,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAII-biotin_UP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACTGAT
     S1: ATA
@@ -105,7 +105,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAII-biotin_UP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: AGACTA
     S1: ATA
@@ -116,8 +116,8 @@ selections:
     alternative_name: MK_34
     operator: MK
     date: '2023-09-01'
-    target: No protein_UP
-    group: no_protein
+    target: No condition_UP
+    group: control
     beads: DynaBead C1
     S0: AGAGAG
     S1: ATA
@@ -128,8 +128,8 @@ selections:
     alternative_name: MK_35
     operator: MK
     date: '2023-09-01'
-    target: No protein_UP
-    group: no_protein
+    target: No condition_UP
+    group: control
     beads: DynaBead C1
     S0: TAGATG
     S1: ATA
@@ -140,8 +140,8 @@ selections:
     alternative_name: MK_36
     operator: MK
     date: '2023-09-01'
-    target: No protein_UP
-    group: no_protein
+    target: No condition_UP
+    group: control
     beads: DynaBead C1
     S0: TAGTGT
     S1: ATA
@@ -153,7 +153,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: MCL-1_UP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TATCAC
     S1: ATA
@@ -165,7 +165,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: MCL-1_UP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TCATAG
     S1: ATA
@@ -177,7 +177,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: MCL-1_UP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TCGTCA
     S1: ATA
@@ -189,7 +189,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAIX-His_UP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TCTACT
     S1: ATA
@@ -201,7 +201,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAIX-His_UP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TCTGTA
     S1: ATA
@@ -213,7 +213,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAIX-His_UP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TGACAT
     S1: ATA
@@ -224,8 +224,8 @@ selections:
     alternative_name: MK_43
     operator: MK
     date: '2023-09-01'
-    target: No protein_UP
-    group: no_protein
+    target: No condition_UP
+    group: control
     beads: HisPure
     S0: TGCAGC
     S1: ATA
@@ -236,8 +236,8 @@ selections:
     alternative_name: MK_44
     operator: MK
     date: '2023-09-01'
-    target: No protein_UP
-    group: no_protein
+    target: No condition_UP
+    group: control
     beads: HisPure
     S0: TGCGCG
     S1: ATA
@@ -248,8 +248,8 @@ selections:
     alternative_name: MK_45
     operator: MK
     date: '2023-09-01'
-    target: No protein_UP
-    group: no_protein
+    target: No condition_UP
+    group: control
     beads: HisPure
     S0: GCTACT
     S1: ATA
@@ -333,7 +333,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Sigma-Thrombin_SP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACACAC
     S1: TCG
@@ -345,7 +345,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Sigma-Thrombin_SP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACAGCA
     S1: TCG
@@ -357,7 +357,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Sigma-Thrombin_SP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACATGT
     S1: TCG
@@ -369,7 +369,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Andys-Thrombin_SP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACGACG
     S1: TCG
@@ -381,7 +381,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Andys-Thrombin_SP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACGCGA
     S1: TCG
@@ -393,7 +393,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: Andys-Thrombin_SP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACTAGC
     S1: TCG
@@ -405,7 +405,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAII-biotin_SP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACTCTG
     S1: TCG
@@ -417,7 +417,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAII-biotin_SP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: ACTGAT
     S1: TCG
@@ -429,7 +429,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAII-biotin_SP
-    group: protein
+    group: condition
     beads: DynaBead C1
     S0: AGACTA
     S1: TCG
@@ -440,8 +440,8 @@ selections:
     alternative_name: MK_10
     operator: MK
     date: '2023-09-01'
-    target: No protein_SP
-    group: no_protein
+    target: No condition_SP
+    group: control
     beads: DynaBead C1
     S0: AGAGAG
     S1: TCG
@@ -452,8 +452,8 @@ selections:
     alternative_name: MK_11
     operator: MK
     date: '2023-09-01'
-    target: No protein_SP
-    group: no_protein
+    target: No condition_SP
+    group: control
     beads: DynaBead C1
     S0: TAGATG
     S1: TCG
@@ -464,8 +464,8 @@ selections:
     alternative_name: MK_12
     operator: MK
     date: '2023-09-01'
-    target: No protein_SP
-    group: no_protein
+    target: No condition_SP
+    group: control
     beads: DynaBead C1
     S0: TAGTGT
     S1: TCG
@@ -477,7 +477,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: MCL-1_SP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TATCAC
     S1: TCG
@@ -489,7 +489,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: MCL-1_SP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TCATAG
     S1: TCG
@@ -501,7 +501,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: MCL-1_SP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TCGTCA
     S1: TCG
@@ -513,7 +513,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAIX-His_SP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TCTACT
     S1: TCG
@@ -525,7 +525,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAIX-His_SP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TCTGTA
     S1: TCG
@@ -537,7 +537,7 @@ selections:
     operator: MK
     date: '2023-09-01'
     target: CAIX-His_SP
-    group: protein
+    group: condition
     beads: HisPure
     S0: TGACAT
     S1: TCG
@@ -548,8 +548,8 @@ selections:
     alternative_name: MK_19
     operator: MK
     date: '2023-09-01'
-    target: No protein_SP
-    group: no_protein
+    target: No condition_SP
+    group: control
     beads: HisPure
     S0: TGCAGC
     S1: TCG
@@ -560,8 +560,8 @@ selections:
     alternative_name: MK_20
     operator: MK
     date: '2023-09-01'
-    target: No protein_SP
-    group: no_protein
+    target: No condition_SP
+    group: control
     beads: HisPure
     S0: TGCGCG
     S1: TCG
@@ -572,8 +572,8 @@ selections:
     alternative_name: MK_21
     operator: MK
     date: '2023-09-01'
-    target: No protein_SP
-    group: no_protein
+    target: No condition_SP
+    group: control
     beads: HisPure
     S0: GCTACT
     S1: TCG
