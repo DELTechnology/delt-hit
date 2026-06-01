@@ -108,7 +108,7 @@ Column descriptions:
   \item max\_error\_rate: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
   \item indels: Whether to allow insertions/deletions (TRUE/FALSE)
 \end{itemize}
-CRITICAL STEP: Selection barcodes should require perfect matches (\texttt{max\_error\_rate = 0}, \texttt{indels = FALSE}) to ensure accurate multiplexing. Constant regions can tolerate higher error rates depending on their length.
+CRITICAL STEP: To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
 
 
 \protocolstep{4}{Create the constant sheet}
@@ -205,7 +205,7 @@ The demultiplexing parameters defined in the Excel file control how reads are pr
   \item \texttt{max\_error\_rate}: Tolerance for sequencing errors (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
   \item \texttt{indels}: Whether to allow insertions/deletions during barcode matching
 \end{itemize}
-As noted above, exact matches are recommended for selection barcodes (\texttt{max\_error\_rate = 0}, \texttt{indels = FALSE}) to ensure accurate multiplexing. Constant regions can tolerate higher error rates depending on their length.
+As noted above, to balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
 
 
 \protocolstep{11}{Prepare and execute sequence demultiplexing}
