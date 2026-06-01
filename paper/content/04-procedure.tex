@@ -60,7 +60,7 @@ Create an Excel workbook with multiple sheets defining the experiment. Each shee
 
 
 \input{tables/experiment-config}
-CRITICAL STEP: Use absolute paths, or paths relative to the working directory, for \texttt{fastq\_path} and \texttt{save\_dir}. Remove any trailing whitespace.
+CRITICAL STEP: Use absolute paths, or paths relative to the working directory, for \texttt{fastq\_path} and \texttt{save\_dir}.
 
 
 \protocolstep{2}{Create the selection sheet}
@@ -105,7 +105,7 @@ Column descriptions:
 \begin{itemize}
   \item name: Unique identifier for each DNA region
   \item type: Region type (selection, constant, or building\_block)
-  \item max\_error\_rate: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
+  \item max\_error\_rate: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = 10\% errors)
   \item indels: Whether to allow insertions/deletions (TRUE/FALSE)
 \end{itemize}
 CRITICAL STEP: To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
@@ -202,7 +202,7 @@ This phase processes raw sequencing reads to identify and count each library mem
 The demultiplexing parameters defined in the Excel file control how reads are processed by Cutadapt. Key parameters include:
 
 \begin{itemize}
-  \item \texttt{max\_error\_rate}: Tolerance for sequencing errors (0 = perfect match, 0.1 = \textasciitilde{}10\% errors)
+  \item \texttt{max\_error\_rate}: Tolerance for sequencing errors (0 = perfect match, 0.1 = 10\% errors)
   \item \texttt{indels}: Whether to allow insertions/deletions during barcode matching
 \end{itemize}
 As noted above, to balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.

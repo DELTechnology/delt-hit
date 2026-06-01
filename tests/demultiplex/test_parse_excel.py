@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from delt_hit.demultiplex.parser import config_from_excel, structure_from_excel, whitelists_from_excel
+from delt_hit.demultiplex.parser import config_from_excel, experiment_from_excel, structure_from_excel, whitelists_from_excel
 
 
 def _write_excel_config(path, *, include_structure_flag_columns: bool) -> None:
@@ -71,6 +71,25 @@ def test_structure_from_excel_defaults_missing_reverse_and_complement_columns_to
         {'name': 'S1', 'type': 'selection', 'reverse': False, 'complement': False},
         {'name': 'C0', 'type': 'constant', 'reverse': False, 'complement': False},
     ]
+
+
+def test_experiment_from_excel_strips_surrounding_whitespace_from_string_entries(tmp_path):
+    excel_path = tmp_path / 'config.xlsx'
+    with pd.ExcelWriter(excel_path) as writer:
+        pd.DataFrame(
+            {
+                'variable': ['name', 'save_dir', 'fastq_path'],
+                'value': ['  demo  ', f'  {tmp_path}  ', '  reads/sample.fastq.gz  '],
+            }
+        ).to_excel(writer, sheet_name='experiment', index=False)
+
+    experiment = experiment_from_excel(excel_path)
+
+    assert experiment == {
+        'name': 'demo',
+        'save_dir': str(tmp_path),
+        'fastq_path': 'reads/sample.fastq.gz',
+    }
 
 
 def test_whitelists_from_excel_does_not_preserve_reverse_or_complement_flags(tmp_path):

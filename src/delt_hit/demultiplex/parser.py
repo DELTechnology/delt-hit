@@ -2,6 +2,12 @@ from pathlib import Path
 import pandas as pd
 
 
+def _read_excel_stripped(path: Path, *, sheet_name: str) -> pd.DataFrame:
+    """Read an Excel sheet and trim surrounding whitespace from string cells."""
+    df = pd.read_excel(path, sheet_name=sheet_name)
+    return df.map(lambda value: value.strip() if isinstance(value, str) else value)
+
+
 def _normalize_bool_flag(value) -> bool:
     """Normalize optional boolean flags from Excel into booleans."""
     if pd.isna(value):
@@ -104,7 +110,7 @@ def library_from_excel(path: Path) -> dict:
     Raises:
         AssertionError: If required columns are missing values.
     """
-    rnx_g = pd.read_excel(path, sheet_name='reaction_graph')
+    rnx_g = _read_excel_stripped(path, sheet_name='reaction_graph')
     assert not rnx_g.educt_1.isna().any(), "All `educt_1` in `reaction_graph` must be filled"
     assert not rnx_g['product'].isna().any(), "All `product` in `reaction_graph` must be filled"
     assert not rnx_g.reaction.isna().any(), "All `reaction` in `reaction_graph` must be filled"
@@ -129,7 +135,7 @@ def library_from_excel(path: Path) -> dict:
     bbs_sheets = sorted(filter(lambda x: x.startswith('B'), sheets))
     bb_edges = set()
     for sheet in bbs_sheets:
-        df = pd.read_excel(path, sheet_name=sheet)
+        df = _read_excel_stripped(path, sheet_name=sheet)
         df = df.astype(str)
 
         has_chemistry = {'smiles', 'educt', 'reaction', 'product'}.issubset(df.columns)
@@ -158,7 +164,7 @@ def experiment_from_excel(path: Path):
     Returns:
         A dict of experiment settings keyed by variable name.
     """
-    experiment = pd.read_excel(path, sheet_name='experiment')
+    experiment = _read_excel_stripped(path, sheet_name='experiment')
     return experiment.set_index('variable')['value'].to_dict()
 
 def structure_from_excel(path: Path):
@@ -173,7 +179,7 @@ def structure_from_excel(path: Path):
     Raises:
         AssertionError: If structure names or types are invalid.
     """
-    structure = pd.read_excel(path, sheet_name='structure')
+    structure = _read_excel_stripped(path, sheet_name='structure')
     assert structure.name.str.match(r'^[SCB]').all(), "Structure `name` must start with 'S', 'B', or 'C' depending on type"
     assert structure.type.isin(['selection', 'building_block', 'constant']).all(), "Structure `type` must be one of 'selection', 'building_block', or 'constant'"
     for column in ('reverse', 'complement'):
@@ -204,7 +210,7 @@ def selections_from_excel(path: Path):
     Raises:
         AssertionError: If selection names or primer combinations are invalid.
     """
-    selections = pd.read_excel(path, sheet_name='selection')
+    selections = _read_excel_stripped(path, sheet_name='selection')
     if 'date' in selections.columns:
         selections['date'] = pd.to_datetime(selections['date']).dt.strftime('%Y-%m-%d')
     selection_ids_to_name = get_selection_name_to_ids(path)
@@ -221,7 +227,7 @@ def analyses_from_excel(path: Path):
     Returns:
         A dict mapping analysis name to selection names.
     """
-    selections = pd.read_excel(path, sheet_name='selection')
+    selections = _read_excel_stripped(path, sheet_name='selection')
     analyses = {}
     for grp, data in selections.groupby('analysis'):
         analyses[grp] = data.name.tolist()
@@ -244,10 +250,10 @@ def whitelists_from_excel(path: Path):
 
     bbs_sheets = sorted(filter(lambda x: x.startswith('B'), sheets))
 
-    selections = pd.read_excel(path, sheet_name='selection')
+    selections = _read_excel_stripped(path, sheet_name='selection')
     selection_col_names = list(filter(lambda x: x.startswith('S'), selections.columns))
 
-    constants = pd.read_excel(path, sheet_name='constant')
+    constants = _read_excel_stripped(path, sheet_name='constant')
     assert constants.notna().any().any(), "`constant` cannot have empty cells"
 
     # %%
@@ -259,7 +265,7 @@ def whitelists_from_excel(path: Path):
         whitelists[name] = [{'codon': codon}]
 
     for sheet in bbs_sheets:
-        df = pd.read_excel(path, sheet_name=sheet)
+        df = _read_excel_stripped(path, sheet_name=sheet)
         assert df.codon.nunique() == len(df), f"Codons for building blocks {sheet} must be unique"
         assert df.codon.notna().all(), f"Codons for building blocks {sheet} cannot be empty"
 
@@ -287,8 +293,8 @@ def catalog_from_excel(path: Path):
     xf = pd.ExcelFile(path)
     sheets = set(xf.sheet_names)
 
-    compounds = pd.read_excel(path, sheet_name='compounds')
-    reactions = pd.read_excel(path, sheet_name='reactions')
+    compounds = _read_excel_stripped(path, sheet_name='compounds')
+    reactions = _read_excel_stripped(path, sheet_name='reactions')
 
     # %%
     catalog = {
@@ -310,7 +316,7 @@ def get_selection_name_to_ids(path: Path)-> dict:
     Raises:
         AssertionError: If primer combinations are not unique.
     """
-    df = pd.read_excel(path, sheet_name='selection')
+    df = _read_excel_stripped(path, sheet_name='selection')
     selection_col_names = list(filter(lambda x: x.startswith('S'), df.columns))
 
     assert len(df[selection_col_names].drop_duplicates()) == len(df), "S0, S1 combinations must be unique"
