@@ -10,7 +10,7 @@ In this phase, a YAML configuration file is created from an Excel workbook that 
 
 \protocolstep{1}{Create the experiment sheet}
 
-Create an Excel workbook with multiple sheets defining the experiment. We recommend starting from the provided example workbook and adjusting it to the new library. The following sections describe the required sheets and their format. The \texttt{experiment} sheet contains the experiment name, file paths, and computational resource settings.
+Create an Excel workbook with multiple sheets defining the experiment. We recommend starting from the provided example workbook and adjusting it to the new library. The following sections describe the required sheets and their format. The \texttt{experiment} sheet contains the experiment name, file paths, and computational resource settings. All DELT-Hit outputs are written to a folder named \texttt{\textless name\textgreater} created under \texttt{save\_dir}. \texttt{num\_cores} defines the number of CPU cores used for the demultiplexing step.
 
 
 \input{tables/experiment-config}
@@ -26,15 +26,15 @@ The \texttt{selection} sheet defines the experimental design, including selectio
 Required columns for demultiplexing:
 
 \begin{itemize}
-  \item name: Unique identifier for each selection
-  \item S0, S1: Multiplexing barcodes for selection identification
+  \item \texttt{name}: Unique identifier for each selection
+  \item \texttt{S0}, \texttt{S1}: Multiplexing barcodes for selection identification
 \end{itemize}
 Optional columns:
 
 \begin{itemize}
-  \item group: Statistical grouping when needed for downstream analyses (for example, "condition" or "control")
-  \item operator: Person who performed the selection
-  \item date: Date of selection experiment
+  \item \texttt{group}: Statistical grouping when needed for downstream analyses (for example, "condition" or "control")
+  \item \texttt{operator}: Person who performed the selection
+  \item \texttt{date}: Date of selection experiment
   \item other columns can be added at the user's discretion
 \end{itemize}
 
@@ -57,10 +57,10 @@ An example dual-display workbook illustrating the dual-display-specific columns 
 Column descriptions:
 
 \begin{itemize}
-  \item name: Unique identifier for each DNA region
-  \item type: Region type (selection, constant, or building\_block)
-  \item max\_error\_rate: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = 10\% errors)
-  \item indels: Whether to allow insertions/deletions (TRUE/FALSE)
+  \item \texttt{name}: Unique identifier for each DNA region
+  \item \texttt{type}: Region type (\texttt{selection}, \texttt{constant}, or \texttt{building\_block})
+  \item \texttt{max\_error\_rate}: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = 10\% errors)
+  \item \texttt{indels}: Whether to allow insertions/deletions (\texttt{TRUE}/\texttt{FALSE})
 \end{itemize}
 CRITICAL STEP: To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
 
@@ -83,15 +83,15 @@ DELT-Hit supports libraries with an arbitrary number of building block regions. 
 Required columns for demultiplexing:
 
 \begin{itemize}
-  \item codon: DNA barcode sequence identifying this building block
+  \item \texttt{codon}: DNA barcode sequence identifying this building block
 \end{itemize}
 Optional for demultiplexing, required for enumeration:
 
 \begin{itemize}
-  \item smiles: Chemical structure in SMILES notation
-  \item reaction: Name of the reaction using this building block
-  \item educt: Name of the compound this building block reacts with if any
-  \item product: Name of the product formed
+  \item \texttt{smiles}: Chemical structure in SMILES notation
+  \item \texttt{reaction}: Name of the reaction using this building block
+  \item \texttt{educt}: Name of the compound this building block reacts with if any
+  \item \texttt{product}: Name of the product formed
 \end{itemize}
 
 \begin{tcolorbox}[
