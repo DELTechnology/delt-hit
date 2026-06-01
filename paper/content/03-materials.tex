@@ -46,11 +46,19 @@ We provide a complete single-stranded DELT-Hit example dataset to demonstrate th
 \begin{tcolorbox}[
   colback=blue!5,
   colframe=blue!40,
+  breakable,
   title=Box 2 | Quickstart: single-stranded example workflow,
   fonttitle=\bfseries
 ]
 
-This box reproduces the complete DELT-Hit workflow for the single-stranded example dataset provided in the supporting material (see Section~3.3 Data). It is intended as a self-contained reference for users who want to run through the entire pipeline on the provided example before adapting it to their own data.
+This box reproduces the complete DELT-Hit workflow for the single-stranded example dataset provided in the supporting material (see Section~3.3 Data). It is intended as a self-contained reference for users who want to run through the entire pipeline on the provided example before adapting it to their own data. We assume that DELT-Hit has already been installed as described in Box~1.
+
+\setupitem{Download the repository and enter the example directory}
+
+\begin{lstlisting}
+git clone https://github.com/DELTechnology/delt-hit.git
+cd delt-hit/supporting_material/experiments/example-single-stranded
+\end{lstlisting}
 
 \setupitem{Download the example data}
 
