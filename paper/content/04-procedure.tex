@@ -106,7 +106,14 @@ SMILES (Simplified Molecular Input Line Entry System) is a text notation for rep
 \includegraphics[width=0.35\textwidth]{figures/structure.png}
 \end{center}
 
-SMIRKS is a reaction notation derived from SMARTS that describes how one or more reactants are transformed into a product. In DELT-Hit, SMIRKS definitions are used to encode the chemistry of each library-synthesis step so that building blocks can be combined in silico during library enumeration. For example, the \texttt{ABF1} reaction in Table~\ref{tab:table8}, \texttt{[CX3:1](=[O:2])[OX2;H1].[N;\$([N;H1,H2]),\$([N;H3]);!\$([N;H1,H2][S]);!\$([NX3][CX3](=[OX1])[\#6]);!\$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]}, encodes an amide bond formation between a carboxylic acid and an amine. At a high level, the left side specifies the reacting functional groups, and the right side specifies how they are connected in the product. In practice, SMILES describes molecules, whereas SMIRKS describes transformations between molecules.
+SMIRKS is a reaction notation derived from SMARTS that describes how one or more reactants are transformed into a product. In DELT-Hit, SMIRKS definitions are used to encode the chemistry of each library-synthesis step so that building blocks can be combined in silico during library enumeration. For example, the \texttt{ABF1} reaction in Table~\ref{tab:table8} encodes an amide bond formation between a carboxylic acid and an amine:
+
+\begin{lstlisting}
+[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]);!$([N;H1,H2][S]);
+  !$([NX3][CX3](=[OX1])[#6]);!$([NX3][CX3](=[OX1])[OX2]):4]
+  >>[CX3:1](=[O:2])[N:4]
+\end{lstlisting}
+At a high level, the left side specifies the reacting functional groups, and the right side specifies how they are connected in the product. In practice, SMILES describes molecules, whereas SMIRKS describes transformations between molecules.
 \end{tcolorbox}
 
 \protocolstep{6}{Create the reactions sheet}
