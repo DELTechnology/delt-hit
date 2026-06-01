@@ -1,6 +1,5 @@
 experiments:
   - name: condition_vs_control
-    save_dir: campaign/analysis
     selections:
       - name: 'AG24_4'
         counts_path: campaign/selections/AG24_4/counts.txt

@@ -40,7 +40,7 @@ time pixi run delt-hit analyse enrichment \
   --method=counts \
   --save_dir=$ANALYSIS_OUTPUT_ROOT
 
-time pixi run Rscript --vanilla campaign/analysis/counts/condition_vs_control/enrichment_counts.R
+time pixi run Rscript --vanilla ANALYSIS_OUTPUT_ROOT/counts/condition_vs_control/enrichment_counts.R
 
 time pixi run delt-hit analyse enrichment \
   --analysis_config=$ANALYSIS_CONFIG_PATH \
@@ -48,7 +48,7 @@ time pixi run delt-hit analyse enrichment \
   --method=edgeR \
   --save_dir=$ANALYSIS_OUTPUT_ROOT
 
-time pixi run Rscript --vanilla campaign/analysis/edgeR/condition_vs_control/enrichment_edgeR.R
+time pixi run Rscript --vanilla ANALYSIS_OUTPUT_ROOT/edgeR/condition_vs_control/enrichment_edgeR.R
 
 for selection in AG24_13 AG24_14 AG24_15; do
   time pixi run delt-hit analyse enrichment \
