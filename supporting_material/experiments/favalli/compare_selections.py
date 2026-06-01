@@ -4,7 +4,7 @@ from pathlib import Path
 
 base_dir = Path(__file__).parent
 legacy_path = base_dir / "published" / "1907_NF2GB2_s1_R1_260424JS_2026_4_24_16_20_51_eval.txt"
-lane = "lane-1-fasta"
+lane = "lane-1"
 selections_dir = base_dir / lane / "selections"
 selection_names = sorted(path.stem for path in selections_dir.glob("*") if path.is_dir())
 if not selection_names:
