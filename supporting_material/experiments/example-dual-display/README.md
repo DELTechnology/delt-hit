@@ -2,7 +2,7 @@
 
 This folder contains a minimal dual-display Excel configuration example:
 
-- [example-dual-display-extended.xlsx](/Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/example-dual-display/example-dual-display-extended.xlsx)
+- [example-dual-display.xlsx](/Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/example-dual-display/example-dual-display.xlsx)
 
 Dual-display-specific columns:
 
