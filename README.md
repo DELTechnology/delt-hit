@@ -75,27 +75,27 @@ Here is a typical workflow for using `delt-hit`:
    selections for comparison. For example:
    ```yaml
    experiments:
-   - name: protein_vs_no_protein
+   - name: condition_vs_control
      save_dir: campaign/analysis
      selections:
        - name: AG24_4
          counts_path: campaign/selections/AG24_4/counts.txt
-         group: no_protein
+         group: control
        - name: AG24_5
          counts_path: campaign/selections/AG24_5/counts.txt
-         group: no_protein
+         group: control
        - name: AG24_6
          counts_path: campaign/selections/AG24_6/counts.txt
-         group: no_protein
+         group: control
        - name: AG24_13
          counts_path: campaign/selections/AG24_13/counts.txt
-         group: protein
+         group: condition
        - name: AG24_14
          counts_path: campaign/selections/AG24_14/counts.txt
-         group: protein
+         group: condition
        - name: AG24_15
          counts_path: campaign/selections/AG24_15/counts.txt
-         group: protein
+         group: condition
      ```
 
 4. **Calculate Enrichment:**
@@ -103,10 +103,10 @@ Here is a typical workflow for using `delt-hit`:
    you defined in your `config.yaml`.
    ```bash
    # Using simple counts
-   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=protein_vs_no_protein --method=counts
+   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=condition_vs_control --method=counts
 
    # Using edgeR for more sensitive statistical analysis
-   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=protein_vs_no_protein --method=edgeR
+   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=condition_vs_control --method=edgeR
    ```
 
 5. **Work with the Library:**

@@ -36,7 +36,7 @@ def load_config(config_path):
                     'operator': 'A. Gloger',
                     'date': '2024-09-26',
                     'target': 'No Protein',
-                    'group': 'no_protein',
+                    'group': 'control',
                     'beads': 'Dynabeads SA C1',
                     'blocking': 'Biotin',
                     'buffer': 'PBS-T',

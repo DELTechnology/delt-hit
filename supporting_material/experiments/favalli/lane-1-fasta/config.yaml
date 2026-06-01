@@ -784,7 +784,7 @@ selections:
     S0: ACAGCA
     S1: AGCATATCG
     target: CAIX_ss
-    group: protein
+    group: condition
     ids:
     - 1
     - 1
@@ -792,7 +792,7 @@ selections:
     S0: ACATGT
     S1: AGCATATCG
     target: CAIX_ss
-    group: protein
+    group: condition
     ids:
     - 2
     - 1
@@ -800,7 +800,7 @@ selections:
     S0: ACGACG
     S1: AGCATATCG
     target: CAIX_ds
-    group: protein
+    group: condition
     ids:
     - 3
     - 1
@@ -808,7 +808,7 @@ selections:
     S0: ACGCGA
     S1: AGCATATCG
     target: CAIX_ds
-    group: protein
+    group: condition
     ids:
     - 4
     - 1
@@ -816,7 +816,7 @@ selections:
     S0: ACTAGC
     S1: AGCATATCG
     target: CAIX_ds
-    group: protein
+    group: condition
     ids:
     - 5
     - 1
@@ -848,7 +848,7 @@ selections:
     S0: AGAGAG
     S1: AGCATATCG
     target: No prot_ss
-    group: no_protein
+    group: control
     ids:
     - 9
     - 1
@@ -856,7 +856,7 @@ selections:
     S0: TAGATG
     S1: AGCATATCG
     target: No prot_ss
-    group: no_protein
+    group: control
     ids:
     - 10
     - 1
@@ -864,7 +864,7 @@ selections:
     S0: TAGTGT
     S1: AGCATATCG
     target: No prot_ss
-    group: no_protein
+    group: control
     ids:
     - 11
     - 1
@@ -944,7 +944,7 @@ selections:
     S0: GCACAT
     S1: AGCATATCG
     target: No prot_ds
-    group: no_protein
+    group: control
     ids:
     - 21
     - 1
@@ -952,7 +952,7 @@ selections:
     S0: GAGTGT
     S1: AGCATATCG
     target: No prot_ds
-    group: no_protein
+    group: control
     ids:
     - 22
     - 1
@@ -960,7 +960,7 @@ selections:
     S0: GTGCGA
     S1: AGCATATCG
     target: No prot_ds
-    group: no_protein
+    group: control
     ids:
     - 23
     - 1

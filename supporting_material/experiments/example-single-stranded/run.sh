@@ -36,19 +36,19 @@ delt-hit dashboard \
 
 delt-hit analyse enrichment \
   --analysis_config=$ANALYSIS_CONFIG_PATH \
-  --name=protein_vs_no_protein \
+  --name=condition_vs_control \
   --method=counts \
   --save_dir=$ANALYSIS_OUTPUT_ROOT
 
-Rscript --vanilla campaign/analysis/counts/protein_vs_no_protein/enrichment_counts.R
+Rscript --vanilla campaign/analysis/counts/condition_vs_control/enrichment_counts.R
 
 delt-hit analyse enrichment \
   --analysis_config=$ANALYSIS_CONFIG_PATH \
-  --name=protein_vs_no_protein \
+  --name=condition_vs_control \
   --method=edgeR \
   --save_dir=$ANALYSIS_OUTPUT_ROOT
 
-Rscript --vanilla campaign/analysis/edgeR/protein_vs_no_protein/enrichment_edgeR.R
+Rscript --vanilla campaign/analysis/edgeR/condition_vs_control/enrichment_edgeR.R
 
 for selection in AG24_13 AG24_14 AG24_15; do
   delt-hit analyse enrichment \

@@ -60,7 +60,7 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
             stringsAsFactors = FALSE
           )
           groups <- factor(sapply(data.col$name, get_group_from_name))
-          groups <- relevel(groups, "no_protein")
+          groups <- relevel(groups, "control")
           data.col$group <- groups
 
           data.counts <- as.matrix(data.wide %>% select(-all_of(code_columns), -any_of("id")))
@@ -84,7 +84,7 @@ def edgeR_rscript(*, data_path: Path, samples_path: Path, log: bool = False, sav
           fit <- glmFit(y, design)
 
           cm <- makeContrasts(
-            enrichment = protein - no_protein,
+            enrichment = condition - control,
             levels = design
           )
           lrt.enrichment <- glmLRT(fit, contrast = cm[, 1])
@@ -216,7 +216,7 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
         stats <- data_avg |>
           tidyr::pivot_wider(names_from = group, values_from = mean, values_fill = 0) |>
           dplyr::mutate(
-            enrichment = protein - no_protein
+            enrichment = condition - control
           )
 
         readr::write_csv(stats, file.path(args$save_dir, "stats.csv"))
@@ -226,7 +226,7 @@ def counts_rscript(*, data_path: Path, samples_path: Path, cpm, save_dir: Path):
           dplyr::slice(1:100) |>
           readr::write_csv(file.path(args$save_dir, "hits.csv"))
 
-        present_groups <- intersect(c("protein","no_protein","naive"), colnames(stats))
+        present_groups <- intersect(c("condition","control","naive"), colnames(stats))
         for (g in present_groups) {{
           stats |>
             dplyr::select(dplyr::all_of(code_columns), dplyr::all_of(g)) |>

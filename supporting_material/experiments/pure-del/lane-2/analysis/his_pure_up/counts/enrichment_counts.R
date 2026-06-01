@@ -55,8 +55,8 @@ data_avg <- data |>
 stats <- data_avg |>
   tidyr::pivot_wider(names_from = group, values_from = mean, values_fill = 0) |>
   dplyr::mutate(
-    enrichment = protein - no_protein
-    # sticky     = no_protein - naive
+    enrichment = condition - control
+    # sticky     = control - naive
   )
 
 # ---- Save outputs ----
@@ -73,7 +73,7 @@ stats |>
 #   readr::write_csv(file.path(args$save_dir, "sticky.csv"))
 
 # Per-group exports (only those columns present)
-present_groups <- intersect(c("protein","no_protein","naive"), colnames(stats))
+present_groups <- intersect(c("condition","control","naive"), colnames(stats))
 for (g in present_groups) {
   stats |>
     dplyr::select(dplyr::all_of(code_columns), dplyr::all_of(g)) |>

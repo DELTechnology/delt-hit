@@ -20,6 +20,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from delt_hit.analyse.data_prep import canonicalize_group_name
+
 
 def derive_library_size(data: pd.DataFrame, code_columns: list[str]) -> int:
     """Count distinct compound combinations across all selections.
@@ -87,7 +89,7 @@ def zscore_analysis(
 
     Outputs mirror the structure of the counts/ method:
       - stats.csv         — all compounds with per-group mean z-score and enrichment
-      - hits.csv          — top hits_top_n rows sorted by descending protein zscore
+      - hits.csv          — top hits_top_n rows sorted by descending condition zscore
       - <selection>.csv   — per-selection: code_*, count, observed_fraction, expected_fraction, zscore
 
     Args:
@@ -100,6 +102,7 @@ def zscore_analysis(
     save_dir.mkdir(parents=True, exist_ok=True)
 
     data_with_group = data.merge(samples, on="name", how="left")
+    data_with_group["group"] = data_with_group["group"].map(canonicalize_group_name)
     code_columns = [c for c in data_with_group.columns if c.startswith("code_")]
 
     if library_size is None:
@@ -124,23 +127,23 @@ def zscore_analysis(
     )
     group_mean.columns.name = None
 
-    # Ensure protein and no_protein columns exist (fill with 0 if a group is absent)
-    for col in ("protein", "no_protein"):
+    # Ensure condition and control columns exist (fill with 0 if a group is absent)
+    for col in ("condition", "control"):
         if col not in group_mean.columns:
             group_mean[col] = 0.0
 
     group_mean = group_mean.fillna(0.0)
-    group_mean["enrichment"] = group_mean["protein"] - group_mean["no_protein"]
+    group_mean["enrichment"] = group_mean["condition"] - group_mean["control"]
 
-    # Reorder: code_* then protein, no_protein, enrichment (parallel to counts/stats.csv)
-    present_groups = [g for g in ("protein", "no_protein") if g in group_mean.columns]
+    # Reorder: code_* then condition, control, enrichment (parallel to counts/stats.csv)
+    present_groups = [g for g in ("condition", "control") if g in group_mean.columns]
     other_groups = [g for g in group_mean.columns if g not in code_columns + present_groups + ["enrichment"]]
     col_order = code_columns + present_groups + other_groups + ["enrichment"]
     stats = group_mean[col_order]
 
     stats.to_csv(save_dir / "stats.csv", index=False)
 
-    # Hits: top N by descending protein zscore
-    sort_col = "protein" if "protein" in stats.columns else "enrichment"
+    # Hits: top N by descending condition zscore
+    sort_col = "condition" if "condition" in stats.columns else "enrichment"
     hits = stats.sort_values(sort_col, ascending=False).head(hits_top_n)
     hits.to_csv(save_dir / "hits.csv", index=False)
