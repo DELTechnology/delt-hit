@@ -62,7 +62,7 @@ Then compare enrichment scores across methods and export hit lists:
 pixi run python enrichment_scores.py
 ```
 
-Defaults to `--analysis-root lane-1/analysis`, `--analysis-config analysis.yaml`, and `--output-dir enrichment/${exp}`. The script produces:
+Outputs are written to `enrichment/ca9_ds/`. The script produces:
 
 - `hits_<N>.csv` — top-N hit lists for counts, edgeR, and z-score
 - `top_<N>_<code>_counts.pdf/png` — bar plots of building-block frequency among top hits
