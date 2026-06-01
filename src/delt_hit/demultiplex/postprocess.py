@@ -130,7 +130,7 @@ def get_counts(*, input_path: Path, num_reads: int, num_workers: int = 1,
     with multiprocessing.Pool(num_workers) as pool:
         for partial in tqdm(
             pool.imap_unordered(_count_bytes_chunk, _iter_byte_chunks(input_path, chunk_size_bytes)),
-            desc='Counting demultiplexed chunks',
+            desc='Aggregating demultiplexed chunks',
             unit='chunk',
             ncols=100,
         ):
