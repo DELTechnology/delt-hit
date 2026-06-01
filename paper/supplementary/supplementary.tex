@@ -17,6 +17,7 @@
 \usepackage{enumitem}
 \usepackage{caption}
 \usepackage{float}
+\usepackage[section]{placeins}
 \usepackage{xcolor}
 \usepackage[protrusion=true,expansion=false]{microtype}
 \usepackage{seqsplit}
@@ -30,6 +31,7 @@
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 \newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
 \newcommand{\kd}{$K_d$}
+\newcommand{\suppnote}[1]{\clearpage\FloatBarrier\input{#1}}
 
 \hypersetup{
   colorlinks=true,
@@ -49,12 +51,11 @@
 \setcounter{subsection}{0}
 \renewcommand{\thesubsection}{\arabic{subsection}}
 
-\input{analysis-of-published-datasets}
-\input{comparison-delt-deli}
-\clearpage
-\input{enrichment-scores-comparison}
-\input{reaction-graph-advanced}
-\input{template-reactions}
+\suppnote{analysis-of-published-datasets}
+\suppnote{comparison-delt-deli}
+\suppnote{enrichment-scores-comparison}
+\suppnote{reaction-graph-advanced}
+\suppnote{template-reactions}
 
 \bibliographystyle{unsrt}
 \bibliography{../references}

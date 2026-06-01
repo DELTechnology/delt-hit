@@ -77,6 +77,7 @@ def _get_font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFo
 SUB = _get_font(66, bold=True)
 SECTION = _get_font(64, bold=True)
 LABEL = _get_font(50, bold=True)
+LABEL_PLAIN = _get_font(50, bold=False)
 SMALL = _get_font(44)
 
 
@@ -118,6 +119,7 @@ def panel(
     *,
     title: str | None = None,
     subtitle: str | None = None,
+    title_font: ImageFont.FreeTypeFont | ImageFont.ImageFont = LABEL,
 ) -> Image.Image:
     image = Image.open(image_path)
     canvas = Image.new("RGB", size, BG)
@@ -140,7 +142,7 @@ def panel(
     y = top_offset + (inner_h - body.height) // 2 + (68 if title or subtitle else 20)
     canvas.paste(body, (x, y))
     if title:
-        draw.text((28, 24), title, font=LABEL, fill=INK)
+        draw.text((28, 24), title, font=title_font, fill=INK)
     if subtitle:
         draw.text((28, 96), subtitle, font=SMALL, fill=MUTED)
     return canvas
@@ -163,7 +165,6 @@ def build_enumeration_composite(visualization_root: Path, output_path: Path) -> 
         reaction_graph,
         (2050, 1420),
         title="Library reaction graph",
-        subtitle="Visualized from the example-single-stranded workflow",
     )
     figure.paste(graph_panel, (100, 100))
 
@@ -186,11 +187,21 @@ def build_enumeration_composite(visualization_root: Path, output_path: Path) -> 
         draw.text((x + 30, section_y + 30), title, font=SECTION, fill=INK)
 
     for i, building_block_path in enumerate(b0_examples):
-        block_panel = panel(building_block_path, (500, 540), title=f"B0 code {building_block_path.stem}")
+        block_panel = panel(
+            building_block_path,
+            (500, 540),
+            title=f"Code {building_block_path.stem}",
+            title_font=LABEL_PLAIN,
+        )
         figure.paste(block_panel, (140 + i * 520, 1680))
 
     for i, building_block_path in enumerate(b1_examples):
-        block_panel = panel(building_block_path, (500, 540), title=f"B1 code {building_block_path.stem}")
+        block_panel = panel(
+            building_block_path,
+            (500, 540),
+            title=f"Code {building_block_path.stem}",
+            title_font=LABEL_PLAIN,
+        )
         figure.paste(block_panel, (1880 + i * 520, 1680))
 
     figure.save(output_path, quality=95)

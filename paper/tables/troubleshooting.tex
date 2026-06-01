@@ -14,7 +14,7 @@ Experimental Setup & \texttt{command not found: conda} & Conda not installed or 
 13 & \texttt{qc/report.txt} does not open & Text editor does not support the file encoding & Display the file in the terminal with \texttt{cat qc/report.txt} \\
 Experimental Setup / 18 & R script failures & Missing R packages or R not available & Reinstall R into the conda environment; reinstall packages with \texttt{BiocManager}; verify with \texttt{which R}; R 4.1+ required \\
 18 & Empty hit lists & Statistical thresholds too stringent & Adjust FDR cutoffs (0.1 or 0.2 for exploratory analysis); check replicate consistency \\
-15 & Chemical structure errors & Invalid SMILES or incorrect reaction SMIRKS & Validate building block structures with RDKit; check reaction definitions; run enumeration in debug mode \\
+15 & Chemical structure errors & Invalid SMILES or incorrect reaction SMIRKS & Validate reaction definitions on a small subset before full enumeration; validate building block structures with RDKit; rerun \texttt{delt-hit library enumerate} with \texttt{--debug=invalid --errors=raise} to stop at the first failing combination and save its reaction graph for inspection \\
 Experimental Setup & \texttt{command not found: delt-hit} & Conda environment not activated & Run \texttt{conda activate delt-hit} before executing DELT-Hit commands \\
 11 & Permission denied for shell scripts & Executable permission not set & Run \texttt{chmod u+x \textless{}script\_name.sh\textgreater{}} before executing the script \\
 18 & Poor replicate correlation & Batch effects or technical variability & Review the selection protocol for consistency; check for contamination \\

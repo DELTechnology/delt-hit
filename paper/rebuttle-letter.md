@@ -261,7 +261,7 @@ Response: We have expanded the "Comparison with other methods" section to provid
 It is suggested that the authors provide additional discussion or supporting data to further justify the applicability of edgeR for DEL data analysis."
 
 Response: We are actively exploring various enrichment methods and are currently working on a more comprehensive comparison of edgeR with other approaches previously used in the DEL field.
-For the scope of this protocol, we have added a discussion in the Supplementary Information that indicate that edgeR is potentially more sensitve in detecting enriched synthons in comparison to pure counts methods or the newly implemented Z-score method.
+For the scope of this protocol, we have added a benchmark-style comparison in the Supplementary Information ("Comparison of enrichment score rankings for the Favalli CA9 selection"), which shows that the edgeR-based methods are more sensitive than pure count-based ranking or the newly implemented z-score method in recovering a literature-supported CA9-associated building block. We also now state explicitly that we are working on a more comprehensive comparison of enrichment methods across multiple targets and different selection conditions.
 
 ### Reviewer 1.6 Language and formatting improvements
 "It is suggested that the manuscript undergo careful proofreading to ensure consistency in terminology and overall readability."
@@ -302,12 +302,12 @@ Response: TODO
 However, the overall discussion remains largely qualitative and lacks quantitative performance comparisons against other frameworks—especially DELi—using the same benchmark datasets."
 
 Response: We performed an in-depth comparison of DELT-Hit and DELi on the synthetic datasets, which is now included in the Supplementary Information.
-Comparing runtime and memory complexity across those synthetic libraries.
+This benchmark compares runtime and memory complexity across matched synthetic libraries and shows a clear performance advantage of DELT-Hit under the tested conditions.
 
 ### Reviewer 2.6 Quantitative benchmark request: enrichment reliability and replicate consistency
 "For example, numerical comparisons of key metrics such as the reliability of enrichment analysis methods and consistency across experimental replicates are not provided. Including such quantitative comparisons would more strongly support the practical improvements of DELT-Hit in terms of accuracy, reproducibility, and automation."
 
-Response: TODO
+Response: We agree that quantitative benchmarking of enrichment reliability is important. In the revised Supplementary Information, we therefore include an initial benchmark note ("Comparison of enrichment score rankings for the Favalli CA9 selection") that compares the ranking behavior of the count-based, edgeR, and z-score methods on a literature-supported positive-control motif. In parallel, we are working on a more comprehensive comparison of enrichment methods across multiple targets and different selection conditions, including replicate structure and selection-design differences, which we consider the appropriate next step beyond the scope of the present protocol revision.
 
 ## Reviewer 3
 
@@ -397,9 +397,12 @@ I strongly recommend this manuscript for publication, pending the following revi
 We thank the reviewer for the strong support and for the helpful recommendations below.
 
 ### Reviewer 4.1 Template library breadth for non-expert users
-"The protocol acknowledges that defining library-specific SMIRKS requires "advanced cheminformatics expertise." This remains a significant hurdle for experimental chemists. To improve accessibility, the authors should expand the Template Library to include a broader suite of validated, DEL-compatible chemistries. Providing more pre-defined templates would allow users without deep computational backgrounds to deploy the protocol more effectively."
+"The protocol acknowledges that defining library-specific SMIRKS requires "advanced cheminformatics expertise." 
+This remains a significant hurdle for experimental chemists. To improve accessibility, the authors should expand the Template Library to include a broader suite of validated, DEL-compatible chemistries. Providing more pre-defined templates would allow users without deep computational backgrounds to deploy the protocol more effectively."
 
-Response:
+Response: We agree that this remains a significant hurdle for experimental chemists and have this intensively discussed internally.
+We agree with the reviwer that additional templates can provide a starting point for users without cheminformatics background. 
+However, in reality this still means that users need to adapt the provided templates to their specific chemistry, which still requires some level of cheminformatics expertise.
 
 ### Reviewer 4.2 Chemical visualization: 2D reaction schemes and tutorial structures
 "The protocol's current chemical visualization relies on abstract formats, such as SMILES strings in tables and schematic reaction graphs,
@@ -419,9 +422,9 @@ We revised the manuscript and analysis examples to use the more generic \texttt{
 ### Reviewer 4.4 No-replicate statistics: normalized Z-score suggestion
 "Currently, users must choose between edgeR and Simple Counts. For users lacking replicates, "Simple Counts" lacks the necessary statistical rigor to distinguish true hits from stochastic noise. To bridge this gap, I recommend implementing the normalized Z-score methodology (as described by Faver et al. https://doi.org/10.1021/acscombsci.8b00116). By modeling selection data using a binomial distribution to describe the probability of observing a specific compound across the library, researchers can identify significant enrichment relative to the library mean even in the absence of biological replicates."
 
-Response:
+Response: We think it is a valuable addition to the enrichment analysis module and have implemented the Z-score method as an additional option for users without replicates.
 
 ### Reviewer 4.5 Filtered enumeration mode for large libraries
 "For billion-member libraries, enumerating the entire in silico space is computationally expensive. The current workflow for restricting enumeration to "observed hits" is a manual, multi-step process. I recommend implementing an optional "filtered enumeration" mode. This would allow the library module to ingest a counts matrix directly, restricting SMILES construction and descriptor calculation only to barcode combinations that meet a user-defined read threshold."
 
-Response:
+Response: As discussed above we have restructured the workflow in a selection centric way, with enumeration and property calculation only performed on the observed hits, which significantly reduces the computational time for larger libraries.
