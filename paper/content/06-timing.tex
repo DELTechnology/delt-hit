@@ -3,26 +3,24 @@ Protocol execution times depend on dataset characteristics and computational res
 
 
 \input{tables/timing-estimates}
-¹Small dataset: \textless{}100K compounds
-²Medium dataset: 100K-10M compounds
+¹Small dataset: \textless{}500K compounds
+²Medium dataset: 500K-10M compounds
 ³Large dataset: \textgreater{}10M compounds
+* Potentially not feasible
 
-Measured runtimes for the three manuscript example workflows can be read directly from the terminal or scheduler output because each command in the support scripts is prefixed with \texttt{time} (\path{supporting_material/experiments/example-single-stranded/run.sh}, \path{supporting_material/experiments/pure-del/run.sh}, and \path{supporting_material/experiments/favalli/run-all.sh}).
+Representative step-level timing guidance for the main computational stages is summarized below:
 
-\begin{table}[htbp]
-\centering
-\caption{Measured runtime for the manuscript example workflows}
-\label{tab:application-timing}
-\begin{tabular}{p{4.6cm}p{3.2cm}p{5.6cm}}
-\toprule
-Example workflow & Runtime & Timing source \\
-\midrule
-Example single-stranded library & To be measured & terminal or job log from \path{supporting_material/experiments/example-single-stranded/run.sh} \\
-Pure-DEL re-analysis & To be measured & terminal or job log from \path{supporting_material/experiments/pure-del/run.sh} \\
-Favalli re-analysis & To be measured & terminal or job log from \path{supporting_material/experiments/favalli/run-all.sh} \\
-\bottomrule
-\end{tabular}
-\end{table}
+\begin{itemize}
+  \item Steps 1--9: project initialization and workbook-to-YAML configuration typically require 30--60 min, depending mainly on how much library and experimental metadata must be entered and checked.
+  \item Steps 10--13: sequence demultiplexing generally requires 10--30 min for small datasets, 1--2 h for medium datasets, and 2--6 h for large datasets.
+  \item Step 14: launching and using the dashboard usually requires 15--60 min, depending on how extensively the count tables are explored.
+  \item Step 15: selection-focused enumeration is expected to require less than 1 min across dataset classes.
+  \item Step 16: selection-focused property calculation is expected to require less than 1 min across dataset classes.
+  \item Steps 17--18: statistical-analysis setup and execution are expected to require less than 5 min across dataset classes.
+  \item Step 19: optional full-library enumeration is expected to require less than 5 min for small datasets, 15 min to 2 h for medium datasets, and more than 2 h for large datasets, where execution may be impractical.
+  \item Step 20: optional full-library property calculation is expected to require less than 5 min for small datasets, 15 min to 2 h for medium datasets, and more than 2 h for large datasets, where execution may be impractical.
+  \item Step 21: optional molecular-representation generation is expected to require less than 5 min for small datasets, 15 min to 2 h for medium datasets, and more than 2 h for large datasets.
+\end{itemize}
 
 Notes:
 

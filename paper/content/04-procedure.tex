@@ -1,7 +1,6 @@
 \section{Procedure}
 
 \subsection{Phase 1: Project initialization and configuration}
-\textbf{TIMING 30-60 min}
 
 The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template.
 
@@ -152,16 +151,9 @@ delt-hit init --excel_path=<PATH_TO_EXCEL>
 \end{lstlisting}
 This command creates a YAML configuration file at \texttt{\textless save\_dir\textgreater/\textless name\textgreater/config.yaml}, as defined in the \texttt{experiment} sheet. Throughout the following steps, angle-bracket tokens such as \texttt{\textless name\textgreater}, \texttt{\textless save\_dir\textgreater}, \texttt{\textless selection\_name\textgreater}, and \texttt{\textless library\_name\textgreater} are placeholders to be replaced with values from the Excel workbook or analysis YAML. \texttt{\textless name\textgreater} and \texttt{\textless save\_dir\textgreater} refer to the fields in Table~\ref{tab:table3}; \texttt{\textless experiment\_name\textgreater} and \texttt{\textless selection\_name\textgreater} refer to the \texttt{name} fields in the analysis YAML defined in Step~17.
 
-Expected output:
-
-
-\begin{lstlisting}
-Configuration created at <save_dir>/<name>/config.yaml
-\end{lstlisting}
 CRITICAL: Review the generated YAML file to verify that all information was parsed correctly. This file is used in all downstream steps.
 
 \subsection{Phase 2: Sequence processing and demultiplexing}
-\textbf{TIMING 30 min - 4 h}
 
 This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
 
@@ -188,7 +180,7 @@ Generate the demultiplexing scripts with its dependencies and execute the analys
 delt-hit demultiplex prepare --config_path=$CONFIG_PATH
 
 # Execute demultiplexing
-<name>/demultiplex/cutadapt_input_files/demultiplex.sh
+<save_dir>/<name>/demultiplex/cutadapt_input_files/demultiplex.sh
 \end{lstlisting}
 The demultiplexing process performs:
 
@@ -198,15 +190,6 @@ The demultiplexing process performs:
   \item Quality filtering: rejection of reads with errors exceeding the defined thresholds
 \end{itemize}
 The generated shell script runs Cutadapt on the FASTQ file and maps reads to selection and codon identifiers. It produces \texttt{reads\_with\_adapters.gz}, which contains all mapped sequences.
-
-Processing speed is approximately 50,000--200,000 reads per second. For a typical dataset with 50--100 million reads, expect 30 min to 2 h of processing time.
-
-Expected outputs:
-
-\begin{itemize}
-  \item demultiplex/cutadapt\_output\_files/*.cutadapt.json: Detailed processing statistics for each demultiplexing step
-  \item demultiplex/cutadapt\_output\_files/reads\_with\_adapters.gz: Intermediate files with extracted barcodes
-\end{itemize}
 
 \protocolstep{12}{Process demultiplexing results and generate count tables}
 
@@ -226,8 +209,7 @@ delt-hit demultiplex process --config_path=$CONFIG_PATH
 # Also export flattened per-selection count files
 delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True
 
-# Optional: keep codon-id order instead of sorting by observed counts
-# delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True --sort_by_counts=False
+delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True --sort_by_counts=False
 \end{lstlisting}
 These commands:
 
@@ -236,15 +218,6 @@ These commands:
   \item map barcode combinations to library members
   \item generate count tables for each selection
   \item save the results in a standardized format
-\end{itemize}
-Expected outputs:
-
-\begin{itemize}
-  \item \texttt{selections/\textless selection\_name\textgreater/counts.txt}: Tab-delimited count table with columns:
-  \item \texttt{code\_0}, \texttt{code\_1}, ...: Building block indices
-  \item \texttt{name}: Selection identifier
-  \item \texttt{count}: Number of reads for this compound in this selection
-  \item Alternatively, counts can be saved as \texttt{\{selection\_name\}\_counts.txt} with the flag \texttt{--as\_files=True}. To retain codon order rather than sorting by observed counts, use \texttt{--sort\_by\_\allowbreak{}counts=False}.
 \end{itemize}
 \newpage
 
@@ -255,19 +228,9 @@ Assess demultiplexing quality with summary statistics and visualizations:
 
 
 \begin{lstlisting}
-# In the single-stranded example workflow, these commands are executed
-# immediately before count-table generation (Step 12):
 delt-hit demultiplex report --config_path=$CONFIG_PATH
 delt-hit demultiplex qc --config_path=$CONFIG_PATH
 \end{lstlisting}
-Expected outputs:
-
-\begin{itemize}
-  \item qc/report.txt: Comprehensive text report with processing statistics
-  \item qc/hits\_*.parquet: Per-region tables with barcode-assignment counts grouped by error level
-  \item qc/hits\_*.pdf and qc/hits\_*.png: Quality control plots showing barcode recovery and coverage distributions
-\end{itemize}
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/qc-poor-selection-report.png}
@@ -289,7 +252,6 @@ Quality assessment criteria:
 \end{itemize}
 
 \subsection{Phase 3: Data visualization and interpretation}
-\textbf{TIMING 15-60 min}
 
 The interactive dashboard provides real-time exploration of raw count data and experimental metadata.
 
@@ -331,7 +293,6 @@ CRITICAL: Use the default folder hierarchy produced by \texttt{delt-hit demultip
 \newpage
 
 \subsection{Phase 4: Selection enumeration and enrichment analysis}
-\textbf{TIMING 10 min - 2 h}
 
 This phase generates chemical structures and molecular properties for the top enriched compounds in a selected experiment. Library enumeration requires advanced knowledge of SMIRKS, and library-specific adjustments are often necessary.
 
@@ -359,14 +320,6 @@ These commands:
   \item validate chemical structures
   \item save the compound catalog for the selected hits
 \end{itemize}
-Expected outputs:
-
-\begin{itemize}
-  \item \texttt{library/\textless library\_name\textgreater.parquet}: Compound catalog for the top hits with SMILES and barcode mappings
-  \item \texttt{library/visualization/reaction\_graph.png}: Visual representation of synthetic schema
-  \item \texttt{library/visualization/reaction\_graph\_additional.png}: Visualizes the additional reactions from the \texttt{reaction\_graph} sheet
-  \item \texttt{library/visualization/reaction\_graph\_building\_blocks.png}: Visualizes the reactions derived from the building block sheets \texttt{B0}, \texttt{B1}, etc.
-\end{itemize}
 
 \begin{figure}[htbp]
 \centering
@@ -374,7 +327,6 @@ Expected outputs:
 \caption{Composite summary of enumeration-oriented visualization outputs from the single-stranded example workflow. The main panel shows the library reaction graph, alongside representative reaction templates and example \texttt{B0} and \texttt{B1} building blocks generated during selection-focused library enumeration.}
 \label{fig:figure2}
 \end{figure}
-Enumeration speed is approximately 1,000--10,000 compounds per second, depending on reaction complexity. For a library with 1 million compounds, expect 2--10 min of processing time depending on the hardware.
 
 \newpage
 
@@ -395,25 +347,16 @@ Computed properties include:
   \item Structural complexity metrics: Number of aromatic rings, heavy atom count, formal charge
   \item Drug-likeness scores: Quantitative estimate of drug-likeness (QED), fraction of sp³ carbons
 \end{itemize}
-Expected outputs:
-
-\begin{itemize}
-  \item \texttt{library/properties/\textless library\_name\textgreater/properties.parquet}: Top-hit catalog augmented with molecular descriptors
-  \item \texttt{library/properties/\textless library\_name\textgreater/prop\_*.png}: Distribution plots for each calculated property
-  \item \texttt{library/visualization/libraries/\textless library\_name\textgreater/*.png}: Per-compound structure renderings for the enumerated top-hit set
-\end{itemize}
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=0.5\textheight,keepaspectratio]{figures/top-hit-properties-and-structures.png}
+\includegraphics[height=0.25\textheight,keepaspectratio]{figures/top-hit-properties-and-structures.png}
 \caption{Molecular property and structure summary for the enumerated \texttt{AG24\_4\_top\_hits} collection. The left panel shows the molecular-weight distribution from the example output, and the right panels show four representative structure renderings produced by \texttt{delt-hit visualize library}.}
 \label{fig:figure3}
 \end{figure}
-Property calculation processes approximately 600--1,000 compounds per second. For a library with 1 million compounds, expect 15--30 min of processing time.
 
 
 \subsection{Phase 5: Statistical analysis and hit identification}
-\textbf{TIMING 10-30 min}
 
 This phase identifies enriched library members by comparing selection conditions using established statistical methods.
 
@@ -510,14 +453,6 @@ Rscript --vanilla <save_dir>/z_score/<selection_name>/enrichment_z_score.R
 The normalized z-score method computes the per-compound score for an individual selection following Faver et al.\cite{faver_quantitativecomparisonenrichment_2019}. Because it does not rely on replicate-based variance estimation, it can also be applied to experiments without replicates.
 
 For all three methods, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CA9-associated building block by Favalli \cite{favalli_stereoregiodefineddnaencoded_2021} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}.
-
-Expected outputs:
-
-\begin{itemize}
-  \item \texttt{\textless method\textgreater/hits.csv}: top-ranked compounds
-  \item \texttt{\textless method\textgreater/stats.csv}: full results table
-  \item \texttt{\textless method\textgreater/enrichment.R}: executable analysis script
-\end{itemize}
 These files report, for each compound, the enrichment score and, where applicable, method-specific parameters such as log fold change or \textit{P} values.
 
 Interpreting results:
@@ -540,7 +475,6 @@ CRITICAL: Always examine replicate correlation plots to verify data quality befo
 
 
 \subsection{Phase 6: Full library enumeration and machine learning representations}
-\textbf{TIMING 1 h - 8 h}
 
 This phase performs full-library enumeration and generates molecular representations for downstream machine-learning applications. These steps are optional.
 
@@ -579,11 +513,5 @@ Available representation methods:
 \begin{itemize}
   \item morgan: Morgan circular fingerprints (2048-bit vectors) for similarity searching and clustering
   \item bert: Transformer-based molecular embeddings (768-dimensional vectors) for deep-learning applications
-\end{itemize}
-Expected outputs:
-
-\begin{itemize}
-  \item representations/morgan.npz: Sparse matrix of Morgan fingerprints
-  \item representations/bert.npz: Dense matrix of BERT embeddings
 \end{itemize}
 These representations are compatible with scikit-learn, PyTorch, and TensorFlow.
