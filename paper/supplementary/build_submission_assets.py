@@ -14,7 +14,6 @@ import csv
 import json
 import re
 from pathlib import Path
-from statistics import median
 from typing import Any
 
 from openpyxl import Workbook
@@ -26,7 +25,6 @@ ROOT = Path(__file__).resolve().parents[2]
 SUPP_DIR = ROOT / "paper" / "supplementary"
 DEMUX_DIR = ROOT / "benchmarks" / "demultiplex"
 DEMUX_TOOLS_DIR = DEMUX_DIR / "tools"
-NF2_DIR = ROOT / "supporting_material" / "experiments" / "favalli" / "benchmark_nf2"
 WORKBOOK_PATH = SUPP_DIR / "Supplementary_Data_1.xlsx"
 
 DATASET_PATTERN = re.compile(
@@ -54,7 +52,6 @@ def convert_supplementary_figures() -> list[Path]:
         DEMUX_DIR / "plots" / "synthetic_2cycle_10bbpc_peak_rss.png",
         DEMUX_DIR / "plots" / "synthetic_3cycle_10bbpc_peak_rss.png",
         DEMUX_DIR / "plots" / "synthetic_4cycle_10bbpc_peak_rss.png",
-        SUPP_DIR / "figures" / "nf2-recall-benchmark.png",
     ]
     written: list[Path] = []
     for path in figure_paths:
@@ -119,79 +116,6 @@ def demux_memory_rows() -> list[dict[str, Any]]:
     return rows
 
 
-def recovery_summary_rows(strict_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
-    methods = [
-        ("DELT-Hit counts", "delt_hit_counts_rank"),
-        ("DELT-Hit z-score", "delt_hit_zscore_rank"),
-        ("DELi NSC", "deli_nsc_rank"),
-        ("DELi MLE", "deli_mle_rank"),
-        ("DELT-Hit edgeR", "delt_hit_edger_rank"),
-        ("DELi norm-z", "deli_normz_rank"),
-    ]
-    summary: list[dict[str, Any]] = []
-    for method, column in methods:
-        ranks = [int(row[column]) for row in strict_rows if row[column]]
-        n = len(ranks)
-        summary.append(
-            {
-                "method": method,
-                "n": n,
-                "median_rank": median(ranks),
-                "worst_rank": max(ranks),
-                "recall_at_10": sum(rank <= 10 for rank in ranks) / n,
-                "recall_at_50": sum(rank <= 50 for rank in ranks) / n,
-                "recall_at_100": sum(rank <= 100 for rank in ranks) / n,
-            }
-        )
-    return summary
-
-
-def recall_figure_rows(summary_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
-    for row in summary_rows:
-        family = "DELT-Hit" if row["method"].startswith("DELT-Hit") else "DELi"
-        for cutoff, column in (
-            (10, "recall_at_10"),
-            (50, "recall_at_50"),
-            (100, "recall_at_100"),
-        ):
-            rows.append(
-                {
-                    "tool_family": family,
-                    "method": row["method"],
-                    "rank_cutoff": cutoff,
-                    "recall": row[column],
-                    "n": row["n"],
-                }
-            )
-    return rows
-
-
-def strict_truth_rows(strict_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
-    grouped: dict[tuple[str, str, str], dict[str, Any]] = {}
-    for row in strict_rows:
-        key = (row["paper_target"], row["paper_ab"], row["evidence"])
-        entry = grouped.setdefault(
-            key,
-            {
-                "target": row["paper_target"],
-                "ab_pair": row["paper_ab"],
-                "evidence": row["evidence"],
-                "conditions": [],
-                "instances": 0,
-            },
-        )
-        entry["conditions"].append(row["strand"])
-        entry["instances"] += 1
-    return [
-        {
-            **entry,
-            "conditions": ", ".join(entry["conditions"]),
-        }
-        for entry in grouped.values()
-    ]
-
-
 def reanalysis_example_rows() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     favalli = [
         {"code_0": 268, "code_1": 278, "legacy": 62, "delt": 62, "identical": True},
@@ -253,6 +177,28 @@ def workflow_comparison_rows() -> list[dict[str, str]]:
     ]
 
 
+def template_reaction_rows() -> list[dict[str, str]]:
+    return [
+        {"name": "MTT deprotection", "smirks": "[N:1]C(c1ccccc1)(c2ccccc2)c3ccc(C)cc3>>[N:1]"},
+        {"name": "Nvoc deprotection", "smirks": "[N:1]C(OCc1cc(OC)c(OC)cc1[N+]([O-])=O)=O>>[N:1]"},
+        {"name": "Fmoc deprotection", "smirks": "[N:1]C(OCC1c2c(c3c1cccc3)cccc2)=O>>[N:1]"},
+        {"name": "Staudinger reduction", "smirks": "[#6:1][$([NX2-][NX2+]#[NX1]),$([NX2]=[NX2+]=[NX1-])]>>[#6:1][N;H2]"},
+        {"name": "Azido transfer", "smirks": "[#6:1][N;H2:2]>>[#6:1][N:2]=[N+]=[N-]"},
+        {"name": "Nitro reduction", "smirks": "[#6:1][N+]([O-])=O>>[#6:1][N;H2]"},
+        {
+            "name": "Ester cleavage",
+            "smirks": "[CX3:1](=[O:2])[OX2;H0][$([C;H3]),$([C;H2][C;H3]),$([C;H0]([C;H3])([C;H3])[C;H3])]>>[CX3:1](=[O:2])[OX2;H1]",
+        },
+        {"name": "Reductive amination", "smirks": "[C$(C(=O)([CX4,c])([CX4,c])),C$([CH](=O)([CX4,c])):1](=[O]).[N:2]>>[C:1][N:2]"},
+        {"name": "Heck", "smirks": "[cX3:1][Br,I].[CX3:2]=[CX3;H2:3]>>[cX3:1]-[CX3:3]=[CX3:2]"},
+        {"name": "Thioether formation", "smirks": "[#6:1][S;H1:2].[C:3][Cl,Br,I]>>[#6:1][S:2][C:3]"},
+        {"name": "Amide bond formation", "smirks": "[CX3:1](=[O:2])[OX2;H1].[N;$([N;H1,H2]),$([N;H3]):4]>>[CX3:1](=[O:2])[N:4]"},
+        {"name": "Sonogashira", "smirks": "[cX3:1][Br,I].[CX2:2]#[CX2;H1:3]>>[cX3:1]-[CX2:3]#[CX2:2]"},
+        {"name": "Suzuki", "smirks": "[cX3:1][Br,I].[#6:2][BX3]>>[cX3:1][#6:2]"},
+        {"name": "C-N coupling reactions", "smirks": "[cX3:1][Cl,Br,I].[N;H1,H2;!$(NC=O);!$(NS=O):2]>>[cX3:1][N:2]"},
+    ]
+
+
 def add_sheet(workbook: Workbook, title: str, rows: list[dict[str, Any]]) -> None:
     sheet = workbook.create_sheet(title)
     if not rows:
@@ -266,8 +212,6 @@ def add_sheet(workbook: Workbook, title: str, rows: list[dict[str, Any]]) -> Non
 
 
 def build_workbook() -> Path:
-    strict_rows = read_csv(NF2_DIR / "strict14_method_ranks.csv")
-    summary_rows = recovery_summary_rows(strict_rows)
     favalli_rows, puredel_rows = reanalysis_example_rows()
 
     workbook = Workbook()
@@ -276,7 +220,7 @@ def build_workbook() -> Path:
     readme.append(["Supplementary Data 1"])
     readme.append(
         [
-            "Source data for the Supplementary Figures and supplementary comparison and benchmark tables."
+            "Source data for the Supplementary Figures, supplementary comparison and benchmark tables, and additional reaction templates."
         ]
     )
     readme.append(["Supporting-material repository", "https://doi.org/10.6084/m9.figshare.31198468"])
@@ -327,14 +271,10 @@ def build_workbook() -> Path:
             if row["bb_per_cycle"] == 10 and row["cycles"] in (2, 3, 4)
         ],
     )
-    add_sheet(workbook, "SuppFig4_NF2_recall", recall_figure_rows(summary_rows))
     add_sheet(workbook, "SuppTable1_Favalli", favalli_rows)
     add_sheet(workbook, "SuppTable2_PureDEL", puredel_rows)
     add_sheet(workbook, "SuppTable3_Workflow", workflow_comparison_rows())
-    add_sheet(workbook, "SuppTable4_NF2_truth", strict_truth_rows(strict_rows))
-    add_sheet(workbook, "SuppTable5_NF2_summary", summary_rows)
-    add_sheet(workbook, "Strict14_method_ranks", strict_rows)
-    add_sheet(workbook, "Zscore_benchmark", read_csv(NF2_DIR / "zscore_outputs" / "benchmark_summary.csv"))
+    add_sheet(workbook, "SuppTable6_ReactionTemplates", template_reaction_rows())
 
     workbook.save(WORKBOOK_PATH)
     return WORKBOOK_PATH

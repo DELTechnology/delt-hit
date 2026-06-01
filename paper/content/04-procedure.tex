@@ -51,7 +51,7 @@ In-silico chemical assembly of all library members and calculation of molecular 
 \subsection{Phase 1: Project initialization and configuration}
 \textbf{TIMING 30-60 min}
 
-The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template, a rudimentary template file can be found in the supplementary information.
+The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template, and additional templates are provided in the Supplementary Information.
 
 In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL library and experimental design information.
 
@@ -159,7 +159,7 @@ SMIRKS is a reaction notation derived from SMARTS that describes how one or more
 
 \protocolstep{6}{Create the reactions sheet}
 
-Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). A collection of SMARTS/SMIRKS for reactions commonly employed in DEL synthesis is provided in the supplementary information (Supplementary Note~\ref{supp:template-reactions}). Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks.
+Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). Additional reaction templates commonly employed in DEL synthesis are provided in the Supplementary Information. Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks.
 
 
 \input{tables/reaction-smirks}
