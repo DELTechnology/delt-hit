@@ -212,6 +212,85 @@ def test_enumerate_filtered_mode_writes_named_library_and_selected_rows(tmp_path
     assert df[["code_0", "code_1"]].to_dict("records") == [{"code_0": 1, "code_1": 0}]
 
 
+def test_enumerate_applies_additional_final_step_after_all_building_blocks(tmp_path):
+    config = {
+        "experiment": {
+            "name": "final_step",
+            "save_dir": str(tmp_path),
+        },
+        "library": {
+            "bb_edges": [["B0", "rxn_join"], ["B1", "rxn_join"], ["rxn_join", "product_1"]],
+            "other_edges": [["product_1", "rxn_final"], ["rxn_final", "product_final"]],
+            "building_blocks": ["B0", "B1"],
+            "products": ["product_1", "product_final"],
+        },
+        "catalog": {
+            "reactions": {
+                "rxn_join": {"smirks": "[C:1].[O:2]>>[C:1][O:2]"},
+                "rxn_final": {"smirks": "[C:1][O:2]>>[C:1][O:2]N"},
+            },
+            "compounds": {},
+        },
+        "structure": [
+            {"name": "B0", "type": "building_block", "strand": None},
+            {"name": "B1", "type": "building_block", "strand": None},
+        ],
+        "whitelists": {
+            "B0": [
+                {"index": 0, "smiles": "C", "reaction": "rxn_join", "product": "product_1", "educt": "B1"},
+            ],
+            "B1": [
+                {"index": 0, "smiles": "O", "reaction": "rxn_join", "product": "product_1", "educt": "B0"},
+            ],
+        },
+    }
+    config_path = tmp_path / "config.yaml"
+    write_yaml(config, config_path)
+
+    Library().enumerate(config_path=config_path)
+
+    library_path = tmp_path / "final_step" / "library" / "library.parquet"
+    df = pd.read_parquet(library_path)
+    assert df["smiles"].to_list() == ["CON"]
+
+
+def test_enumerate_preserves_isomeric_smiles(tmp_path):
+    config = {
+        "experiment": {
+            "name": "stereo",
+            "save_dir": str(tmp_path),
+        },
+        "library": {
+            "bb_edges": [["B0", "rxn_pass"], ["rxn_pass", "product_1"]],
+            "other_edges": [],
+            "building_blocks": ["B0"],
+            "products": ["product_1"],
+        },
+        "catalog": {
+            "reactions": {
+                "rxn_pass": {"smirks": "[C@:1]([N:2])([C:3])[C:4]>>[C@:1]([N:2])([C:3])[C:4]"},
+            },
+            "compounds": {},
+        },
+        "structure": [
+            {"name": "B0", "type": "building_block", "strand": None},
+        ],
+        "whitelists": {
+            "B0": [
+                {"index": 0, "smiles": "N[C@@H](C)C(=O)O", "reaction": "rxn_pass", "product": "product_1", "educt": "B0"},
+            ],
+        },
+    }
+    config_path = tmp_path / "config.yaml"
+    write_yaml(config, config_path)
+
+    Library().enumerate(config_path=config_path)
+
+    library_path = tmp_path / "stereo" / "library" / "library.parquet"
+    df = pd.read_parquet(library_path)
+    assert "@" in df["smiles"].iloc[0]
+
+
 def test_enumerate_writes_reaction_graphs_under_visualization_dir(tmp_path, monkeypatch):
     _, config_path = make_test_config(tmp_path)
     captured_save_dir = None

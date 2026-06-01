@@ -552,7 +552,7 @@ def enumerate_single_strand(*,
         for n in bb_nodes:
             for sgn in subgraphs:
                 sg = add_G.subgraph(sgn).copy()
-                if n in sg and sg.out_degree(n) == 0:
+                if n in sg and (sg.out_degree(n) == 0 or sg.in_degree(n) == 0):
                     additional_edges.update(sg.edges)
 
         edges = bb_edges + [tuple(e) for e in additional_edges]
@@ -861,7 +861,7 @@ def perform_reaction(smirks: str, reactants: list[str], use_smiles: bool = False
     for tup in product_sets:
         for pmol in tup:
             Chem.SanitizeMol(pmol)
-            products.add(Chem.MolToSmiles(pmol, canonical=True, kekuleSmiles=False, isomericSmiles=False))
+            products.add(Chem.MolToSmiles(pmol, canonical=True, kekuleSmiles=False, isomericSmiles=True))
 
     return sorted(products)
 
