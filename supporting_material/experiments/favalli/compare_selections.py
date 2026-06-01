@@ -2,7 +2,7 @@ import pandas as pd
 from loguru import logger
 from pathlib import Path
 
-base_dir = Path('/Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/favalli')
+base_dir = Path(__file__).parent
 legacy_path = base_dir / "published" / "1907_NF2GB2_s1_R1_260424JS_2026_4_24_16_20_51_eval.txt"
 lane = "lane-1-fasta"
 selections_dir = base_dir / lane / "selections"
