@@ -3,23 +3,23 @@
 \subsection{Phase 1: Project initialization and configuration}
 \textbf{TIMING 30-60 min}
 
-The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template, and additional templates are provided in the Supplementary Information.
+The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template.
 
 In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL library and experimental design information.
 
 
 \protocolstep{1}{Create the experiment sheet}
 
-Create an Excel workbook with multiple sheets defining the experiment. Each sheet contains specific information required for the analysis. The following sections describe the required sheets and their format. Users can start from the template provided in Table 3. The experiment sheet contains the experiment name, file paths, and computational resource settings.
+Create an Excel workbook with multiple sheets defining the experiment. We recommend starting from the provided example workbook and adjusting it to the new library. The following sections describe the required sheets and their format. The \texttt{experiment} sheet contains the experiment name, file paths, and computational resource settings.
 
 
 \input{tables/experiment-config}
-CRITICAL STEP: Use absolute paths, or paths relative to the working directory, for \texttt{fastq\_path} and \texttt{save\_dir}.
+CRITICAL STEP: Use absolute paths, or paths relative to the working directory, for \texttt{fastq\_path} and \texttt{save\_dir}. Here, \texttt{./} refers to the current working directory from which the command is run.
 
 
 \protocolstep{2}{Create the selection sheet}
 
-This sheet defines the experimental design, including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes one experimental setting, such as a target condition or control condition, and is identified by a unique combination of \texttt{S0} and \texttt{S1} primers for demultiplexing.
+The \texttt{selection} sheet defines the experimental design, including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes one experimental setting, such as a target condition or control condition, and is identified by a unique combination of \texttt{S0} and \texttt{S1} primers for demultiplexing.
 
 
 \input{tables/selection-design}
@@ -40,12 +40,12 @@ Optional columns:
 
 \protocolstep{3}{Create the structure sheet}
 
-This sheet defines the DNA construct architecture and error tolerances for demultiplexing.
+The \texttt{structure} sheet defines the DNA construct architecture and error tolerances for demultiplexing.
 
 There are three types of DNA regions:
 
 \begin{itemize}
-  \item \texttt{selection}: Region used for selection primers defined in the selection sheet; these regions should be named \texttt{S0}, \texttt{S1}, and so on.
+  \item \texttt{selection}: Region used for selection primers defined in the \texttt{selection} sheet; these regions should be named \texttt{S0}, \texttt{S1}, and so on.
   \item \texttt{constant}: Constant regions shared across DNA constructs; these regions should be named sequentially \texttt{C0}, \texttt{C1}, and so on.
   \item \texttt{building\_block}: Region identifying a chemical building block; these regions should be named sequentially \texttt{B0}, \texttt{B1}, and so on.
 \end{itemize}
@@ -67,16 +67,16 @@ CRITICAL STEP: To balance assignment accuracy and read recovery, we recommend us
 
 \protocolstep{4}{Create the constant sheet}
 
-This sheet contains the DNA sequences for all constant regions defined in the structure sheet.
+The \texttt{constant} sheet contains the DNA sequences for all constant regions defined in the \texttt{structure} sheet.
 
 
 \input{tables/constant-regions}
-CRITICAL STEP: The \texttt{name} column must match the constant-region names defined in the structure sheet.
+CRITICAL STEP: The \texttt{name} column must match the constant-region names defined in the \texttt{structure} sheet.
 
 
-\protocolstep{5}{Create building block sheets (B0, B1, etc.)}
+\protocolstep{5}{Create building block sheets (\texttt{B0}, \texttt{B1}, etc.)}
 
-DELT-Hit supports libraries with an arbitrary number of building block regions. For each region defined in the structure sheet, create a sheet with the corresponding name (for example, \texttt{B0}, \texttt{B1}, ..., \texttt{BN}) and list the DNA codons used at that position. To enable library enumeration and property calculation, also define the chemical structures of the building blocks and the reactions used during library synthesis.
+DELT-Hit supports libraries with an arbitrary number of building block regions. For each region defined in the \texttt{structure} sheet, create a sheet with the corresponding name (for example, \texttt{B0}, \texttt{B1}, ..., \texttt{BN}) and list the DNA codons used at that position. To enable library enumeration and property calculation, also define the chemical structures of the building blocks and the reactions used during library synthesis.
 
 
 \input{tables/building-blocks-b0}
@@ -100,7 +100,7 @@ Optional for demultiplexing, required for enumeration:
   title=Box 3 | SMILES and SMIRKS,
   fonttitle=\bfseries
 ]
-SMILES (Simplified Molecular Input Line Entry System) is a text notation for representing the structure of an individual molecule. In DELT-Hit, each building block is provided as a SMILES string in the corresponding building-block sheet so that the software can reconstruct products and calculate molecular properties. For example, the SMILES string \texttt{NCC1=CC=CS1} describes a small molecule that contains an aminoethyl side chain attached to a five-membered aromatic ring with sulfur. At a high level, a SMILES string tells the software which atoms are present and how they are connected in the starting building block.
+SMILES (Simplified Molecular Input Line Entry System) is a text notation for representing the structure of an individual molecule. In DELT-Hit, each building block is provided as a SMILES string in the corresponding \texttt{B0}, \texttt{B1}, ..., \texttt{BN} sheet so that the software can reconstruct products and calculate molecular properties. For example, the SMILES string \texttt{NCC1=CC=CS1} describes a small molecule that contains an aminoethyl side chain attached to a five-membered aromatic ring with sulfur. At a high level, a SMILES string tells the software which atoms are present and how they are connected in the starting building block.
 
 \begin{center}
 \includegraphics[width=0.35\textwidth]{figures/structure.png}
@@ -111,16 +111,16 @@ SMIRKS is a reaction notation derived from SMARTS that describes how one or more
 
 \protocolstep{6}{Create the reactions sheet}
 
-Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). Additional reaction templates commonly employed in DEL synthesis are provided in the Supplementary Information. Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks.
+Only required for library enumeration. In the \texttt{reactions} sheet, define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). Additional reaction templates commonly employed in DEL synthesis are provided in the Supplementary Information. Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks.
 
 
 \input{tables/reaction-smirks}
-CRITICAL STEP: The \texttt{name} column must match the reaction names used in the building block sheets.
+CRITICAL STEP: The \texttt{name} column must match the reaction names used in the \texttt{B0}, \texttt{B1}, ..., \texttt{BN} sheets.
 
 
 \protocolstep{7}{Create the compounds sheet}
 
-Only required for library enumeration. Define any additional chemical compounds (scaffolds, reagents) used in the reactions.
+Only required for library enumeration. In the \texttt{compounds} sheet, define any additional chemical compounds (scaffolds, reagents) used in the reactions.
 
 
 \input{tables/compound-definitions}
