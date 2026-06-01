@@ -520,7 +520,8 @@ def enumerate_single_strand(*,
                             top_n: int | None = None,
                             debug: str = 'False',
                             errors: str = 'raise',
-                            save_dir: Path | None = None) -> pd.DataFrame:
+                            save_dir: Path | None = None,
+                            label: str | None = None) -> pd.DataFrame:
     """Enumerate a single-display library and return it as a dataframe."""
     reactions = graph_bundle['reactions']
     products = graph_bundle['products']
@@ -538,7 +539,8 @@ def enumerate_single_strand(*,
         combs = combinations
 
     library = []
-    logger.info('Starting enumeration of library...')
+    suffix = f' ({label})' if label else ''
+    logger.info(f'Starting enumeration of library{suffix}...')
     for i, comb in tqdm(enumerate(combs)):
         bb_edges = [(bb, c['reaction']) for bb, c in zip(building_block_names, comb)]
         bb_edges += [(c['reaction'], c['product']) for c in comb]
@@ -661,6 +663,7 @@ def enumerate_dual_display(*,
         debug=debug,
         errors=errors,
         save_dir=save_dir,
+        label='strand A',
     )
     strand_b_df = enumerate_single_strand(
         cfg=strand_b_cfg,
@@ -670,6 +673,7 @@ def enumerate_dual_display(*,
         debug=debug,
         errors=errors,
         save_dir=save_dir,
+        label='strand B',
     )
 
     strand_a_df = strand_a_df.rename(columns={'smiles': 'smiles_a'})
