@@ -25,39 +25,11 @@ console = Console()
 
 
 def parse_args() -> argparse.Namespace:
-    script_dir = Path(__file__).resolve().parent
-    default_analysis_root = script_dir / "lane-1" / "analysis"
-    default_analysis_config = script_dir / "analysis.yaml"
-
     parser = argparse.ArgumentParser(
         description="Plot top-hit code count summaries from counts, edgeR, and z-score stats tables."
     )
     parser.add_argument("--top-n", type=int, default=DEFAULT_TOP_N, help="Number of top compounds to select per method.")
-    parser.add_argument(
-        "--analysis-root",
-        type=Path,
-        default=default_analysis_root,
-        help="Analysis root containing counts/<name>/stats.csv, edgeR/<name>/stats.csv, and z_score/<selection>/stats.csv.",
-    )
-    parser.add_argument(
-        "--analysis-config",
-        type=Path,
-        default=default_analysis_config,
-        help="Analysis YAML used to infer the condition replicate selections for z-score.",
-    )
     parser.add_argument("--name", default="ca9_ds", help="Experiment name for the counts and edgeR results.")
-    parser.add_argument(
-        "--zscore-selections",
-        nargs="*",
-        default=None,
-        help="Optional explicit z-score selection names. Defaults to the condition selections for --name in the analysis config.",
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=None,
-        help="Directory for plots and CSV summaries. Defaults to supporting_material/experiments/favalli/enrichment/<name>/.",
-    )
     return parser.parse_args()
 
 
@@ -342,13 +314,13 @@ def main() -> None:
     args = parse_args()
     validate_top_n(args.top_n)
 
-    analysis_root = args.analysis_root.expanduser().resolve()
-    analysis_config = args.analysis_config.expanduser().resolve()
-
-    output_dir = (args.output_dir or Path(__file__).parent / "enrichment" / args.name).expanduser().resolve()
+    script_dir = Path(__file__).resolve().parent
+    analysis_root = script_dir / "lane-1" / "analysis"
+    analysis_config = script_dir / "analysis.yaml"
+    output_dir = script_dir / "enrichment" / args.name
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    zscore_selections = args.zscore_selections or infer_zscore_selections(analysis_config=analysis_config, name=args.name)
+    zscore_selections = infer_zscore_selections(analysis_config=analysis_config, name=args.name)
 
     counts_path = analysis_root / "counts" / args.name / "stats.csv"
     edger_path = analysis_root / "edgeR" / args.name / "stats.csv"
