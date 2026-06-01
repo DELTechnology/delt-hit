@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-cd supporting_material/experiments/pure-del || exit
-
 PREFIX="${1:-lane-1}"
 
 time pixi run delt-hit init --excel_path "$PREFIX.xlsx"
