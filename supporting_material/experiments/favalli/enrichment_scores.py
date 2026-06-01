@@ -26,7 +26,7 @@ console = Console()
 
 def parse_args() -> argparse.Namespace:
     script_dir = Path(__file__).resolve().parent
-    default_analysis_root = script_dir / "lane-1-fasta" / "analysis"
+    default_analysis_root = script_dir / "lane-1" / "analysis"
     default_analysis_config = script_dir / "analysis.yaml"
 
     parser = argparse.ArgumentParser(
@@ -345,7 +345,7 @@ def main() -> None:
     analysis_root = args.analysis_root.expanduser().resolve()
     analysis_config = args.analysis_config.expanduser().resolve()
 
-    output_dir = args.output_dir.expanduser().resolve()
+    output_dir = (args.output_dir or Path(__file__).parent / "enrichment" / args.name).expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
     zscore_selections = args.zscore_selections or infer_zscore_selections(analysis_config=analysis_config, name=args.name)
