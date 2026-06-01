@@ -51,13 +51,6 @@ def get_plot_top_ns(top_n: int) -> list[int]:
     return sorted({*DEFAULT_PLOT_TOP_NS, top_n})
 
 
-def infer_zscore_selections(*, analysis_config: Path, name: str) -> list[str]:
-    config = yaml.safe_load(analysis_config.read_text())
-    for experiment in config["experiments"]:
-        if experiment["name"] == name:
-            return [selection["name"] for selection in experiment["selections"] if selection["group"] == "condition"]
-    raise ValueError(f"Experiment {name} not found in analysis config {analysis_config}.")
-
 
 def load_counts_scores(path: Path) -> pd.DataFrame:
     table = pd.read_csv(path)
@@ -322,7 +315,9 @@ def main() -> None:
     output_dir = script_dir / "enrichment" / EXPERIMENT_NAME
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    zscore_selections = infer_zscore_selections(analysis_config=analysis_config, name=EXPERIMENT_NAME)
+    config = yaml.safe_load(analysis_config.read_text())
+    experiment = next(e for e in config["experiments"] if e["name"] == EXPERIMENT_NAME)
+    zscore_selections = [s["name"] for s in experiment["selections"] if s["group"] == "condition"]
 
     counts_path = analysis_root / "counts" / EXPERIMENT_NAME / "stats.csv"
     edger_path = analysis_root / "edgeR" / EXPERIMENT_NAME / "stats.csv"
