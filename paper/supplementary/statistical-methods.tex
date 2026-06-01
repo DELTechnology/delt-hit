@@ -21,7 +21,7 @@ identities in the library and $n$ the total number of sequencing reads in a
 selection. For a given compound, let $c$ be its raw read count. The observed
 sequence frequency is $p_{\rm obs} = c / n$ and the expected null frequency under
 uniform library representation is $p_i = 1/D$. The depth-insensitive z-score
-is\cite{ref42}
+is\cite{faver_quantitativecomparisonenrichment_2019}
 
 \begin{equation}
 z_n = \frac{p_{\rm obs} - p_i}{\sqrt{p_i\,(1 - p_i)}}.
@@ -46,7 +46,7 @@ Compound-level read counts per selection are modelled as negative-binomial
 Poisson counts, which arises in DEL experiments from variation in sequencing
 depth, barcode-decoding efficiency, and chemical synthesis yield. Per-compound
 dispersion is estimated by empirical Bayes shrinkage towards a trend fitted
-across all compounds\cite{ref36}. A likelihood-ratio test (LRT) is performed
+across all compounds\cite{robinson_edgerbioconductorpackage_2010}. A likelihood-ratio test (LRT) is performed
 for each compound to compare the NB-GLM fit under a two-group design
 (condition vs.\ control) against a null model; Benjamini--Hochberg
 false-discovery rate (FDR) correction is applied across all compounds.

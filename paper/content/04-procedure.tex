@@ -514,9 +514,9 @@ delt-hit analyse enrichment --config_path=campaign/config.yaml --counts=campaign
 # Execute the generated R script
 Rscript --vanilla campaign/analysis/z_score/AG24_15/enrichment_z_score.R
 \end{lstlisting}
-The normalized z-score method computes the per-compound score for an individual selection following Faver et al.\cite{ref42}. Because it does not rely on replicate-based variance estimation, it can also be applied to experiments without replicates.
+The normalized z-score method computes the per-compound score for an individual selection following Faver et al.\cite{faver_quantitativecomparisonenrichment_2019}. Because it does not rely on replicate-based variance estimation, it can also be applied to experiments without replicates.
 
-For all three methods, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CA9-associated building block by Favalli \cite{ref38} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}.
+For all three methods, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CA9-associated building block by Favalli \cite{favalli_stereoregiodefineddnaencoded_2021} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}.
 
 Expected outputs:
 
