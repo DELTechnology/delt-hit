@@ -16,15 +16,15 @@ if [[ ! " ${VALID_PREFIXES[*]} " =~ [[:space:]]${PREFIX}[[:space:]] ]]; then
   exit 1
 fi
 
-delt-hit init --excel_path "$PREFIX.xlsx"
+time pixi run delt-hit init --excel_path "$PREFIX.xlsx"
 
 CONFIG_PATH=$PREFIX/config.yaml
 
-delt-hit demultiplex prepare --config_path=$CONFIG_PATH
-$PREFIX/demultiplex/cutadapt_input_files/demultiplex.sh
+time pixi run delt-hit demultiplex prepare --config_path="$CONFIG_PATH"
+time bash "$PREFIX/demultiplex/cutadapt_input_files/demultiplex.sh"
 
-delt-hit demultiplex report --config_path=$CONFIG_PATH
-delt-hit demultiplex qc --config_path=$CONFIG_PATH
+time pixi run delt-hit demultiplex report --config_path="$CONFIG_PATH"
+time pixi run delt-hit demultiplex qc --config_path="$CONFIG_PATH"
 
-delt-hit demultiplex process --config_path=$CONFIG_PATH
-delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True
+time pixi run delt-hit demultiplex process --config_path="$CONFIG_PATH"
+time pixi run delt-hit demultiplex process --config_path="$CONFIG_PATH" --as_files=True
