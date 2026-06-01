@@ -24,12 +24,14 @@ QUERY_COMPOUNDS = [(159, 474), (357, 474), (68, 474)]
 console = Console()
 
 
+EXPERIMENT_NAME = "ca9_ds"
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Plot top-hit code count summaries from counts, edgeR, and z-score stats tables."
     )
     parser.add_argument("--top-n", type=int, default=DEFAULT_TOP_N, help="Number of top compounds to select per method.")
-    parser.add_argument("--name", default="ca9_ds", help="Experiment name for the counts and edgeR results.")
     return parser.parse_args()
 
 
@@ -317,13 +319,13 @@ def main() -> None:
     script_dir = Path(__file__).resolve().parent
     analysis_root = script_dir / "lane-1" / "analysis"
     analysis_config = script_dir / "analysis.yaml"
-    output_dir = script_dir / "enrichment" / args.name
+    output_dir = script_dir / "enrichment" / EXPERIMENT_NAME
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    zscore_selections = infer_zscore_selections(analysis_config=analysis_config, name=args.name)
+    zscore_selections = infer_zscore_selections(analysis_config=analysis_config, name=EXPERIMENT_NAME)
 
-    counts_path = analysis_root / "counts" / args.name / "stats.csv"
-    edger_path = analysis_root / "edgeR" / args.name / "stats.csv"
+    counts_path = analysis_root / "counts" / EXPERIMENT_NAME / "stats.csv"
+    edger_path = analysis_root / "edgeR" / EXPERIMENT_NAME / "stats.csv"
     zscore_paths = {
         selection: analysis_root / "z_score" / selection / "stats.csv"
         for selection in zscore_selections

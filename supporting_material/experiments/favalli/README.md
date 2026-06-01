@@ -28,24 +28,22 @@ This produces per-selection counts under `lane-1/selections/`.
 
 ## Enrichment analysis
 
-Run the enrichment setup for an experiment (e.g. `ca9_ds`) and execute the generated R scripts:
+Run the enrichment setup and execute the generated R scripts:
 
 ```bash
-exp=ca9_ds
-
 pixi run delt-hit analyse enrichment \
   --analysis_config=analysis.yaml \
   --save_dir=lane-1/analysis \
-  --name=${exp} \
+  --name=ca9_ds \
   --method=counts
-pixi run Rscript --vanilla lane-1/analysis/counts/${exp}/enrichment_counts.R
+pixi run Rscript --vanilla lane-1/analysis/counts/ca9_ds/enrichment_counts.R
 
 pixi run delt-hit analyse enrichment \
   --analysis_config=analysis.yaml \
   --save_dir=lane-1/analysis \
-  --name=${exp} \
+  --name=ca9_ds \
   --method=edgeR
-pixi run Rscript --vanilla lane-1/analysis/edgeR/${exp}/enrichment_edgeR.R
+pixi run Rscript --vanilla lane-1/analysis/edgeR/ca9_ds/enrichment_edgeR.R
 
 for selection in 4_2 5_2 6_2; do
   pixi run delt-hit analyse enrichment \
@@ -61,7 +59,7 @@ done
 Then compare enrichment scores across methods and export hit lists:
 
 ```bash
-pixi run python enrichment_scores.py --name ${exp}
+pixi run python enrichment_scores.py
 ```
 
 Defaults to `--analysis-root lane-1/analysis`, `--analysis-config analysis.yaml`, and `--output-dir enrichment/${exp}`. The script produces:
