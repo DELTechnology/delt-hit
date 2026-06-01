@@ -24,6 +24,16 @@ def parse_args() -> argparse.Namespace:
         / "library"
         / "visualization"
     )
+    default_properties_root = (
+        script_dir.parent
+        / "supporting_material"
+        / "experiments"
+        / "example-single-stranded"
+        / "campaign"
+        / "library"
+        / "properties"
+        / "AG24_4_top_hits"
+    )
     default_output_dir = script_dir / "figures"
     parser = argparse.ArgumentParser(
         description=(
@@ -42,6 +52,12 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=default_output_dir,
         help="Directory where the composite figures should be written.",
+    )
+    parser.add_argument(
+        "--properties-root",
+        type=Path,
+        default=default_properties_root,
+        help="Directory containing molecular property distribution PNG outputs.",
     )
     return parser.parse_args()
 
@@ -229,17 +245,70 @@ def build_library_examples_composite(visualization_root: Path, output_path: Path
     figure.save(output_path, quality=95)
 
 
+def build_properties_and_examples_composite(
+    visualization_root: Path,
+    properties_root: Path,
+    output_path: Path,
+) -> None:
+    property_plot = properties_root / "prop_mw.png"
+    require_paths([property_plot])
+    library_examples = top_hit_paths(visualization_root)[:5]
+
+    width, height = 3600, 3000
+    figure = Image.new("RGB", (width, height), BG)
+    draw = ImageDraw.Draw(figure)
+
+    property_panel = panel(
+        property_plot,
+        (3380, 1280),
+        title="Top-hit molecular weight distribution",
+        subtitle="supporting_material/experiments/example-single-stranded/campaign/library/properties/AG24_4_top_hits/prop_mw.png",
+    )
+    figure.paste(property_panel, (110, 100))
+
+    draw.rounded_rectangle(
+        (110, 1460, 3490, 2820),
+        28,
+        fill=SECTION_BG,
+        outline=BORDER,
+        width=3,
+    )
+    draw.text((140, 1500), "Representative top-hit structures", font=SECTION, fill=INK)
+    draw.text((140, 1585), "Examples from AG24_4_top_hits visualized with delt-hit visualize library", font=SMALL, fill=MUTED)
+
+    positions = [
+        (140, 1695),
+        (810, 1695),
+        (1480, 1695),
+        (2150, 1695),
+        (2820, 1695),
+    ]
+    size = (620, 980)
+    for i, (image_path, (x, y)) in enumerate(zip(library_examples, positions), start=1):
+        example_panel = panel(image_path, size, title=f"Example {i}", subtitle=image_path.stem)
+        figure.paste(example_panel, (x, y))
+
+    figure.save(output_path, quality=95)
+
+
 def main() -> None:
     args = parse_args()
     visualization_root = args.visualization_root
+    properties_root = args.properties_root
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
     build_enumeration_composite(visualization_root, output_dir / "enumeration-summary.png")
     build_library_examples_composite(visualization_root, output_dir / "top-hit-structures.png")
+    build_properties_and_examples_composite(
+        visualization_root,
+        properties_root,
+        output_dir / "top-hit-properties-and-structures.png",
+    )
 
     print(f"Wrote {output_dir / 'enumeration-summary.png'}")
     print(f"Wrote {output_dir / 'top-hit-structures.png'}")
+    print(f"Wrote {output_dir / 'top-hit-properties-and-structures.png'}")
 
 
 if __name__ == "__main__":
