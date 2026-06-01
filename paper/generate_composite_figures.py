@@ -254,12 +254,12 @@ def build_properties_and_examples_composite(
     require_paths([property_plot])
     library_examples = top_hit_paths(visualization_root)[:4]
 
-    width, height = 3600, 3000
+    width, height = 3600, 1800
     figure = Image.new("RGB", (width, height), BG)
 
     property_panel = panel(
         property_plot,
-        (1700, 2780),
+        (1700, 1580),
         title="Top-hit molecular weight distribution",
     )
     figure.paste(property_panel, (110, 110))
@@ -267,10 +267,10 @@ def build_properties_and_examples_composite(
     positions = [
         (1920, 110),
         (2720, 110),
-        (1920, 1560),
-        (2720, 1560),
+        (1920, 860),
+        (2720, 860),
     ]
-    size = (730, 1330)
+    size = (730, 830)
     for i, (image_path, (x, y)) in enumerate(zip(library_examples, positions), start=1):
         example_panel = panel(image_path, size, title=f"Example {i}", subtitle=image_path.stem)
         figure.paste(example_panel, (x, y))

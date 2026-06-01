@@ -1,29 +1,4 @@
 \section{Timing}
 Protocol execution times depend on dataset characteristics and computational resources. This table provides estimates for different dataset scales using the recommended hardware configuration (32 GB RAM, 16 CPU cores).
 
-
 \input{tables/timing-estimates}
-¹Small dataset: \textless{}500K compounds
-²Medium dataset: 500K-10M compounds
-³Large dataset: \textgreater{}10M compounds
-* Potentially not feasible
-
-Representative step-level timing guidance for the main computational stages is summarized below:
-
-\begin{itemize}
-  \item Steps 1--9: project initialization and workbook-to-YAML configuration typically require 30--60 min, depending mainly on how much library and experimental metadata must be entered and checked.
-  \item Steps 10--13: sequence demultiplexing generally requires 10--30 min for small datasets, 1--2 h for medium datasets, and 2--6 h for large datasets.
-  \item Step 14: launching and using the dashboard usually requires 15--60 min, depending on how extensively the count tables are explored.
-  \item Step 15: selection-focused enumeration is expected to require less than 1 min across dataset classes.
-  \item Step 16: selection-focused property calculation is expected to require less than 1 min across dataset classes.
-  \item Steps 17--18: statistical-analysis setup and execution are expected to require less than 5 min across dataset classes.
-  \item Step 19: optional full-library enumeration is expected to require less than 5 min for small datasets, 15 min to 2 h for medium datasets, and more than 2 h for large datasets, where execution may be impractical.
-  \item Step 20: optional full-library property calculation is expected to require less than 5 min for small datasets, 15 min to 2 h for medium datasets, and more than 2 h for large datasets, where execution may be impractical.
-  \item Step 21: optional molecular-representation generation is expected to require less than 5 min for small datasets, 15 min to 2 h for medium datasets, and more than 2 h for large datasets.
-\end{itemize}
-
-Notes:
-
-\begin{itemize}
-  \item Parallel processing with the \texttt{num\_cores} parameter can substantially affect runtime
-\end{itemize}
