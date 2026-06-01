@@ -252,38 +252,25 @@ def build_properties_and_examples_composite(
 ) -> None:
     property_plot = properties_root / "prop_mw.png"
     require_paths([property_plot])
-    library_examples = top_hit_paths(visualization_root)[:5]
+    library_examples = top_hit_paths(visualization_root)[:4]
 
     width, height = 3600, 3000
     figure = Image.new("RGB", (width, height), BG)
-    draw = ImageDraw.Draw(figure)
 
     property_panel = panel(
         property_plot,
-        (3380, 1280),
+        (1700, 2780),
         title="Top-hit molecular weight distribution",
-        subtitle="supporting_material/experiments/example-single-stranded/campaign/library/properties/AG24_4_top_hits/prop_mw.png",
     )
-    figure.paste(property_panel, (110, 100))
-
-    draw.rounded_rectangle(
-        (110, 1460, 3490, 2820),
-        28,
-        fill=SECTION_BG,
-        outline=BORDER,
-        width=3,
-    )
-    draw.text((140, 1500), "Representative top-hit structures", font=SECTION, fill=INK)
-    draw.text((140, 1585), "Examples from AG24_4_top_hits visualized with delt-hit visualize library", font=SMALL, fill=MUTED)
+    figure.paste(property_panel, (110, 110))
 
     positions = [
-        (140, 1695),
-        (810, 1695),
-        (1480, 1695),
-        (2150, 1695),
-        (2820, 1695),
+        (1920, 110),
+        (2720, 110),
+        (1920, 1450),
+        (2720, 1450),
     ]
-    size = (620, 980)
+    size = (730, 1220)
     for i, (image_path, (x, y)) in enumerate(zip(library_examples, positions), start=1):
         example_panel = panel(image_path, size, title=f"Example {i}", subtitle=image_path.stem)
         figure.paste(example_panel, (x, y))

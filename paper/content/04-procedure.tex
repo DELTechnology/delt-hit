@@ -48,7 +48,9 @@ In-silico chemical assembly of all library members and calculation of molecular 
 \end{tcolorbox}
 \clearpage
 
-\subsection{Phase 1: Project initialization and configuration • TIMING 30-60 min}
+\subsection{Phase 1: Project initialization and configuration}
+\textbf{TIMING 30-60 min}
+
 The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template, a rudimentary template file can be found in the supplementary information.
 
 In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL library and experimental design information.
@@ -117,7 +119,7 @@ This sheet contains the DNA sequences for all constant regions defined in the st
 
 
 \input{tables/constant-regions}
-Note: The \texttt{name} column must match the constant-region names defined in the structure sheet.
+CRITICAL STEP: The \texttt{name} column must match the constant-region names defined in the structure sheet.
 
 
 \protocolstep{5}{Create building block sheets (B0, B1, etc.)}
@@ -131,7 +133,7 @@ Required columns for demultiplexing:
 \begin{itemize}
   \item codon: DNA barcode sequence identifying this building block
 \end{itemize}
-Required columns for library enumeration:
+Optional for demultiplexing, required for enumeration:
 
 \begin{itemize}
   \item smiles: Chemical structure in SMILES notation
@@ -146,9 +148,13 @@ Required columns for library enumeration:
   title=Box 3 | SMILES and SMIRKS,
   fonttitle=\bfseries
 ]
-SMILES (Simplified Molecular Input Line Entry System) is a text notation for representing the structure of an individual molecule. In DELT-Hit, each building block is provided as a SMILES string in the corresponding building-block sheet so that the software can reconstruct products and calculate molecular properties.
+SMILES (Simplified Molecular Input Line Entry System) is a text notation for representing the structure of an individual molecule. In DELT-Hit, each building block is provided as a SMILES string in the corresponding building-block sheet so that the software can reconstruct products and calculate molecular properties. For example, the SMILES string \texttt{NCC1=CC=CS1} describes a small molecule that contains an aminoethyl side chain attached to a five-membered aromatic ring with sulfur. At a high level, a SMILES string tells the software which atoms are present and how they are connected in the starting building block.
 
-SMIRKS is a reaction notation derived from SMARTS that describes how one or more reactants are transformed into a product. In DELT-Hit, SMIRKS definitions are used to encode the chemistry of each library-synthesis step so that building blocks can be combined in silico during library enumeration. In practice, SMILES describes molecules, whereas SMIRKS describes transformations between molecules.
+\begin{center}
+\includegraphics[width=0.35\textwidth]{figures/structure.png}
+\end{center}
+
+SMIRKS is a reaction notation derived from SMARTS that describes how one or more reactants are transformed into a product. In DELT-Hit, SMIRKS definitions are used to encode the chemistry of each library-synthesis step so that building blocks can be combined in silico during library enumeration. For example, the \texttt{ABF1} reaction in Table~\ref{tab:table8}, \texttt{[CX3:1](=[O:2])[OX2;H1].[N;\$([N;H1,H2]),\$([N;H3]);!\$([N;H1,H2][S]);!\$([NX3][CX3](=[OX1])[\#6]);!\$([NX3][CX3](=[OX1])[OX2]):4]>>[CX3:1](=[O:2])[N:4]}, encodes an amide bond formation between a carboxylic acid and an amine. At a high level, the left side specifies the reacting functional groups, and the right side specifies how they are connected in the product. In practice, SMILES describes molecules, whereas SMIRKS describes transformations between molecules.
 \end{tcolorbox}
 
 \protocolstep{6}{Create the reactions sheet}
@@ -157,7 +163,7 @@ Only required for library enumeration. Define all chemical reactions used during
 
 
 \input{tables/reaction-smirks}
-Note: The \texttt{name} column must match the reaction names used in the building block sheets.
+CRITICAL STEP: The \texttt{name} column must match the reaction names used in the building block sheets.
 
 
 \protocolstep{7}{Create the compounds sheet}
@@ -204,7 +210,9 @@ Configuration created at campaign/config.yaml
 \end{lstlisting}
 CRITICAL STEP: Review the generated YAML file to verify that all information was parsed correctly. This file is used in all downstream steps.
 
-\subsection{Phase 2: Sequence processing and demultiplexing • TIMING 30 min - 4 h}
+\subsection{Phase 2: Sequence processing and demultiplexing}
+\textbf{TIMING 30 min - 4 h}
+
 This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
 
 
@@ -330,7 +338,9 @@ Quality assessment criteria:
   \item Barcode coverage: Most building blocks should have \textgreater{}0 reads
 \end{itemize}
 
-\subsection{Phase 3: Data visualization and interpretation • TIMING 15-60 min}
+\subsection{Phase 3: Data visualization and interpretation}
+\textbf{TIMING 15-60 min}
+
 The interactive dashboard provides real-time exploration of raw count data and experimental metadata.
 
 
@@ -363,13 +373,15 @@ Using the dashboard:
   \item Visualize aggregated counts across codon dimensions:
   \item Apply filters to focus on specific count ranges
 \end{itemize}
-Note: The dashboard displays raw counts from demultiplexing. For statistical comparisons and hit identification, use the enrichment analysis results from Phase 5. The command accepts counts provided as a \texttt{.txt} file, so users can also visualize custom normalized count tables by passing \texttt{--counts\_path} and, if needed, \texttt{--selection\_name}.
+CAUTION: The dashboard displays raw counts from demultiplexing. For statistical comparisons and hit identification, use the enrichment analysis results from Phase 5. The command accepts counts provided as a \texttt{.txt} file, so users can also visualize custom normalized count tables by passing \texttt{--counts\_path} and, if needed, \texttt{--selection\_name}.
 
 CRITICAL STEP: Use the default folder hierarchy produced by \texttt{delt-hit demultiplex process}. If a custom \texttt{counts.txt} file is provided, also pass the selection name exactly as specified in the selection sheet.
 
 \newpage
 
-\subsection{Phase 4: Selection enumeration and enrichment analysis • TIMING 10 min - 2 h}
+\subsection{Phase 4: Selection enumeration and enrichment analysis}
+\textbf{TIMING 10 min - 2 h}
+
 This phase generates chemical structures and molecular properties for the top enriched compounds in a selected experiment. Library enumeration requires advanced knowledge of SMARTS/SMIRKS, and library-specific adjustments are often necessary.
 
 
@@ -442,14 +454,16 @@ Expected outputs:
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/top-hit-properties-and-structures.png}
-\caption{Molecular property and structure summary for the enumerated \texttt{AG24\_4\_top\_hits} collection. The upper panel shows the molecular-weight distribution from the example output, and the lower panels show five representative structure renderings produced by \texttt{delt-hit visualize library}.}
+\includegraphics[height=0.5\textheight,keepaspectratio]{figures/top-hit-properties-and-structures.png}
+\caption{Molecular property and structure summary for the enumerated \texttt{AG24\_4\_top\_hits} collection. The left panel shows the molecular-weight distribution from the example output, and the right panels show four representative structure renderings produced by \texttt{delt-hit visualize library}.}
 \label{fig:figure3}
 \end{figure}
 Performance note: Property calculation processes approximately 600--1,000 compounds per second. For a library with 1 million compounds, expect 15--30 min of processing time.
 
 
-\subsection{Phase 5: Statistical analysis and hit identification • TIMING 10-30 min}
+\subsection{Phase 5: Statistical analysis and hit identification}
+\textbf{TIMING 10-30 min}
+
 This phase identifies enriched library members by comparing selection conditions using established statistical methods.
 
 
@@ -557,7 +571,9 @@ CRITICAL STEP: Always examine replicate correlation plots to verify data quality
 \input{tables/edger-hits}
 
 
-\subsection{Phase 6: Full library enumeration and machine learning representations • TIMING 1 h - 8 h}
+\subsection{Phase 6: Full library enumeration and machine learning representations}
+\textbf{TIMING 1 h - 8 h}
+
 This phase performs full-library enumeration and generates molecular representations for downstream machine-learning applications. These steps are optional.
 
 \protocolstep{19}{Enumerate the full library}
@@ -602,4 +618,4 @@ Expected outputs:
   \item representations/morgan.npz: Sparse matrix of Morgan fingerprints
   \item representations/bert.npz: Dense matrix of BERT embeddings
 \end{itemize}
-Note: These representations are compatible with scikit-learn, PyTorch, and TensorFlow.
+These representations are compatible with scikit-learn, PyTorch, and TensorFlow.
