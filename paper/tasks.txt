@@ -5,3 +5,4 @@
 5. Verify that all mentions of the z-score in main.tex and supplementary information are aligned with the latest implementation
 6. Verify that all mentioned outputs are names correctly accroding to the latest code version (I ran all steps again, check against the file names that are in supporting material)
 7. Create new release of the code and update the link in the paper
+8. Verify that the number of steps is accurate in the prosa text
