@@ -140,6 +140,17 @@ Required columns for library enumeration:
   \item product: Name of the product formed
 \end{itemize}
 
+\begin{tcolorbox}[
+  colback=gray!10,
+  colframe=gray!50,
+  title=Box 3 | SMILES and SMIRKS,
+  fonttitle=\bfseries
+]
+SMILES (Simplified Molecular Input Line Entry System) is a text notation for representing the structure of an individual molecule. In DELT-Hit, each building block is provided as a SMILES string in the corresponding building-block sheet so that the software can reconstruct products and calculate molecular properties.
+
+SMIRKS is a reaction notation derived from SMARTS that describes how one or more reactants are transformed into a product. In DELT-Hit, SMIRKS definitions are used to encode the chemistry of each library-synthesis step so that building blocks can be combined in silico during library enumeration. In practice, SMILES describes molecules, whereas SMIRKS describes transformations between molecules.
+\end{tcolorbox}
+
 \protocolstep{6}{Create the reactions sheet}
 
 Only required for library enumeration. Define all chemical reactions used during library synthesis with SMARTS/SMIRKS notation\cite{ref34}. SMARTS/SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction. Table 9 illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). A collection of SMARTS/SMIRKS for reactions commonly employed in DEL synthesis is provided in the supplementary information (Supplementary Note~\ref{supp:template-reactions}). Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks.
