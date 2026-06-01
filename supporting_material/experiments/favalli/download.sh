@@ -49,7 +49,7 @@ download_and_normalize_fasta() {
 
 download_and_normalize_fasta \
   "https://polybox.ethz.ch/index.php/s/9xZkcW5jWtLHiFo/download" \
-  "20190812.A-1907_NF2GB2_s1_R1.fastq.gz.fasta.gz"
+  "20190812.A-1907_NF2GB2_s1_R1.fasta.gz"
 
 #download_and_normalize_fasta \
 #  "https://polybox.ethz.ch/index.php/s/XY2ieRTwdM337Jc/download" \
