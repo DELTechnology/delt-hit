@@ -150,7 +150,7 @@ Once your Excel file is complete with all required sheets, activate the DELT-Hit
 conda activate delt-hit
 delt-hit init --excel_path=<PATH_TO_EXCEL>
 \end{lstlisting}
-This command creates a YAML configuration file at \texttt{\textless save\_dir\textgreater/\textless name\textgreater/config.yaml}, as defined in the \texttt{experiment} sheet.
+This command creates a YAML configuration file at \texttt{\textless save\_dir\textgreater/\textless name\textgreater/config.yaml}, as defined in the \texttt{experiment} sheet. The placeholders \texttt{\textless name\textgreater} and \texttt{\textless save\_dir\textgreater} used throughout the subsequent steps refer to the \texttt{name} and \texttt{save\_dir} fields in Table~\ref{tab:table3}.
 
 Expected output:
 
@@ -426,29 +426,15 @@ This file supports comparisons across different selection runs, including runs d
 
 
 \begin{lstlisting}
-# new analysis.yaml
+# analysis.yaml
 experiments:
-- name: condition_vs_control
-  save_dir: campaign/analysis
+- name: <experiment_name>        # referenced as --name in enrichment commands
+  save_dir: <save_dir>           # referenced as --save_dir in enrichment commands
   selections:
-    - name: AG24_4
-      counts_path: campaign/selections/AG24_4/counts.txt
-      group: control
-    - name: AG24_5
-      counts_path: campaign/selections/AG24_5/counts.txt
-      group: control
-    - name: AG24_6
-      counts_path: campaign/selections/AG24_6/counts.txt
-      group: control
-    - name: AG24_13
-      counts_path: campaign/selections/AG24_13/counts.txt
-      group: condition
-    - name: AG24_14
-      counts_path: campaign/selections/AG24_14/counts.txt
-      group: condition
-    - name: AG24_15
-      counts_path: campaign/selections/AG24_15/counts.txt
-      group: condition
+    - name: <selection_name>     # referenced as --name for z-score
+      counts_path: <name>/selections/<selection_name>/counts.txt
+      group: control             # or "condition"
+    - ...
 \end{lstlisting}
 
 \protocolstep{18}{Perform enrichment analysis with statistical methods}
