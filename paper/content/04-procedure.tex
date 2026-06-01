@@ -143,29 +143,20 @@ More advanced reaction-graph edge cases, including multi-path precursor activati
 \protocolstep{9}{Generate the configuration file}
 \textbf{Troubleshooting}
 
-Once your Excel file is complete with all required sheets, generate the YAML configuration file:
+Once your Excel file is complete with all required sheets, activate the DELT-Hit environment and generate the YAML configuration file:
 
 
 \begin{lstlisting}
-# Activate the DELT-Hit conda environment
 conda activate delt-hit
-
-# Move into the single-stranded example workflow
-cd supporting_material/experiments/example-single-stranded
-
-# Generate configuration from Excel template
-delt-hit init --excel_path=example-single-stranded.xlsx
-
-# Reuse this config path in the downstream commands
-CONFIG_PATH=campaign/config.yaml
+delt-hit init --excel_path=<PATH_TO_EXCEL>
 \end{lstlisting}
-This command creates a YAML configuration file at \texttt{<save\_dir>/<name>/config.yaml}, as defined in the \texttt{experiment} sheet.
+This command creates a YAML configuration file at \texttt{\textless save\_dir\textgreater/\textless name\textgreater/config.yaml}, as defined in the \texttt{experiment} sheet.
 
 Expected output:
 
 
 \begin{lstlisting}
-Configuration created at campaign/config.yaml
+Configuration created at <save_dir>/<name>/config.yaml
 \end{lstlisting}
 CRITICAL STEP: Review the generated YAML file to verify that all information was parsed correctly. This file is used in all downstream steps.
 

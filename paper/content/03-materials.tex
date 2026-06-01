@@ -40,7 +40,98 @@ R packages:
 \end{itemize}
 
 \subsection{Data}
-We provide a complete single-stranded DELT-Hit example dataset to demonstrate the full workflow from initialization through demultiplexing, library reconstruction, and enrichment analysis. A complementary dual-display example focused on library enumeration and visualization is also included in the supporting material. The example is based on the architecture of a published library\cite{bassi_singlestrandeddnaencodedchemical_2020} and can be accessed through the repository supporting material together with downloadable input files hosted on Figshare. The dataset contains the following files: \texttt{example-single-stranded.xlsx}, which contains the full library and experimental definitions for the worked example; \texttt{campaign.fastq.gz}, which contains representative sequencing reads for the screen; and \texttt{analysis.yaml}, which defines the comparisons used for hit identification. The accompanying supporting material archive is available at \url{https://doi.org/10.6084/m9.figshare.31198468}. Individual example inputs can be downloaded from \url{https://figshare.com/ndownloader/files/61487731} (\texttt{example-single-stranded.xlsx}), \url{https://figshare.com/ndownloader/files/61487743} (\texttt{campaign.fastq.gz}), and \url{https://figshare.com/ndownloader/files/61487728} (\texttt{analysis.yaml}).
+We provide a complete single-stranded DELT-Hit example dataset to demonstrate the full workflow from initialization through demultiplexing, library reconstruction, and enrichment analysis. A complementary dual-display example focused on library enumeration and visualization is also included in the supporting material. The example is based on the architecture of a published library\cite{bassi_singlestrandeddnaencodedchemical_2020} and can be accessed through the repository supporting material together with downloadable input files hosted on Figshare. The dataset contains the following files: \texttt{example-single-stranded.xlsx}, which contains the full library and experimental definitions for the worked example; \texttt{campaign.fastq.gz}, which contains representative sequencing reads for the screen; and \texttt{analysis.yaml}, which defines the comparisons used for hit identification. The accompanying supporting material archive is available at \url{https://doi.org/10.6084/m9.figshare.31198468}. Individual example inputs can be downloaded from \url{https://figshare.com/ndownloader/files/61487731} (\texttt{example-single-stranded.xlsx}), \url{https://figshare.com/ndownloader/files/61487743} (\texttt{campaign.fastq.gz}), and \url{https://figshare.com/ndownloader/files/61487728} (\texttt{analysis.yaml}). A complete end-to-end walkthrough of this example is provided in Box~2.
+
+\clearpage
+\begin{tcolorbox}[
+  colback=blue!5,
+  colframe=blue!40,
+  title=Box 2 | Quickstart: single-stranded example workflow,
+  fonttitle=\bfseries
+]
+
+This box reproduces the complete DELT-Hit workflow for the single-stranded example dataset provided in the supporting material (see Section~3.3 Data). It is intended as a self-contained reference for users who want to run through the entire pipeline on the provided example before adapting it to their own data.
+
+\setupitem{Download the example data}
+
+\begin{lstlisting}
+cd supporting_material/experiments/example-single-stranded
+bash download.sh
+\end{lstlisting}
+
+\setupitem{Initialize the configuration}
+
+\begin{lstlisting}
+delt-hit init --excel_path=example-single-stranded.xlsx
+CONFIG_PATH=campaign/config.yaml
+ANALYSIS_CONFIG_PATH=analysis.yaml
+ANALYSIS_OUTPUT_ROOT=campaign/analysis
+\end{lstlisting}
+
+\setupitem{Demultiplexing}
+
+\begin{lstlisting}
+delt-hit demultiplex prepare --config_path="$CONFIG_PATH"
+bash campaign/demultiplex/cutadapt_input_files/demultiplex.sh
+delt-hit demultiplex report --config_path="$CONFIG_PATH"
+delt-hit demultiplex qc --config_path="$CONFIG_PATH"
+delt-hit demultiplex process --config_path="$CONFIG_PATH"
+delt-hit demultiplex process --config_path="$CONFIG_PATH" --as_files=True
+\end{lstlisting}
+
+\setupitem{Library enumeration and visualization}
+
+\begin{lstlisting}
+delt-hit visualize enumerate --config_path="$CONFIG_PATH"
+delt-hit library enumerate \
+  --config_path="$CONFIG_PATH" \
+  --counts_path=campaign/selections/AG24_4_counts.txt \
+  --top_n=1000 \
+  --library_name=AG24_4_top_hits
+delt-hit visualize library --config_path="$CONFIG_PATH" \
+  --library_name=AG24_4_top_hits
+delt-hit library properties --config_path="$CONFIG_PATH" \
+  --library_name=AG24_4_top_hits
+delt-hit dashboard \
+  --config_path="$CONFIG_PATH" \
+  --counts_path=campaign/selections/AG24_4_counts.txt
+\end{lstlisting}
+
+\setupitem{Enrichment analysis}
+
+\begin{lstlisting}
+delt-hit analyse enrichment \
+  --analysis_config="$ANALYSIS_CONFIG_PATH" \
+  --name=condition_vs_control --method=counts \
+  --save_dir="$ANALYSIS_OUTPUT_ROOT"
+Rscript --vanilla "$ANALYSIS_OUTPUT_ROOT/counts/condition_vs_control/enrichment_counts.R"
+
+delt-hit analyse enrichment \
+  --analysis_config="$ANALYSIS_CONFIG_PATH" \
+  --name=condition_vs_control --method=edgeR \
+  --save_dir="$ANALYSIS_OUTPUT_ROOT"
+Rscript --vanilla "$ANALYSIS_OUTPUT_ROOT/edgeR/condition_vs_control/enrichment_edgeR.R"
+
+for selection in AG24_13 AG24_14 AG24_15; do
+  delt-hit analyse enrichment \
+    --config_path="$CONFIG_PATH" \
+    --counts=campaign/selections/$selection/counts.txt \
+    --method=z_score --name=$selection \
+    --save_dir="$ANALYSIS_OUTPUT_ROOT"
+  Rscript --vanilla "$ANALYSIS_OUTPUT_ROOT/z_score/$selection/enrichment_z_score.R"
+done
+\end{lstlisting}
+
+\setupitem{Full library enumeration and molecular representations}
+
+\begin{lstlisting}
+delt-hit library enumerate --config_path="$CONFIG_PATH"
+delt-hit library properties --config_path="$CONFIG_PATH"
+delt-hit library represent --method=morgan --config_path="$CONFIG_PATH"
+delt-hit library represent --method=bert --config_path="$CONFIG_PATH"
+\end{lstlisting}
+
+\end{tcolorbox}
 
 \clearpage
 \begin{tcolorbox}[
@@ -74,9 +165,7 @@ CRITICAL STEP: Activate the \texttt{delt-hit} conda environment using \texttt{co
 
 \setupitem{R environment configuration}
 
-Statistical analysis requires R and specific Bioconductor packages. This configuration is only required once.
-
-Open R or RStudio and execute:
+Statistical analysis requires R and specific Bioconductor packages. This configuration is only required once. Open R or RStudio and execute:
 
 
 \begin{lstlisting}
