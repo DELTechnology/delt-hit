@@ -37,9 +37,7 @@ provides a scale-invariant measure of enrichment that is more interpretable for
 hit-picking. Equations~\ref{eq:zscore} and \ref{eq:fe} summarize these two
 related views. The recommended primary hit threshold is $E \geq 2.0$; a fixed
 $z_n$ cutoff is not recommended because practical score ranges depend on
-library diversity, sampling sparsity, and selection context. We use this
-normalized, depth-insensitive Faver formulation rather than the conventional
-binomial z-score, whose numerical value increases with sequencing depth.
+library diversity, sampling sparsity, and selection context.
 
 \textbf{edgeR Method.}
 Compound-level read counts per selection are modelled as negative-binomial
@@ -53,13 +51,3 @@ for each compound to compare the NB-GLM fit under a two-group design
 false-discovery rate (FDR) correction is applied across all compounds.
 Compounds are ranked by log$_2$ fold change (logFC); FDR is available as a
 secondary filter.
-
-For DEL hit picking, the main limitation is not that edgeR is statistically
-inappropriate, but that its objective differs from primary rank ordering.
-Typical compound-level DEL count tables remain sparse across hundreds of
-thousands of library members even with replicate selections. Low-count
-positives near the detection limit can therefore receive conservative logFC
-estimates or weaker statistical support, whereas frequency-based scores rank
-them directly by observed selection enrichment. For this reason, edgeR is best
-used to annotate a shortlist and flag statistically supported contrasts, rather
-than as the sole full-library ranking signal.

@@ -223,12 +223,14 @@ def build_workbook() -> Path:
             "Source data for the Supplementary Figures, supplementary comparison and benchmark tables, and additional reaction templates."
         ]
     )
+    readme.append(["Workflow data archive (Zenodo)", "https://doi.org/10.5281/zenodo.20447074"])
+    readme.append(["Code release archive (Zenodo)", "https://doi.org/10.5281/zenodo.20497548"])
     readme.append(["Supporting-material repository", "https://doi.org/10.6084/m9.figshare.31198468"])
-    readme.append(["Example single-stranded direct download", "https://figshare.com/ndownloader/files/61487743"])
+    readme.append(["Example single-stranded direct download", "https://ndownloader.figshare.com/files/61487743"])
     readme.append(["Download links used by supporting_material/experiments/*/download.sh", None])
     readme.append([
         "example-single-stranded/download.sh",
-        "https://api.figshare.com/v2/articles/31198468 ; https://figshare.com/ndownloader/files/61487743",
+        "https://api.figshare.com/v2/articles/31198468 ; https://ndownloader.figshare.com/files/61487743",
     ])
     readme.append([
         "favalli/download.sh",
