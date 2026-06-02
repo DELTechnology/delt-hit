@@ -105,6 +105,8 @@ The configuration file defines library structure, experimental design, and analy
 
 In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL library and experimental design information.
 
+\textbf{TIMING:} 15--60 min
+
 
 \protocolstep{1}{Create the experiment sheet}
 
@@ -256,6 +258,8 @@ CRITICAL: Review the generated YAML file to verify that all information was pars
 
 This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
 
+\textbf{TIMING:} 1--2 h
+
 
 \protocolstep{10}{Configure demultiplexing parameters}
 
@@ -345,6 +349,8 @@ These commands parse the demultiplexed reads, map barcode combinations to librar
 
 The interactive dashboard provides real-time exploration of raw count data and experimental metadata.
 
+\textbf{TIMING:} 10--30 min
+
 
 \protocolstep{14}{Launch the interactive analysis dashboard}
 
@@ -372,6 +378,8 @@ CRITICAL: Use the default folder hierarchy produced by \texttt{delt-hit demultip
 \subsection{Phase 4: Selection enumeration and enrichment analysis}
 
 This phase generates chemical structures and molecular properties for the top enriched compounds in a selected experiment. Library enumeration requires advanced knowledge of SMIRKS, and library-specific adjustments are often necessary.
+
+\textbf{TIMING:} \textless{}1 min
 
 
 \protocolstep{15}{Enumerate top compounds from a selection}
@@ -422,6 +430,8 @@ Computed properties include Lipinski descriptors such as molecular weight (MW), 
 \subsection{Phase 5: Statistical analysis and hit identification}
 
 This phase identifies enriched library members by comparing selection conditions using established statistical methods.
+
+\textbf{TIMING:} \textless{}5 min
 
 
 \protocolstep{17}{Define statistical comparisons}
@@ -538,6 +548,8 @@ CRITICAL: Always examine replicate correlation plots to verify data quality befo
 \subsection{Phase 6: Full library enumeration and machine learning representations}
 
 This phase performs full-library enumeration and generates molecular representations for downstream machine-learning applications. These steps are optional. When only a focused subset is needed, the filtered-enumeration route in Step~15 usually provides a faster alternative to full-library processing.
+
+\textbf{TIMING:} 15 min--2 h
 
 \protocolstep{19}{Enumerate the full library}
 
