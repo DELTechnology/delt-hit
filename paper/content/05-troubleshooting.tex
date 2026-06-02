@@ -5,20 +5,7 @@ Troubleshooting advice for common issues encountered during DELT-Hit analysis ca
 \input{tables/troubleshooting}
 
 \subsection{Performance optimization guidelines}
-Approximate memory requirements by library size are:
-
-\begin{itemize}
-  \item Small libraries (\textless{}1M compounds): 16 GB RAM is usually sufficient
-  \item Medium libraries (1--50M compounds): 32 GB RAM is recommended
-  \item Large libraries (\textgreater{}50M compounds): at least 32 GB RAM is required
-\end{itemize}
-To improve processing speed:
-
-\begin{itemize}
-  \item use SSD storage to improve I/O performance
-  \item increase the \texttt{num\_cores} parameter for parallel processing
-  \item use compressed FASTQ files (\texttt{.gz}) to reduce disk usage
-\end{itemize}
+Speed and resource usage can be improved by using SSD storage to reduce I/O bottlenecks and by increasing the \texttt{num\_cores} parameter to parallelize compatible steps. Compressed FASTQ files (\texttt{.gz}) do not primarily accelerate processing, but they reduce disk usage and can simplify storage management for large sequencing datasets.
 
 \subsection{Quality control thresholds}
 Suggested quality indicators for demultiplexing are:
