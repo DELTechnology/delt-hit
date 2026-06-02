@@ -103,7 +103,7 @@ delt-hit library represent --method=bert --config_path="$CONFIG_PATH"
 
 The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template.
 
-In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL library and experimental design information.
+In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL and experimental design information.
 
 \textbf{TIMING:} 15--60 min
 
@@ -145,7 +145,7 @@ The \texttt{structure} sheet defines the DNA construct architecture and error to
 There are three types of DNA regions:
 
 \begin{itemize}
-  \item \texttt{selection}: Region used for selection primers defined in the \texttt{selection} sheet; these regions should be named \texttt{S0}, \texttt{S1}, and so on.
+  \item \texttt{selection}: Region used for selection primers defined in the \texttt{selection} sheet; these regions should be named \texttt{S0} and \texttt{S1}.
   \item \texttt{constant}: Constant regions shared across DNA constructs; these regions should be named sequentially \texttt{C0}, \texttt{C1}, and so on.
   \item \texttt{building\_block}: Region identifying a chemical building block; these regions should be named sequentially \texttt{B0}, \texttt{B1}, and so on.
 \end{itemize}
@@ -200,7 +200,7 @@ Optional for demultiplexing, required for enumeration:
   title=Box 3 | SMILES and SMIRKS,
   fonttitle=\bfseries
 ]
-SMILES (Simplified Molecular Input Line Entry System) is a text notation for representing the structure of an individual molecule. In DELT-Hit, each building block is provided as a SMILES string in the corresponding \texttt{B0}, \texttt{B1}, ..., \texttt{BN} sheet so that the software can reconstruct products and calculate molecular properties. For example, the SMILES string \texttt{NCC1=CC=CS1} describes a small molecule that contains an aminoethyl side chain attached to a five-membered aromatic ring with sulfur. At a high level, a SMILES string tells the software which atoms are present and how they are connected in the starting building block.
+SMILES (Simplified Molecular Input Line Entry System) is a text notation for representing the structure of an individual molecule. In DELT-Hit, each building block is provided as a SMILES string in the corresponding \texttt{B0}, \texttt{B1}, ..., \texttt{BN} sheet so that the software can reconstruct products and calculate molecular properties. For example, the SMILES string \texttt{NCC1=CC=CS1} describes a small molecule that contains an aminoethyl side chain attached to a five-membered aromatic ring with sulfur. At a high level, a SMILES string tells the software which atoms are present and how they are connected in the molecule.
 
 \begin{center}
 \includegraphics[width=0.35\textwidth]{figures/structure.png}
@@ -213,7 +213,7 @@ SMIRKS is a reaction notation derived from SMARTS that describes how one or more
   !$([NX3][CX3](=[OX1])[#6]);!$([NX3][CX3](=[OX1])[OX2]):4]
   >>[CX3:1](=[O:2])[N:4]
 \end{lstlisting}
-At a high level, the left side specifies the reacting functional groups, and the right side specifies how they are connected in the product. In practice, SMILES describes molecules, whereas SMIRKS describes transformations between molecules.
+At a high level, the left side specifies the reacting functional groups, and the right side specifies how they are connected in the product. In practice, SMILES \cite{ref33} describes molecules, whereas SMIRKS \cite{ref34} describes transformations between molecules.
 \end{tcolorbox}
 
 \protocolstep{6}{Create the reactions sheet}
@@ -227,7 +227,7 @@ CRITICAL: The \texttt{name} column must match the reaction names used in the \te
 
 \protocolstep{7}{Create the compounds sheet}
 
-Only required for library enumeration. In the \texttt{compounds} sheet, define any additional chemical compounds (scaffolds, reagents) used in the reactions, as shown in Table~\ref{tab:table9}.
+Only required for library enumeration. In the \texttt{compounds} sheet, define any additional chemical compounds (scaffolds, reactants) used in the reactions, as shown in Table~\ref{tab:table9}.
 
 
 \input{tables/compound-definitions}
@@ -269,7 +269,7 @@ The demultiplexing parameters defined in the Excel file control how reads are pr
   \item \texttt{max\_error\_rate}: Tolerance for sequencing errors (0 = perfect match, 0.1 = 10\% errors)
   \item \texttt{indels}: Whether to allow insertions/deletions during barcode matching
 \end{itemize}
-As noted above, to balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
+To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
 
 
 \protocolstep{11}{Prepare and execute sequence demultiplexing}
@@ -317,8 +317,10 @@ delt-hit demultiplex qc --config_path=$CONFIG_PATH
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figures/qc-stacked-barplots.png}
-\caption{Stacked bar plots showing the number of reads per index position for selection or barcode codons as defined in the Excel file. Absolute read counts are shown on the right, and log-transformed counts on the left. For each index position, reads are displayed as stacked segments according to the number of sequencing errors. Strong dropout of specific bars or a shift toward higher-error segments points to barcode-definition problems, synthesis imbalance, or selection-specific loss.}
+%\includegraphics[width=\textwidth]{figures/qc-stacked-barplots.png}
+%\includegraphics[width=\textwidth]{paper/figures/qc-stacked-barplots-with-errors.png}
+\includegraphics[width=\textwidth]{paper/figures/qc-stacked-barplot-composite.png}
+\caption{Quality-control plots showing log-transformed read counts for barcode and constant-region sequences after demultiplexing. The left panel displays the number of reads mapped to building block 0 (BB0) barcode indices, while the right panel shows the number of reads mapped to the constant region 0 index. For the barcode region, exact matching was required, and therefore all mapped reads have 0 sequencing errors. For the constant region, up to one sequencing error was permitted during matching. Reads matching exactly are shown in blue, whereas reads matching with one sequencing error are shown in orange. Strong dropout of individual barcode indices or an increased proportion of one-error matches may indicate issues with oligonucleotide synthesis, sequencing quality, or library preparation.}
 \label{fig:figure5}
 \end{figure}
 Quality assessment criteria:
@@ -402,7 +404,7 @@ These commands visualize the reaction graph for inspection, enumerate the top \t
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/enumeration-summary.png}
-\caption{Composite summary of enumeration-oriented visualization outputs from the single-display example workflow. The main panel shows the library reaction graph, alongside representative reaction templates and example \texttt{B0} and \texttt{B1} building blocks generated during selection-focused library enumeration.}
+\caption{Composite summary of the enumeration visualization command outputs from the single-stranded example workflow. The main panel shows the library reaction graph, alongside representative reaction templates and example \texttt{B0} and \texttt{B1} building blocks generated during selection-focused library enumeration.}
 \label{fig:figure2}
 \end{figure}
 
@@ -524,7 +526,7 @@ Rscript --vanilla <save_dir>/z_score/<selection_name>/enrichment_z_score.R
 The normalized z-score method computes the per-compound score for an individual selection following Faver et al.\cite{faver_quantitativecomparisonenrichment_2019}. In the current implementation, the generated output contains both the raw \texttt{z\_score} and the depth-normalized \texttt{norm\_z\_score}, defined as $z\_score / \sqrt{n}$ and used for ranking. Because this approach does not rely on replicate-based variance estimation, it can also be applied to experiments without replicates.
 
 For all three methods, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CA9-associated building block by Favalli \cite{favalli_stereoregiodefineddnaencoded_2021} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}, and the underlying statistical definitions are summarized in Supplementary Note~\ref{supp:enrichment-scores}.
-These files report, for each compound, the enrichment score and, where applicable, method-specific parameters such as log fold change or \textit{P} values.
+These files report the enrichment score for each compound and, where applicable, method-specific parameters such as log fold change or \textit{P} values.
 
 Interpreting results:
 
