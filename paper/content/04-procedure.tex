@@ -404,7 +404,7 @@ These commands visualize the reaction graph for inspection, enumerate the top \t
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/enumeration-summary.png}
-\caption{Composite summary of the enumeration visualization command outputs from the single-stranded example workflow. The main panel shows the library reaction graph, alongside representative reaction templates and example \texttt{B0} and \texttt{B1} building blocks generated during selection-focused library enumeration.}
+\caption{Composite summary of the enumeration visualization command outputs from the single-display example workflow. The main panel shows the library reaction graph, alongside representative reaction templates and example \texttt{B0} and \texttt{B1} building blocks generated during selection-focused library enumeration.}
 \label{fig:figure2}
 \end{figure}
 
@@ -525,7 +525,9 @@ Rscript --vanilla <save_dir>/z_score/<selection_name>/enrichment_z_score.R
 \end{lstlisting}
 The normalized z-score method computes the per-compound score for an individual selection following Faver et al.\cite{faver_quantitativecomparisonenrichment_2019}. In the current implementation, the generated output contains both the raw \texttt{z\_score} and the depth-normalized \texttt{norm\_z\_score}, defined as $z\_score / \sqrt{n}$ and used for ranking. Because this approach does not rely on replicate-based variance estimation, it can also be applied to experiments without replicates.
 
-For all three methods, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CA9-associated building block by Favalli \cite{favalli_stereoregiodefineddnaencoded_2021} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}, and the underlying statistical definitions are summarized in Supplementary Note~\ref{supp:enrichment-scores}.
+For all three methods, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CAIX-associated building block by Favalli \cite{favalli_stereoregiodefineddnaencoded_2021} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}, and the underlying statistical definitions are summarized in Supplementary Note~\ref{supp:enrichment-scores}.
+
+\textbf{◆ Troubleshooting}
 These files report the enrichment score for each compound and, where applicable, method-specific parameters such as log fold change or \textit{P} values.
 
 Interpreting results:
