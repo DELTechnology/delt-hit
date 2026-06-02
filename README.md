@@ -52,7 +52,7 @@ Same as the user installation above, but pass the `-e` flag to install in editab
 
 ## 🧪 Example Workflow
 
-A complete end-to-end example is available in [`supporting_material/experiments/example-single-stranded/`](supporting_material/experiments/example-single-stranded/); see [`supporting_material/README.md`](supporting_material/README.md) for full instructions.
+A complete end-to-end example is available in [`supporting_material/experiments/example-single-display/`](supporting_material/experiments/example-single-display/); see [`supporting_material/README.md`](supporting_material/README.md) for full instructions.
 
 Here is a typical workflow for using `delt-hit`:
 
