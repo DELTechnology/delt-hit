@@ -1,27 +1,27 @@
 \begin{table}[htbp]
 \centering
-\caption{Timing estimates for different dataset sizes}
+\caption{Timing estimates for different dataset sizes, separated by the primary scaling driver}
 \label{tab:table14}
-\begin{tabular}{p{2.4cm}p{4.2cm}p{2.1cm}p{2.1cm}p{2.1cm}}
+\begin{tabular}{p{1.5cm}p{3.5cm}p{2.0cm}p{1.8cm}p{1.8cm}p{1.8cm}}
 \toprule
-Step(s) & Analysis Phase & Small Dataset¹ & Medium Dataset² & Large Dataset³ \\
+Step(s) & Analysis Phase & Primary scaling & Small dataset & Medium dataset & Large dataset \\
 \midrule
-Setup & Software installation (one-time) & 15-30 min & 15-30 min & 15-30 min \\
-1-9 & Project initialization & 15-30 min & 15-60 min & 60-120 min \\
-10-13 & Sequence demultiplexing & 10-30 min & 1-2 h & 2-6 h \\
-14 & Visualization and interpretation & 5-15 min & 10-30 min & 15-45 min \\
-15 & Library enumeration (selection) & \textless{}1 min & \textless{}1 min & \textless{}1 min \\
-16 & Property calculation (selection) & \textless{}1 min & \textless{}1 min & \textless{}1 min \\
-17-18 & Statistical analysis & \textless{}5 min & \textless{}5 min & \textless{}5 min \\
-19 & Library enumeration (full) & \textless{}5 min & 15 min-2 h & \textgreater{}2 h* \\
-20 & Property calculation (full) & \textless{}5 min & 15 min-2 h & \textgreater{}2 h* \\
-21 & Molecular representation & \textless{}5 min & 15 min-2 h & \textgreater{}2 h \\
-1-21 & Total workflow time & 45 min-1.5 h & 2-4 h & 4-10 h \\
+Setup & Software installation (one-time) & -- & 15-30 min & 15-30 min & 15-30 min \\
+1-9 & Project initialization & Compounds / metadata & 15-30 min & 15-60 min & 60-120 min \\
+10-13 & Sequence demultiplexing & Reads & 10-30 min & 1-2 h & 2-6 h \\
+14 & Visualization and interpretation & Reads / selected counts & 5-15 min & 10-30 min & 15-45 min \\
+15 & Library enumeration (selection) & Selected compounds & \textless{}1 min & \textless{}1 min & \textless{}1 min \\
+16 & Property calculation (selection) & Selected compounds & \textless{}1 min & \textless{}1 min & \textless{}1 min \\
+17-18 & Statistical analysis & Selections / count tables & \textless{}5 min & \textless{}5 min & \textless{}5 min \\
+19 & Library enumeration (full) & Compounds & \textless{}5 min & 15 min-2 h & \textgreater{}2 h* \\
+20 & Property calculation (full) & Compounds & \textless{}5 min & 15 min-2 h & \textgreater{}2 h* \\
+21 & Molecular representation & Compounds & \textless{}5 min & 15 min-2 h & \textgreater{}2 h \\
+1-21 & Total workflow time & Reads + compounds & 45 min-1.5 h & 2-4 h & 4-10 h \\
 \bottomrule
 \end{tabular}
 \par\smallskip
 \begin{minipage}{\textwidth}
 \footnotesize
-¹Small dataset: \textless{}500K compounds. ²Medium dataset: 500K--10M compounds. ³Large dataset: \textgreater{}10M compounds. * Potentially not feasible.
+For read-dominated steps (especially Steps 10--14), small, medium, and large correspond approximately to \textless{}10 million, 10--100 million, and \textgreater{}100 million reads, respectively. For compound-dominated steps (especially Steps 19--21), small, medium, and large correspond approximately to \textless{}500K, 500K--10M, and \textgreater{}10M compounds, respectively. * Potentially not feasible.
 \end{minipage}
 \end{table}
