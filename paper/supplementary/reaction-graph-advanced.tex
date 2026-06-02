@@ -3,17 +3,8 @@
 
 In the single-stranded tutorial workflow used in the main protocol, the only additional reaction-graph step is an \texttt{SR} transformation from \texttt{product\_1} to \texttt{product\_1B}, represented in the \texttt{reaction\_graph} sheet by the row \texttt{product\_1, , SR, product\_1B}. More advanced library designs can require multiple precursor-activation paths even when they conceptually share the same transformation class.
 
-For example, two scaffolds that both require Staudinger reduction before entering subsequent coupling steps should be encoded as separate reaction paths in the \texttt{reaction\_graph} sheet:
+For example, two scaffolds that both require Staudinger reduction before entering subsequent coupling steps should be encoded as separate reaction paths in the \texttt{reaction\_graph} sheet, as summarized in Supplementary Table~\ref{tab:table11}:
 
-\begin{center}
-\begin{tabular}{llll}
-\toprule
-educt\_1 & educt\_2 & reaction & product \\
-\midrule
-scaffold\_1 &  & SR\_precursor\_1 & scaffold\_1B \\
-scaffold\_2 &  & SR\_precursor\_2 & scaffold\_2B \\
-\bottomrule
-\end{tabular}
-\end{center}
+\input{tables/precursor-activation-reactions}
 
 This explicit encoding keeps the reaction graph resolvable as independent paths. In contrast, reusing the same reaction node for both precursor activations would create an ambiguous graph assignment.

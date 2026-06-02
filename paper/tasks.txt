@@ -1,8 +1,8 @@
-1. Verify all Supplementary notes are referenced correctly
-2. Verify all tables are referenced in the text
-3. Verify all figures are referened in the text
-4. Verify all todos in the revision.md are completed
-5. Verify that all mentions of the z-score in main.tex and supplementary information are aligned with the latest implementation
-6. Verify that all mentioned outputs are names correctly accroding to the latest code version (I ran all steps again, check against the file names that are in supporting material)
-7. Create new release of the code and update the link in the paper
-8. Verify that the number of steps is accurate in the prosa text
+1. [x] Verify all Supplementary notes are referenced correctly
+2. [x] Verify all tables are referenced in the text
+3. [x] Verify all figures are referenced in the text
+4. [x] Verify that completed items in `revision.md` are marked accordingly
+5. [x] Verify that all mentions of the z-score in `main.tex` and the supplementary information are aligned with the latest implementation
+6. [x] Verify that all mentioned outputs are named correctly according to the latest code version and the checked supporting-material outputs
+7. [x] Verify that the current Zenodo-backed code release link in the paper matches the archived release already referenced in the repository
+8. [x] Verify that the number of steps is accurate in the prose text

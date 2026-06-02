@@ -6,7 +6,7 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 
 - [x] Confirm the author list and author order are correct.
 - [x] Add a statement in Code Availability confirming foreseeable availability of any freely accessible web-based tool. Not applicable: DELT-Hit is not a freely accessible web-based tool.
-- [ ] Make the GitHub repository citable via Zenodo and add the DOI citation to the manuscript, Code Availability statement, and reference list.
+- [x] Make the GitHub repository citable via Zenodo and add the DOI citation to the manuscript, Code Availability statement, and reference list.
 - [x] Change the title to avoid punctuation. Current title in `paper/main.tex`: `An end-to-end computational framework for DNA-encoded chemical library analysis`.
 - [x] Add a sentence to the Abstract describing the required skill set or experience level. Added in `paper/main.tex`.
 - [x] Add a sentence to the Abstract describing how long the protocol takes. Added in `paper/main.tex` with placeholder timing `[X-Y] h` still to be finalized.
@@ -25,14 +25,14 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 
 ## Reviewer 1
 
-- [ ] Re-analyse at least one previously published DEL dataset with DELT-Hit.
-- [ ] Add a comparison table showing the original analysis versus DELT-Hit for that case study.
-- [ ] Show what additional analysis or evaluation DELT-Hit enables on that dataset.
+- [x] Re-analyse at least one previously published DEL dataset with DELT-Hit.
+- [x] Add a comparison table showing the original analysis versus DELT-Hit for that case study.
+- [x] Show what additional analysis or evaluation DELT-Hit enables on that dataset.
 - [x] Expand the DELi comparison into a quantitative benchmark on shared datasets.
 - [x] Compare technical performance, enrichment results, and practical usability against DELi. Addressed for technical performance and practical usability through the DELi comparison table plus shared runtime and memory benchmarking; quantitative enrichment reliability remains tracked separately below.
-- [ ] Add discussion and/or data justifying the use of edgeR for DEL data.
-- [ ] Show that edgeR and other scoring methods recover positive controls robustly.
-- [ ] Preferably support the edgeR justification with a dataset containing replicates.
+- [x] Add discussion and/or data justifying the use of edgeR for DEL data.
+- [x] Show that edgeR and other scoring methods recover positive controls robustly.
+- [x] Preferably support the edgeR justification with a dataset containing replicates.
 - [ ] **Confirm with Jörg** which selection indices in the Favalli dataset correspond to condition vs no-condition groups (currently `1_1/2_1/3_1` vs `4_1/5_1/6_1` as placeholder in `supporting_material/experiments/favalli/analysis.yaml`). Required before enrichment results for the Favalli re-analysis can be included in the manuscript.
 - [ ] Proofread the manuscript for terminology, language consistency, and readability.
 
@@ -44,18 +44,18 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 
 ## Reviewer 3
 
-- [ ] Soften claims that suggest no existing open-source solution exists; acknowledge DELi and emphasize DELT-Hit's end-to-end integration.
-- [ ] Make it explicit that the case studies cover diverse DEL architectures, including dual-display libraries.
-- [ ] Add or strengthen the statistical justification for edgeR on DEL data.
-- [ ] Add a concise explanation of the balance between strict barcode matching and controlled error tolerance.
-- [ ] Clearly recommend validating reaction definitions on small subsets before full enumeration.
-- [ ] Add a quick-start overview summarizing the workflow steps.
+- [x] Soften claims that suggest no existing open-source solution exists; acknowledge DELi and emphasize DELT-Hit's end-to-end integration.
+- [x] Make it explicit that the case studies cover diverse DEL architectures, including dual-display libraries.
+- [x] Add or strengthen the statistical justification for edgeR on DEL data.
+- [x] Add a concise explanation of the balance between strict barcode matching and controlled error tolerance.
+- [x] Clearly recommend validating reaction definitions on small subsets before full enumeration.
+- [x] Add a quick-start overview summarizing the workflow steps.
 - [ ] Add a table listing inputs and outputs for each module.
 - [ ] Revise Figure 1 so data flow and processing steps are more clearly distinguished.
 - [ ] Expand QC figure captions with interpretation guidance.
 - [ ] Provide a minimal YAML example inline in the manuscript.
 - [ ] Clarify the recommended number of replicates and the recommended sequencing depth.
-- [ ] Add a small worked chemical example.
+- [x] Add a small worked chemical example.
 - [ ] Add more troubleshooting guidance for low read retention.
 
 ## Reviewer 4
@@ -65,9 +65,9 @@ This file turns the editor and reviewer comments for the Nature Protocols revisi
 - [ ] Add 2D structural diagrams for building blocks from the tutorial dataset.
 - [ ] Add 2D structural diagrams for final products from the tutorial dataset.
 - [ ] Explain how the analysis handles more nuanced selection conditions such as competition, concentration gradients, and varied stringency washes.
-- [ ] Implement a normalized Z-score enrichment mode for experiments without replicates, following Faver et al.
+- [x] Implement a normalized Z-score enrichment mode for experiments without replicates, following Faver et al.
 - [x] Add an optional filtered-enumeration mode that restricts SMILES construction and descriptor calculation to barcode combinations above a user-defined threshold.
-- [ ] Mention the filtered-enumeration capability clearly in the revised manuscript.
+- [x] Mention the filtered-enumeration capability clearly in the revised manuscript.
 
 ## Cross-cutting Deliverables
 

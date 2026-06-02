@@ -40,7 +40,9 @@ R packages:
 \end{itemize}
 
 \subsection{Data}
-We provide a complete single-stranded DELT-Hit example dataset to demonstrate the full workflow from initialization through demultiplexing, library reconstruction, and enrichment analysis. A complementary dual-display example focused on library enumeration and visualization is also included in the supporting material. The example is based on the architecture of a published library\cite{bassi_singlestrandeddnaencodedchemical_2020} and can be accessed through the repository supporting material together with downloadable input files. The dataset contains \texttt{example-single-stranded.xlsx}, which contains the full library and experimental definitions; \texttt{campaign.fastq.gz}, which contains representative sequencing reads for the screen; and \texttt{analysis.yaml}, which defines the comparisons used for hit identification. The files \texttt{example-single-stranded.xlsx} and \texttt{analysis.yaml} are deposited in the GitHub repository under \path{supporting_material/experiments/example-single-stranded/}. Persistent Zenodo repositories are also provided for the workflow data and generated outputs (\url{https://doi.org/10.5281/zenodo.20447074}) and for the DELT-Hit code release used to produce them (\url{https://doi.org/10.5281/zenodo.20497548}). A complete end-to-end walkthrough of this example is provided in Box~2 in the Procedure.
+We provide a complete single-stranded DELT-Hit example dataset to demonstrate the full workflow from initialization through demultiplexing, library reconstruction, and enrichment analysis. A complementary dual-display example focused on library enumeration and visualization is also included in the supporting material. The example is based on the architecture of a published library\cite{bassi_singlestrandeddnaencodedchemical_2020} and can be accessed through the repository supporting material together with downloadable input files. The dataset contains \texttt{example-single-stranded.xlsx}, which contains the full library and experimental definitions; \texttt{campaign.fastq.gz}, which contains representative sequencing reads for the screen; and \texttt{analysis.yaml}, which defines the comparisons used for hit identification. The files \texttt{example-single-stranded.xlsx} and \texttt{analysis.yaml} are deposited in the GitHub repository under \path{supporting_material/experiments/example-single-stranded/}. Table~\ref{tab:table2} lists the tutorial inputs and persistent archives. Persistent Zenodo repositories are also provided for the workflow data and generated outputs (\url{https://doi.org/10.5281/zenodo.20447074}) and for the DELT-Hit code release used to produce them (\url{https://doi.org/10.5281/zenodo.20497548}). A complete end-to-end walkthrough of this example is provided in Box~2 in the Procedure.
+
+\input{tables/tutorial-datasets}
 
 \clearpage
 \begin{tcolorbox}[
@@ -69,7 +71,7 @@ conda install pygraphviz -y
 # Install DELT-Hit package
 pip install git+https://git@github.com/DELTechnology/delt-hit.git
 \end{lstlisting}
-CRITICAL STEP: Activate the \texttt{delt-hit} conda environment using \texttt{conda activate delt-hit} each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with Conda during installation so that the \texttt{conda} command is available in new terminal windows. If activation fails, see Troubleshooting.
+CRITICAL: Activate the \texttt{delt-hit} conda environment using \texttt{conda activate delt-hit} each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with Conda during installation so that the \texttt{conda} command is available in new terminal windows. If activation fails, see Troubleshooting.
 
 
 \setupitem{R environment configuration}
