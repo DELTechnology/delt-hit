@@ -254,7 +254,7 @@ This command creates a YAML configuration file at \texttt{\textless save\_dir\te
 
 CRITICAL: Review the generated YAML file to verify that all information was parsed correctly. This file is used in all downstream steps.
 
-\textbf{◆ Troubleshooting}
+\textbf{$\blacklozenge$ Troubleshooting}
 
 \subsection{Phase 2: Sequence processing and demultiplexing}
 
@@ -288,7 +288,7 @@ delt-hit demultiplex prepare --config_path=$CONFIG_PATH
 The demultiplexing process performs adapter detection and trimming, sequential extraction of selection and building-block barcodes, and quality filtering of reads that exceed the defined error thresholds.
 The generated shell script runs Cutadapt on the FASTQ file and maps reads to selection and codon identifiers. It produces \texttt{reads\_with\_adapters.gz}, which contains all mapped sequences.
 
-\textbf{◆ Troubleshooting}
+\textbf{$\blacklozenge$ Troubleshooting}
 
 \protocolstep{12}{Inspect demultiplexing quality}
 After demultiplexing, generate the text report and QC figures, then inspect whether the read retention and barcode recovery are sufficient to proceed:
@@ -330,7 +330,7 @@ Quality assessment criteria:
   \item Barcode coverage: Most building blocks should have \textgreater{}0 reads
 \end{itemize}
 
-\textbf{◆ Troubleshooting}
+\textbf{$\blacklozenge$ Troubleshooting}
 
 \newpage
 
@@ -408,7 +408,7 @@ These commands visualize the reaction graph for inspection, enumerate the top \t
 \label{fig:figure2}
 \end{figure}
 
-\textbf{◆ Troubleshooting}
+\textbf{$\blacklozenge$ Troubleshooting}
 
 \newpage
 
@@ -527,7 +527,7 @@ The normalized z-score method computes the per-compound score for an individual 
 
 For all three methods, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CAIX-associated building block by Favalli \cite{favalli_stereoregiodefineddnaencoded_2021} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}, and the underlying statistical definitions are summarized in Supplementary Note~\ref{supp:enrichment-scores}.
 
-\textbf{◆ Troubleshooting}
+\textbf{$\blacklozenge$ Troubleshooting}
 These files report the enrichment score for each compound and, where applicable, method-specific parameters such as log fold change or \textit{P} values.
 
 Interpreting results:
