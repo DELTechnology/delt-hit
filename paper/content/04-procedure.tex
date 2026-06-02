@@ -146,11 +146,11 @@ There are three types of DNA regions:
 
 \begin{itemize}
   \item \texttt{selection}: Region used for selection primers defined in the \texttt{selection} sheet; these regions should be named \texttt{S0} and \texttt{S1}.
-  \item \texttt{constant}: Constant regions shared across DNA constructs; these regions should be named sequentially \texttt{C0}, \texttt{C1}, and so on.
-  \item \texttt{building\_block}: Region identifying a chemical building block; these regions should be named sequentially \texttt{B0}, \texttt{B1}, and so on.
+  \item \texttt{constant}: Constant regions shared across DNA constructs; these regions should be named sequentially \texttt{C0}, \texttt{C1}, ..., \texttt{CN}.
+  \item \texttt{building\_block}: Region identifying a chemical building block; these regions should be named sequentially \texttt{B0}, \texttt{B1}, ..., \texttt{BN}.
 \end{itemize}
 Each DNA region is identified by a unique name. A \texttt{max\_error\_rate} and the allowance of indels can be configured separately for each region.
-An example dual-display workbook illustrating the dual-display-specific columns is provided in the DELT-Hit GitHub repository under \texttt{supporting\_material/experiments/example-dual-display/}.
+The \texttt{reverse} and \texttt{complement} flags control optional codon orientation transforms during matching and are mostly relevant for dual-display libraries. An example dual-display workbook illustrating the dual-display-specific columns is provided in the DELT-Hit GitHub repository under \texttt{supporting\_material/experiments/example-dual-display/}.
 
 
 \input{tables/sequence-structure}
@@ -161,6 +161,8 @@ Column descriptions:
   \item \texttt{type}: Region type (\texttt{selection}, \texttt{constant}, or \texttt{building\_block})
   \item \texttt{max\_error\_rate}: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = 10\% errors)
   \item \texttt{indels}: Whether to allow insertions/deletions (\texttt{TRUE}/\texttt{FALSE})
+  \item \texttt{reverse}: Whether to reverse the codon before matching (\texttt{TRUE}/\texttt{FALSE}; mostly relevant for dual-display libraries)
+  \item \texttt{complement}: Whether to complement the codon before matching (\texttt{TRUE}/\texttt{FALSE}; mostly relevant for dual-display libraries)
 \end{itemize}
 CRITICAL: To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
 
@@ -174,7 +176,7 @@ The \texttt{constant} sheet contains the DNA sequences for all constant regions 
 CRITICAL: The \texttt{name} column must match the constant-region names defined in the \texttt{structure} sheet.
 
 
-\protocolstep{5}{Create building block sheets (\texttt{B0}, \texttt{B1}, etc.)}
+\protocolstep{5}{Create building block sheets (\texttt{B0}, \texttt{B1}, ..., \texttt{BN})}
 
 DELT-Hit supports libraries with an arbitrary number of building block regions. For each region defined in the \texttt{structure} sheet, create a sheet with the corresponding name (for example, \texttt{B0}, \texttt{B1}, ..., \texttt{BN}) and list the DNA codons used at that position. To enable library enumeration and property calculation, also define the chemical structures of the building blocks and the reactions used during library synthesis. Table~\ref{tab:table7} gives a representative example.
 
