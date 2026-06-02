@@ -19,7 +19,7 @@ def parse_args() -> argparse.Namespace:
         script_dir.parent
         / "supporting_material"
         / "experiments"
-        / "example-single-stranded"
+        / "example-single-display"
         / "campaign"
         / "library"
         / "visualization"
@@ -28,7 +28,7 @@ def parse_args() -> argparse.Namespace:
         script_dir.parent
         / "supporting_material"
         / "experiments"
-        / "example-single-stranded"
+        / "example-single-display"
         / "campaign"
         / "library"
         / "properties"
@@ -37,7 +37,7 @@ def parse_args() -> argparse.Namespace:
     default_output_dir = script_dir / "figures"
     parser = argparse.ArgumentParser(
         description=(
-            "Generate the composite manuscript figures for the single-stranded "
+            "Generate the composite manuscript figures for the single-display "
             "example workflow."
         )
     )

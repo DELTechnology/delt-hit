@@ -226,10 +226,10 @@ def build_workbook() -> Path:
     readme.append(["Workflow data archive (Zenodo)", "https://doi.org/10.5281/zenodo.20447074"])
     readme.append(["Code release archive (Zenodo)", "https://doi.org/10.5281/zenodo.20497548"])
     readme.append(["Supporting-material repository", "https://doi.org/10.6084/m9.figshare.31198468"])
-    readme.append(["Example single-stranded direct download", "https://ndownloader.figshare.com/files/61487743"])
+    readme.append(["Example single-display direct download", "https://ndownloader.figshare.com/files/61487743"])
     readme.append(["Download links used by supporting_material/experiments/*/download.sh", None])
     readme.append([
-        "example-single-stranded/download.sh",
+        "example-single-display/download.sh",
         "https://api.figshare.com/v2/articles/31198468 ; https://ndownloader.figshare.com/files/61487743",
     ])
     readme.append([
