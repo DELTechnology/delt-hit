@@ -101,21 +101,18 @@ delt-hit library represent --method=bert --config_path="$CONFIG_PATH"
 
 \subsection{Phase 1: Project initialization and configuration}
 
-The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template.
-
-In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL and experimental design information.
-
 \textbf{TIMING:} 15--60 min
+
+CRITICAL: In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL and experimental design information. The configuration file defines library structure, experimental design, and analysis parameters. DELT-Hit initializes this file from a standardized Excel template.
 
 
 \protocolstep{1}{Create the experiment sheet}
 
-Create an Excel workbook with multiple sheets defining the experiment. We recommend starting from the provided example workbook and adjusting it to the new library. The following sections describe the required sheets and their format. The \texttt{experiment} sheet contains the experiment name, file paths, and computational resource settings. All DELT-Hit outputs are written to a folder named \texttt{\textless name\textgreater} created under \texttt{save\_dir}. \texttt{num\_cores} defines the number of CPU cores used for the demultiplexing step. Table~\ref{tab:table3} lists the required fields.
-
-
-\input{tables/experiment-config}
 CRITICAL: Use absolute paths, or paths relative to the working directory, for \texttt{fastq\_path} and \texttt{save\_dir}. Here, \texttt{./} refers to the current working directory from which the command is run.
 
+Create an Excel workbook with multiple sheets defining the experiment. We recommend starting from the provided example workbook and adjusting it to the new library. The following sections describe the required sheets and their format. The \texttt{experiment} sheet contains the experiment name, file paths, and computational resource settings. All DELT-Hit outputs are written to a folder named \texttt{\textless name\textgreater} created under \texttt{save\_dir}. \texttt{num\_cores} defines the number of CPU cores used for the demultiplexing step. Table~\ref{tab:table3} lists the required fields.
+
+\input{tables/experiment-config}
 
 \protocolstep{2}{Create the selection sheet}
 
@@ -141,6 +138,7 @@ Optional columns:
 \protocolstep{3}{Create the structure sheet}
 
 The \texttt{structure} sheet defines the DNA construct architecture and error tolerances for demultiplexing. Table~\ref{tab:table5} summarizes the expected columns.
+CRITICAL: To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
 
 There are three types of DNA regions:
 
@@ -164,7 +162,6 @@ Column descriptions:
   \item \texttt{reverse}: Whether to reverse the codon before matching (\texttt{TRUE}/\texttt{FALSE}; mostly relevant for dual-display libraries)
   \item \texttt{complement}: Whether to complement the codon before matching (\texttt{TRUE}/\texttt{FALSE}; mostly relevant for dual-display libraries)
 \end{itemize}
-CRITICAL: To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
 
 
 \protocolstep{4}{Create the constant sheet}
@@ -173,8 +170,8 @@ The \texttt{constant} sheet contains the DNA sequences for all constant regions 
 
 
 \input{tables/constant-regions}
-CRITICAL: The \texttt{name} column must match the constant-region names defined in the \texttt{structure} sheet.
 
+CRITICAL: The \texttt{name} column must match the constant-region names defined in the \texttt{structure} sheet.
 
 \protocolstep{5}{Create building block sheets (\texttt{B0}, \texttt{B1}, ..., \texttt{BN})}
 
@@ -220,12 +217,13 @@ At a high level, the left side specifies the reacting functional groups, and the
 
 \protocolstep{6}{Create the reactions sheet}
 
-Only required for library enumeration. In the \texttt{reactions} sheet, define all chemical reactions used during library synthesis with SMIRKS notation\cite{ref34}. SMIRKS should be specified so that each transformation yields a single product. If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction; while not strictly necessary, this simplifies inspection of the produced reaction graph. Table~\ref{tab:table8} illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). Additional reaction templates commonly employed in DEL synthesis are provided in the Supplementary Information. Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks.
+CRITICAL: Additional reaction templates commonly employed in DEL synthesis are provided in the Supplementary Information. Depending on the library setup and the building blocks employed, customization by the user may be required. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks. SMIRKS should be specified so that each transformation yields a single product.
 
+Only required for library enumeration. In the \texttt{reactions} sheet, define all chemical reactions used during library synthesis with SMIRKS notation\cite{ref34}.  If the same reaction type is used at multiple stages of the synthesis, define each instance as a separate reaction; while not strictly necessary, this simplifies inspection of the produced reaction graph. Table~\ref{tab:table8} illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). 
 
 \input{tables/reaction-smirks}
-CRITICAL: The \texttt{name} column must match the reaction names used in the \texttt{B0}, \texttt{B1}, ..., \texttt{BN} sheets.
 
+CRITICAL: The \texttt{name} column must match the reaction names used in the building block sheets \texttt{B0}, \texttt{B1}, ..., \texttt{BN}.
 
 \protocolstep{7}{Create the compounds sheet}
 
@@ -236,7 +234,9 @@ Only required for library enumeration. In the \texttt{compounds} sheet, define a
 
 \protocolstep{8}{Create the additional reaction steps}
 
-Only required for advanced library enumeration. If library synthesis includes additional steps, such as precursor conversion or deprotection before a reaction, define them in the \texttt{reaction\_graph} sheet. Each row describes a reaction with up to two educts, a reaction name, and the resulting product. Add one row for each additional step using the compound and reaction names defined in the corresponding sheets. Table~\ref{tab:table10} shows the general format.
+CRITICAL: If library synthesis includes additional steps, such as precursor conversion or deprotection before a reaction, define them in the \texttt{reaction\_graph} sheet.
+
+Only required for advanced library enumeration. Each row describes a reaction with up to two educts, a reaction name, and the resulting product. Add one row for each additional step using the compound and reaction names defined in the corresponding sheets. Table~\ref{tab:table10} shows the general format.
 
 
 \input{tables/additional-reactions}
@@ -258,12 +258,12 @@ CRITICAL: Review the generated YAML file to verify that all information was pars
 
 \subsection{Phase 2: Sequence processing and demultiplexing}
 
-This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
-
 \textbf{TIMING:} 1--2 h
 
+This phase processes raw sequencing reads to identify and count each library member in your selection experiments.
 
 \protocolstep{10}{Configure demultiplexing parameters}
+
 
 The demultiplexing parameters defined in the Excel file control how reads are processed by Cutadapt. Key parameters include:
 
@@ -271,7 +271,7 @@ The demultiplexing parameters defined in the Excel file control how reads are pr
   \item \texttt{max\_error\_rate}: Tolerance for sequencing errors (0 = perfect match, 0.1 = 10\% errors)
   \item \texttt{indels}: Whether to allow insertions/deletions during barcode matching
 \end{itemize}
-To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
+CRITICAL: To balance assignment accuracy and read recovery, we recommend using exact matching for selection barcodes while allowing for 1--2 errors in constant regions.
 
 
 \protocolstep{11}{Prepare and execute sequence demultiplexing}
@@ -351,9 +351,9 @@ These commands parse the demultiplexed reads, map barcode combinations to librar
 
 \subsection{Phase 3: Data visualization and interpretation}
 
-The interactive dashboard provides real-time exploration of raw count data and experimental metadata.
-
 \textbf{TIMING:} 10--30 min
+
+The interactive dashboard provides real-time exploration of raw count data and experimental metadata.
 
 
 \protocolstep{14}{Launch the interactive analysis dashboard}
@@ -381,9 +381,9 @@ CRITICAL: Use the default folder hierarchy produced by \texttt{delt-hit demultip
 
 \subsection{Phase 4: Selection enumeration and enrichment analysis}
 
-This phase generates chemical structures and molecular properties for the top enriched compounds in a selected experiment. Library enumeration requires advanced knowledge of SMIRKS, and library-specific adjustments are often necessary.
-
 \textbf{TIMING:} \textless{}1 min
+
+This phase generates chemical structures and molecular properties for the top enriched compounds in a selected experiment. Library enumeration requires advanced knowledge of SMIRKS, and library-specific adjustments are often necessary.
 
 
 \protocolstep{15}{Enumerate top compounds from a selection}
@@ -433,10 +433,9 @@ Computed properties include Lipinski descriptors such as molecular weight (MW), 
 
 \subsection{Phase 5: Statistical analysis and hit identification}
 
-This phase identifies enriched library members by comparing selection conditions using established statistical methods.
-
 \textbf{TIMING:} \textless{}5 min
 
+This phase identifies enriched library members by comparing selection conditions using established statistical methods.
 
 \protocolstep{17}{Define statistical comparisons}
 
@@ -528,6 +527,7 @@ The normalized z-score method computes the per-compound score for an individual 
 For all three methods, the tool produces R scripts that can be adapted to more specialized workflows. A comparison of enrichment score rankings for recovery of a previously reported CAIX-associated building block by Favalli \cite{favalli_stereoregiodefineddnaencoded_2021} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}, and the underlying statistical definitions are summarized in Supplementary Note~\ref{supp:enrichment-scores}.
 
 \textbf{$\blacklozenge$ Troubleshooting}
+
 These files report the enrichment score for each compound and, where applicable, method-specific parameters such as log fold change or \textit{P} values.
 
 Interpreting results:
@@ -551,9 +551,9 @@ CRITICAL: Always examine replicate correlation plots to verify data quality befo
 
 \subsection{Phase 6: Full library enumeration and machine learning representations}
 
-This phase performs full-library enumeration and generates molecular representations for downstream machine-learning applications. These steps are optional. When only a focused subset is needed, the filtered-enumeration route in Step~15 usually provides a faster alternative to full-library processing.
-
 \textbf{TIMING:} 15 min--2 h
+
+This phase performs full-library enumeration and generates molecular representations for downstream machine-learning applications. These steps are optional. When only a focused subset is needed, the filtered-enumeration route in Step~15 usually provides a faster alternative to full-library processing.
 
 \protocolstep{19}{Enumerate the full library}
 

@@ -7,14 +7,14 @@
 \toprule
 Step & Problem & Possible Cause & Solution \\
 \midrule
-Setup & \texttt{command not found: conda} & Conda not installed or not initialized in the shell & Install Conda as described in the Experimental Setup section and initialize it in your terminal. On macOS: \path{~/miniconda3/bin/activate}; on Windows: \path{~/miniconda3/etc/profile.d/conda.sh} \\
-Setup & \texttt{command not found: delt-hit} & Conda environment not activated & Run \texttt{conda activate delt-hit} before executing DELT-Hit commands \\
-Setup / 18 & R script failures & Missing R packages or R not available & Reinstall R into the conda environment; reinstall packages with \texttt{BiocManager}; verify with \texttt{which R}; R 4.1+ required \\
+Setup~Box1 & \texttt{command not found: conda} & Conda not installed or not initialized in the shell & Install Conda as described in the Experimental Setup section and initialize it in your terminal. On macOS: \path{~/miniconda3/bin/activate}; on Windows: \path{~/miniconda3/etc/profile.d/conda.sh} \\
+Setup~Box1 & \texttt{command not found: delt-hit} & Conda environment not activated & Run \texttt{conda activate delt-hit} before executing DELT-Hit commands \\
+Setup~Box1 / 18 & R script failures & Missing R packages or R not available & Reinstall R into the conda environment; reinstall packages with \texttt{BiocManager}; verify with \texttt{which R}; R 4.1+ required \\
 9 & Command fails with unrecognized arguments & Trailing spaces after \textbackslash{} in multiline commands; mistyped command name & Remove trailing spaces from multiline commands and verify the command name. Use \texttt{delt-hit \textless{}cmd\textgreater{} --help} for accepted arguments \\
 9 & Demultiplexing fails: \texttt{No such file or directory} & Trailing whitespace in the file name defined in the Excel configuration sheet & Remove whitespace from the file name and regenerate the configuration with \texttt{delt-hit init} \\
 11 & Permission denied for shell scripts & Executable permission not set & Run \texttt{chmod u+x \textless{}script\_name.sh\textgreater{}} before executing the script \\
 12 & No mapped reads & Incorrect sequences or inverted barcodes & Validate sequences against the sequencing data \\
-12 & Low read retention (\textless{}50\%) & Poor amplicon quality & Verify library and amplicon quality, repeat selection and/or sequencing if necessary \\
+12 & Low read retention (\textless{}50\%) & Poor library or amplicon quality & Verify library and amplicon quality, repeat selection and/or sequencing if necessary \\
 12 & \texttt{qc/report.txt} does not open & Text editor does not support the file encoding & Display the file in the terminal with \texttt{cat qc/report.txt} \\
 15 & Chemical structure errors & Invalid SMILES or incorrect reaction SMIRKS & Validate reaction definitions on a small subset before full enumeration; validate building block structures with RDKit; rerun \texttt{delt-hit library enumerate} with \texttt{--debug=invalid --errors=raise} to stop at the first failing combination and save its reaction graph for inspection \\
 18 & Empty hit lists & Statistical thresholds too stringent & Adjust FDR cutoffs (0.1 or 0.2 for exploratory analysis); check replicate consistency \\
