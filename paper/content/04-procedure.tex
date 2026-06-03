@@ -98,7 +98,7 @@ delt-hit library represent --method=bert --config_path="$CONFIG_PATH"
 
 \end{tcolorbox}
 
-\subsection{Phase 1: Project initialization and configuration}
+\subsection{Project initialization and configuration}
 
 \textbf{TIMING:} 15--60 min
 
@@ -258,7 +258,7 @@ CRITICAL: Review the generated YAML file to verify that all information was pars
 
 \textbf{$\blacklozenge$ Troubleshooting}
 
-\subsection{Phase 2: Sequence processing and demultiplexing}
+\subsection{Sequence processing and demultiplexing}
 
 \textbf{TIMING:} 1--2 h
 
@@ -320,8 +320,8 @@ delt-hit demultiplex qc --config_path=$CONFIG_PATH
 \begin{figure}[H]
 \centering
 %\includegraphics[width=\textwidth]{figures/qc-stacked-barplots.png}
-%\includegraphics[width=\textwidth]{paper/figures/qc-stacked-barplots-with-errors.png}
-\includegraphics[width=\textwidth]{paper/figures/qc-stacked-barplot-composite.png}
+%\includegraphics[width=\textwidth]{figures/qc-stacked-barplots-with-errors.png}
+\includegraphics[width=\textwidth]{figures/qc-stacked-barplot-composite.png}
 \caption{Quality-control plots showing log-transformed read counts for barcode and constant-region sequences after demultiplexing. The left panel displays the number of reads mapped to building block 0 (BB0) barcode indices, while the right panel shows the number of reads mapped to the constant region 0 index. For the barcode region, exact matching was required, and therefore all mapped reads have 0 sequencing errors. For the constant region, up to one sequencing error was permitted during matching. Reads matching exactly are shown in blue, whereas reads matching with one sequencing error are shown in orange. Strong dropout of individual barcode indices or an increased proportion of one-error matches may indicate issues with oligonucleotide synthesis, sequencing quality, or library preparation.}
 \label{fig:figure5}
 \end{figure}
@@ -351,7 +351,7 @@ delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True --sort_b
 \end{lstlisting}
 These commands parse the demultiplexed reads, map barcode combinations to library members, generate count tables for each selection, and save the results in a standardized format.
 
-\subsection{Phase 3: Data visualization and interpretation}
+\subsection{Data visualization and interpretation}
 
 \textbf{TIMING:} 10--30 min
 
@@ -374,14 +374,14 @@ delt-hit dashboard --config_path=$CONFIG_PATH \
 This command starts a local server that can be opened in a web browser, typically at \url{http://localhost:8050}. Stop the server with \texttt{Ctrl+C} or by closing the terminal.
 
 The dashboard displays experimental metadata, including selection conditions, target information, and experimental parameters, together with count-distribution views such as scatter plots, histograms, and summary statistics for the selected condition. Users can switch between count files, inspect aggregated counts across codon dimensions, and apply filters to focus on specific regions of the count distribution.
-The dashboard displays raw counts from demultiplexing. For statistical comparisons and hit identification, use the enrichment analysis results from Phase 5. The command accepts counts provided as a \texttt{.txt} file, so users can also visualize custom normalized count tables by passing \texttt{--counts\_path} and, if needed, \texttt{--selection\_name}.
+The dashboard displays raw counts from demultiplexing. For statistical comparisons and hit identification, use the enrichment analysis results from the statistical analysis and hit identification section. The command accepts counts provided as a \texttt{.txt} file, so users can also visualize custom normalized count tables by passing \texttt{--counts\_path} and, if needed, \texttt{--selection\_name}.
 An example dashboard view is shown in Figure~\ref{fig:figure7}.
 
 CRITICAL: Use the default folder hierarchy produced by \texttt{delt-hit demultiplex process}. If a custom \texttt{counts.txt} file is provided, also pass the selection name exactly as specified in the selection sheet.
 
 \newpage
 
-\subsection{Phase 4: Selection enumeration and enrichment analysis}
+\subsection{Selection enumeration and enrichment analysis}
 
 \textbf{TIMING:} \textless{}1 min
 
@@ -433,7 +433,7 @@ Computed properties include Lipinski descriptors such as molecular weight (MW), 
 \end{figure}
 
 
-\subsection{Phase 5: Statistical analysis and hit identification}
+\subsection{Statistical analysis and hit identification}
 
 \textbf{TIMING:} \textless{}5 min
 
@@ -551,7 +551,7 @@ CRITICAL: Always examine replicate correlation plots to verify data quality befo
 \input{tables/edger-hits}
 
 
-\subsection{Phase 6: Full library enumeration and machine learning representations}
+\subsection{Full library enumeration and machine learning representations}
 
 \textbf{TIMING:} 15 min--2 h
 

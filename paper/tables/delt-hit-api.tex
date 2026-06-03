@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{p{2.2cm}p{2.8cm}p{6.4cm}p{3.8cm}}
+\hline
+\textbf{Group} & \textbf{Command} & \textbf{Purpose} & \textbf{Main outputs} \\
+\hline
+\texttt{init} & \texttt{delt-hit init} & Create a YAML experiment configuration from an Excel template. & \texttt{config.yaml} \\
+\texttt{demultiplex} & \texttt{delt-hit demultiplex prepare} & Generate Cutadapt input files and a shell script for barcode parsing. & Cutadapt input files, \texttt{demultiplex.sh} \\
+\texttt{demultiplex} & \texttt{delt-hit demultiplex process} & Parse demultiplexed reads and compute per-selection barcode counts. & Per-selection \texttt{counts.txt} tables \\
+\texttt{demultiplex} & \texttt{delt-hit demultiplex report} & Summarize Cutadapt and demultiplexing statistics. & QC text report \\
+\texttt{demultiplex} & \texttt{delt-hit demultiplex qc} & Generate quality-control plots from demultiplexed counts. & QC plots \\
+\texttt{library} & \texttt{delt-hit library enumerate} & Enumerate the DEL from the reaction graph and generate compound SMILES. & Library parquet, optional debug reaction-graph PNGs \\
+\texttt{library} & \texttt{delt-hit library properties} & Compute molecular descriptors for an enumerated library. & Properties parquet, descriptor histograms \\
+\texttt{library} & \texttt{delt-hit library represent} & Generate machine-learning representations such as Morgan fingerprints. & Sparse representation matrix (\texttt{.npz}) \\
+\texttt{visualize} & \texttt{delt-hit visualize enumerate} & Render reaction graphs, reaction schemes, building blocks, and configured compounds. & Chemistry visualization PNGs \\
+\texttt{visualize} & \texttt{delt-hit visualize library} & Render 2D structure panels for compounds in a named library. & Per-compound library PNGs \\
+\texttt{analyse} & \texttt{delt-hit analyse enrichment} & Run enrichment analysis from count tables using count-based or edgeR-based workflows. & Enrichment result tables and normalized counts \\
+\texttt{dashboard} & \texttt{delt-hit dashboard} & Launch an interactive Dash application to inspect a selection's count data. & Local web dashboard \\
+\hline
+\end{tabular}
+\caption{Current DELT-Hit command-line API exposed by the user-facing CLI.}
+\label{tab:delt-hit-api}
+\end{table}

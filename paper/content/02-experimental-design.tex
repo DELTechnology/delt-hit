@@ -5,6 +5,11 @@ DELT-Hit uses three main input categories. Library definition files in \texttt{.
 
 \input{tables/input-files}
 
+\subsection{Command-line interface overview}
+DELT-Hit is organized as a command-line workflow with dedicated commands for configuration generation, demultiplexing, library reconstruction, visualization, statistical analysis, and interactive inspection. Table~\ref{tab:delt-hit-api} summarizes the current user-facing CLI/API used throughout this protocol.
+
+\input{tables/delt-hit-api}
+
 
 \subsection{Library architecture considerations}
 DELT-Hit supports several library architectures, including single-display libraries with linear synthetic schemes in which DNA tags are appended after each reaction cycle as well as dual-display libraries in which compounds are presented on both complementary DNA strands. More complex multi-cycle libraries with branching reactions and multiple building block incorporation sites are also supported.
