@@ -4,7 +4,7 @@
 Hardware:
 
 \begin{itemize}
-  \item Minimum configuration: 8 GB RAM, 8 CPU cores, 50 GB available storage
+  \item Minimum configuration: 16 GB RAM, 8 CPU cores, 50 GB available storage
   \item Recommended configuration: 32 GB RAM, 16 CPU cores, 100 GB available storage
   \item High-performance setup: 64 GB RAM, 32 CPU cores, 250 GB SSD storage
   \item Operating systems: Linux (Ubuntu 20.04+), macOS (12.0+), and Windows 10/11 (with Windows Subsystem for Linux recommended)
@@ -40,7 +40,8 @@ R packages:
 \end{itemize}
 
 \subsection{Data}
-We provide a complete single-display DELT-Hit example dataset to demonstrate the full workflow from initialization through demultiplexing, library reconstruction, and enrichment analysis. A complementary dual-display example focused on library enumeration and visualization is also included in the supporting material. The example is based on the architecture of a published library\cite{bassi_singlestrandeddnaencodedchemical_2020} and can be accessed through the repository supporting material together with downloadable input files. The dataset contains \texttt{example-single-display.xlsx}, which contains the full library and experimental definitions; \texttt{campaign.fastq.gz}, which contains representative sequencing reads for the screen; and \texttt{analysis.yaml}, which defines the comparisons used for hit identification. The files \texttt{example-single-display.xlsx} and \texttt{analysis.yaml} are deposited in the GitHub repository under \path{supporting_material/experiments/example-single-display/}. Table~\ref{tab:table2} lists the tutorial inputs and persistent archives. Persistent Zenodo repositories are also provided for the workflow data and generated outputs (\url{https://doi.org/10.5281/zenodo.20447074}) and for the DELT-Hit code release used to produce them (\url{https://doi.org/10.5281/zenodo.20497548}). A complete end-to-end walkthrough of this example is provided in Box~2 in the Procedure.
+We provide a complete single-display DELT-Hit example dataset to demonstrate the full workflow from initialization through demultiplexing, library reconstruction, and enrichment analysis. A complementary dual-display example focused on library enumeration and visualization is also included in the supporting material. The example is based on the architecture of a published library\cite{bassi_singlestrandeddnaencodedchemical_2020} and can be accessed through the repository supporting material.
+The dataset includes \texttt{example-single-display.xlsx}, which defines the library architecture and experimental setup; \texttt{campaign.fastq.gz}, which contains representative sequencing reads from the screen; and \texttt{analysis.yaml}, which specifies the comparisons used for hit identification. The files \texttt{example-single-display.xlsx} and \texttt{analysis.yaml} are available in the GitHub repository under \path{supporting_material/experiments/example-single-display/}. Table~\ref{tab:table2} lists the tutorial inputs and persistent archives. A complete end-to-end walkthrough of this example is provided in Box~2 in the Procedure.
 
 \input{tables/tutorial-datasets}
 
