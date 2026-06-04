@@ -24,23 +24,23 @@ users to adapt the workflow to different experimental settings.
 \caption{DELT-Hit is organized into several modules (C - F) that complement the wet-lab DEL workflow (A - B). DEL synthesis (A) proceeds through iterative cycles of building block addition and encoding. Libraries are then screened in affinity-based selection experiments (B), after which retained DNA tags are PCR-amplified and sequenced. DELT-Hit uses Cutadapt\cite{martin_cutadaptremovesadapter_2011} to demultiplex sequencing reads (C) with user-defined error tolerances and produces count matrices for combinations of selection and building block codes. In parallel, library compounds can be enumerated in silico (D) from building block structures and reaction SMIRKS definitions, and molecular properties can be calculated (E). These in silico enumeration and property-calculation features can be applied before DEL synthesis to support library design and building-block selection. DELT-Hit subsequently integrates count data and chemical information for hit analysis (F), quality control, enrichment ranking, and interactive data exploration. In addition, the workflow exports molecular representations, including Morgan fingerprints and BERT embeddings, for downstream machine-learning applications.}
 \label{fig:figure1}
 \end{figure}
-Figure~\ref{fig:figure1} summarizes the overall DELT-Hit workflow. The workflow integrates sequence demultiplexing via Cutadapt\cite{martin_cutadaptremovesadapter_2011}, chemical structure representation in SMILES\cite{weininger_smileschemicallanguage_1988,weininger_smiles2algorithm_1989,weininger_smiles3depict_1990}, reaction definitions in SMIRKS\cite{ref33,ref34} implemented in RDKit\cite{landrum_rdkitrdkit2025_09_4_2025}, different enrichment analysis methods including edgeR\cite{robinson_edgerbioconductorpackage_2010}, molecular property calculation, library member enumeration and interactive visualization. Users can run the full workflow or individual modules, and each stage produces executable scripts and standardized outputs that can be adapted to more specialized analyses.
+Figure~\ref{fig:figure1} summarizes the overall DELT-Hit workflow. The workflow integrates sequence demultiplexing via Cutadapt\cite{martin_cutadaptremovesadapter_2011}, chemical structure representation in SMILES\cite{weininger_smileschemicallanguage_1988,weininger_smiles2algorithm_1989,weininger_smiles3depict_1990}, reaction definitions in SMIRKS\cite{ref33,ref34} implemented in RDKit\cite{landrum_rdkitrdkit2025_09_4_2025}, different enrichment-analysis methods including edgeR\cite{robinson_edgerbioconductorpackage_2010}, molecular property calculation, library-member enumeration, and interactive visualization. Users can run the full workflow or individual modules, and each stage produces executable scripts and standardized outputs that can be adapted to more specialized analyses.
 
 
 \subsection{Overview of the procedure}
-The DELT-Hit protocol is organized into six analysis phases spanning 21 steps. Some downstream phases are optional or can be run independently:
+The DELT-Hit protocol is organized into six analysis phases spanning 20 steps. Some downstream phases are optional or can be run independently:
 
 (i) Project setup and library specification (Steps 1--9): Configuration file creation from Excel templates, library architecture definition, reaction specification, and experimental metadata setup.
 
-(ii) Sequence demultiplexing and quality assessment (Steps 10--13): High-throughput sequencing data processing, barcode identification with error correction, and quality-control metric generation.
+(ii) Sequence demultiplexing and quality assessment (Steps 10--12): High-throughput sequencing data processing, barcode identification with error correction, and quality-control metric generation.
 
-(iii) Data visualization and interpretation (Step 14): Interactive dashboard exploration of raw count data to identify selections of interest.
+(iii) Data visualization and interpretation (Step 13): Interactive dashboard exploration of raw count data to identify selections of interest.
 
-(iv) Selection enumeration and enrichment analysis (Steps 15--16): Automated SMILES generation and molecular property calculation for the top enriched compounds of a chosen selection.
+(iv) Selection enumeration and enrichment analysis (Steps 14--15): Automated SMILES generation and molecular property calculation for the top enriched compounds of a chosen selection.
 
-(v) Statistical analysis and hit detection (Steps 17--18): Enrichment analysis using established RNA-seq methods, hit ranking with multiple statistical approaches, and result validation.
+(v) Statistical analysis and hit detection (Steps 16--17): Enrichment analysis using established RNA-seq methods, hit ranking with multiple statistical approaches, and result validation.
 
-(vi) Full library enumeration and machine-learning representations (Steps 19--21): Optional full-library enumeration and generation of molecular fingerprints and embeddings for downstream machine-learning workflows.
+(vi) Full library enumeration and machine-learning representations (Steps 18--20): Optional full-library enumeration and generation of molecular fingerprints and embeddings for downstream machine-learning workflows.
 
 
 \subsection{Applications of the method}
@@ -123,4 +123,4 @@ To our knowledge, DELi\cite{wellnitz_opensourcednaencodedlibrary_2025} is the on
   \item support for widely used library designs, including single-display and dual-display formats.
 \end{itemize}
 
-DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration. Furthermore, DELT-Hit exhibits substantially more favourable runtime and memory complexity than DELi, enabling the analysis of industry-scale libraries with billions of sequencing reads. A more detailed comparison of DELT-Hit and DELi is provided in Supplementary Note~\ref{supp:comparison-delt-deli}.
+DELT-Hit also exposes intermediate data products and executable scripts, allowing users to inspect, adapt, and extend each analysis step for reproducible benchmarking and integration. Furthermore, DELT-Hit exhibits substantially more favorable runtime and memory complexity than DELi, enabling the analysis of industry-scale libraries with billions of sequencing reads. A more detailed comparison of DELT-Hit and DELi is provided in Supplementary Note~\ref{supp:comparison-delt-deli}.

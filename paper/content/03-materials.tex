@@ -40,7 +40,7 @@ R packages:
 \end{itemize}
 
 \subsection{Data}
-We provide a complete single-display DELT-Hit example dataset to demonstrate the full workflow from initialization through demultiplexing, library reconstruction, and enrichment analysis. A complementary dual-display example focused on library enumeration and visualization is also included in the supporting material. The example is based on the architecture of a published library\cite{bassi_singlestrandeddnaencodedchemical_2020} and can be accessed through the repository supporting material.
+We provide a complete single-display DELT-Hit example dataset to demonstrate the full workflow from initialization through demultiplexing, library reconstruction, and enrichment analysis. A complementary dual-display example focused on library enumeration and visualization is also included in the supporting material. The example is based on the architecture of a published library\cite{bassi_singlestrandeddnaencodedchemical_2020} and can be accessed through the repository's supporting material.
 The dataset includes \texttt{example-single-display.xlsx}, which defines the library architecture and experimental setup; \texttt{campaign.fastq.gz}, which contains representative sequencing reads from the screen; and \texttt{analysis.yaml}, which specifies the comparisons used for hit identification. The files \texttt{example-single-display.xlsx} and \texttt{analysis.yaml} are available in the GitHub repository under \path{supporting_material/experiments/example-single-display/}. Table~\ref{tab:table2} lists the tutorial inputs and persistent archives. A complete end-to-end walkthrough of this example is provided in Box~2 in the Procedure.
 
 \input{tables/tutorial-datasets}
@@ -72,7 +72,7 @@ conda install pygraphviz -y
 # Install DELT-Hit package
 pip install git+https://git@github.com/DELTechnology/delt-hit.git
 \end{lstlisting}
-CRITICAL: Activate the \texttt{delt-hit} conda environment using \texttt{conda activate delt-hit} each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with Conda during installation so that the \texttt{conda} command is available in new terminal windows. 
+<CRITICAL>: Activate the \texttt{delt-hit} conda environment using \texttt{conda activate delt-hit} each time you open a new terminal session before running DELT-Hit commands. We also recommend initializing the shell with Conda during installation so that the \texttt{conda} command is available in new terminal windows. 
 
 
 \setupitem{R environment configuration}
@@ -113,4 +113,4 @@ delt-hit --help
 \clearpage
 
 \subsection{Experimental setup}
-The installation procedure detailed in Box 1 is performed once before running the DELT-Hit workflow. Subsequent analyses are also executed from the command line within the same software environment.
+The installation procedure detailed in Box~1 is performed once before running the DELT-Hit workflow. Subsequent analyses are executed from the command line within the same software environment.

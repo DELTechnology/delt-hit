@@ -102,7 +102,7 @@ delt-hit library represent --method=bert --config_path="$CONFIG_PATH"
 
 \textbf{TIMING:} 15--60 min
 
-<CRITICAL>: In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL and experimental design information. The following steps describe the required sheets and their format. We recommend starting from the provided example workbook provided on Github (under \texttt{templates}) and adjusting it to the new library.
+<CRITICAL>: In this phase, a YAML configuration file is created from an Excel workbook that contains the DEL and experimental design information. The following steps describe the required sheets and their format. We recommend starting from the example workbook provided on GitHub (under \texttt{templates}) and adjusting it to the new library.
 
 
 \protocolstep{1}{Create the experiment sheet}
@@ -112,7 +112,7 @@ Table~\ref{tab:table3} shows the complete layout of the \texttt{experiment} shee
 \begin{itemize}
   \item \texttt{name}: Experiment name
   \item \texttt{fastq\_path}: File path
-  \item \texttt{save\_dir}: Folder to which DELT-Hit outputs are written to, created under \texttt{save\_dir} and named \texttt{\textless name\textgreater}
+  \item \texttt{save\_dir}: Directory under which DELT-Hit outputs are written, created as \texttt{\textless save\_dir\textgreater/\textless name\textgreater}
   \item \texttt{num\_cores}: Defines the number of CPU cores used for the demultiplexing step
 \end{itemize}
 
@@ -123,7 +123,7 @@ Table~\ref{tab:table3} shows the complete layout of the \texttt{experiment} shee
 
 \protocolstep{2}{Create the selection sheet}
 
-Define the experimental design within this sheet, like selection conditions, multiplexing barcodes and replicate grouping. Table~\ref{tab:table4} shows an example layout. Required columns for demultiplexing:
+Define the experimental design within this sheet, including selection conditions, multiplexing barcodes, and replicate grouping. Table~\ref{tab:table4} shows an example layout. Required columns for demultiplexing:
 
 \begin{itemize}
   \item \texttt{name}: Unique identifier for each selection
@@ -135,7 +135,7 @@ Optional columns:
   \item \texttt{group}: Statistical grouping when needed for downstream analyses (for example, "condition" or "control")
   \item \texttt{operator}: Person who performed the selection
   \item \texttt{date}: Date of selection experiment
-  \item other columns can be added at the user's discretion
+  \item Other columns can be added at the user's discretion
 \end{itemize}
 
 \input{tables/selection-design}
@@ -155,7 +155,7 @@ Table~\ref{tab:table5} summarizes the expected layout. The following columns and
 \begin{itemize}
   \item \texttt{name}: Unique identifier for each DNA region
   \item \texttt{type}: Region type (\texttt{selection}, \texttt{constant}, or \texttt{building\_block})
-  \item \texttt{max\_error\_rate}: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = 10\% errors), can be configurated separately for each region
+  \item \texttt{max\_error\_rate}: Maximum allowed error rate for adapter trimming (0 = perfect match, 0.1 = 10\% errors), configured separately for each region
   \item \texttt{indels}: Whether to allow insertions/deletions (\texttt{TRUE}/\texttt{FALSE})
   \item \texttt{reverse}: Whether to reverse the codon before matching (\texttt{TRUE}/\texttt{FALSE}; mostly relevant for dual-display libraries)
   \item \texttt{complement}: Whether to complement the codon before matching (\texttt{TRUE}/\texttt{FALSE}; mostly relevant for dual-display libraries)
@@ -218,7 +218,7 @@ At a high level, the left side specifies the reacting functional groups, and the
 
 \protocolstep{6}{Create the reactions sheet}
 
-<CRITICAL> Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks. SMIRKS should be specified so that each transformation yields a single product.
+<CRITICAL> Before attempting to enumerate an entire library, we recommend validating all reaction notations with a representative subset of building blocks. SMIRKS should be specified so that each transformation yields a single product.
 
 In the \texttt{reactions} sheet, define all chemical reactions used during library synthesis with SMIRKS notation\cite{ref34}. For reaction types used at multiple stages of library synthesis, define each instance as a separate reaction to simplify inspection of the produced reaction graph. Table~\ref{tab:table8} illustrates this with two amide-bond-forming reactions (\texttt{ABF1} and \texttt{ABF2}). 
 
@@ -254,7 +254,7 @@ delt-hit init --excel_path=<PATH_TO_EXCEL>
 
 Review the generated YAML file at \texttt{\textless save\_dir\textgreater/\textless name\textgreater/config.yaml}, as defined in the \texttt{experiment} sheet to verify that all information was parsed correctly. This file is used in all downstream steps.
 
-<CRITICAL>: Throughout the following steps, angle-bracket tokens such as \texttt{\textless name\textgreater}, \texttt{\textless save\_dir\textgreater}, \texttt{\textless selection\_name\textgreater}, and \texttt{\textless library\_name\textgreater} are placeholders to be replaced with values from the Excel workbook or analysis YAML. \texttt{\textless name\textgreater} and \texttt{\textless save\_dir\textgreater} refer to the fields in Table~\ref{tab:table3}; \texttt{\textless experiment\_name\textgreater} and \texttt{\textless selection\_name\textgreater} refer to the \texttt{name} fields in the analysis YAML defined in Step~17.
+<CRITICAL>: Throughout the following steps, angle-bracket tokens such as \texttt{\textless name\textgreater}, \texttt{\textless save\_dir\textgreater}, \texttt{\textless selection\_name\textgreater}, and \texttt{\textless library\_name\textgreater} are placeholders to be replaced with values from the Excel workbook or analysis YAML. \texttt{\textless name\textgreater} and \texttt{\textless save\_dir\textgreater} refer to the fields in Table~\ref{tab:table3}; \texttt{\textless experiment\_name\textgreater} and \texttt{\textless selection\_name\textgreater} refer to the \texttt{name} fields in the analysis YAML defined in Step~16.
 
 \textbf{$\blacklozenge$ Troubleshooting}
 
@@ -264,15 +264,15 @@ Review the generated YAML file at \texttt{\textless save\_dir\textgreater/\textl
 
 <CRITICAL>: This phase processes raw sequencing reads to identify and count each library member in your selection experiments. 
 
-\protocolstep{11}{Prepare and execute sequence demultiplexing}
-Generate the demultiplexing scripts with its input files by running
+\protocolstep{10}{Prepare and execute sequence demultiplexing}
+Generate the demultiplexing script together with its input files by running
 
 \begin{lstlisting}
 CONFIG_PATH=<save_dir>/<name>/config.yaml
 delt-hit demultiplex prepare --config_path=$CONFIG_PATH
 \end{lstlisting}
 
-Execute demultiplexing script that runs Cutadapt against the FASTQ file, maps reads to selection and codon identifiers, and outputs all mapped sequences to \texttt{reads\_with\_adapters.gz}.
+Execute the demultiplexing script, which runs Cutadapt against the FASTQ file, maps reads to selection and codon identifiers, and outputs all mapped sequences to \texttt{reads\_with\_adapters.gz}.
 
 \begin{lstlisting}
 <save_dir>/<name>/demultiplex/cutadapt_input_files/demultiplex.sh
@@ -280,7 +280,7 @@ Execute demultiplexing script that runs Cutadapt against the FASTQ file, maps re
 
 \textbf{$\blacklozenge$ Troubleshooting}
 
-\protocolstep{12}{Inspect demultiplexing quality}
+\protocolstep{11}{Inspect demultiplexing quality}
 Generate the demultiplexing report and QC figures. The report (Figure~\ref{fig:figure4}) relates read retention across demultiplexing stages. The generated QC plots (Figure~\ref{fig:figure5}) show barcode-level plots for each indexed region.
 
 \begin{lstlisting}
@@ -305,7 +305,7 @@ delt-hit demultiplex qc --config_path=$CONFIG_PATH
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/qc-poor-selection-report.png}
-\caption{Example report for a poor selection with only 37\% read retention. The report highlights the problematic region where more than 10\% of the reads are lost during codon assignment, which typically indicates a barcode-definition mismatch, low read quality reads, or an unexpected sequence architecture.}
+\caption{Example report for a poor selection with only 37\% read retention. The report highlights the problematic region where more than 10\% of the reads are lost during codon assignment, which typically indicates a barcode-definition mismatch, low-quality reads, or an unexpected sequence architecture.}
 \label{fig:figure4}
 \end{figure}
 
@@ -320,7 +320,7 @@ delt-hit demultiplex qc --config_path=$CONFIG_PATH
 
 \newpage
 
-\protocolstep{13}{Process demultiplexing results into count tables}
+\protocolstep{12}{Process demultiplexing results into count tables}
 
 Once the quality-control inspection is satisfactory, aggregate the demultiplexed reads into selection-level count tables: 
 
@@ -340,9 +340,9 @@ delt-hit demultiplex process --config_path=$CONFIG_PATH --as_files=True --sort_b
 
 \textbf{TIMING:} 10--30 min
 
-<CRITICAL>: This phase demonstrates how demultiplexing results can be visualised in the interactive dashboard. 
+<CRITICAL>: This phase demonstrates how demultiplexing results can be visualized in the interactive dashboard. 
 
-\protocolstep{14}{Launch the interactive analysis dashboard}
+\protocolstep{13}{Launch the interactive analysis dashboard}
 Launch the interactive dashboard and explore count distributions. Open the local server in a web browser, typically at \url{http://localhost:8050} (see print statement in the terminal). Stop the server with \texttt{Ctrl+C} or by closing the terminal. An example dashboard view is shown in Figure~\ref{fig:figure7}.
 
 
@@ -350,7 +350,7 @@ Launch the interactive dashboard and explore count distributions. Open the local
 delt-hit dashboard --config_path=$CONFIG_PATH \
   --counts_path=<name>/selections/<selection_name>/counts.txt
 
-# Dash is running on http://127.0.0.1:8050/  # copy paste into browser
+# Dash is running on http://127.0.0.1:8050/  # copy and paste into browser
 # * Serving Flask app 'delt_hit.cli.dashboard.api'
 # * Debug mode: on
 \end{lstlisting}
@@ -374,7 +374,7 @@ delt-hit dashboard --config_path=$CONFIG_PATH \
 <CRITICAL>: This phase generates chemical structures and molecular properties for the top enriched compounds in a selected experiment. 2D representations of the reaction schemes, building blocks and enriched compounds as well as molecular property plots as shown in Figure~\ref{fig:figure2} and Figure~\ref{fig:figure3} can provide visual support for the analysis of selection results. 
 
 
-\protocolstep{15}{Enumerate top compounds from a selection}
+\protocolstep{14}{Enumerate top compounds from a selection}
 Generate chemical structures for the top enriched compounds in a selected experiment. Visualize the reaction graph to verify the chemical structure of library components.
 
 \begin{lstlisting}
@@ -405,7 +405,7 @@ delt-hit library enumerate \
 
 \newpage
 
-\protocolstep{16}{Visualize and calculate molecular properties of top hits}
+\protocolstep{15}{Visualize and calculate molecular properties of top hits}
 
 Visualize the chemical structure of the most observed compounds:
 
@@ -434,7 +434,7 @@ delt-hit library properties --config_path=$CONFIG_PATH --library_name=<library_n
 
 <CRITICAL>: This phase identifies enriched library members by comparing selection conditions using established statistical methods.
 
-\protocolstep{17}{Define statistical comparisons}
+\protocolstep{16}{Define statistical comparisons}
 
 Using the information from the selection sheet, create a dedicated YAML configuration file that specifies which selections to compare. Comparisons across different selection runs and runs derived from multiple sequencing files are supported. Following the template below, organize the file as a list of \texttt{experiments}, where each experiment defines one named comparison and contains a \texttt{selections} list. Each selection entry specifies the selection name, the corresponding \texttt{counts\_path}, and a \texttt{group} label indicating whether that selection belongs to the control or condition set for the comparison. An example for the single-display workflow (see Box~2) is given below for orientation. 
 
@@ -477,7 +477,7 @@ experiments:
       group: condition
 \end{lstlisting}
 
-\protocolstep{18}{Perform enrichment analysis with statistical methods}
+\protocolstep{17}{Perform enrichment analysis with statistical methods}
 <CRITICAL>: DELT-Hit supports three statistical approaches for identifying enriched compounds. Methods A, B, and C each generate an R script that can be executed directly or adapted further. Use method C for experiments without replicates and any of the three methods for evaluation settings where replicates are available. The generated files report the enrichment score for each compound and, where applicable, method-specific parameters such as log fold change or \textit{P} values.
 
 A. Simple counts method
@@ -549,9 +549,9 @@ Rscript --vanilla <save_dir>/z_score/<selection_name>/enrichment_z_score.R
 
 \textbf{TIMING:} 15 min--2 h
 
-<CRITICAL>: This phase performs full-library enumeration and generates molecular representations for downstream machine-learning applications. These steps are optional. When only a focused subset is needed, the filtered-enumeration route in Step~15 usually provides a faster alternative to full-library processing.
+<CRITICAL>: This phase performs full-library enumeration and generates molecular representations for downstream machine-learning applications. These steps are optional. When only a focused subset is needed, the filtered-enumeration route in Step~14 usually provides a faster alternative to full-library processing.
 
-\protocolstep{19}{Enumerate the full library}
+\protocolstep{18}{Enumerate the full library}
 
 Generate molecular representations of all library members: 
 
@@ -559,7 +559,7 @@ Generate molecular representations of all library members:
 delt-hit library enumerate --config_path=$CONFIG_PATH
 \end{lstlisting}
 
-\protocolstep{20}{Calculate molecular properties for the full library}
+\protocolstep{19}{Calculate molecular properties for the full library}
 
 Compute molecular properties for all enumerated compounds:
 
@@ -567,21 +567,21 @@ Compute molecular properties for all enumerated compounds:
 delt-hit library properties --config_path=$CONFIG_PATH
 \end{lstlisting}
 
-\protocolstep{21}{Generate molecular representations for machine learning}
+\protocolstep{20}{Generate molecular representations for machine learning}
 
 Create standardized chemical representations compatible with common machine-learning frameworks. Two methods tailored for different applications are available. Method A (\texttt{morgan}) generates Morgan circular fingerprints (2048-bit vectors), which are useful for similarity analysis. Method B (\texttt{bert}) generates transformer-based molecular embeddings (768-dimensional vectors) for deep-learning applications.
 
 
 A. Morgan fingerprints
 
-(i) Generate Morgan fingerprints (Approx. 600-1000 compounds/s):
+(i) Generate Morgan fingerprints (approximately 600--1000 compounds/s):
 \begin{lstlisting}
 delt-hit library represent --method=morgan --config_path=$CONFIG_PATH
 \end{lstlisting}
 
 B. BERT embeddings
 
-(i) Generate BERT embeddings (Approx. 600-1000 compounds/s):
+(i) Generate BERT embeddings (approximately 600--1000 compounds/s):
 \begin{lstlisting}
 delt-hit library represent --method=bert --config_path=$CONFIG_PATH
 \end{lstlisting}
