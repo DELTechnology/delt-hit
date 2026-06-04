@@ -23,3 +23,57 @@ Libraries with non-standard reaction schemes, unconventional building block repr
 
 \subsection{Quality control parameters}
 DELT-Hit monitors several quality metrics throughout the workflow. These include demultiplexing efficiency, defined as the proportion of sequencing reads assigned to valid barcode combinations and typically exceeding 70\% in high-quality datasets; barcode recovery rates, which can help identify technical artifacts or configuration errors; statistical significance measures based on multiple-testing correction and false-discovery-rate control using established methods for count-based sequencing data; consistency across biological and technical replicates; and reaction validation to confirm that the specified reaction definitions generate the expected chemical products.
+
+
+\subsection{Project initialization and configuration}
+
+DELT-Hit uses a YAML configuration file that defines library structure, experimental design, and analysis parameters. This file is initialized from a standardized Excel template that contains the DEL and experimental design information. The protocol guides users through the creation and completion of this workbook in the Procedure section. The excel sheets and their respective contents and functions are explained here. 
+
+The \texttt{experiment} sheet contains the experiment name, file paths, and computational resource settings. 
+
+The \texttt{selection} sheet defines the experimental design, including selection conditions, multiplexing barcodes, and replicate grouping. Each row describes one experimental setting, such as a target condition or control condition, and is identified by a unique combination of \texttt{S0} and \texttt{S1} primers for demultiplexing. 
+
+The \texttt{structure} sheet defines the DNA construct architecture and error tolerances for demultiplexing. Each DNA region is identified by a unique name. A \texttt{max\_error\_rate} and the allowance of indels can be configured separately for each region. The \texttt{reverse} and \texttt{complement} flags control optional codon orientation transforms during matching and are mostly relevant for dual-display libraries. An example dual-display workbook illustrating the dual-display-specific columns is provided in the DELT-Hit GitHub repository under \texttt{supporting\_material/experiments/example-dual-display/}. 
+
+The \texttt{constant} sheet contains the DNA sequences for all constant regions defined in the \texttt{structure} sheet. 
+
+The \texttt{building block} sheets contain the coding information and chemical structures of all encoded building blocks, and indicates the reactions they are subjected to during library synthesis. DELT-Hit supports libraries with an arbitrary number of building block regions. A separate \texttt{building block} sheet is required for each barcode region defined in the structure sheet. 
+
+The \texttt{reactions} sheet defines all chemical reactions used during library synthesis with SMIRKS notation\cite{ref34} and is only required for library enumeration. Although reaction templates commonly employed in DEL synthesis are provided in the Supplementary Information, customization by the user may be required depending on the library setup and the building blocks employed. Before attempting to enumerate an entire library, we recommend a validation of all reaction notations with a representative subset of building blocks. If the same reaction type is used at multiple stages of the synthesis, each instance should be defined as a separate reaction; while not strictly necessary, this simplifies inspection of the produced reaction graph. 
+
+The \texttt{compounds} sheet is only required for library enumeration and is used to define any additional chemical compounds (scaffolds, reactants) used during library synthesis. 
+
+The \texttt{reaction graph} sheet allows advanced library enumeration with additional steps such as precursor conversion or deprotection reactions. More advanced reaction-graph edge cases, including multi-path precursor activation schemes that require separate reaction nodes, are described in Supplementary Note~\ref{supp:reaction-graph-advanced}; a concrete two-path precursor-activation example is summarized in Supplementary Table~\ref{tab:table11}. 
+
+Once the Excel file is completed with all required sheets, the YAML configuration file can be generated. 
+
+\subsection{Sequence processing and demultiplexing}
+
+DELT-Hit uses Cutadapt to process raw sequencing reads according to the demultiplexing parameters defined in the Excel file. This enables the identification and counting of each library member in the selection experiments. Users can decide to allow insertions/deletions during barcode matching (\texttt{indels} in the \texttt{structure} sheet) and set the tolerance for sequencing errors (\texttt{max\_error\_rate} in the \texttt{structure} sheet). The demultiplexing process performs adapter detection and trimming, sequential extraction of selection and building-block barcodes, and quality filtering of reads that exceed the defined error thresholds. The generated shell script runs Cutadapt on the FASTQ file and maps reads to selection and codon identifiers. It produces \texttt{reads\_with\_adapters.gz}, which contains all mapped sequences. After demultiplexing, a text report of read retention across demultiplexing stages and QC figures are generated. These allow the user to inspect whether the read retention and barcode recovery are sufficient to proceed. If the quality-control inspection is satisfactory, the demultiplexed reads can be aggregated into selection-level count tables. DELT-Hit does this by parsing the demultiplexed reads, mapping barcode combinations to library members, and finally generating count tables for each selection. The results are saved in a standardized format. 
+
+\subsection{Data visualization and interpretation}
+
+Once sequence processing and demultiplexing is completed, DELT-Hit provides various ways to visualize and analyse selection results. The dashboard displays experimental metadata, including selection conditions, target information, and experimental parameters, along with scatter plots for the selected condition. Users can switch between count files, inspect aggregated counts across codon dimensions, and apply filters to focus on specific regions of the count distribution. While the dashboard displays raw counts from demultiplexing, the statistical analysis and hit identification section enable statistical comparisons and hit identification based on enrichment analysis. 
+
+\subsection{Selection enumeration and enrichment analysis}
+
+DELT-Hit supports selection-based compound enumeration for streamlined evaluation of enriched library members. Given a user-defined threshold \texttt{top\_n}, the workflow first enumerates the most enriched compounds in the selected experiment, generating their chemical structures. For easier visualization, a reaction graph, corresponding reaction schemes, and catalogs of 2D molecular representations of both the building blocks and enumerated compounds are also generated. In a second step, molecular descriptors are computed to characterize the chemical space of the enumerated compounds. These include Lipinski descriptors such as molecular weight (MW), partition coefficient (LogP) or hydrogen-bond donors (HBD).
+
+\subsection{Statistical analysis and hit identification}
+
+DELT-Hit implements methods to identify enriched library members by comparing results obtained from different selection conditions. A dedicated analysis configuration file based on the information from the \texttt{selection} sheet can be generated by the user to specify which selections to compare. The configuration defines the comparisons to be performed across selection runs, including runs derived from multiple sequencing files. Each \texttt{experiment} entry specifies a single named comparison and contains a list of \texttt{selections} for the comparison. Each entry within the \texttt{selections} list can be attributed to either a control or condition \texttt{group}. 
+
+DELT-Hit supports three statistical approaches for identifying enriched compounds. All methods generate an R script that can be executed directly or adapted further by the user to fit more specialized workflows. A simple counts based method and edgeR are designed for evaluation settings with replicates, whereas the normalized z-score method can also be used for experiments without replicates.
+
+% Method A (simple counts method) averages counts across replicates within each group and computes a direct enrichment score from the difference between the condition and control groups. It does not provide formal significance testing, but it is useful as a straightforward ranking approach when replicate-based comparisons are being evaluated.
+
+% Method B (edgeR method) applies RNA-seq-derived statistical modeling with empirical Bayes shrinkage, reports false-discovery-rate-corrected \textit{P} values, and provides normalized count tables for each selection. It requires replicates and is best used as a significance-annotation layer alongside enrichment ranking.
+
+% Method C (normalized z-score method) computes the per-compound score for an individual selection following Faver et al.\cite{faver_quantitativecomparisonenrichment_2019}. In the current implementation, the generated output contains both the raw \texttt{z\_score} and the depth-normalized \texttt{norm\_z\_score}, defined as $z\_score / \sqrt{n}$ and used for ranking. Because this approach does not rely on replicate-based variance estimation, it can also be applied to experiments without replicates.
+
+A comparison of enrichment score rankings for recovery of a previously reported CAIX-associated building block by Favalli \cite{favalli_stereoregiodefineddnaencoded_2021} is provided in Supplementary Note~\ref{supp:enrichment-scores-comparison}, and the underlying statistical definitions are summarized in Supplementary Note~\ref{supp:enrichment-scores}.
+
+\subsection{Full library enumeration and machine learning representations}
+
+While selection-based compound enumeration enables the rapid analysis of library member subsets, DELT-Hit also supports full library enumeration. Although this is computationally much more expensive than the focused approach, it can be useful for downstream machine learning applications and can help with the evaluation of prospective libraries regarding their properties and inform building block selection even before DEL synthesis. Full-library enumeration generates molecular representations for all library compounds and computes their molecular properties. To prepare for downstream machine learning applications, DELT-Hit supports the generation of two types of molecular representations compatible with common machine-learning frameworks. Morgan circular fingerprints (2048-bit vectors) are useful for similarity searching and clustering and can be created using the \texttt{morgan} method implemented in DELT-Hit. For deep-learning applications, the \texttt{bert} method allows the creation of transformer-based molecular embeddings (768-dimensional vectors). Both representations are compatible with scikit-learn, PyTorch, and TensorFlow.
+
