@@ -22,7 +22,10 @@ comparison_dir = base_dir / "comparison" / lane
 comparison_dir.mkdir(parents=True, exist_ok=True)
 report_rows: list[dict[str, object]] = []
 
+suffix = '_2_' if lane == 'lane-1' else '_1_'  # this is intentional, check the `lane` and `name` columns in the .xlsx files
 for published_path in published_paths:
+    if not published_path.stem.endswith(suffix):
+        continue
     selection_name = published_path.stem.removeprefix("selection_").removesuffix("_")
     delt_path = selections_dir / selection_name / "counts.txt"
 
