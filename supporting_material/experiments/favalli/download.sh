@@ -21,7 +21,11 @@ download() {
 download_and_normalize_fasta() {
   local url="$1"
   local raw_out="$2"
-  local final_out="${raw_out%.fastq.gz.fasta.gz}.fasta.gz"
+  local final_out="$raw_out"
+
+  if [[ "$raw_out" == *.fastq.gz.fasta.gz ]]; then
+    final_out="${raw_out%.fastq.gz.fasta.gz}.fasta.gz"
+  fi
 
   if [[ -s "$final_out" ]]; then
     echo "$final_out already exists, skipping"

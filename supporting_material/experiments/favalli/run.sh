@@ -5,8 +5,6 @@
 
 set -euo pipefail
 
-cd supporting_material/experiments/favalli || exit
-
 delt-hit init --excel_path "lane-1.xlsx"
 
 CONFIG_PATH=lane-1/config.yaml
