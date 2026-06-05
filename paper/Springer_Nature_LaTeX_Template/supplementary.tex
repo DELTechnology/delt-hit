@@ -1,3 +1,61 @@
+% Generated from ../supplementary.tex for Springer Nature submission-style compilation.
+% Source of truth remains ../supplementary.tex and ../content/10-supplementary.tex.
+\documentclass[pdflatex,sn-nature]{sn-jnl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[htt]{hyphenat}
+\usepackage{xurl}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[expansion=false]{microtype}
+\usepackage{parskip}
+\usepackage{seqsplit}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\graphicspath{{../}{../../}}
+
+\lstset{
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  breakatwhitespace=false,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  xleftmargin=1em,
+  xrightmargin=1em,
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue,
+}
+
+\newcommand{\protocolstep}[2]{\par\medskip\noindent\textbf{#1 \textbar{} #2}\par}
+\newcommand{\setupitem}[1]{\par\medskip\noindent\textbf{#1}\par}
+\setcounter{secnumdepth}{0}
+\raggedbottom
+
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\providecommand{\benchmarkroot}{../..}
+
+\begin{document}
+
+\title{Supplementary Notes}
+
+\maketitle
+
 \providecommand{\benchmarkroot}{..}
 \setcounter{subsection}{0}
 \renewcommand{\thesubsection}{\arabic{subsection}}
@@ -220,6 +278,23 @@ In the single-display tutorial workflow used in the main protocol, the only addi
 
 For example, two scaffolds that both require Staudinger reduction before entering subsequent coupling steps should be encoded as separate reaction paths in the \texttt{reaction\_graph} sheet, as summarized in Supplementary Table~\ref{tab:table11}:
 
-\input{tables/precursor-activation-reactions}
-
+% BEGIN flattened input: tables/precursor-activation-reactions
+\begin{table}[htbp]
+\centering
+\caption{Additional reaction step definitions (special case)}
+\label{tab:table11}
+\begin{tabular}{llll}
+\toprule
+educt\_1 & educt\_2 & reaction & product \\
+\midrule
+scaffold\_1 &  & SR\_precursor\_1 & scaffold\_1B \\
+scaffold\_2 &  & SR\_precursor\_2 & scaffold\_2B \\
+\bottomrule
+\end{tabular}
+\end{table}
+% END flattened input: tables/precursor-activation-reactions
 This explicit encoding keeps the reaction graph resolvable as independent paths. In contrast, reusing the same reaction node for both precursor activations would create an ambiguous graph assignment.
+
+\bibliography{../zotero}
+
+\end{document}

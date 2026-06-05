@@ -1,0 +1,60 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[htt]{hyphenat}
+\usepackage{xurl}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[expansion=false]{microtype}
+\usepackage{parskip}
+\usepackage{seqsplit}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+
+\lstset{
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  breakatwhitespace=false,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  xleftmargin=1em,
+  xrightmargin=1em,
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue,
+}
+
+\newcommand{\protocolstep}[2]{\par\medskip\noindent\textbf{#1 \textbar{} #2}\par}
+\newcommand{\setupitem}[1]{\par\medskip\noindent\textbf{#1}\par}
+\setcounter{secnumdepth}{0}
+
+\title{Supplementary Notes}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\input{content/10-supplementary}
+
+\bibliographystyle{unsrt}
+\bibliography{zotero}
+
+\end{document}

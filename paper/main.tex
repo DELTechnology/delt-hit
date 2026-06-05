@@ -16,6 +16,7 @@
 \usepackage{caption}
 \usepackage{float}
 \usepackage{subcaption}
+\usepackage[figuresright]{rotating}
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage[expansion=false]{microtype}
@@ -40,6 +41,16 @@
   urlcolor=blue,
   citecolor=blue,
 }
+
+\makeatletter
+\newcommand{\externalref}[2]{\@namedef{r@#1}{{#2}{0}{External reference}{Doc-Start}{}}}
+\externalref{supp:analysis-of-published-datasets}{1}
+\externalref{supp:comparison-delt-deli}{2}
+\externalref{supp:enrichment-scores}{3}
+\externalref{supp:enrichment-scores-comparison}{4}
+\externalref{supp:reaction-graph-advanced}{5}
+\externalref{tab:table11}{3}
+\makeatother
 
 \newcommand{\protocolstep}[2]{\par\medskip\noindent\textbf{#1 \textbar{} #2}\par}
 \newcommand{\setupitem}[1]{\par\medskip\noindent\textbf{#1}\par}
@@ -70,9 +81,5 @@
 
 \bibliographystyle{unsrt}
 \bibliography{zotero}
-
-\pagebreak
-\setcounter{page}{1}
-\input{content/10-supplementary}
 
 \end{document}

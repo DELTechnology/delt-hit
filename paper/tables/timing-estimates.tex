@@ -1,10 +1,10 @@
 \begin{table}[htbp]
 \centering
-\caption{Timing estimates for different dataset sizes}
+\caption{Timing estimates for different dataset sizes. For read-dominated steps (especially Steps 10--14), small, medium, and large correspond approximately to \textless{}10 million, 10--100 million, and \textgreater{}100 million reads, respectively. For compound-dominated steps (especially Steps 19--21), small, medium, and large correspond approximately to \textless{}500K, 500K--10M, and \textgreater{}10M library compounds, respectively. These estimates assume that the required laboratory protocol details and library-definition inputs, including building block SMILES, reaction definitions to be converted to SMIRKS, code lists, and related metadata, are readily available to the person performing the workflow}
 \label{tab:table14}
 \begin{tabular}{p{1.7cm}p{4.4cm}p{2.0cm}p{2.0cm}p{2.0cm}}
 \toprule
-Step(s) & Analysis Phase & Small complexity & Medium complexity & Large complexity \\
+Step(s) & Analysis Phase & Small & Medium & Large \\
 \midrule
 Setup & Software installation (one-time) & 15 min & 15 min & 15 min \\
 1-9 & Project initialization & 15-30 min & 15-60 min & 30-60 min \\
@@ -22,6 +22,6 @@ Setup & Software installation (one-time) & 15 min & 15 min & 15 min \\
 \par\smallskip
 \begin{minipage}{\textwidth}
 \footnotesize
-For read-dominated steps (especially Steps 10--14), small, medium, and large correspond approximately to \textless{}10 million, 10--100 million, and \textgreater{}100 million reads, respectively. For compound-dominated steps (especially Steps 19--21), small, medium, and large correspond approximately to \textless{}500K, 500K--10M, and \textgreater{}10M compounds, respectively. These estimates assume that the required laboratory protocol details and library-definition inputs, including building block SMILES, reaction definitions to be converted to SMIRKS, code lists, and related metadata, are readily available to the person performing the workflow. * Potentially not feasible.
+* Potentially not feasible.
 \end{minipage}
 \end{table}
