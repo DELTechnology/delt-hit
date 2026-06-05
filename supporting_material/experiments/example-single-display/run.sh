@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-cd supporting_material/experiments/example-single-display || exit
-
 time pixi run delt-hit init --excel_path example-single-display.xlsx
 
 CONFIG_PATH=campaign/config.yaml
@@ -30,9 +28,9 @@ time pixi run delt-hit library enumerate \
 time pixi run delt-hit visualize library --config_path="$CONFIG_PATH" --library_name=AG24_4_top_hits
 time pixi run delt-hit library properties --config_path="$CONFIG_PATH" --library_name=AG24_4_top_hits
 
-time pixi run delt-hit dashboard \
-  --config_path=$CONFIG_PATH \
-  --counts_path=campaign/selections/AG24_4_counts.txt
+#time pixi run delt-hit dashboard \
+#  --config_path=$CONFIG_PATH \
+#  --counts_path=campaign/selections/AG24_4_counts.txt
 
 time pixi run delt-hit analyse enrichment \
   --analysis_config=$ANALYSIS_CONFIG_PATH \
