@@ -212,6 +212,36 @@ def test_enumerate_filtered_mode_writes_named_library_and_selected_rows(tmp_path
     assert df[["code_0", "code_1"]].to_dict("records") == [{"code_0": 1, "code_1": 0}]
 
 
+def test_enumerate_parallel_workers_match_serial_output(tmp_path):
+    _, config_path = make_test_config(tmp_path)
+    counts_path = tmp_path / "observed.tsv"
+    counts_path.write_text("code_0\tcode_1\n1\t0\n0\t1\n1\t1\n0\t0\n")
+
+    Library().enumerate(
+        config_path=config_path,
+        counts_path=counts_path,
+        library_name="serial",
+        num_workers=1,
+    )
+    Library().enumerate(
+        config_path=config_path,
+        counts_path=counts_path,
+        library_name="parallel",
+        num_workers=2,
+    )
+
+    serial = pd.read_parquet(tmp_path / "mini" / "library" / "serial.parquet")
+    parallel = pd.read_parquet(tmp_path / "mini" / "library" / "parallel.parquet")
+    pd.testing.assert_frame_equal(parallel, serial)
+
+
+def test_enumerate_rejects_nonpositive_worker_count(tmp_path):
+    _, config_path = make_test_config(tmp_path)
+
+    with pytest.raises(AssertionError, match="positive integer"):
+        Library().enumerate(config_path=config_path, num_workers=0)
+
+
 def test_enumerate_writes_reaction_graphs_under_visualization_dir(tmp_path, monkeypatch):
     _, config_path = make_test_config(tmp_path)
     captured_save_dir = None
