@@ -1,30 +1,31 @@
-ARTICLE_ID=31198468
-FILE_ID=61487743
-OUT=campaign.fastq.gz
+#!/usr/bin/env bash
 
-pixi run python - <<'PY'
-import requests
+set -euo pipefail
+
+# Run after activating the delt-hit Conda environment.
+python - <<'PYTHON'
+import json
+import shutil
+from pathlib import Path
+from urllib.request import urlopen
 
 article_id = "31198468"
 file_id = "61487743"
-out = "campaign.fastq.gz"
+out = Path("campaign.fastq.gz")
 
-api_url = f"https://api.figshare.com/v2/articles/{article_id}"
-meta = requests.get(api_url, timeout=60).json()
-
-files = meta["files"]
-target = next(f for f in files if str(f["id"]) == file_id)
-
-print("File:", target["name"])
-print("Size:", target["size"])
-print("Download URL:", target["download_url"])
-
-with requests.get(target["download_url"], stream=True, timeout=120) as r:
-    r.raise_for_status()
-    with open(out, "wb") as f:
-        for chunk in r.iter_content(chunk_size=1024 * 1024):
-            if chunk:
-                f.write(chunk)
-
-print(f"Saved to {out}")
-PY
+if out.is_file() and out.stat().st_size:
+    print(f"{out} already exists, skipping")
+else:
+    with urlopen(f"https://api.figshare.com/v2/articles/{article_id}", timeout=60) as response:
+        meta = json.load(response)
+    target = next(f for f in meta["files"] if str(f["id"]) == file_id)
+    print("File:", target["name"])
+    print("Size:", target["size"])
+    partial = out.with_suffix(out.suffix + ".part")
+    with urlopen(target["download_url"], timeout=120) as response, partial.open("wb") as dest:
+        shutil.copyfileobj(response, dest)
+    if partial.stat().st_size != target["size"]:
+        raise RuntimeError("Downloaded file size differs from the archive metadata")
+    partial.replace(out)
+    print(f"Saved to {out}")
+PYTHON

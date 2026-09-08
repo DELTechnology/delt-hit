@@ -5,6 +5,8 @@
 
 set -euo pipefail
 
+# Run from this directory after: conda activate delt-hit
+
 delt-hit init --excel_path "lane-1.xlsx"
 
 CONFIG_PATH=lane-1/config.yaml

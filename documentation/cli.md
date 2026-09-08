@@ -30,7 +30,7 @@ The resulting `config.yaml` contains:
 - `structure`: parsing structure (selection/building block/constant regions).
 - `whitelists`: codon lists derived from selections, building blocks, and constants.
 
-The configuration layout is derived directly from the Excel template sheets (see `templates/library.xlsx`) and is parsed by `delt_hit.demultiplex.parser`.
+The configuration layout is derived directly from the Excel template sheets (see `templates/single-display-two-cycle.xlsx`) and is parsed by `delt_hit.demultiplex.parser`.
 
 ## `init`
 Creates a YAML config from an Excel template.
@@ -231,17 +231,34 @@ Supported methods:
 - `<save_dir>/<experiment_name>/representations/<method>.npz`
 
 ## `analyse`
-Statistical analysis over per-selection counts. The analysis config expects an `experiments` list with explicit selection entries and `counts_path` values (see `delt_hit.cli.analyse.api.prepare_data`).
+Statistical analysis over per-selection counts. The analysis config expects an `experiments` list with explicit selection entries and `counts_path` values (see `delt_hit.analyse.data_prep`).
 
 ### `enrichment`
-Runs count-based or edgeR-based enrichment analysis.
 
+Generate an R script for a named comparison in a separate analysis YAML containing an `experiments` list. For replicate-based methods, use `--analysis_config` and an explicit `--save_dir`:
+
+```bash
+delt-hit analyse enrichment \
+  --analysis_config /path/to/analysis.yaml \
+  --save_dir /path/to/output/analysis \
+  --name condition_vs_control --method edgeR
+Rscript --vanilla /path/to/output/analysis/edgeR/condition_vs_control/enrichment_edgeR.R
 ```
-delt-hit analyse enrichment --config_path <path/to/config.yaml> --name <experiment-name> --method edgeR
+
+Use `--method counts` for count-based comparisons and execute the corresponding `counts/<name>/enrichment_counts.R` script. For individual-selection normalized z-scores:
+
+```bash
+delt-hit analyse enrichment \
+  --config_path /path/to/config.yaml \
+  --counts /path/to/selections/SELECTION_NAME/counts.txt \
+  --save_dir /path/to/output/analysis \
+  --name SELECTION_NAME --method z_score
+Rscript --vanilla /path/to/output/analysis/z_score/SELECTION_NAME/enrichment_z_score.R
 ```
 
 **Outputs**
-- `<save_dir>/<experiment_name>/edgeR/` (or `counts/`) with statistics tables and normalized counts.
+- The CLI generates `enrichment_*.R` and, for replicate-based methods, `data.csv` and `samples.csv` under `<save_dir>/<method>/<name>/`.
+- Execute the generated R script to produce `stats.csv`, `hits.csv`, and method-specific normalized tables and correlation plots.
 
 ## `dashboard`
 Launches a Dash web UI for inspecting a single selection’s counts.

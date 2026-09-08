@@ -14,14 +14,13 @@ DELT-Hit is an end-to-end, open-source toolkit for DNA-encoded library (DEL) ana
 
 ### Supporting assets
 - **`templates/`**: Excel templates used to initialize configuration via `delt-hit init`.
-- **`protocols.pdf`**: The reference protocol describing the intended scientific workflow and rationale for each module.
 - **`tests/`**: Unit tests that validate core building blocks.
 
 ## High-level data flow
 1. **Configuration**: Start from an Excel library template, then run `delt-hit init` to produce a `config.yaml` that captures experiment metadata, library structure, reaction catalog, and barcode/primer definitions.
-2. **Demultiplexing**: Use `delt-hit demultiplex prepare/run` to generate and execute Cutadapt workflows, then `delt-hit demultiplex process` to convert adapter-tagged reads into per-selection count tables.
+2. **Demultiplexing**: Use `delt-hit demultiplex prepare` to generate a Cutadapt shell script, execute that script, then `delt-hit demultiplex process` to convert adapter-tagged reads into per-selection count tables.
 3. **Library enumeration**: Use `delt-hit library enumerate` to build the reaction graph and generate SMILES for the complete library. This creates `library.parquet` and reaction graph visualizations.
 4. **Property/descriptor computation**: `delt-hit library properties` and `delt-hit library represent` produce cheminformatics features (properties and fingerprints) for downstream modeling.
-5. **Analysis & QC**: `delt-hit analyse enrichment` runs statistical enrichment (edgeR or count-based) and exports result tables, while `delt-hit demultiplex report/qc` and `delt-hit dashboard` provide textual/visual inspection of the results.
+5. **Analysis & QC**: `delt-hit analyse enrichment` generates R scripts for statistical enrichment (edgeR, count-based, or normalized z-scores); executing those scripts exports result tables, while `delt-hit demultiplex report/qc` and `delt-hit dashboard` provide textual/visual inspection of the results.
 
 For CLI specifics (arguments, outputs, and example commands), see [documentation/cli.md](cli.md).

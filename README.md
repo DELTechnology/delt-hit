@@ -1,249 +1,225 @@
-# 🧬 `DELT-Hit`
+# DELT-Hit
 
-Welcome to `delt-hit`! An end-to-end computational framework for DNA-encoded chemical library analysis.
+DELT-Hit is an open-source, end-to-end computational framework for DNA-encoded chemical library analysis. It connects sequence demultiplexing, chemical structure reconstruction, molecular property calculation, enrichment analysis, and quality control.
 
-## 🚀 Installation
+## 1. System requirements
 
-This guide provides instructions for setting up `delt-hit` for both regular users and developers.
-Use either **[Pixi](https://pixi.sh/latest/)** (recommended) or **[Conda](https://docs.anaconda.com/miniconda)** to manage the environment.
+The protocol specifies Python 3.12+, R 4.1+, and Cutadapt 4.9+, with Conda for environment management. R is required for all three enrichment methods; edgeR is additionally required for the edgeR method.
 
-### 🧑‍🔬 User Installation
+### Tested versions
 
-Clone the repository:
+The example workflow and paper analyses were run on **macOS 26.6.2** with:
 
-```bash
-git clone https://github.com/DELTechnology/delt-hit.git
-cd delt-hit
-```
+| Software | Version |
+|---|---|
+| Python | 3.12.13 |
+| Cutadapt | 5.2 |
+| R | 4.4.0 |
+| edgeR | 4.4.2 |
 
-#### Option A: Pixi (recommended)
+The complete Python dependency list is in [pyproject.toml](pyproject.toml). Python dependencies are installed automatically with DELT-Hit. Graphviz/pygraphviz and the R packages are installed separately as described below. The R workflow uses tidyverse and GGally, plus edgeR and limma for the edgeR method.
 
-```bash
-pixi install
-pixi run delt-hit --help
-```
+The protocol also lists Linux (Ubuntu 20.04+), macOS (12.0+), and Windows 10/11 through Windows Subsystem for Linux as supported platforms. The tested configuration above is distinct from these minimum platform requirements. Run shell commands in Bash or a compatible terminal (inside WSL on Windows).
 
-#### Option B: Conda
+Minimum hardware: 16 GB RAM, 8 CPU cores, and 50 GB available storage. Recommended: 32 GB RAM, 16 CPU cores, and 100 GB available storage. Large datasets may require additional memory and disk space.
+
+## 2. Installation guide
+
+Install [Miniconda](https://docs.anaconda.com/miniconda/) for your operating system and initialize your shell during installation. Then create and activate an isolated environment, as in Box 1 of the protocol:
 
 ```bash
 conda create -n delt-hit python=3.12 -y
 conda activate delt-hit
-conda install pygraphviz -y
-pip install .
-delt-hit --help
+conda install -c conda-forge pygraphviz -y
+pip install git+https://github.com/DELTechnology/delt-hit.git
 ```
 
-#### R dependencies (optional)
+For enrichment analysis, install R 4.1+ if it is not already available (for example, `conda install -c conda-forge r-base -y`). Open R or RStudio and run:
 
-Required only for enrichment analysis with `edgeR`:
-
-```R
+```r
 install.packages(c("tidyverse", "GGally"))
-if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+if (!require("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
 BiocManager::install(c("edgeR", "limma"))
 ```
 
-### 👩‍💻 Developer Installation
-
-Same as the user installation above, but pass the `-e` flag to install in editable mode with dev dependencies:
-
-- **Pixi:** `pixi install -e dev`
-- **Conda:** `pip install -e ".[dev,test]"` instead of `pip install .`
-
-## 🧪 Example Workflow
-
-A complete end-to-end example is available in [`supporting_material/experiments/example-single-display/`](supporting_material/experiments/example-single-display/); see [`supporting_material/README.md`](supporting_material/README.md) for full instructions.
-
-Here is a typical workflow for using `delt-hit`:
-
-1. **Initialize Configuration:**
-   Create a `config.yaml` file from an Excel library file. This file defines the experiment, selections, and library
-   information.
-   ```bash
-   delt-hit init --excel_path /path/to/library.xlsx
-   ```
-
-2. **Run Demultiplexing:**
-   Run the entire demultiplexing pipeline based on your configuration. This includes preparing scripts, running
-   `cutadapt`, and processing the results.
-   ```bash
-   delt-hit demultiplex run --config_path /path/to/config.yaml
-   ```
-
-3. **Define Analysis Groups:**
-   After demultiplexing, define analysis groups by editing your `config.yaml` file. Add an `analyses` section to group
-   selections for comparison. For example:
-   ```yaml
-   experiments:
-   - name: condition_vs_control
-     save_dir: campaign/analysis
-     selections:
-       - name: AG24_4
-         counts_path: campaign/selections/AG24_4/counts.txt
-         group: control
-       - name: AG24_5
-         counts_path: campaign/selections/AG24_5/counts.txt
-         group: control
-       - name: AG24_6
-         counts_path: campaign/selections/AG24_6/counts.txt
-         group: control
-       - name: AG24_13
-         counts_path: campaign/selections/AG24_13/counts.txt
-         group: condition
-       - name: AG24_14
-         counts_path: campaign/selections/AG24_14/counts.txt
-         group: condition
-       - name: AG24_15
-         counts_path: campaign/selections/AG24_15/counts.txt
-         group: condition
-     ```
-
-4. **Calculate Enrichment:**
-   Calculate enrichment for the defined groups using different methods. The `--name` argument must correspond to a group
-   you defined in your `config.yaml`.
-   ```bash
-   # Using simple counts
-   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=condition_vs_control --method=counts
-
-   # Using edgeR for more sensitive statistical analysis
-   delt-hit analyse enrichment --config_path /path/to/config.yaml --name=condition_vs_control --method=edgeR
-   ```
-
-5. **Work with the Library:**
-   Enumerate the library, compute properties, and generate representations.
-   ```bash
-   # Enumerate all molecules in the library
-   delt-hit library enumerate --config_path /path/to/config.yaml
-
-   # Enumerate only the top observed combinations from a demultiplex counts file
-   delt-hit library enumerate \
-   --config_path /path/to/config.yaml \
-   --counts_path /path/to/selections/SELECTION_NAME/counts.txt \
-   --top_n 1000 \
-   --library_name observed_hits
-
-   # Compute chemical properties
-   delt-hit library properties --config_path /path/to/config.yaml
-
-   # Compute chemical properties for a named filtered library
-   delt-hit library properties \
-   --config_path /path/to/config.yaml \
-   --library_name observed_hits
-
-   # Generate molecular fingerprints (e.g., Morgan)
-   delt-hit library represent --method=morgan --config_path /path/to/config.yaml
-   ```
-
-6. **Launch Dashboard:**
-   Explore the results interactively in a web-based dashboard.
-   ```bash
-   delt-hit dashboard \
-   --config_path /path/to/config.yaml \
-   --counts_path /path/to/selections/SELECTION_NAME/counts.txt
-   ```
-
-## 📚 Documentation
-
-For a codebase overview and a detailed CLI reference, see:
-
-- [Codebase overview](documentation/overview.md)
-- [CLI guide](documentation/cli.md)
-
-The original protocol description lives in `protocols.pdf`.
-
-## 💻 CLI Reference
-
-For the most up-to-date CLI details and output locations, use the [CLI guide](documentation/cli.md).
-
-### `init`
-
-Initializes a project by creating a `config.yaml` from a standardized Excel file.
+Verify the installation:
 
 ```bash
-delt-hit init --excel_path <path/to/library.xlsx>
+conda activate delt-hit
+delt-hit --help
+Rscript --vanilla -e 'library(tidyverse); library(GGally); library(edgeR); library(limma)'
 ```
 
-### `library`
+The first command prints the CLI help; the R check should complete without missing-package errors. Activate the environment with `conda activate delt-hit` in each new terminal session.
 
-Commands for library enumeration, and chemical property and representation calculation.
+Allow approximately **15 minutes** for installation on a desktop computer, as estimated in the protocol. Download speed and compilation of dependencies can increase this time. This estimate excludes the demo dataset download.
 
-- **`enumerate`**: Generates the full library of molecules from the reaction steps defined in the configuration file.
-  ```bash
-  delt-hit library enumerate --config_path <path/to/config.yaml>
-  ```
-  For troubleshooting, `--debug` can write per-combination reaction-graph PNGs into the library output directory. Use `--debug invalid --errors ignore` to keep enumerating while capturing combinations that fail during reaction execution.
-  ```bash
-  delt-hit library enumerate \
-  --config_path <path/to/config.yaml> \
-  --debug invalid \
-  --errors ignore
-  ```
-  You can also enumerate only the top observed barcode combinations from a demultiplex counts file:
-  ```bash
-  delt-hit library enumerate \
-  --config_path <path/to/config.yaml> \
-  --counts_path <path/to/selections/SELECTION_NAME/counts.txt> \
-  --top_n 1000 \
-  --library_name observed_hits
-  ```
-- **`properties`**: Calculates a set of chemical properties for the enumerated library.
-  ```bash
-  delt-hit library properties --config_path <path/to/config.yaml>
-  ```
-  You can also compute properties for a named filtered library:
-  ```bash
-  delt-hit library properties \
-  --config_path <path/to/config.yaml> \
-  --library_name observed_hits
-  ```
-- **`represent`**: Generates molecular representations (fingerprints) for the library.
-  ```bash
-  delt-hit library represent --config_path <path/to/config.yaml> --method <METHOD>
-  ```
-    - `<METHOD>` can be `morgan` or `bert`.
+## 3. Demo
 
-### `demultiplex`
+### Run the example data
 
-Commands for demultiplexing FASTQ files and obtaining read counts.
+The [single-display example](supporting_material/experiments/example-single-display/) contains the Excel library definition, analysis YAML, and scripts for the workflow in Box 2 of the protocol. The compressed FASTQ download is approximately **6.6 GB**.
 
-- **`run`**: Runs the entire demultiplexing workflow, including running Cutadapt and computing counts.
-  ```bash
-  delt-hit demultiplex run --config_path <path/to/config.yaml>
-  ```
-- **`prepare`**: Prepares the `cutadapt` input files and executable script without running them.
-  ```bash
-  delt-hit demultiplex prepare --config_path <path/to/config.yaml>
-  ```
-- **`process`**: Computes counts from the output of a `cutadapt` run.
-  ```bash
-  delt-hit demultiplex process --config_path <path/to/config.yaml>
-  ```
-- **`report`**: Generates a text report summarizing demultiplexing statistics.
-  ```bash
-  delt-hit demultiplex report --config_path <path/to/config.yaml>
-  ```
-- **`qc`**: Generates quality control plots from the demultiplexing results.
-  ```bash
-  delt-hit demultiplex qc --config_path <path/to/config.yaml>
-  ```
+```bash
+conda activate delt-hit
+git clone https://github.com/DELTechnology/delt-hit.git
+cd delt-hit/supporting_material/experiments/example-single-display
+bash download.sh
+bash run.sh
+```
 
-### `analyse`
+If you already cloned the repository, enter the existing example directory instead. Run `download.sh` and `run.sh` from that directory. The [run script](supporting_material/experiments/example-single-display/run.sh) lists each command, including demultiplexing, selection-focused enumeration, enrichment analysis, and optional full-library processing.
 
-Commands for analyzing demultiplexed data, such as performing enrichment analysis.
+Allow **one to several hours** for the demo on a desktop with 32 GB RAM and 16 CPU cores, consistent with the protocol's overall timing guidance. This is an indicative estimate, not a separately measured demo benchmark, and excludes downloading the sequencing data. Each stage in `run.sh` reports its elapsed time. Full-library enumeration and representation generation can be omitted when only selection analysis is required.
 
-- **`enrichment`**: Performs enrichment analysis on an analysis group defined in the configuration file.
-  ```bash
-  delt-hit analyse enrichment --config_path <path/to/config.yaml> --name <group_name> --method <METHOD>
-  ```
-    - Analysis groups must be defined under the `analyses` key in your `config.yaml`.
-    - `<group_name>` refers to a key under the `analyses` section.
-    - `<METHOD>` can be `counts` or `edgeR`.
+### Expected output
 
-### `dashboard`
+The workflow writes the following folders under the example directory:
 
-Launches an interactive dashboard for data visualization.
+```text
+campaign/
+├── config.yaml
+├── demultiplex/
+│   ├── cutadapt_input_files/    # Barcode files and demultiplex.sh
+│   └── cutadapt_output_files/   # Cutadapt logs, JSON reports and mapped reads
+├── qc/                         # report.txt and barcode-recovery plots
+├── selections/                 # <selection>/counts.txt and flat count exports
+├── library/
+│   ├── AG24_4_top_hits.parquet
+│   ├── library.parquet         # Full-library enumeration
+│   ├── visualization/          # Reaction graphs and molecular structures
+│   └── properties/             # Descriptor tables and property plots
+├── analysis/
+│   ├── counts/condition_vs_control/
+│   ├── edgeR/condition_vs_control/
+│   └── z_score/                # Separate results for AG24_13, AG24_14, AG24_15
+└── representations/            # Molecular representation files
+```
 
-- **`dashboard`**: Starts a web-based dashboard to interactively explore counts data for a given selection.
-  ```bash
-  delt-hit dashboard --config_path <path/to/config.yaml> --counts_path <path/to/counts.txt>
-  ```
+Selection count tables contain the recovered building-block combinations and their read counts. After the generated R scripts execute, analysis folders contain `stats.csv` and ranked `hits.csv` files, with normalized tables and replicate-correlation plots where applicable. The protocol's Anticipated Results section describes these outputs and their interpretation.
+
+The current `bert` CLI option in `run.sh` writes Morgan fingerprints to `bert.npz`; it does not yet generate the transformer embeddings described in the protocol. Use `morgan.npz` for Morgan fingerprints until that implementation discrepancy is resolved.
+
+The [dual-display example](supporting_material/experiments/example-dual-display/) demonstrates library configuration and enumeration. Its output uses `smiles_a` and `smiles_b`; property and representation commands currently require the single-display `smiles` format.
+
+## 4. Instructions for use
+
+### Prepare your own library and experiment
+
+Copy [templates/single-display-two-cycle.xlsx](templates/single-display-two-cycle.xlsx) and fill in the sheets for your library and selections:
+
+- `experiment`: experiment name, FASTQ path, output directory, and CPU count.
+- `selection`: selection identifiers, multiplexing barcodes, and experimental metadata.
+- `structure` and `constant`: DNA-region order, constant sequences, and matching error tolerances.
+- `B0`, `B1`, and any additional building-block sheets: DNA codons and, for enumeration, building-block SMILES and reaction assignments.
+- `reactions`, `compounds`, and `reaction_graph`: reaction SMIRKS, scaffolds, and any additional reaction steps needed for enumeration.
+
+See the [dual-display example](supporting_material/experiments/example-dual-display/) for strand-specific configuration. Validate reaction definitions on a representative subset before enumerating a complete library.
+
+Generate the project configuration:
+
+```bash
+delt-hit init --excel_path=/path/to/library.xlsx
+```
+
+This creates `<save_dir>/<name>/config.yaml` using the workbook's experiment fields. Review the generated file, then use its path in subsequent commands. The placeholders below must be replaced with your own paths and selection name.
+
+### Demultiplex and inspect sequencing reads
+
+```bash
+CONFIG_PATH=/path/to/output/experiment/config.yaml
+PROJECT_DIR=/path/to/output/experiment
+
+delt-hit demultiplex prepare --config_path="$CONFIG_PATH"
+bash "$PROJECT_DIR/demultiplex/cutadapt_input_files/demultiplex.sh"
+delt-hit demultiplex report --config_path="$CONFIG_PATH"
+delt-hit demultiplex qc --config_path="$CONFIG_PATH"
+delt-hit demultiplex process --config_path="$CONFIG_PATH"
+delt-hit demultiplex process --config_path="$CONFIG_PATH" --as_files=True
+```
+
+Inspect read retention and barcode recovery before interpreting selection counts. For interactive exploration:
+
+```bash
+SELECTION_NAME=your_selection
+delt-hit dashboard --config_path="$CONFIG_PATH" \
+  --counts_path="$PROJECT_DIR/selections/$SELECTION_NAME/counts.txt"
+```
+
+Open the printed local URL, then stop the dashboard with Ctrl+C when finished.
+
+### Reconstruct selected compounds
+
+```bash
+delt-hit visualize enumerate --config_path="$CONFIG_PATH"
+delt-hit library enumerate \
+  --config_path="$CONFIG_PATH" \
+  --counts_path="$PROJECT_DIR/selections/$SELECTION_NAME/counts.txt" \
+  --top_n=1000 --library_name=top_hits
+delt-hit visualize library --config_path="$CONFIG_PATH" --library_name=top_hits
+delt-hit library properties --config_path="$CONFIG_PATH" --library_name=top_hits
+```
+
+This enumerates the top combinations by observed count. For full-library processing, omit the count filter:
+
+```bash
+delt-hit library enumerate --config_path="$CONFIG_PATH"
+delt-hit library properties --config_path="$CONFIG_PATH"
+delt-hit library represent --method=morgan --config_path="$CONFIG_PATH"
+```
+
+### Compare selections and rank hits
+
+Create a **separate `analysis.yaml`** using the [example analysis configuration](supporting_material/experiments/example-single-display/analysis.yaml). Each entry in its `experiments` list defines a named comparison. Its `selections` list provides each selection's `name`, `counts_path`, and `group` (`condition` or `control`). Replace the example selections and paths with your own, retaining replicate groupings.
+
+```bash
+ANALYSIS_CONFIG_PATH=/path/to/analysis.yaml
+ANALYSIS_OUTPUT_ROOT="$PROJECT_DIR/analysis"
+
+delt-hit analyse enrichment \
+  --analysis_config="$ANALYSIS_CONFIG_PATH" \
+  --name=condition_vs_control --method=counts \
+  --save_dir="$ANALYSIS_OUTPUT_ROOT"
+Rscript --vanilla "$ANALYSIS_OUTPUT_ROOT/counts/condition_vs_control/enrichment_counts.R"
+
+delt-hit analyse enrichment \
+  --analysis_config="$ANALYSIS_CONFIG_PATH" \
+  --name=condition_vs_control --method=edgeR \
+  --save_dir="$ANALYSIS_OUTPUT_ROOT"
+Rscript --vanilla "$ANALYSIS_OUTPUT_ROOT/edgeR/condition_vs_control/enrichment_edgeR.R"
+```
+
+`--name` must match a comparison in `analysis.yaml`. The CLI generates analysis inputs and an R script; the `Rscript` command performs the analysis. Counts and edgeR compare replicate groups. Normalized z-scores can also be calculated for an individual selection without replicates:
+
+```bash
+delt-hit analyse enrichment \
+  --config_path="$CONFIG_PATH" \
+  --counts="$PROJECT_DIR/selections/$SELECTION_NAME/counts.txt" \
+  --method=z_score --name="$SELECTION_NAME" \
+  --save_dir="$ANALYSIS_OUTPUT_ROOT"
+Rscript --vanilla "$ANALYSIS_OUTPUT_ROOT/z_score/$SELECTION_NAME/enrichment_z_score.R"
+```
+
+### Reproduction instructions (optional)
+
+For instructions to reproduce the published-dataset reanalyses reported in the manuscript, including data downloads, workflow commands, and comparisons with the original selection counts, see:
+
+- [Favalli et al. re-analysis](supporting_material/experiments/favalli/README.md)
+- [Pure-DEL (Keller et al.) re-analysis](supporting_material/experiments/pure-del/README.md)
+
+### Documentation
+
+- [CLI input/output reference](documentation/input-output.md)
+- [Codebase overview](documentation/overview.md)
+- [Supporting material and published-data reanalyses](supporting_material/README.md)
+- [Demultiplexing benchmarks](benchmarks/demultiplex/README.md)
+- [Archived workflow data and outputs](https://doi.org/10.5281/zenodo.20447074)
+- [Archived code release](https://doi.org/10.5281/zenodo.20556531)
+
+For command-specific help, use `delt-hit --help` or `delt-hit <group> <command> --help`.
+
+## License
+
+DELT-Hit is distributed under the [MIT License](LICENSE), which permits use, modification, and redistribution subject to its terms. Source code is available in the [DELTechnology/delt-hit repository](https://github.com/DELTechnology/delt-hit).

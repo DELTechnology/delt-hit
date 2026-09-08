@@ -1,8 +1,14 @@
 # Example Dual-Display Configuration
 
+Follow the [installation guide](../../../README.md#2-installation-guide), then run the commands below from this directory with the environment active:
+
+```bash
+conda activate delt-hit
+```
+
 This folder contains a minimal dual-display Excel configuration example:
 
-- [example-dual-display.xlsx](/Users/adrianomartinelli/projects/delt-hit/supporting_material/experiments/example-dual-display/example-dual-display.xlsx)
+- [example-dual-display.xlsx](example-dual-display.xlsx)
 
 Dual-display-specific columns:
 

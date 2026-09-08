@@ -2,6 +2,8 @@
 
 Reproducible example workflows and dataset re-analyses accompanying DELT-Hit.
 
+Install the software using the [Conda installation guide](../README.md#2-installation-guide). Before running any workflow, activate the environment with `conda activate delt-hit` and change into the corresponding experiment directory.
+
 | Folder | Description |
 |---|---|
 | `experiments/example-single-display/` | Full single-display DEL workflow example |

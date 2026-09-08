@@ -1,5 +1,11 @@
 # Favalli et al. Re-Analysis
 
+Follow the [installation guide](../../../README.md#2-installation-guide), then run the commands below from this directory with the environment active:
+
+```bash
+conda activate delt-hit
+```
+
 Re-analysis of the Favalli et al. dataset using DELT-Hit.  
 Publication DOI: [10.1038/s41557-021-00660-y](https://doi.org/10.1038/s41557-021-00660-y)
 
@@ -31,35 +37,35 @@ This produces per-selection counts under `lane-1/selections/`.
 Run the enrichment setup and execute the generated R scripts:
 
 ```bash
-pixi run delt-hit analyse enrichment \
+delt-hit analyse enrichment \
   --analysis_config=analysis.yaml \
   --save_dir=lane-1/analysis \
   --name=ca9_ds \
   --method=counts
-pixi run Rscript --vanilla lane-1/analysis/counts/ca9_ds/enrichment_counts.R
+Rscript --vanilla lane-1/analysis/counts/ca9_ds/enrichment_counts.R
 
-pixi run delt-hit analyse enrichment \
+delt-hit analyse enrichment \
   --analysis_config=analysis.yaml \
   --save_dir=lane-1/analysis \
   --name=ca9_ds \
   --method=edgeR
-pixi run Rscript --vanilla lane-1/analysis/edgeR/ca9_ds/enrichment_edgeR.R
+Rscript --vanilla lane-1/analysis/edgeR/ca9_ds/enrichment_edgeR.R
 
 for selection in 4_2 5_2 6_2; do
-  pixi run delt-hit analyse enrichment \
+  delt-hit analyse enrichment \
     --config_path=lane-1/config.yaml \
     --save_dir=lane-1/analysis \
     --counts=lane-1/selections/${selection}/counts.txt \
     --name=${selection} \
     --method=z_score
-  pixi run Rscript --vanilla lane-1/analysis/z_score/${selection}/enrichment_z_score.R
+  Rscript --vanilla lane-1/analysis/z_score/${selection}/enrichment_z_score.R
 done
 ```
 
 Then compare enrichment scores across methods and export hit lists:
 
 ```bash
-pixi run python enrichment_scores.py
+python enrichment_scores.py
 ```
 
 Outputs are written to `enrichment/ca9_ds/`. The script produces:
@@ -71,7 +77,7 @@ Outputs are written to `enrichment/ca9_ds/`. The script produces:
 ## Compare against published counts
 
 ```bash
-pixi run python compare_selections.py
+python compare_selections.py
 ```
 
 Comparison tables are written to `comparison/lane-1/`. Each selection produces a detailed CSV with an `identical` column plus a `report.csv` summary of observed-compound counts, total counts, and mismatch totals.
