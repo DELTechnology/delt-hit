@@ -25,6 +25,8 @@ Minimum hardware: 16 GB RAM, 8 CPU cores, and 50 GB available storage. Recommend
 
 ## 2. Installation guide
 
+### Option A: Conda (default)
+
 Install [Miniconda](https://docs.anaconda.com/miniconda/) for your operating system and initialize your shell during installation. Then create and activate an isolated environment, as in Box 1 of the protocol:
 
 ```bash
@@ -34,7 +36,25 @@ conda install -c conda-forge pygraphviz -y
 pip install git+https://github.com/DELTechnology/delt-hit.git
 ```
 
-For enrichment analysis, install R 4.1+ if it is not already available (for example, `conda install -c conda-forge r-base -y`). Open R or RStudio and run:
+Activate the environment with `conda activate delt-hit` in each new terminal session.
+
+### Option B: Pixi
+
+Install [Pixi](https://pixi.sh/latest/), then clone the repository and install its configured environment:
+
+```bash
+git clone https://github.com/DELTechnology/delt-hit.git
+cd delt-hit
+pixi install
+pixi run delt-hit --help
+pixi shell
+```
+
+`pixi shell` activates the environment so the commands and supporting-material scripts below can be run directly. Use it instead of `conda activate delt-hit` when following this README or the experiment instructions. Alternatively, prefix commands with `pixi run`, including `pixi run bash run.sh` for a complete workflow. The configured Pixi platforms are Linux x86-64 and macOS Apple Silicon.
+
+### R dependencies and verification (both options)
+
+For enrichment analysis, install R 4.1+ if it is not already available (for Conda, for example, `conda install -c conda-forge r-base -y`). The Pixi environment does not include R; ensure an external R installation provides `Rscript` on your PATH. Open the corresponding R installation or RStudio and run:
 
 ```r
 install.packages(c("tidyverse", "GGally"))
@@ -47,12 +67,11 @@ BiocManager::install(c("edgeR", "limma"))
 Verify the installation:
 
 ```bash
-conda activate delt-hit
 delt-hit --help
 Rscript --vanilla -e 'library(tidyverse); library(GGally); library(edgeR); library(limma)'
 ```
 
-The first command prints the CLI help; the R check should complete without missing-package errors. Activate the environment with `conda activate delt-hit` in each new terminal session.
+Run these checks in the environment activated using your chosen option. The first command prints the CLI help; the R check should complete without missing-package errors.
 
 Allow approximately **15 minutes** for installation on a desktop computer, as estimated in the protocol. Download speed and compilation of dependencies can increase this time. This estimate excludes the demo dataset download.
 
