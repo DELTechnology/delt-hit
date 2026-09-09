@@ -19,8 +19,6 @@ The example workflow and paper analyses were run on **macOS 26.6.2** with:
 
 The complete Python dependency list is in [pyproject.toml](pyproject.toml). Python dependencies are installed automatically with DELT-Hit. Graphviz/pygraphviz and the R packages are installed separately as described below. The R workflow uses tidyverse and GGally, plus edgeR and limma for the edgeR method.
 
-The protocol also lists Linux (Ubuntu 20.04+), macOS (12.0+), and Windows 10/11 through Windows Subsystem for Linux as supported platforms. The tested configuration above is distinct from these minimum platform requirements. Run shell commands in Bash or a compatible terminal (inside WSL on Windows).
-
 Minimum hardware: 16 GB RAM, 8 CPU cores, and 50 GB available storage. Recommended: 32 GB RAM, 16 CPU cores, and 100 GB available storage. Large datasets may require additional memory and disk space.
 
 ## 2. Installation guide
