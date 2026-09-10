@@ -8,6 +8,7 @@ import json
 import shutil
 from pathlib import Path
 from urllib.request import urlopen
+from tqdm import tqdm
 
 article_id = "31198468"
 file_id = "61487743"
@@ -23,7 +24,8 @@ else:
     print("Size:", target["size"])
     partial = out.with_suffix(out.suffix + ".part")
     with urlopen(target["download_url"], timeout=120) as response, partial.open("wb") as dest:
-        shutil.copyfileobj(response, dest)
+        with tqdm.wrapattr(response, "read", total=target["size"], desc=out.name) as source:
+            shutil.copyfileobj(source, dest, length=1024 * 1024)
     if partial.stat().st_size != target["size"]:
         raise RuntimeError("Downloaded file size differs from the archive metadata")
     partial.replace(out)
