@@ -757,7 +757,13 @@ def project_strand_combinations(*,
     return sorted(unique.values(), key=lambda combination: tuple(entry['index'] for entry in combination))
 
 
-def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
+def visualize_reaction_graph(
+    G: nx.DiGraph,
+    *,
+    node_size: int = 500,
+    reaction_node_size: int = 600,
+    font_size: int = 8,
+) -> plt.Axes:
     """Render a reaction graph with typed node coloring.
 
     Args:
@@ -775,13 +781,21 @@ def visualize_reaction_graph(G: nx.DiGraph) -> plt.Axes:
 
     pos = nx.nx_agraph.graphviz_layout(G, prog="dot")
 
-    nx.draw_networkx_nodes(G, pos, nodelist=compounds, node_color="lightblue", node_shape="o", node_size=500, ax=ax)
-    nx.draw_networkx_nodes(G, pos, nodelist=building_blocks, node_color="mediumorchid", node_shape="o", node_size=500, ax=ax)
-    nx.draw_networkx_nodes(G, pos, nodelist=products, node_color="salmon", node_shape="o", node_size=500, ax=ax)
-    nx.draw_networkx_nodes(G, pos, nodelist=reactions, node_color="lightgreen", node_shape="s", node_size=600, ax=ax)
+    nx.draw_networkx_nodes(G, pos, nodelist=compounds, node_color="lightblue", node_shape="o", node_size=node_size, ax=ax)
+    nx.draw_networkx_nodes(G, pos, nodelist=building_blocks, node_color="mediumorchid", node_shape="o", node_size=node_size, ax=ax)
+    nx.draw_networkx_nodes(G, pos, nodelist=products, node_color="salmon", node_shape="o", node_size=node_size, ax=ax)
+    nx.draw_networkx_nodes(
+        G,
+        pos,
+        nodelist=reactions,
+        node_color="lightgreen",
+        node_shape="s",
+        node_size=reaction_node_size,
+        ax=ax,
+    )
 
     labels = {node: node for node in G.nodes()}
-    nx.draw_networkx_labels(G, pos, labels=labels, ax=ax, font_size=8)
+    nx.draw_networkx_labels(G, pos, labels=labels, ax=ax, font_size=font_size)
     nx.draw_networkx_edges(G, pos, ax=ax, arrows=True)
     ax.set_axis_off()
     ax.figure.tight_layout()
