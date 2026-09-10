@@ -44,6 +44,7 @@ Install [Pixi](https://pixi.sh/latest/), then clone the repository and install i
 git clone https://github.com/DELTechnology/delt-hit.git
 cd delt-hit
 pixi install
+pixi run dot -c  # registers Graphviz plugins; Pixi skips the post-install step Conda runs automatically
 pixi run delt-hit --help
 pixi shell
 ```
