@@ -340,6 +340,9 @@ paper/experiment-1/representations
 experiments/synthetic_2cycle/
 *.zip
 
+# manuscript and publication assets are maintained outside Git
+paper/
+
 .claude
 
 other_tools/
