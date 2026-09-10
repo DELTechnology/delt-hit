@@ -355,3 +355,4 @@ other_tools/
 *.blg
 *.fdb_latexmk
 *.swp
+*.part

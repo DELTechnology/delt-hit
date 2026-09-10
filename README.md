@@ -17,7 +17,7 @@ The example workflow and paper analyses were run on **macOS 26.6.2** with:
 | R | 4.4.0 |
 | edgeR | 4.4.2 |
 
-The complete Python dependency list is in [pyproject.toml](pyproject.toml). Python dependencies are installed automatically with DELT-Hit. Graphviz/pygraphviz and the R packages are installed separately as described below. The R workflow uses tidyverse and GGally, plus edgeR and limma for the edgeR method.
+The complete Python and R dependency list is in [pyproject.toml](pyproject.toml). Python dependencies are installed automatically with DELT-Hit. For Pixi, R and its packages (tidyverse, GGally, edgeR, limma) are installed automatically as well; for Conda, Graphviz/pygraphviz and the R packages are installed separately as described below. The R workflow uses tidyverse and GGally, plus edgeR and limma for the edgeR method.
 
 Minimum hardware: 16 GB RAM, 8 CPU cores, and 50 GB available storage. Recommended: 32 GB RAM, 16 CPU cores, and 100 GB available storage. Large datasets may require additional memory and disk space.
 
@@ -50,9 +50,13 @@ pixi shell
 
 `pixi shell` activates the environment so the commands and supporting-material scripts below can be run directly. Use it instead of `conda activate delt-hit` when following this README or the experiment instructions. Alternatively, prefix commands with `pixi run`, including `pixi run bash run.sh` for a complete workflow. The configured Pixi platforms are Linux x86-64 and macOS Apple Silicon.
 
-### R dependencies and verification (both options)
+### R dependencies and verification
 
-For enrichment analysis, install R 4.1+ if it is not already available (for Conda, for example, `conda install -c conda-forge r-base -y`). The Pixi environment does not include R; ensure an external R installation provides `Rscript` on your PATH. Open the corresponding R installation or RStudio and run:
+For enrichment analysis, R 4.1+ with tidyverse, GGally, edgeR, and limma is required.
+
+The Pixi environment (Option B) installs R and all required R packages automatically; no separate step is needed.
+
+For Conda (Option A), install R 4.1+ if it is not already available (for example, `conda install -c conda-forge r-base -y`), then open the corresponding R installation or RStudio and run:
 
 ```r
 install.packages(c("tidyverse", "GGally"))
@@ -69,7 +73,7 @@ delt-hit --help
 Rscript --vanilla -e 'library(tidyverse); library(GGally); library(edgeR); library(limma)'
 ```
 
-Run these checks in the environment activated using your chosen option. The first command prints the CLI help; the R check should complete without missing-package errors.
+Run these checks in the environment activated using your chosen option (`pixi shell` for Pixi, `conda activate delt-hit` for Conda). The first command prints the CLI help; the R check should complete without missing-package errors.
 
 Allow approximately **15 minutes** for installation on a desktop computer, as estimated in the protocol. Download speed and compilation of dependencies can increase this time. This estimate excludes the demo dataset download.
 
