@@ -359,3 +359,8 @@ other_tools/
 *.fdb_latexmk
 *.swp
 *.part
+
+# generated experiment outputs (contain machine-specific absolute paths)
+supporting_material/experiments/*/lane-*/demultiplex/
+supporting_material/experiments/*/lane-*/analysis/
+supporting_material/experiments/example-dual-display/campaign-dual-display/
