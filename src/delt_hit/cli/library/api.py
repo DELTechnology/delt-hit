@@ -1,6 +1,9 @@
+from concurrent.futures import ProcessPoolExecutor
 from itertools import batched
 from itertools import product
+from multiprocessing import get_context
 from pathlib import Path
+from typing import Any
 
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -25,10 +28,14 @@ from delt_hit.cli.helper import (
 from delt_hit.utils import read_yaml
 
 
+_ENUMERATION_WORKER_STATE: dict[str, Any] | None = None
+
+
 class Library:
     def enumerate(self, *, config_path: Path, debug: str = 'False', overwrite: bool = False,
                   errors: str = 'raise', counts_path: Path | None = None,
-                  top_n: int | None = None, library_name: str | None = None):
+                  top_n: int | None = None, library_name: str | None = None,
+                  num_workers: int = 1):
         """Enumerate the combinatorial library from a config.
 
         Args:
@@ -44,6 +51,8 @@ class Library:
             counts_path: Optional path to a file with observed combinations.
             top_n: Optional cap on the number of input combinations to enumerate.
             library_name: Optional output parquet base name for filtered mode.
+            num_workers: Number of worker processes used for reaction enumeration.
+                The default of 1 preserves serial execution.
         """
         if counts_path is not None:
             assert library_name, "Filtered enumeration requires `library_name`"
@@ -56,6 +65,7 @@ class Library:
 
         if top_n is not None:
             assert top_n > 0, "`top_n` must be a positive integer"
+        assert num_workers > 0, "`num_workers` must be a positive integer"
 
         cfg = read_yaml(config_path)
         graph_bundle = prepare_graph_bundle(cfg=cfg)
@@ -73,6 +83,7 @@ class Library:
                 debug=debug,
                 errors=errors,
                 save_dir=lib_path.parent,
+                num_workers=num_workers,
             )
         else:
             df = enumerate_single_strand(
@@ -84,6 +95,7 @@ class Library:
                 debug=debug,
                 errors=errors,
                 save_dir=lib_path.parent,
+                num_workers=num_workers,
             )
         df.to_parquet(lib_path, index=False)
 
@@ -521,13 +533,10 @@ def enumerate_single_strand(*,
                             debug: str = 'False',
                             errors: str = 'raise',
                             save_dir: Path | None = None,
-                            label: str | None = None) -> pd.DataFrame:
+                            label: str | None = None,
+                            num_workers: int = 1) -> pd.DataFrame:
     """Enumerate a single-display library and return it as a dataframe."""
-    reactions = graph_bundle['reactions']
-    products = graph_bundle['products']
-    compounds = graph_bundle['compounds']
-    add_G = graph_bundle['add_G']
-    G = graph_bundle['G']
+    assert num_workers > 0, "`num_workers` must be a positive integer"
     if combinations is None:
         combs = get_combinations(
             cfg=cfg,
@@ -538,39 +547,135 @@ def enumerate_single_strand(*,
     else:
         combs = combinations
 
-    library = []
     suffix = f' ({label})' if label else ''
-    logger.info(f'Starting enumeration of library{suffix}...')
-    for i, comb in tqdm(enumerate(combs)):
-        bb_edges = [(bb, c['reaction']) for bb, c in zip(building_block_names, comb)]
-        bb_edges += [(c['reaction'], c['product']) for c in comb]
-        bb_edges += [(c['educt'], c['reaction']) for c in comb]
-        bb_nodes = {n for e in bb_edges for n in e}
+    logger.info(f'Starting enumeration of library{suffix} with {num_workers} worker(s)...')
+    combination_count = len(combs)
 
-        additional_edges = set()
-        subgraphs = list(nx.weakly_connected_components(add_G))
-        for n in bb_nodes:
-            for sgn in subgraphs:
-                sg = add_G.subgraph(sgn).copy()
-                if n in sg and sg.out_degree(n) == 0:
-                    additional_edges.update(sg.edges)
+    if num_workers == 1:
+        records = (
+            _enumerate_combination(
+                item=item,
+                cfg=cfg,
+                graph_bundle=graph_bundle,
+                building_block_names=building_block_names,
+                debug=debug,
+                errors=errors,
+                save_dir=save_dir,
+            )
+            for item in enumerate(combs)
+        )
+        library = [record for record in tqdm(records, total=combination_count) if record is not None]
+    else:
+        chunksize = max(1, combination_count // (num_workers * 8))
+        with ProcessPoolExecutor(
+            max_workers=num_workers,
+            mp_context=get_context('spawn'),
+            initializer=_initialize_enumeration_worker,
+            initargs=(cfg, graph_bundle, building_block_names, debug, errors, save_dir),
+        ) as executor:
+            parallel_records = executor.map(
+                _enumerate_combination_from_worker_state,
+                enumerate(combs),
+                chunksize=chunksize,
+            )
+            library = [record for record in tqdm(parallel_records, total=combination_count) if record is not None]
 
-        edges = bb_edges + [tuple(e) for e in additional_edges]
-        edges = [tuple(e) for e in edges]
-        nodes = [n for e in edges for n in e]
+    df = pd.DataFrame(library)
+    if 'smiles' in df.columns:
+        df = df[df.smiles.notna()]
+    return df
 
-        rnx = {r: cfg['catalog']['reactions'][r] for r in nodes if r in reactions}
-        prods = {p: dict(smiles=None) for p in nodes if p in products}
-        comps = {c: cfg['catalog']['compounds'][c] for c in nodes if c in compounds}
-        bbs = {bbn: bb for bbn, bb in zip(building_block_names, comb) if not pd.isna(bb['smiles'])}
 
-        node_attrs = {**comps, **prods, **bbs, **rnx}
+def _initialize_enumeration_worker(cfg: dict,
+                                   graph_bundle: dict,
+                                   building_block_names: list[str],
+                                   debug: str,
+                                   errors: str,
+                                   save_dir: Path | None) -> None:
+    """Initialize immutable enumeration state once in each worker process."""
+    global _ENUMERATION_WORKER_STATE
+    _ENUMERATION_WORKER_STATE = {
+        'cfg': cfg,
+        'graph_bundle': graph_bundle,
+        'building_block_names': building_block_names,
+        'debug': debug,
+        'errors': errors,
+        'save_dir': save_dir,
+    }
 
-        g = G.edge_subgraph(edges=edges).copy()
-        sinks = [n for n, d in g.out_degree() if d == 0]
-        is_valid = len(sinks) == 1
 
-        if ((debug == 'all') or (debug == 'valid')) and is_valid and save_dir is not None:
+def _enumerate_combination_from_worker_state(item: tuple[int, tuple[dict, ...]]) -> dict | None:
+    """Enumerate one combination using process-local initialized state."""
+    assert _ENUMERATION_WORKER_STATE is not None, "Enumeration worker state was not initialized"
+    return _enumerate_combination(item=item, **_ENUMERATION_WORKER_STATE)
+
+
+def _enumerate_combination(*,
+                           item: tuple[int, tuple[dict, ...]],
+                           cfg: dict,
+                           graph_bundle: dict,
+                           building_block_names: list[str],
+                           debug: str,
+                           errors: str,
+                           save_dir: Path | None) -> dict | None:
+    """Enumerate one building-block combination without mutating shared state."""
+    i, comb = item
+    reactions = graph_bundle['reactions']
+    products = graph_bundle['products']
+    compounds = graph_bundle['compounds']
+    add_G = graph_bundle['add_G']
+    G = graph_bundle['G']
+
+    bb_edges = [(bb, c['reaction']) for bb, c in zip(building_block_names, comb)]
+    bb_edges += [(c['reaction'], c['product']) for c in comb]
+    bb_edges += [(c['educt'], c['reaction']) for c in comb]
+    bb_nodes = {n for e in bb_edges for n in e}
+
+    additional_edges = set()
+    subgraphs = list(nx.weakly_connected_components(add_G))
+    for n in bb_nodes:
+        for sgn in subgraphs:
+            sg = add_G.subgraph(sgn).copy()
+            if n in sg and sg.out_degree(n) == 0:
+                additional_edges.update(sg.edges)
+
+    edges = bb_edges + [tuple(e) for e in additional_edges]
+    edges = [tuple(e) for e in edges]
+    nodes = [n for e in edges for n in e]
+
+    rnx = {r: cfg['catalog']['reactions'][r] for r in nodes if r in reactions}
+    prods = {p: dict(smiles=None) for p in nodes if p in products}
+    comps = {c: cfg['catalog']['compounds'][c] for c in nodes if c in compounds}
+    bbs = {bbn: bb for bbn, bb in zip(building_block_names, comb) if not pd.isna(bb['smiles'])}
+    node_attrs = {**comps, **prods, **bbs, **rnx}
+
+    g = G.edge_subgraph(edges=edges).copy()
+    sinks = [n for n, d in g.out_degree() if d == 0]
+    is_valid = len(sinks) == 1
+
+    if ((debug == 'all') or (debug == 'valid')) and is_valid and save_dir is not None:
+        ax = visualize_reaction_graph(g)
+        ax.figure.savefig(
+            save_dir / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
+            dpi=300,
+        )
+        plt.close(ax.figure)
+
+    if is_valid:
+        terminal = sinks[0]
+    else:
+        logger.warning(
+            f'More than one terminal node for combination: {i}',
+            f"Run with debug='all' to visualize reaction graphs with multiple terminal nodes.",
+        )
+        return None
+
+    nx.set_node_attributes(g, node_attrs)
+
+    try:
+        g = complete_reaction_graph(g, errors=errors)
+    except Exception as e:
+        if debug == 'invalid' and save_dir is not None:
             ax = visualize_reaction_graph(g)
             ax.figure.savefig(
                 save_dir / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
@@ -578,41 +683,14 @@ def enumerate_single_strand(*,
             )
             plt.close(ax.figure)
 
-        if is_valid:
-            terminal = sinks[0]
-        else:
-            logger.warning(
-                f'More than one terminal node for combination: {i}',
-                f"Run with debug='all' to visualize reaction graphs with multiple terminal nodes.",
-            )
-            continue
+        if errors == 'raise':
+            raise e
+        if errors == 'ignore':
+            return None
 
-        nx.set_node_attributes(g, node_attrs)
-
-        try:
-            g = complete_reaction_graph(g, errors=errors)
-        except Exception as e:
-            if debug == 'invalid' and save_dir is not None:
-                ax = visualize_reaction_graph(g)
-                ax.figure.savefig(
-                    save_dir / f'reaction_graph_combination={i}_{"_".join(str(c["index"]) for c in comb)}.png',
-                    dpi=300,
-                )
-                plt.close(ax.figure)
-
-            if errors == 'raise':
-                raise e
-            if errors == 'ignore':
-                continue
-
-        record = {get_code_column_name(bb_name): c['index'] for bb_name, c in zip(building_block_names, comb)}
-        record['smiles'] = g.nodes[terminal]['smiles']
-        library.append(record)
-
-    df = pd.DataFrame(library)
-    if 'smiles' in df.columns:
-        df = df[df.smiles.notna()]
-    return df
+    record = {get_code_column_name(bb_name): c['index'] for bb_name, c in zip(building_block_names, comb)}
+    record['smiles'] = g.nodes[terminal]['smiles']
+    return record
 
 
 def enumerate_dual_display(*,
@@ -622,7 +700,8 @@ def enumerate_dual_display(*,
                            top_n: int | None = None,
                            debug: str = 'False',
                            errors: str = 'raise',
-                           save_dir: Path | None = None) -> pd.DataFrame:
+                           save_dir: Path | None = None,
+                           num_workers: int = 1) -> pd.DataFrame:
     """Enumerate both strands independently, then pair their products."""
     strand_by_building_block = get_building_block_strands(cfg)
     strand_a_names = [name for name in building_block_names if strand_by_building_block[name] == 'A']
@@ -664,6 +743,7 @@ def enumerate_dual_display(*,
         errors=errors,
         save_dir=save_dir,
         label='strand A',
+        num_workers=num_workers,
     )
     strand_b_df = enumerate_single_strand(
         cfg=strand_b_cfg,
@@ -674,6 +754,7 @@ def enumerate_dual_display(*,
         errors=errors,
         save_dir=save_dir,
         label='strand B',
+        num_workers=num_workers,
     )
 
     strand_a_df = strand_a_df.rename(columns={'smiles': 'smiles_a'})
