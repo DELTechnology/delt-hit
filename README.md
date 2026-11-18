@@ -1,5 +1,11 @@
 # DELT-Hit
 
+[![Release](https://img.shields.io/github/v/release/DELTechnology/delt-hit)](https://github.com/DELTechnology/delt-hit/releases)
+[![Python](https://img.shields.io/badge/python-3.12%2B-blue)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Code DOI](https://img.shields.io/badge/code%20DOI-10.5281%2Fzenodo.20556531-blue)](https://doi.org/10.5281/zenodo.20556531)
+[![Data DOI](https://img.shields.io/badge/data%20DOI-10.5281%2Fzenodo.20447074-blue)](https://doi.org/10.5281/zenodo.20447074)
+
 DELT-Hit is an open-source, end-to-end computational framework for DNA-encoded chemical library analysis. It connects sequence demultiplexing, chemical structure reconstruction, molecular property calculation, enrichment analysis, and quality control.
 
 ## 1. System requirements

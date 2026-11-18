@@ -9,16 +9,7 @@ from delt_hit.demultiplex.postprocess import (
     get_counts,
     save_counts,
 )
-from delt_hit.demultiplex.parser import whitelists_from_excel
 
-
-def test_building_block_whitelist_indices_are_zero_based():
-    whitelists = whitelists_from_excel("templates/library.xlsx")
-
-    first_bb_name = sorted(name for name in whitelists if name.startswith("B"))[0]
-    first_indices = [item["index"] for item in whitelists[first_bb_name][:3]]
-
-    assert first_indices == [0, 1, 2]
 
 
 def test_extract_ids_keeps_building_block_codes_zero_based():

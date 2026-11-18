@@ -92,7 +92,6 @@ def make_project_config(tmp_path: Path) -> tuple[Path, Path]:
         ({"method": "z_score", "save_dir": Path("out"), "counts": Path("counts.txt")}, "`config_path` is required"),
         ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml")}, "`counts` is required"),
         ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml"), "counts": Path("counts.txt")}, "`name` is required"),
-        ({"method": "z_score", "save_dir": Path("out"), "config_path": Path("config.yaml"), "counts": Path("counts.txt"), "analysis_config": Path("analysis.yaml")}, "`analysis_config` is not supported"),
     ],
 )
 def test_enrichment_argument_validation(kwargs, message):

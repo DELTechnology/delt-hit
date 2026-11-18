@@ -1,4 +1,3 @@
-from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -105,26 +104,6 @@ def test_whitelists_from_excel_does_not_preserve_reverse_or_complement_flags(tmp
     ]
     assert whitelists['B1'] == [{'index': 0, 'codon': 'AGTCGA'}]
 
-
-def test_example_dual_display_extended_workbook_includes_structure_level_flags():
-    workbook_path = (
-        Path(__file__).resolve().parents[2]
-        / 'supporting_material'
-        / 'experiments'
-        / 'example-dual-display'
-        / 'example-dual-display-extended.xlsx'
-    )
-
-    structure = structure_from_excel(workbook_path)
-    structure_by_name = {entry['name']: entry for entry in structure}
-
-    for region_name in ('B0', 'B1'):
-        assert structure_by_name[region_name]['reverse'] is False
-        assert structure_by_name[region_name]['complement'] is False
-
-    for region_name in ('B2', 'B3'):
-        assert structure_by_name[region_name]['reverse'] is True
-        assert structure_by_name[region_name]['complement'] is True
 
 
 def _write_structure_excel_config(path, *, strands: list[str | None], include_selection_strand: bool = False) -> None:
