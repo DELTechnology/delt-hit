@@ -1,7 +1,9 @@
+import os
 import re
 from pathlib import Path
 
 import dash
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -140,6 +142,53 @@ def parse_code_ranges(range_str: str, code_cols: list[str]) -> dict:
         if allowed:
             filters[code_cols[idx]] = allowed
     return filters
+
+
+DEFAULT_MAX_POINTS = 50_000
+
+
+def default_min_count_for_target(df: pd.DataFrame, target_n: int = DEFAULT_MAX_POINTS) -> int:
+    """Pick a min-count threshold that keeps roughly the top ``target_n`` rows.
+
+    Used as the dashboard's initial filter so large selections open with a
+    manageable point count instead of rendering millions of markers.
+
+    Args:
+        df: Counts DataFrame.
+        target_n: Approximate number of rows to keep.
+
+    Returns:
+        The count value at the ``target_n``-th highest row, or the overall
+        minimum if the table is already smaller than ``target_n``.
+    """
+    if df.empty or 'count' not in df:
+        return 0
+    if len(df) <= target_n:
+        return int(df['count'].min())
+    sorted_counts = df['count'].sort_values(ascending=False)
+    return int(sorted_counts.iloc[target_n - 1])
+
+
+def build_count_histogram(df: pd.DataFrame, nbins: int = 50) -> pd.DataFrame:
+    """Bin the ``count`` column into a histogram, computed server-side.
+
+    Avoids shipping one row per compound to the browser just to draw a
+    distribution of counts.
+
+    Args:
+        df: Counts DataFrame with a ``count`` column.
+        nbins: Number of histogram bins.
+
+    Returns:
+        A small DataFrame with one row per bin (``count`` = bin center,
+        ``frequency`` = number of rows in that bin).
+    """
+    values = df['count'].dropna().to_numpy()
+    if values.size == 0:
+        return pd.DataFrame({'count': [], 'frequency': []})
+    hist, edges = np.histogram(values, bins=nbins)
+    centers = (edges[:-1] + edges[1:]) / 2
+    return pd.DataFrame({'count': centers, 'frequency': hist})
 
 
 def apply_code_filters(df: pd.DataFrame, filters: dict) -> pd.DataFrame:
@@ -328,7 +377,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                         value=default_x,
                         placeholder="Select X-axis variable..."
                     )
-                ], className="w-1/4 pr-2"),
+                ], className="w-1/5 pr-2"),
 
                 html.Div([
                     html.Label("Y-axis:", className="font-semibold mb-2 block"),
@@ -338,7 +387,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                         value=default_y,
                         placeholder="Select Y-axis variable..."
                     )
-                ], className="w-1/4 px-2"),
+                ], className="w-1/5 px-2"),
 
                 html.Div([
                     html.Label("Z-axis (3D):", className="font-semibold mb-2 block"),
@@ -348,7 +397,21 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                         value=default_z,
                         placeholder="Select Z-axis variable (select to enable 3D)..."
                     )
-                ], className="w-1/4 px-2"),
+                ], className="w-1/5 px-2"),
+
+                html.Div([
+                    html.Label("Plot type:", className="font-semibold mb-2 block"),
+                    dcc.Dropdown(
+                        id='plot-type-selector',
+                        options=[
+                            {'label': 'Auto', 'value': 'auto'},
+                            {'label': 'Scatter / Bar', 'value': 'scatter'},
+                            {'label': 'Heatmap / Histogram', 'value': 'heatmap'},
+                        ],
+                        value='auto',
+                        clearable=False
+                    )
+                ], className="w-1/5 pr-2"),
 
                 html.Div([
                     html.Label("Options:", className="font-semibold mb-2 block"),
@@ -365,7 +428,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                         inputStyle={"margin-right": "6px"},
                         style={"margin-top": "8px"}
                     ),
-                ], className="w-1/4 pl-2"),
+                ], className="w-1/5 pl-2"),
             ], className="flex bg-white p-4 rounded-lg shadow mb-4")
         ]),
 
@@ -405,12 +468,28 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                 ], className="w-1/2 pr-2"),
 
                 html.Div([
-                    html.Label("Min Count", className="font-semibold mb-2 block"),
+                    html.Label(
+                        [
+                            "Min Count",
+                            html.Span(
+                                " ⓘ",
+                                title=f"Filters raw rows before grouping by axis, defaulting to the "
+                                      f"top ~{DEFAULT_MAX_POINTS:,} rows by count so large selections "
+                                      "load without crashing the plot. Lower it to include more data.",
+                                style={
+                                    "cursor": "help",
+                                    "marginLeft": "6px",
+                                    "color": "#2563eb",
+                                },
+                            ),
+                        ],
+                        className="font-semibold mb-2 block",
+                    ),
                     # Min Count
                     dcc.Input(
                         id='filter-min-count',
                         type='number',
-                        value=int(counts_df['count'].min()) if not counts_df.empty else 0,
+                        value=default_min_count_for_target(counts_df),
                         step=1,
                         style={'width': '100%'},
                         className="mb-2 border border-gray-300 rounded-md px-2 py-1 "
@@ -473,7 +552,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
             raise dash.exceptions.PreventUpdate
         return (
             default_code_range_string(counts_df, available_codes),
-            int(counts_df['count'].min()) if not counts_df.empty else 0,
+            default_min_count_for_target(counts_df),
             int(counts_df['count'].max()) if not counts_df.empty else 0
         )
 
@@ -483,6 +562,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
         [Input('x-axis-selector', 'value'),
          Input('y-axis-selector', 'value'),
          Input('z-axis-selector', 'value'),
+         Input('plot-type-selector', 'value'),
          Input('color-by-count', 'value'),
          Input('size-by-count', 'value'),
          Input('filter-button', 'n_clicks')],
@@ -491,7 +571,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
          State('filter-max-count', 'value')],
         prevent_initial_call=False
     )
-    def update_plot_and_stats(x_axis, y_axis, z_axis, color_by_count, size_by_count,
+    def update_plot_and_stats(x_axis, y_axis, z_axis, plot_type, color_by_count, size_by_count,
                               n_clicks_filter, range_str, min_count, max_count):
         """Update the plot and stats panel based on UI inputs.
 
@@ -499,6 +579,7 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
             x_axis: Selected X-axis column.
             y_axis: Selected Y-axis column.
             z_axis: Selected Z-axis column (3D only).
+            plot_type: 'auto', 'scatter', or 'heatmap'.
             color_by_count: Toggle to color by count.
             size_by_count: Toggle to size by count.
             n_clicks_filter: Click count from filter button.
@@ -521,24 +602,35 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
         code_filters = parse_code_ranges(range_str, available_codes)
         df_filtered = apply_code_filters(counts_df, code_filters)
 
-        # 2) Collect selected code columns (from axes) to aggregate
+        # 2) Apply min/max count filters on the raw per-row counts. This must
+        # happen before aggregation: the defaults are computed from raw row
+        # counts, and grouped sums can be orders of magnitude larger, so
+        # filtering after aggregation would silently drop everything.
+        if min_count is not None:
+            df_filtered = df_filtered.loc[df_filtered['count'] >= int(min_count)]
+        if max_count is not None:
+            df_filtered = df_filtered.loc[df_filtered['count'] <= int(max_count)]
+
+        # 3) Collect selected code columns (from axes) to aggregate
         selected_codes = []
         for axis in (x_axis, y_axis, z_axis):
             if axis not in ('None', 'count') and axis is not None:
                 selected_codes.append(axis)
         selected_codes = list(dict.fromkeys(selected_codes))
 
-        # 3) Aggregate/marginalize
-        if selected_codes:
+        # 4) Aggregate/marginalize
+        # A pure count distribution (one axis is 'count', the other 'None')
+        # needs the raw per-row counts, not a single summed row.
+        is_count_distribution = z_axis == 'None' and (
+            (x_axis == 'count' and y_axis == 'None') or
+            (y_axis == 'count' and x_axis == 'None')
+        )
+        if is_count_distribution:
+            plot_data = df_filtered[['count']].copy()
+        elif selected_codes:
             plot_data = marginalize_counts(df_filtered, selected_codes)
         else:
             plot_data = pd.DataFrame({'count': [df_filtered['count'].sum()]})
-
-        # 4) Apply min/max count filters on aggregated data (if provided)
-        if min_count is not None:
-            plot_data = plot_data.loc[plot_data['count'] >= int(min_count)]
-        if max_count is not None:
-            plot_data = plot_data.loc[plot_data['count'] <= int(max_count)]
 
         # Compute stats
         total_entries = len(plot_data)
@@ -584,6 +676,22 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
             return lab
 
         fig = go.Figure()
+
+        def use_dense_mode(n_points):
+            """Decide whether to render a binned plot instead of raw markers.
+
+            Args:
+                n_points: Number of rows in the data to be plotted.
+
+            Returns:
+                True if a heatmap/histogram should be used instead of a
+                scatter/bar of individual points.
+            """
+            if plot_type == 'scatter':
+                return False
+            if plot_type == 'heatmap':
+                return True
+            return n_points > DEFAULT_MAX_POINTS
 
         # 3D plot
         if use_3d:
@@ -633,10 +741,17 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
             if x_axis == 'None' or y_axis == 'None':
                 if x_axis != 'None':
                     if x_axis == 'count':
-                        fig = px.histogram(
-                            plot_data, x='count',
+                        hist_data = build_count_histogram(plot_data)
+                        fig = px.bar(
+                            hist_data, x='count', y='frequency',
                             title='Distribution of Counts',
-                            labels={'count': 'Count', 'count_count': 'Frequency'}
+                            labels={'count': 'Count', 'frequency': 'Frequency'}
+                        )
+                    elif use_dense_mode(len(plot_data)):
+                        fig = px.histogram(
+                            plot_data, x=x_axis, y='count', histfunc='sum',
+                            title=f'Counts by {x_axis} (binned)',
+                            labels={'count': 'Count', x_axis: x_axis}
                         )
                     else:
                         fig = px.bar(
@@ -646,8 +761,12 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                         )
                 elif y_axis != 'None':
                     if y_axis == 'count':
-                        fig = px.bar(x=['Total'], y=[total_counts],
-                                     title='Total Counts')
+                        hist_data = build_count_histogram(plot_data)
+                        fig = px.bar(
+                            hist_data, x='count', y='frequency',
+                            title='Distribution of Counts',
+                            labels={'count': 'Count', 'frequency': 'Frequency'}
+                        )
                     else:
                         fig = px.bar(
                             plot_data, y=y_axis, x='count',
@@ -661,16 +780,29 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                                        xref="paper", yref="paper", x=0.5, y=0.5,
                                        showarrow=False, font_size=16)
                 elif x_axis == 'count':
-                    fig = px.scatter(
-                        plot_data, x='count', y=y_axis,
-                        color=color_dim, size=size_dim,
-                        title=f'Count vs {y_axis}'
-                              f"{' • color=count' if color_dim else ''}"
-                              f"{' • size=count' if size_dim else ''}",
-                        labels={'count': 'Count', y_axis: y_axis}
-                    )
+                    if use_dense_mode(len(plot_data)):
+                        fig = px.histogram(
+                            plot_data, y=y_axis, x='count', histfunc='sum',
+                            title=f'Count vs {y_axis} (binned)',
+                            labels={'count': 'Count', y_axis: y_axis}
+                        )
+                    else:
+                        fig = px.scatter(
+                            plot_data, x='count', y=y_axis,
+                            color=color_dim, size=size_dim,
+                            title=f'Count vs {y_axis}'
+                                  f"{' • color=count' if color_dim else ''}"
+                                  f"{' • size=count' if size_dim else ''}",
+                            labels={'count': 'Count', y_axis: y_axis}
+                        )
                 elif y_axis == 'count':
-                    if len(plot_data) < 20 and not size_dim:
+                    if use_dense_mode(len(plot_data)):
+                        fig = px.histogram(
+                            plot_data, x=x_axis, y='count', histfunc='sum',
+                            title=f'Counts by {x_axis} (binned)',
+                            labels={'count': 'Count', x_axis: x_axis}
+                        )
+                    elif len(plot_data) < 20 and not size_dim:
                         fig = px.bar(
                             plot_data, x=x_axis, y='count',
                             title=f'Counts by {x_axis}',
@@ -685,6 +817,12 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
                                   f"{' • size=count' if size_dim else ''}",
                             labels={'count': 'Count', x_axis: x_axis}
                         )
+                elif use_dense_mode(len(plot_data)):
+                    fig = px.density_heatmap(
+                        plot_data, x=x_axis, y=y_axis, z='count', histfunc='sum',
+                        title=f'{y_axis} vs {x_axis} (binned, summed counts)',
+                        labels={x_axis: x_axis, y_axis: y_axis}
+                    )
                 else:
                     fig = px.scatter(
                         plot_data, x=x_axis, y=y_axis,
@@ -745,4 +883,8 @@ def dashboard(*, config_path: Path, counts_path: Path, selection_name: str | Non
     </html>
     '''
 
-    app.run_server(debug=True, port=8050)
+    # Dash reads the HOST env var and overrides any host= passed here;
+    # pixi's build-platform triplet (e.g. arm64-apple-darwin20.0.0) is
+    # unrelated to a real network host, so force it to localhost.
+    os.environ['HOST'] = '127.0.0.1'
+    app.run_server(debug=True, host='127.0.0.1', port=8050)
