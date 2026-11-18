@@ -5,7 +5,7 @@
 The benchmark commands below assume these environments already exist:
 
 - DELT-Hit: the project Pixi environment, invoked with `pixi run ...`
-- DELi: installed and available on `PATH` as `deli`
+- DELi: installed into `other_tools/DELi/.venv` as described in [`benchmarks/README.md`](../README.md); `run_split_timing.py` calls `other_tools/DELi/.venv/bin/deli`
 
 ## Dataset Matrix
 
@@ -266,7 +266,7 @@ for dataset in "${ALL_DATASETS[@]}"; do
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /users/amarti51/projects/delt-hit
+cd "$SLURM_SUBMIT_DIR"  # submit from the repository root
 
 TMPDIR="${TMPDIR:?TMPDIR must be set for Slurm benchmark jobs}"
 DATA_ROOT="$TMPDIR/delt-hit-benchmarks/${SLURM_JOB_ID}/${DATASET}"
@@ -364,7 +364,7 @@ If you want to run the prepared inputs manually instead of using `run_split_timi
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/users/amarti51/projects/delt-hit"
+ROOT="$(git rev-parse --show-toplevel)"
 DATASET="synthetic_4cycle_10bbpc_100m_err=0"
 
 DELI_DIR="$ROOT/benchmarks/demultiplex/tools/deli/$DATASET"
