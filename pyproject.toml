@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "delt-hit"
-description = "DEL Technology core functionalities"
+description = "End-to-end analysis of DNA-encoded chemical library (DEL) selections: demultiplexing, enumeration, enrichment and QC"
 authors = [
-    { name = "Adriano Martinelli", email = "adrianom@student.ethz.ch" },
+    { name = "Adriano Martinelli", email = "adriano.martinelli@unibas.ch" },
 ]
 readme = "README.md"
 # due to how PEP 440 defines version matching, prefer [incl, excl) definitions like below:
@@ -34,9 +34,8 @@ dependencies = [
     "scipy",
     "dash==2.18.2",
     "isal",
-    "python-docx>=1.2.0",
 ]
-version = "0.0.1"
+version = "1.1.1"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -47,7 +46,9 @@ classifiers = [
 delt-hit = "delt_hit.cli.main:cli"
 
 [project.urls]
-repository = "https://github.com/DELTechnology/delt-core"
+repository = "https://github.com/DELTechnology/delt-hit"
+issues = "https://github.com/DELTechnology/delt-hit/issues"
+changelog = "https://github.com/DELTechnology/delt-hit/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 test = [

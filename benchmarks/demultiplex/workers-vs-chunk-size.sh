@@ -1,4 +1,4 @@
-cd /Users/adrianomartinelli/projects/delt-hit
+cd "$(dirname "$0")/../.."  # run from the repository root
 
 # Generate fixtures once
 pixi run python benchmarks/demultiplex/generate_reads_with_adapters.py \

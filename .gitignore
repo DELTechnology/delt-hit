@@ -364,3 +364,14 @@ other_tools/
 supporting_material/experiments/*/lane-*/demultiplex/
 supporting_material/experiments/*/lane-*/analysis/
 supporting_material/experiments/example-dual-display/campaign-dual-display/
+
+# AI agent instruction files (kept local only)
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+.cursor/
+
+# unpublished data and internal notes (kept local only)
+supporting_material/experiments/johanna/
+proof-of-concept-libraries/
+issues/

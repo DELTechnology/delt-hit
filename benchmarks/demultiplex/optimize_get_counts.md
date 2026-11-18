@@ -6,7 +6,7 @@ This note documents the changes made to `get_counts()` and the benchmark results
 
 ### 1. Replace split-heavy parsing in the hot path
 
-In [postprocess.py](/Users/adrianomartinelli/projects/delt-hit/src/delt_hit/demultiplex/postprocess.py), the counting path now uses a bytes parser with a small state machine instead of repeatedly doing:
+In [postprocess.py](../../src/delt_hit/demultiplex/postprocess.py), the counting path now uses a bytes parser with a small state machine instead of repeatedly doing:
 
 - `split("?")`
 - `split(".")`
@@ -44,8 +44,8 @@ from the config and passes it through to `get_counts(...)`.
 
 Relevant code:
 
-- [postprocess.py](/Users/adrianomartinelli/projects/delt-hit/src/delt_hit/demultiplex/postprocess.py)
-- [api.py](/Users/adrianomartinelli/projects/delt-hit/src/delt_hit/cli/demultiplex/api.py)
+- [postprocess.py](../../src/delt_hit/demultiplex/postprocess.py)
+- [api.py](../../src/delt_hit/cli/demultiplex/api.py)
 
 ## Benchmarks
 
@@ -120,9 +120,9 @@ Three chunk sizes were tested:
 
 Saved raw outputs:
 
-- [benchmark_5000000.txt](/Users/adrianomartinelli/projects/delt-hit/target/benchmarks/get_counts/benchmark_5000000.txt)
-- [benchmark_25000000.txt](/Users/adrianomartinelli/projects/delt-hit/target/benchmarks/get_counts/benchmark_25000000.txt)
-- [benchmark_100000000.txt](/Users/adrianomartinelli/projects/delt-hit/target/benchmarks/get_counts/benchmark_100000000.txt)
+- `target/benchmarks/get_counts/benchmark_5000000.txt`
+- `target/benchmarks/get_counts/benchmark_25000000.txt`
+- `target/benchmarks/get_counts/benchmark_100000000.txt`
 
 ### Results
 
